@@ -23,6 +23,7 @@ enum ValueNode {
     String(String),
     None(String),
     FunCall(FunCall),
+    Id(String),
 }
 #[derive(Debug)]
 enum AcrionNode {}
@@ -46,6 +47,13 @@ fn func_return(input: &FunCall) -> ValueNode {
         return ValueNode::None("".to_string());
     }
 }
+fn id_return(input: String) -> ValueNode {
+    if input == "ab" {
+        return ValueNode::String("aaaa".to_string());
+    } else {
+        return ValueNode::None("".to_string());
+    }
+}
 impl Eval for ValueNode {
     fn eval(&self) -> ValueNode {
         //print!("{:?}", &self);
@@ -54,6 +62,7 @@ impl Eval for ValueNode {
             ValueNode::None(_) => todo!(),
             ValueNode::FunCall(value) => func_return(value),
             ValueNode::String(value) => return ValueNode::String(value.to_string()),
+            ValueNode::Id(value) => id_return(value.to_string()),
         }
     }
 }
@@ -65,6 +74,7 @@ impl fmt::Display for ValueNode {
             ValueNode::None(_) => todo!(),
             ValueNode::FunCall(value) => write!(f, "{:?}", func_return(value)),
             ValueNode::String(value) => write!(f, "{:}", value),
+            ValueNode::Id(_) => todo!(),
         }
     }
 }
@@ -75,6 +85,7 @@ impl Pop for ValueNode {
             ValueNode::String(_) => todo!(),
             ValueNode::None(_) => todo!(),
             ValueNode::FunCall(_) => todo!(),
+            ValueNode::Id(_) => todo!(),
         }
     }
 }
@@ -137,6 +148,8 @@ fn parse_function(input: AstNode<'_>) -> crate::ast_parser::ValueNode {
                 || args.at(j).to_string() == "exp_reizdal"
             {
                 arguments.push(parse_function(args.at(j).to_owned()))
+            } else if args.at(j).to_string().starts_with("ID = ") {
+                arguments.push(parse_function(args.at(j).to_owned()))
             }
             j += 1;
         }
@@ -166,6 +179,11 @@ fn parse_function(input: AstNode<'_>) -> crate::ast_parser::ValueNode {
                 .parse::<i32>()
                 .unwrap(),
         );
+    } else if input.to_string().starts_with("ID = ") {
+        return ValueNode::Id(
+            input.to_string().split("ID = ").collect::<Vec<&str>>()[1].to_string(),
+        )
+        .eval();
     } else {
         return ValueNode::None("".to_string()).eval();
     }

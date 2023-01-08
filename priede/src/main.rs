@@ -12,7 +12,7 @@ fn main() {
     let result = priede::parse_string(&contents);
     let ast = result.get_ast();
     //print!("{:?}", root.children().at(0).children().at(0).to_string());
-    //format_ast(ast.get_root(), Vec::<bool>::new());
+    format_ast(ast.get_root(), Vec::<bool>::new());
     ast_parser::parse_ast(ast.get_root());
 }
 //fn write_to_file(input: String) -> io::Result<()> {
