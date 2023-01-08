@@ -1,1 +1,6 @@
 target
+Hime.Redist.dll
+Hime.SDK.dll
+himecc.exe
+priedeLexer.bin
+priedeParser.bin

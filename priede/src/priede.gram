@@ -1,0 +1,72 @@
+grammar priede
+{
+    options{
+        Axiom = "root";
+        Separator = "SEPARATOR";
+    }
+    terminals{
+        WHITE_SPACE -> U+0020 | U+0009 | U+000B | U+000C;
+        LineTerminator  -> U+000D /* CR */
+						|  U+000A /* LF */
+						|  U+000D U+000A /* CR LF */
+						|  U+2028 /* LS */
+						|  U+2029 /* PS */ ;
+        SEPARATOR   -> WHITE_SPACE+ | U+000A | LineTerminator;
+
+        ID -> [a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_-]+;
+        //TEXT -> (.+);
+        QUOTE -> '"';
+        
+        INTEGER -> [1-9] [0-9]* | '0' ;
+        NUMBER -> INTEGER;
+
+        STRING	-> '"' (
+									(. - ('"' | LineTerminator | '\\'))
+									| '\\' LineTerminator
+									| '\\' ('\'' | '"' | '\\' | [bfnrtv])
+									| '\\x' [0-9a-fA-F]{2}
+									| '\\u' [0-9a-fA-F]{4}
+									| '\\0'
+								)* '"' |
+                                '\'' (
+									(. - ('\'' | LineTerminator | '\\'))
+									| '\\' LineTerminator
+									| '\\' ('\'' | '"' | '\\' | [bfnrtv])
+									| '\\x' [0-9a-fA-F]{2}
+									| '\\u' [0-9a-fA-F]{4}
+									| '\\0'
+								)* '\'' ;
+		SingleQuoteString	-> '\'' (
+									(. - ('\'' | LineTerminator | '\\'))
+									| '\\' LineTerminator
+									| '\\' ('\'' | '"' | '\\' | [bfnrtv])
+									| '\\x' [0-9a-fA-F]{2}
+									| '\\u' [0-9a-fA-F]{4}
+									| '\\0'
+								)* '\'' ;
+    }
+    rules{
+        func -> ID '('! funcargs ')'!
+                   | ID '()'! ;
+
+        funcargs -> exp|exp (','! exp)*;
+
+        exp_atom -> NUMBER^
+                   | '('! exp^ ')'! 
+                   |  ID^
+                   |  func^;
+
+        exp_reizdal -> exp_atom^
+                   |  exp_reizdal '*' exp_atom
+                   |  exp_reizdal '/' exp_atom;
+
+        exp_plusmin -> exp_reizdal^
+                   |  exp_plusmin '+' exp_reizdal
+                   |  exp_plusmin '-' exp_reizdal;
+        exp ->
+                   |  exp_plusmin^
+                   |  STRING^;
+
+        root -> func*;
+    }
+}
