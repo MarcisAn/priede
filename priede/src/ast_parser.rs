@@ -18,12 +18,20 @@ struct FunCall {
 }
 
 #[derive(Debug, Clone)]
+struct Var {
+    id: String,
+    var_type: String,
+    value: ValueNode,
+}
+
+#[derive(Debug, Clone)]
 enum ValueNode {
     Number(i32),
     String(String),
     None(String),
     FunCall(FunCall),
     Id(String),
+    VarDef(Box<Var>),
 }
 #[derive(Debug)]
 enum AcrionNode {}
@@ -32,37 +40,60 @@ trait Eval {
 }
 trait Pop {
     fn pop_number(&self) -> i32;
+    fn pop_str(&self) -> String;
 }
 fn func_return(input: &FunCall) -> ValueNode {
     if input.id == "aa" {
         return ValueNode::Number(5);
     } else if input.id == "drukāt" {
-        print!("{:}", input.args[0].eval());
+        print!("{}", input.args[0].eval());
         return ValueNode::None("".to_string());
     } else if input.id == "drukātJr" {
         println!("");
-        print!("{:}", input.args[0].eval());
+        print!("{}", input.args[0].eval());
         return ValueNode::None("".to_string());
     } else {
         return ValueNode::None("".to_string());
     }
 }
 fn id_return(input: String) -> ValueNode {
-    if input == "ab" {
-        return ValueNode::String("aaaa".to_string());
-    } else {
-        return ValueNode::None("".to_string());
+    let mut value: ValueNode = ValueNode::Number(9);
+    unsafe {
+        for i in &VARIABLES {
+            if i.id == input {
+                match i.var_type.as_str() {
+                    "skaitlis" => value = i.value.clone(),
+                    "teksts" => value = i.value.clone(),
+                    &_ => todo!(),
+                }
+            }
+        }
     }
+
+    return value;
+}
+static mut VARIABLES: Vec<Var> = Vec::new();
+fn define_variable(input: &Var) -> ValueNode {
+    unsafe {
+        VARIABLES.push(Var {
+            id: input.id.clone(),
+            var_type: input.var_type.clone(),
+            value: input.value.clone(),
+        });
+    }
+
+    return ValueNode::None("".to_string());
 }
 impl Eval for ValueNode {
     fn eval(&self) -> ValueNode {
         //print!("{:?}", &self);
         match &self {
             ValueNode::Number(value) => return ValueNode::Number(*value),
-            ValueNode::None(_) => todo!(),
+            ValueNode::None(_) => ValueNode::None("".to_string()),
             ValueNode::FunCall(value) => func_return(value),
             ValueNode::String(value) => return ValueNode::String(value.to_string()),
             ValueNode::Id(value) => id_return(value.to_string()),
+            ValueNode::VarDef(value) => define_variable(value),
         }
     }
 }
@@ -71,10 +102,11 @@ impl fmt::Display for ValueNode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self {
             ValueNode::Number(value) => write!(f, "{:}", value),
-            ValueNode::None(_) => todo!(),
+            ValueNode::None(_) => write!(f, "NULL"),
             ValueNode::FunCall(value) => write!(f, "{:?}", func_return(value)),
-            ValueNode::String(value) => write!(f, "{:}", value),
+            ValueNode::String(value) => write!(f, "{}", value),
             ValueNode::Id(_) => todo!(),
+            ValueNode::VarDef(_) => todo!(),
         }
     }
 }
@@ -86,6 +118,17 @@ impl Pop for ValueNode {
             ValueNode::None(_) => todo!(),
             ValueNode::FunCall(_) => todo!(),
             ValueNode::Id(_) => todo!(),
+            ValueNode::VarDef(_) => todo!(),
+        }
+    }
+    fn pop_str(&self) -> String {
+        match &self {
+            ValueNode::Number(value) => todo!(),
+            ValueNode::String(_) => todo!(),
+            ValueNode::None(_) => todo!(),
+            ValueNode::FunCall(_) => todo!(),
+            ValueNode::Id(_) => todo!(),
+            ValueNode::VarDef(_) => todo!(),
         }
     }
 }
@@ -183,6 +226,47 @@ fn parse_function(input: AstNode<'_>) -> crate::ast_parser::ValueNode {
         return ValueNode::Id(
             input.to_string().split("ID = ").collect::<Vec<&str>>()[1].to_string(),
         )
+        .eval();
+    } else if input.to_string().starts_with("STRING = ") {
+        let string = input.to_string().split("STRING = ").collect::<Vec<&str>>()[1].to_string();
+        if string.starts_with("\"") && string.ends_with("\"") {
+            return ValueNode::String(
+                string.split("\"").collect::<Vec<&str>>()[1]
+                    .parse::<String>()
+                    .unwrap(),
+            )
+            .eval();
+        } else if string.starts_with("\'") && string.ends_with("\'") {
+            return ValueNode::String(
+                string.split("\'").collect::<Vec<&str>>()[1]
+                    .parse::<String>()
+                    .unwrap(),
+            )
+            .eval();
+        } else {
+            return ValueNode::None("".to_string());
+        }
+    } else if input.to_string() == "var_def" {
+        let id = input
+            .children()
+            .at(1)
+            .to_string()
+            .split("ID = ")
+            .collect::<Vec<&str>>()[1]
+            .to_string();
+        let var_type = input
+            .children()
+            .at(0)
+            .to_string()
+            .split("TYPE = ")
+            .collect::<Vec<&str>>()[1]
+            .to_string();
+
+        return ValueNode::VarDef(Box::new(Var {
+            id: id,
+            var_type: var_type,
+            value: parse_function(input.children().at(2)),
+        }))
         .eval();
     } else {
         return ValueNode::None("".to_string()).eval();

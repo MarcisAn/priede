@@ -36,10 +36,10 @@ pub const ID_TERMINAL_QUOTE: u32 = 0x0007;
 pub const ID_TERMINAL_INTEGER: u32 = 0x0008;
 /// The unique identifier for terminal NUMBER
 pub const ID_TERMINAL_NUMBER: u32 = 0x0009;
+/// The unique identifier for terminal TYPE
+pub const ID_TERMINAL_TYPE: u32 = 0x000A;
 /// The unique identifier for terminal STRING
-pub const ID_TERMINAL_STRING: u32 = 0x000A;
-/// The unique identifier for terminal SingleQuoteString
-pub const ID_TERMINAL_SINGLE_QUOTE_STRING: u32 = 0x000B;
+pub const ID_TERMINAL_STRING: u32 = 0x000B;
 
 /// The unique identifier for the default context
 pub const CONTEXT_DEFAULT: u16 = 0;
@@ -57,16 +57,17 @@ const TERMINALS: &[Symbol] = &[
     Symbol { id: 0x0007, name: "QUOTE" },
     Symbol { id: 0x0008, name: "INTEGER" },
     Symbol { id: 0x0009, name: "NUMBER" },
-    Symbol { id: 0x000A, name: "STRING" },
-    Symbol { id: 0x000B, name: "SingleQuoteString" },
-    Symbol { id: 0x0013, name: "(" },
-    Symbol { id: 0x0014, name: ")" },
-    Symbol { id: 0x0015, name: "()" },
-    Symbol { id: 0x0016, name: "," },
-    Symbol { id: 0x0018, name: "*" },
-    Symbol { id: 0x0019, name: "/" },
-    Symbol { id: 0x001A, name: "+" },
-    Symbol { id: 0x001B, name: "-" }];
+    Symbol { id: 0x000A, name: "TYPE" },
+    Symbol { id: 0x000B, name: "STRING" },
+    Symbol { id: 0x0015, name: "=" },
+    Symbol { id: 0x0016, name: "(" },
+    Symbol { id: 0x0017, name: ")" },
+    Symbol { id: 0x0018, name: "()" },
+    Symbol { id: 0x0019, name: "," },
+    Symbol { id: 0x001B, name: "*" },
+    Symbol { id: 0x001C, name: "/" },
+    Symbol { id: 0x001D, name: "+" },
+    Symbol { id: 0x001E, name: "-" }];
 
 /// Creates a new lexer
 fn new_lexer<'a>(
@@ -80,36 +81,43 @@ fn new_lexer<'a>(
 /// Static resource for the serialized parser automaton
 const PARSER_AUTOMATON: &[u8] = include_bytes!("priedeParser.bin");
 
+/// The unique identifier for variable var_def
+pub const ID_VARIABLE_VAR_DEF: u32 = 0x000C;
+/// The unique identifier for variable var_def_value
+pub const ID_VARIABLE_VAR_DEF_VALUE: u32 = 0x000D;
 /// The unique identifier for variable func
-pub const ID_VARIABLE_FUNC: u32 = 0x000C;
+pub const ID_VARIABLE_FUNC: u32 = 0x000E;
 /// The unique identifier for variable funcargs
-pub const ID_VARIABLE_FUNCARGS: u32 = 0x000D;
+pub const ID_VARIABLE_FUNCARGS: u32 = 0x000F;
 /// The unique identifier for variable exp_atom
-pub const ID_VARIABLE_EXP_ATOM: u32 = 0x000E;
+pub const ID_VARIABLE_EXP_ATOM: u32 = 0x0010;
 /// The unique identifier for variable exp_reizdal
-pub const ID_VARIABLE_EXP_REIZDAL: u32 = 0x000F;
+pub const ID_VARIABLE_EXP_REIZDAL: u32 = 0x0011;
 /// The unique identifier for variable exp_plusmin
-pub const ID_VARIABLE_EXP_PLUSMIN: u32 = 0x0010;
+pub const ID_VARIABLE_EXP_PLUSMIN: u32 = 0x0012;
 /// The unique identifier for variable exp
-pub const ID_VARIABLE_EXP: u32 = 0x0011;
+pub const ID_VARIABLE_EXP: u32 = 0x0013;
 /// The unique identifier for variable root
-pub const ID_VARIABLE_ROOT: u32 = 0x0012;
+pub const ID_VARIABLE_ROOT: u32 = 0x0014;
 
 
 /// The collection of variables matched by this parser
 /// The variables are in an order consistent with the automaton,
 /// so that variable indices in the automaton can be used to retrieve the variables in this table
 const VARIABLES: &[Symbol] = &[
-    Symbol { id: 0x000C, name: "func" },
-    Symbol { id: 0x000D, name: "funcargs" },
-    Symbol { id: 0x000E, name: "exp_atom" },
-    Symbol { id: 0x000F, name: "exp_reizdal" },
-    Symbol { id: 0x0010, name: "exp_plusmin" },
-    Symbol { id: 0x0011, name: "exp" },
-    Symbol { id: 0x0012, name: "root" },
-    Symbol { id: 0x0017, name: "__V23" },
-    Symbol { id: 0x001C, name: "__V28" },
-    Symbol { id: 0x001D, name: "__VAxiom" }];
+    Symbol { id: 0x000C, name: "var_def" },
+    Symbol { id: 0x000D, name: "var_def_value" },
+    Symbol { id: 0x000E, name: "func" },
+    Symbol { id: 0x000F, name: "funcargs" },
+    Symbol { id: 0x0010, name: "exp_atom" },
+    Symbol { id: 0x0011, name: "exp_reizdal" },
+    Symbol { id: 0x0012, name: "exp_plusmin" },
+    Symbol { id: 0x0013, name: "exp" },
+    Symbol { id: 0x0014, name: "root" },
+    Symbol { id: 0x001A, name: "__V26" },
+    Symbol { id: 0x001F, name: "__V31" },
+    Symbol { id: 0x0020, name: "__V32" },
+    Symbol { id: 0x0021, name: "__VAxiom" }];
 
 /// The collection of virtuals matched by this parser
 /// The virtuals are in an order consistent with the automaton,
@@ -158,8 +166,10 @@ pub trait Visitor {
     fn on_terminal_quote(&self, _node: &AstNode) {}
     fn on_terminal_integer(&self, _node: &AstNode) {}
     fn on_terminal_number(&self, _node: &AstNode) {}
+    fn on_terminal_type(&self, _node: &AstNode) {}
     fn on_terminal_string(&self, _node: &AstNode) {}
-    fn on_terminal_single_quote_string(&self, _node: &AstNode) {}
+    fn on_variable_var_def(&self, _node: &AstNode) {}
+    fn on_variable_var_def_value(&self, _node: &AstNode) {}
     fn on_variable_func(&self, _node: &AstNode) {}
     fn on_variable_funcargs(&self, _node: &AstNode) {}
     fn on_variable_exp_atom(&self, _node: &AstNode) {}
@@ -190,15 +200,17 @@ pub fn visit_ast_node<'a>(node: AstNode<'a>, visitor: &dyn Visitor) {
         0x0007 => visitor.on_terminal_quote(&node),
         0x0008 => visitor.on_terminal_integer(&node),
         0x0009 => visitor.on_terminal_number(&node),
-        0x000A => visitor.on_terminal_string(&node),
-        0x000B => visitor.on_terminal_single_quote_string(&node),
-        0x000C => visitor.on_variable_func(&node),
-        0x000D => visitor.on_variable_funcargs(&node),
-        0x000E => visitor.on_variable_exp_atom(&node),
-        0x000F => visitor.on_variable_exp_reizdal(&node),
-        0x0010 => visitor.on_variable_exp_plusmin(&node),
-        0x0011 => visitor.on_variable_exp(&node),
-        0x0012 => visitor.on_variable_root(&node),
+        0x000A => visitor.on_terminal_type(&node),
+        0x000B => visitor.on_terminal_string(&node),
+        0x000C => visitor.on_variable_var_def(&node),
+        0x000D => visitor.on_variable_var_def_value(&node),
+        0x000E => visitor.on_variable_func(&node),
+        0x000F => visitor.on_variable_funcargs(&node),
+        0x0010 => visitor.on_variable_exp_atom(&node),
+        0x0011 => visitor.on_variable_exp_reizdal(&node),
+        0x0012 => visitor.on_variable_exp_plusmin(&node),
+        0x0013 => visitor.on_variable_exp(&node),
+        0x0014 => visitor.on_variable_root(&node),
         _ => ()
     };
 }

@@ -1,1 +1,3 @@
-drukāt(ab)
+teksts tx = 'Sveika, pasaule!'
+
+drukāt(tx)
