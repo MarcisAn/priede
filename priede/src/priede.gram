@@ -14,13 +14,11 @@ grammar priede
         SEPARATOR   -> WHITE_SPACE+ | U+000A | LineTerminator;
 
         ID -> [a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_-]+;
-        //TEXT -> (.+);
         QUOTE -> '"';
-        
         INTEGER -> [1-9] [0-9]* | '0' ;
         NUMBER -> INTEGER;
-
-        TYPE -> 'teksts' | 'skaitlis' | 'liels skaitlis' | 'naturāls skaitlis' | 'liels naturāls skaitlis';
+        
+        
 
         STRING	-> '"' (
 									(. - ('"' | LineTerminator | '\\'))
@@ -41,8 +39,20 @@ grammar priede
 		
     }
     rules{
+        BOOL_DEF -> 'būls'!;
+        TEXT -> 'teksts'!;
+        NUM -> 'skaitlis'!;
+        LONG -> 'liels skaitlis'! | 'skaitlis liels'!;
+        NATURAL -> 'naturāls skailtis'! | 'skaitlis naturāls'!;
+        LONG_NAT -> 'naturāls liels skaitlis'! | 'liels naturāls skaitlis'!;
+
+        TYPE -> BOOL_DEF^ | TEXT^ | LONG^ | NATURAL^ | LONG_NAT^ | NUM^;
+
+        TRUE -> 'PAT'! | 'PATIESS'!;
+        FALSE -> 'NEPAT'! | 'NEPATIESS'!;
+        BOOL -> TRUE | FALSE;
         var_def -> TYPE ID '='! var_def_value;
-        var_def_value -> STRING^|NUMBER^;
+        var_def_value -> STRING^|NUMBER^|BOOL^;
         func -> ID '('! funcargs ')'!
                    | ID '()'! ;
 
