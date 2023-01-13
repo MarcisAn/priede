@@ -3,8 +3,15 @@ name = "priede"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 hime_redist = "3.5.1"
 colored = "2.0.0"
+arguments = "0.7.1"
+
+[lib]
+name = "interpreter"
+path = "src/interpreter/main.rs"
+
+[[bin]]
+name = "priede"
+path = "src/cli/main.rs"

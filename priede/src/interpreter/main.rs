@@ -6,13 +6,14 @@ use hime_redist::ast::AstNode;
 static mut AST_STR: String = String::new();
 use std::fs;
 
-fn main() {
-    let contents = fs::read_to_string("L:/Dev/priede/examples/sveika_pasaule.pr").unwrap();
+pub fn main(print_ast: bool, src_file: String) {
+    let contents = fs::read_to_string(src_file).unwrap();
     //print!("{:?}", contents);
     let result = priede::parse_string(&contents);
     let ast = result.get_ast();
-    //print!("{:?}", root.children().at(0).children().at(0).to_string());
-    format_ast(ast.get_root(), Vec::<bool>::new());
+    if print_ast {
+        format_ast(ast.get_root(), Vec::<bool>::new());
+    }
     ast_parser::parse_ast(ast.get_root());
 }
 //fn write_to_file(input: String) -> io::Result<()> {
