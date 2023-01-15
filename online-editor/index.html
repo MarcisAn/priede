@@ -9,11 +9,13 @@
   <body>
     <textarea name="code" id="code" cols="30" rows="10"></textarea>
     <button id="btn">Palaist</button>
+    <h2>Programmas izvade ir pārlūka konsolē!</h2>
   </body>
   <script type="module">
     import init, { run } from "./pkg/priede_wasm.js";
-    await init();
     var x = document.getElementById("code");
+    x.value = 'drukāt("Sveika, pasaule!")';
+    await init();
     var btn = document.getElementById("btn");
     btn.onclick = function () {
       run(x.value);
