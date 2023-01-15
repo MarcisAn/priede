@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="lv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PRIEDE</title>
+  </head>
+  <body>
+    <textarea name="code" id="code" cols="30" rows="10"></textarea>
+    <button id="btn">Palaist</button>
+  </body>
+  <script type="module">
+    import init, { run } from "../wasm/pkg/priede_wasm.js";
+    await init();
+    var x = document.getElementById("code");
+    var btn = document.getElementById("btn");
+    btn.onclick = function () {
+      run(x.value);
+    };
+  </script>
+</html>

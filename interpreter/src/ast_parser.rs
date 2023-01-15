@@ -1,4 +1,6 @@
 //use colored::*;
+use crate::main;
+use crate::print;
 use core::fmt;
 use hime_redist::ast::AstNode;
 
@@ -47,11 +49,13 @@ fn func_return(input: &FunCall) -> ValueNode {
     if input.id == "aa" {
         return ValueNode::Number(5);
     } else if input.id == "drukāt" {
-        print!("{}", input.args[0].eval());
+        //print!("{}", input.args[0].eval());
+        print(format!("{}", input.args[0].eval()));
         return ValueNode::None("".to_string());
     } else if input.id == "drukātJr" {
         println!("");
-        print!("{}", input.args[0].eval());
+        //print!("{}", input.args[0].eval());
+        print(format!("\n{}", input.args[0].eval()));
         return ValueNode::None("".to_string());
     } else {
         return ValueNode::None("".to_string());
