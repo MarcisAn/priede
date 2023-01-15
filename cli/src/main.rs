@@ -6,6 +6,7 @@ pub fn main() {
         interpreter::interpret(
             false,
             String::from("L:/Dev/priede/examples/sveika_pasaule.pr"),
+            false,
         );
     } else {
         let mut print_ast: bool = false;
@@ -14,6 +15,6 @@ pub fn main() {
                 print_ast = true;
             }
         }
-        interpreter::interpret(print_ast, String::from(arguments.orphans[0].clone()));
+        interpreter::interpret(print_ast, String::from(arguments.orphans[0].clone()), false);
     }
 }
