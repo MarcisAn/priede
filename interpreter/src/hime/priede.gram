@@ -53,7 +53,8 @@ grammar priede
         BOOL -> TRUE | FALSE;
         var_def -> TYPE ID '='! var_def_value;
         var_def_value -> STRING^|NUMBER^|BOOL^;
-        func -> ID '('! funcargs ')'!
+
+        func_call -> ID '('! funcargs ')'!
                    | ID '()'! ;
 
         funcargs -> exp|exp (','! exp)*;
@@ -61,7 +62,7 @@ grammar priede
         exp_atom -> NUMBER^
                    | '('! exp^ ')'! 
                    |  ID^
-                   |  func^;
+                   |  func_call^;
 
         exp_reizdal -> exp_atom^
                    |  exp_reizdal '*' exp_atom
@@ -74,6 +75,8 @@ grammar priede
                    |  exp_plusmin^
                    |  STRING^;
 
-        root ->  var_def* func*;
+        stat -> var_def^ | func_call^;
+        block -> stat*;
+        root ->  block^;
     }
 }

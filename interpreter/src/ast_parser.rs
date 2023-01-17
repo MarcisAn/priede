@@ -138,7 +138,7 @@ impl Pop for ValueNode {
 }
 
 fn parse_function(input: AstNode<'_>) -> crate::ast_parser::ValueNode {
-    if input.to_string() == "func" {
+    if input.to_string() == "func_call" {
         let node = input.clone();
         let binding = node.children();
         let binding = binding.at(1);
@@ -215,15 +215,23 @@ fn parse_function(input: AstNode<'_>) -> crate::ast_parser::ValueNode {
             value: parse_function(input.children().at(2)),
         }))
         .eval();
+    } else if input.to_string() == "block" {
+        let mut i = 0;
+        while i < input.children().len() {
+            parse_function(input.children().at(i));
+            i += 1;
+        }
+        return ValueNode::None("".to_string()).eval();
     } else {
         return ValueNode::None("".to_string()).eval();
     }
 }
 pub fn parse_ast(input: AstNode<'_>) {
-    let mut i = 0;
-    let children = input.children();
-    while i < input.children().len() {
-        parse_function(children.at(i));
-        i += 1;
-    }
+    parse_function(input);
+    //let mut i = 0;
+    //let children = input.children();
+    //while i < input.children().len() {
+    //    parse_function(children.at(i));
+    //    i += 1;
+    //}
 }

@@ -1,2 +1,5 @@
-drukāt(2)
-drukātJr(3)
+skaitlis aa = 2
+drukātJr(aa)
+drukātJr(aa)
+skaitlis bb = 4
+drukātJr(bb)
