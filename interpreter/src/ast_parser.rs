@@ -1,17 +1,7 @@
 //use colored::*;
 use crate::ast::Eval;
 use crate::ast::{self, Pop};
-use crate::print;
-use core::fmt;
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
-//struct FuncDef {
-//    id: String,
-//    args: Vec<FuncArg>,
-//}
-//struct FuncArg {
-//    arg_type: String,
-//    arg_name: String,
-//}
 
 fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
     if input.to_string() == "func_call" {
@@ -19,13 +9,7 @@ fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         let binding = node.children();
         let binding = binding.at(1);
         let args = binding.children(); //argumenti
-        let id = node
-            .children()
-            .at(0)
-            .to_string()
-            .split("ID = ")
-            .collect::<Vec<&str>>()[1]
-            .to_string();
+        let id = node.children().at(0).get_value().unwrap();
         let mut arguments: Vec<ast::ValueNode> = Vec::new();
         let mut j = 0;
         while j < node.children().at(1).children().len() {
@@ -104,10 +88,4 @@ fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
 }
 pub fn parse_ast(input: AstNode<'_>) {
     parse_function(input);
-    //let mut i = 0;
-    //let children = input.children();
-    //while i < input.children().len() {
-    //    parse_function(children.at(i));
-    //    i += 1;
-    //}
 }

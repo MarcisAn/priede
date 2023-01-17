@@ -1,5 +1,14 @@
 use core::fmt;
 
+//struct FuncDef {
+//    id: String,
+//    args: Vec<FuncArg>,
+//}
+//struct FuncArg {
+//    arg_type: String,
+//    arg_name: String,
+//}
+
 #[derive(Debug, Clone)]
 pub struct FunCall {
     pub(crate) id: String,

@@ -2,6 +2,7 @@ mod ast;
 mod ast_parser;
 mod hime;
 mod interpreter;
+mod priede_std;
 
 extern crate hime_redist;
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
@@ -10,7 +11,6 @@ static mut AST_STR: String = String::new();
 static mut IS_WASM: bool = false;
 use std::fs;
 /*
-
 use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 extern "C" {
@@ -23,10 +23,6 @@ extern "C" {
 pub fn run_wasm(code: String) {
     interpret(true, code, true);
 }*/
-pub fn print(out: String) {
-    print!("{}", out);
-    //log(&out);
-}
 
 pub fn main() {}
 

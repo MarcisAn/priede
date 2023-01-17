@@ -1,16 +1,17 @@
 use crate::ast::{self, Eval, Var};
+use crate::priede_std::io::{print, printnl};
 
 pub fn func_return(input: &ast::FunCall) -> ast::ValueNode {
     if input.id == "aa" {
         return ast::ValueNode::Number(5);
     } else if input.id == "drukāt" {
-        print!("{}", input.args[0].eval());
-        //print(format!("{}", input.args[0].eval()));
+        //print!("{}", input.args[0].eval());
+        print(format!("{}", input.args[0].eval()));
         return ast::ValueNode::None("".to_string());
-    } else if input.id == "drukātJr" {
+    } else if input.id == "drukātJr" || input.id == "drukātjr" {
         //println!("");
-        print!("{}", input.args[0].eval());
-        //print(format!("\n{}", input.args[0].eval()));
+        //print!("{}", input.args[0].eval());
+        printnl(format!("{}", input.args[0].eval()));
         return ast::ValueNode::None("".to_string());
     } else {
         return ast::ValueNode::None("".to_string());
