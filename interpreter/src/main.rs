@@ -1,5 +1,8 @@
+mod ast;
 mod ast_parser;
 mod hime;
+mod interpreter;
+
 extern crate hime_redist;
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 //use hime_redist::symbols::SemanticElementTrait;
