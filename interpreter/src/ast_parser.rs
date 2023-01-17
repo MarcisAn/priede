@@ -1,9 +1,7 @@
 //use colored::*;
-use crate::main;
 use crate::print;
 use core::fmt;
-use hime_redist::ast::AstNode;
-
+use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 //struct FuncDef {
 //    id: String,
 //    args: Vec<FuncArg>,
@@ -53,7 +51,7 @@ fn func_return(input: &FunCall) -> ValueNode {
         print(format!("{}", input.args[0].eval()));
         return ValueNode::None("".to_string());
     } else if input.id == "drukātJr" {
-        println!("");
+        //println!("");
         //print!("{}", input.args[0].eval());
         print(format!("\n{}", input.args[0].eval()));
         return ValueNode::None("".to_string());
@@ -179,11 +177,7 @@ fn parse_function(input: AstNode<'_>) -> crate::ast_parser::ValueNode {
             return ValueNode::None("".to_string()).eval();
         }
     } else if input.to_string().starts_with("NUMBER = ") {
-        return ValueNode::Number(
-            input.to_string().split("NUMBER = ").collect::<Vec<&str>>()[1]
-                .parse::<i32>()
-                .unwrap(),
-        );
+        return ValueNode::Number(input.get_value().unwrap().parse::<i32>().unwrap());
     } else if input.to_string() == "BOOL" {
         if input.children().at(0).to_string() == "FALSE" {
             return ValueNode::Bool(false);
@@ -191,10 +185,7 @@ fn parse_function(input: AstNode<'_>) -> crate::ast_parser::ValueNode {
             return ValueNode::Bool(true);
         }
     } else if input.to_string().starts_with("ID = ") {
-        return ValueNode::Id(
-            input.to_string().split("ID = ").collect::<Vec<&str>>()[1].to_string(),
-        )
-        .eval();
+        return ValueNode::Id(input.get_value().unwrap()).eval();
     } else if input.to_string().starts_with("STRING = ") {
         let string = input.to_string().split("STRING = ").collect::<Vec<&str>>()[1].to_string();
         if string.starts_with("\"") && string.ends_with("\"") {
@@ -215,13 +206,7 @@ fn parse_function(input: AstNode<'_>) -> crate::ast_parser::ValueNode {
             return ValueNode::None("".to_string());
         }
     } else if input.to_string() == "var_def" {
-        let id = input
-            .children()
-            .at(1)
-            .to_string()
-            .split("ID = ")
-            .collect::<Vec<&str>>()[1]
-            .to_string();
+        let id = input.children().at(1).get_value().unwrap();
         let var_type = input.children().at(0).to_string();
 
         return ValueNode::VarDef(Box::new(Var {

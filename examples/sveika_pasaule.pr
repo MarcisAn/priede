@@ -1,3 +1,2 @@
-liels naturāls skaitlis tx = 2
-
-drukāt(tx)
+drukāt(2)
+drukātJr(3)

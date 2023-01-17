@@ -1,19 +1,14 @@
 mod ast_parser;
-mod priede;
+mod hime;
 extern crate hime_redist;
-use hime_redist::ast::AstNode;
+use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 //use hime_redist::symbols::SemanticElementTrait;
 static mut AST_STR: String = String::new();
 static mut IS_WASM: bool = false;
 use std::fs;
+/*
+
 use wasm_bindgen::prelude::*;
-
-pub fn main() {}
-pub fn print(out: String) {
-    print!("{}", out);
-    log(&out);
-}
-
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
@@ -24,7 +19,13 @@ extern "C" {
 #[wasm_bindgen]
 pub fn run_wasm(code: String) {
     interpret(true, code, true);
+}*/
+pub fn print(out: String) {
+    print!("{}", out);
+    //log(&out);
 }
+
+pub fn main() {}
 
 pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
     unsafe {
@@ -34,7 +35,7 @@ pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
     ////print!("{:?}", contents);
     //let result = priede::parse_string(&contents);
     if isWASM {
-        let result = priede::parse_string(&src_file);
+        let result = hime::priede::parse_string(&src_file);
         let ast = result.get_ast();
         //if print_ast {
         //    format_ast(ast.get_root(), Vec::<bool>::new());
@@ -43,11 +44,12 @@ pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
     } else {
         let contents = fs::read_to_string(src_file).unwrap();
         //print!("{:?}", contents);
-        let result = priede::parse_string(&contents);
+        let result = hime::priede::parse_string(&contents);
         let ast = result.get_ast();
         if print_ast {
             format_ast(ast.get_root(), Vec::<bool>::new());
         }
+
         ast_parser::parse_ast(ast.get_root());
     }
 }
