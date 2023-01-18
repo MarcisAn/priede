@@ -82,6 +82,11 @@ fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
             i += 1;
         }
         return ast::ValueNode::None("".to_string()).eval();
+    } else if input.to_string() == "if" {
+        if input.children().at(0).children().at(0).to_string() == "TRUE" {
+            parse_function(input.children().at(1));
+        }
+        return ast::ValueNode::None("".to_string()).eval();
     } else {
         return ast::ValueNode::None("".to_string()).eval();
     }

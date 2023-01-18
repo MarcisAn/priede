@@ -78,7 +78,7 @@ fn format_ast<'a>(node: AstNode<'a>, crossings: Vec<bool>) {
     let mut i = 0;
     if !crossings.is_empty() {
         while i < crossings.len() - 1 {
-            print!("{:}", " ");
+            print!("{:}", "  ");
             concat("\x00".to_string());
             i += 1;
         }

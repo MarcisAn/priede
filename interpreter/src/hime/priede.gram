@@ -59,6 +59,20 @@ grammar priede
 
         funcargs -> exp|exp (','! exp)*;
 
+        comp_s ->    exp '==' exp
+                   | exp '>' exp
+                   | exp '>=' exp
+                   | exp '<' exp
+                   | exp '>=' exp
+                   | exp '!=' exp;
+
+        comp -> comp_s^ |
+                comp_s^ 'vai' comp |
+                comp_s^ 'un' comp|
+                BOOL^;
+
+        if -> 'ja'! comp '{'! block '}'!;
+
         exp_atom -> NUMBER^
                    | '('! exp^ ')'! 
                    |  ID^
@@ -75,7 +89,7 @@ grammar priede
                    |  exp_plusmin^
                    |  STRING^;
 
-        stat -> var_def^ | func_call^;
+        stat -> var_def^ | func_call^ | if^;
         block -> stat*;
         root ->  block^;
     }
