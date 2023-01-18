@@ -73,13 +73,6 @@ export function run(code) {
     wasm.run(ptr0, len0);
 }
 
-const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
-
-cachedTextDecoder.decode();
-
-function getStringFromWasm0(ptr, len) {
-    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
-}
 /**
 * @param {string} code
 */
@@ -123,9 +116,6 @@ async function load(module, imports) {
 function getImports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbg_log_7fb17fc1a6b3bee8 = function(arg0, arg1) {
-        console.log(getStringFromWasm0(arg0, arg1));
-    };
 
     return imports;
 }

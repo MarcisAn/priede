@@ -22,8 +22,8 @@ extern "C" {
 #[wasm_bindgen]
 pub fn run_wasm(code: String) {
     interpret(true, code, true);
-}*/
-
+}
+ */
 pub fn main() {}
 
 pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
