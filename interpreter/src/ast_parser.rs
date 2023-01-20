@@ -1,9 +1,10 @@
 //use colored::*;
-use crate::ast::Eval;
 use crate::ast::{self, Pop};
+use crate::ast::{Eval, ValueNode};
+use crate::interpreter::{arithemtics, arithemtics_int};
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 
-fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
+pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
     if input.to_string() == "func_call" {
         let node = input.clone();
         let binding = node.children();
@@ -23,21 +24,9 @@ fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         .eval();
     } else if input.to_string() == "exp_plusmin" || input.to_string() == "exp_reizdal" {
         // aritmētiskās darbības
-        let left_value = parse_function(input.children().at(0)).pop_number();
-        let right_value = parse_function(input.children().at(2)).pop_number();
-        if input.children().at(1).to_string() == "+ = +" {
-            return ast::ValueNode::Number(left_value + right_value).eval();
-        } else if input.children().at(1).to_string() == "- = -" {
-            return ast::ValueNode::Number(left_value - right_value).eval();
-        } else if input.children().at(1).to_string() == "* = *" {
-            return ast::ValueNode::Number(left_value * right_value).eval();
-        } else if input.children().at(1).to_string() == "/ = /" {
-            return ast::ValueNode::Number(left_value / right_value).eval();
-        } else {
-            return ast::ValueNode::None("".to_string()).eval();
-        }
+        return arithemtics_int(input);
     } else if input.to_string().starts_with("NUMBER = ") {
-        return ast::ValueNode::Number(input.get_value().unwrap().parse::<i32>().unwrap());
+        return ast::ValueNode::Int(input.get_value().unwrap().parse::<i32>().unwrap());
     } else if input.to_string() == "BOOL" {
         if input.children().at(0).to_string() == "FALSE" {
             return ast::ValueNode::Bool(false);
