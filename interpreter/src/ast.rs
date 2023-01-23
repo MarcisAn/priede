@@ -9,7 +9,7 @@ use core::fmt;
 //    arg_name: String,
 //}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub struct FunCall {
     pub(crate) id: String,
     pub(crate) args: Vec<ValueNode>,
@@ -21,18 +21,17 @@ pub struct Var {
     pub(crate) value: ValueNode,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub enum ValueNode {
     //Number(i32),
     Int(i32),
     Nat(u32),
-    Long(i128),
-    LongNat(u128),
+    Long(i64),
+    LongNat(u64),
     String(String),
     None(String),
     FunCall(FunCall),
     Id(String),
-    VarDef(Box<Var>),
     Bool(bool),
 }
 #[derive(Debug)]
@@ -42,10 +41,11 @@ pub trait Eval {
 }
 pub trait Pop {
     fn pop_int(&self) -> i32;
-    fn pop_long(&self) -> i128;
-    fn pop_long_nat(&self) -> u128;
+    fn pop_long(&self) -> i64;
+    fn pop_long_nat(&self) -> u64;
     fn pop_nat(&self) -> u32;
     fn pop_str(&self) -> String;
+    fn pop_bool(&self) -> bool;
 }
 impl Eval for ValueNode {
     fn eval(&self) -> ValueNode {
@@ -58,7 +58,6 @@ impl Eval for ValueNode {
             ValueNode::FunCall(value) => crate::interpreter::func_return(value),
             ValueNode::String(value) => return ValueNode::String(value.to_string()),
             ValueNode::Id(value) => crate::interpreter::id_return(value.to_string()),
-            ValueNode::VarDef(value) => crate::interpreter::define_variable(value),
             ValueNode::Bool(value) => ValueNode::Bool(*value),
         }
     }
@@ -87,6 +86,12 @@ impl fmt::Display for ValueNode {
     }
 }
 impl Pop for ValueNode {
+    fn pop_bool(&self) -> bool {
+        match &self {
+            ValueNode::Bool(value) => return *value,
+            _ => todo!(),
+        }
+    }
     fn pop_int(&self) -> i32 {
         match &self {
             ValueNode::Int(value) => return *value,
@@ -100,20 +105,19 @@ impl Pop for ValueNode {
         }
     }
 
-    fn pop_long(&self) -> i128 {
+    fn pop_long(&self) -> i64 {
         match &self {
             ValueNode::Long(value) => return *value,
             _ => todo!(),
         }
     }
 
-    fn pop_long_nat(&self) -> u128 {
+    fn pop_long_nat(&self) -> u64 {
         match &self {
             ValueNode::LongNat(value) => return *value,
             _ => todo!(),
         }
     }
-
     fn pop_nat(&self) -> u32 {
         match &self {
             ValueNode::Nat(value) => return *value,

@@ -1,7 +1,6 @@
-//use colored::*;
 use crate::ast::{self, Pop};
 use crate::ast::{Eval, ValueNode};
-use crate::interpreter::{arithemtics, arithemtics_int};
+use crate::interpreter::{arithemtics_int, compare, define_variable, print_error};
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 
 pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
@@ -26,7 +25,14 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         // aritmētiskās darbības
         return arithemtics_int(input);
     } else if input.to_string().starts_with("NUMBER = ") {
-        return ast::ValueNode::Int(input.get_value().unwrap().parse::<i32>().unwrap());
+        //19
+        if input.get_value().unwrap().len() >= 9 {
+            return ast::ValueNode::Long(input.get_value().unwrap().parse::<i64>().unwrap());
+        } else if input.get_value().unwrap().len() >= 19 {
+            return ast::ValueNode::LongNat(input.get_value().unwrap().parse::<u64>().unwrap());
+        } else {
+            return ast::ValueNode::Int(input.get_value().unwrap().parse::<i32>().unwrap());
+        }
     } else if input.to_string() == "BOOL" {
         if input.children().at(0).to_string() == "FALSE" {
             return ast::ValueNode::Bool(false);
@@ -57,13 +63,11 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
     } else if input.to_string() == "var_def" {
         let id = input.children().at(1).get_value().unwrap();
         let var_type = input.children().at(0).to_string();
-
-        return ast::ValueNode::VarDef(Box::new(ast::Var {
-            id: id,
-            var_type: var_type,
-            value: parse_function(input.children().at(2)),
-        }))
-        .eval();
+        let value = parse_function(input.children().at(2));
+        //print!("{}", input.children().at(2));
+        //print!("{}", var_type);
+        define_variable(id, var_type, value);
+        return ast::ValueNode::None("".to_string());
     } else if input.to_string() == "block" {
         let mut i = 0;
         while i < input.children().len() {
@@ -72,14 +76,30 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         }
         return ast::ValueNode::None("".to_string()).eval();
     } else if input.to_string() == "if" {
-        if input.children().at(0).children().at(0).to_string() == "TRUE" {
-            parse_function(input.children().at(1));
+        let comp = parse_function(input.children().at(0));
+        if comp != ValueNode::None("".to_string()) {
+            if comp.pop_bool() {
+                parse_function(input.children().at(1));
+            }
         }
+
         return ast::ValueNode::None("".to_string()).eval();
+    } else if input.to_string() == "comp_s" {
+        let left = parse_function(input.children().at(0));
+        let right = parse_function(input.children().at(2));
+        let comp = compare(left, right);
+        if comp.is_err() {
+            let line = input.children().at(1).get_position().unwrap().line;
+            print_error(line, comp.err().unwrap());
+            return ast::ValueNode::None("".to_string());
+        } else {
+            if comp.unwrap() {
+                return ast::ValueNode::Bool(true);
+            } else {
+                return ast::ValueNode::Bool(false);
+            }
+        }
     } else {
         return ast::ValueNode::None("".to_string()).eval();
     }
-}
-pub fn parse_ast(input: AstNode<'_>) {
-    parse_function(input);
 }

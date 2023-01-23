@@ -1,2 +1,7 @@
-skaitlis aa = -2
-drukāt(aa * 2)
+skaitlis aaa = 4
+skaitlis nobide = 4
+teksts cav = 'bbb'
+
+ja aaa == nobide {
+    drukāt("cav")
+}

@@ -3,6 +3,7 @@ mod ast_parser;
 mod hime;
 mod interpreter;
 mod priede_std;
+use colored::*;
 
 extern crate hime_redist;
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
@@ -39,17 +40,15 @@ pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
         //if print_ast {
         //    format_ast(ast.get_root(), Vec::<bool>::new());
         //}
-        ast_parser::parse_ast(ast.get_root());
+        ast_parser::parse_function(ast.get_root());
     } else {
         let contents = fs::read_to_string(src_file).unwrap();
-        //print!("{:?}", contents);
         let result = hime::priede::parse_string(&contents);
         let ast = result.get_ast();
         if print_ast {
             format_ast(ast.get_root(), Vec::<bool>::new());
         }
-
-        ast_parser::parse_ast(ast.get_root());
+        ast_parser::parse_function(ast.get_root());
     }
 }
 //fn write_to_file(input: String) -> io::Result<()> {
@@ -85,7 +84,7 @@ fn format_ast<'a>(node: AstNode<'a>, crossings: Vec<bool>) {
         print!(" ");
         concat("\x00".to_string());
     }
-    println!("{:}", node);
+    println!("{:}", node.to_string().blue());
     concat(node.to_string() + "\n");
     i = 0;
     let children = node.children();

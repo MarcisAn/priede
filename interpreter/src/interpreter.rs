@@ -2,7 +2,20 @@ use crate::ast::{self, Eval, Pop, ValueNode, Var};
 use crate::ast_parser::parse_function;
 use crate::hime_redist::symbols::SemanticElementTrait;
 use crate::priede_std::io::{print, printnl};
+use colored::*;
 use hime_redist::ast::AstNode;
+
+pub fn print_error(line: usize, msg: String) {
+    println!(
+        "{}",
+        format!(
+            "Kļūda {} rindiņā: \n{}",
+            line.to_string(),
+            msg.to_string().on_red()
+        )
+        .red()
+    );
+}
 
 pub fn func_return(input: &ast::FunCall) -> ast::ValueNode {
     if input.id == "aa" {
@@ -25,15 +38,7 @@ pub fn id_return(input: String) -> ast::ValueNode {
     unsafe {
         for i in &VARIABLES {
             if i.id == input {
-                match i.var_type.as_str() {
-                    "NUM" => value = i.value.clone(),
-                    "NATURAL" => value = i.value.clone(),
-                    "LONG" => value = i.value.clone(),
-                    "LONG_NAT" => value = i.value.clone(),
-                    "TEXT" => value = i.value.clone(),
-                    "BOOL_DEF" => value = i.value.clone(),
-                    &_ => todo!(),
-                }
+                value = i.value.clone()
             }
         }
     }
@@ -41,15 +46,29 @@ pub fn id_return(input: String) -> ast::ValueNode {
 }
 static mut VARIABLES: Vec<Var> = Vec::new();
 
-pub fn define_variable(input: &Var) -> ast::ValueNode {
-    unsafe {
-        VARIABLES.push(ast::Var {
-            id: input.id.clone(),
-            var_type: input.var_type.clone(),
-            value: input.value.clone(),
-        });
+pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueNode {
+    print!("{:?} {}", value, var_type);
+    let mut overwrite: bool = false;
+    let mut overwritten_value: ValueNode;
+
+    if overwrite {
+        unsafe {
+            VARIABLES.push(ast::Var {
+                id: id.clone(),
+                value: value,
+                var_type: var_type,
+            });
+        }
+    } else {
+        unsafe {
+            VARIABLES.push(ast::Var {
+                id: id.clone(),
+                value: overwritten_value,
+                var_type: var_type,
+            });
+        }
     }
-    return ast::ValueNode::None("".to_string());
+    return ValueNode::None("".to_string());
 }
 //TODO: merge next two functions
 pub fn arithemtics_int(input: AstNode) -> ValueNode {
@@ -60,25 +79,25 @@ pub fn arithemtics_int(input: AstNode) -> ValueNode {
     let mut left_type = "";
     let mut right_type = "";
 
-    let mut left_node = parse_function(input.children().at(0));
-    let mut right_node = parse_function(input.children().at(2));
+    let left_node = parse_function(input.children().at(0));
+    let right_node = parse_function(input.children().at(2));
 
     match &left {
-        ValueNode::Int(value) => left_type = "int",
-        ValueNode::Nat(value) => left_type = "nat",
-        ValueNode::Long(value) => left_type = "long",
-        ValueNode::LongNat(value) => left_type = "longnat",
-        ValueNode::String(value) => left_type = "string",
-        ValueNode::Bool(value) => left_type = "bool",
+        ValueNode::Int(_) => left_type = "int",
+        ValueNode::Nat(_) => left_type = "nat",
+        ValueNode::Long(_) => left_type = "long",
+        ValueNode::LongNat(_) => left_type = "longnat",
+        ValueNode::String(_) => left_type = "string",
+        ValueNode::Bool(_) => left_type = "bool",
         _ => todo!(),
     };
     match &right {
-        ValueNode::Int(value) => right_type = "int",
-        ValueNode::Nat(value) => right_type = "nat",
-        ValueNode::Long(value) => right_type = "long",
-        ValueNode::LongNat(value) => right_type = "longnat",
-        ValueNode::String(value) => right_type = "string",
-        ValueNode::Bool(value) => right_type = "bool",
+        ValueNode::Int(_) => right_type = "int",
+        ValueNode::Nat(_) => right_type = "nat",
+        ValueNode::Long(_) => right_type = "long",
+        ValueNode::LongNat(_) => right_type = "longnat",
+        ValueNode::String(_) => right_type = "string",
+        ValueNode::Bool(_) => right_type = "bool",
         _ => todo!(),
     };
     if right_type == "longnat" || left_type == "longnat" {
@@ -145,4 +164,36 @@ pub fn arithemtics(
     }
 
     return res;
+}
+pub fn compare(left: ValueNode, right: ValueNode) -> Result<bool, String> {
+    let mut left_type;
+    let mut right_type;
+    match &left {
+        ValueNode::Int(_) => left_type = "int",
+        ValueNode::Nat(_) => left_type = "nat",
+        ValueNode::Long(_) => left_type = "long",
+        ValueNode::LongNat(_) => left_type = "longnat",
+        ValueNode::String(_) => left_type = "string",
+        ValueNode::Bool(_) => left_type = "bool",
+        _ => todo!(),
+    };
+    match &right {
+        ValueNode::Int(_) => right_type = "int",
+        ValueNode::Nat(_) => right_type = "nat",
+        ValueNode::Long(_) => right_type = "long",
+        ValueNode::LongNat(_) => right_type = "longnat",
+        ValueNode::String(_) => right_type = "string",
+        ValueNode::Bool(_) => right_type = "bool",
+        _ => todo!(),
+    };
+    //print!("{} {}", left_type, right_type);
+    if left_type != right_type {
+        return Err("salīdzināmie datu tipi nav vienādi".to_string());
+    } else {
+        if left == right {
+            return Ok(true);
+        } else {
+            return Ok(false);
+        }
+    }
 }
