@@ -1,7 +1,6 @@
 skaitlis aaa = 4
-skaitlis nobide = 4
-teksts cav = 'bbb'
+liels skaitlis bb = 3
 
-ja aaa == nobide {
-    drukāt("cav")
+ja 2==2 {
+    drukāt("Sveika, pasaule!")//aaaa
 }

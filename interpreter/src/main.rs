@@ -26,7 +26,7 @@ pub fn run_wasm(code: String) {
 }
  */
 pub fn main() {}
-
+//TODO: līnijas komentāri nestrādā koda pēdējā rindiņā
 pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
     unsafe {
         IS_WASM = isWASM;

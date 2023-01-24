@@ -23,7 +23,14 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         .eval();
     } else if input.to_string() == "exp_plusmin" || input.to_string() == "exp_reizdal" {
         // aritmētiskās darbības
-        return arithemtics_int(input);
+        let act = arithemtics_int(input.clone());
+        if act.is_err() {
+            let line = input.children().at(1).get_position().unwrap().line;
+            print_error(line, act.err().unwrap());
+            return ast::ValueNode::None("".to_string());
+        } else {
+            return act.unwrap();
+        }
     } else if input.to_string().starts_with("NUMBER = ") {
         //19
         if input.get_value().unwrap().len() >= 9 {

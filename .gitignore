@@ -6,3 +6,4 @@ himecc.exe
 priedeLexer.bin
 priedeParser.bin
 node_modules
+interpreter/Cargo.lock

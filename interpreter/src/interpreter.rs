@@ -1,3 +1,5 @@
+use std::fmt::Error;
+
 use crate::ast::{self, Eval, Pop, ValueNode, Var};
 use crate::ast_parser::parse_function;
 use crate::hime_redist::symbols::SemanticElementTrait;
@@ -9,7 +11,7 @@ pub fn print_error(line: usize, msg: String) {
     println!(
         "{}",
         format!(
-            "Kļūda {} rindiņā: \n{}",
+            "Kļūda rindiņā {}: \n{}",
             line.to_string(),
             msg.to_string().on_red()
         )
@@ -47,31 +49,69 @@ pub fn id_return(input: String) -> ast::ValueNode {
 static mut VARIABLES: Vec<Var> = Vec::new();
 
 pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueNode {
-    print!("{:?} {}", value, var_type);
-    let mut overwrite: bool = false;
-    let mut overwritten_value: ValueNode;
+    let mut overwritten_value_node: ValueNode = value.clone();
 
-    if overwrite {
-        unsafe {
-            VARIABLES.push(ast::Var {
-                id: id.clone(),
-                value: value,
-                var_type: var_type,
-            });
+    if &var_type == "NUM" {
+        let mut overwritten_value;
+        match &value {
+            ValueNode::Int(value) => overwritten_value = *value as i32,
+            ValueNode::Nat(value) => overwritten_value = *value as i32,
+            ValueNode::Long(value) => overwritten_value = *value as i32,
+            ValueNode::LongNat(value) => overwritten_value = *value as i32,
+            ValueNode::Bool(value) => overwritten_value = *value as i32,
+            _ => todo!(),
         }
-    } else {
-        unsafe {
-            VARIABLES.push(ast::Var {
-                id: id.clone(),
-                value: overwritten_value,
-                var_type: var_type,
-            });
+        overwritten_value_node = ValueNode::Int(overwritten_value);
+    }
+    if &var_type == "LONG" {
+        let mut overwritten_value;
+        match &value {
+            ValueNode::Int(value) => overwritten_value = *value as i64,
+            ValueNode::Nat(value) => overwritten_value = *value as i64,
+            ValueNode::Long(value) => overwritten_value = *value as i64,
+            ValueNode::LongNat(value) => overwritten_value = *value as i64,
+            ValueNode::Bool(value) => overwritten_value = *value as i64,
+            _ => todo!(),
         }
+        overwritten_value_node = ValueNode::Long(overwritten_value);
+    }
+    if &var_type == "NAT" {
+        let mut overwritten_value;
+        match &value {
+            ValueNode::Int(value) => overwritten_value = *value as u32,
+            ValueNode::Nat(value) => overwritten_value = *value as u32,
+            ValueNode::Long(value) => overwritten_value = *value as u32,
+            ValueNode::LongNat(value) => overwritten_value = *value as u32,
+            ValueNode::Bool(value) => overwritten_value = *value as u32,
+            _ => todo!(),
+        }
+        overwritten_value_node = ValueNode::Nat(overwritten_value);
+    }
+    if &var_type == "LONGNAT" {
+        let mut overwritten_value;
+        match &value {
+            ValueNode::Int(value) => overwritten_value = *value as u64,
+            ValueNode::Nat(value) => overwritten_value = *value as u64,
+            ValueNode::Long(value) => overwritten_value = *value as u64,
+            ValueNode::LongNat(value) => overwritten_value = *value as u64,
+            ValueNode::Bool(value) => overwritten_value = *value as u64,
+            _ => todo!(),
+        }
+        overwritten_value_node = ValueNode::LongNat(overwritten_value);
+    }
+
+    let var = ast::Var {
+        id: id.clone(),
+        value: overwritten_value_node,
+        var_type: var_type,
+    };
+    unsafe {
+        VARIABLES.push(var.clone());
     }
     return ValueNode::None("".to_string());
 }
 //TODO: merge next two functions
-pub fn arithemtics_int(input: AstNode) -> ValueNode {
+pub fn arithemtics_int(input: AstNode) -> Result<ValueNode, String> {
     let operation = input.children().at(1).get_value().unwrap();
     let left = parse_function(input.children().at(0));
     let right = parse_function(input.children().at(2));
@@ -100,16 +140,20 @@ pub fn arithemtics_int(input: AstNode) -> ValueNode {
         ValueNode::Bool(_) => right_type = "bool",
         _ => todo!(),
     };
-    if right_type == "longnat" || left_type == "longnat" {
-        return arithemtics(&operation, left_node, right_node, "longnat");
-    } else if right_type == "long" || left_type == "long" {
-        return arithemtics(&operation, left_node, right_node, "long");
-    } else if right_type == "nat" || left_type == "nat" {
-        return arithemtics(&operation, left_node, right_node, "nat");
-    } else if right_type == "int" || left_type == "int" {
-        return arithemtics(&operation, left_node, right_node, "int");
+    if left_type != right_type {
+        return Err("aritmētiskās darbības locekļu datu tipi nav vienādi".to_string());
     } else {
-        return ValueNode::None("".to_string());
+        if right_type == "longnat" || left_type == "longnat" {
+            return Ok(arithemtics(&operation, left_node, right_node, "longnat"));
+        } else if right_type == "long" || left_type == "long" {
+            return Ok(arithemtics(&operation, left_node, right_node, "long"));
+        } else if right_type == "nat" || left_type == "nat" {
+            return Ok(arithemtics(&operation, left_node, right_node, "nat"));
+        } else if right_type == "int" || left_type == "int" {
+            return Ok(arithemtics(&operation, left_node, right_node, "int"));
+        } else {
+            return Err("nav iespējams veikt aritmētisko darbību".to_string());
+        }
     }
 }
 pub fn arithemtics(

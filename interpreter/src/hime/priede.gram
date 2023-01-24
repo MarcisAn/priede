@@ -11,7 +11,10 @@ grammar priede
 						|  U+000D U+000A /* CR LF */
 						|  U+2028 /* LS */
 						|  U+2029 /* PS */ ;
-        SEPARATOR   -> WHITE_SPACE+ | U+000A | LineTerminator;
+
+        CommentLine		-> '//' (.* - (.* LineTerminator .*)) LineTerminator ;
+		CommentBlock	-> '/*' (.* - (.* '*/' .*)) '*/' ;
+        SEPARATOR   -> (WHITE_SPACE | CommentLine | CommentBlock | LineTerminator)+;
 
         ID -> [a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_-]+;
         QUOTE -> '"';
