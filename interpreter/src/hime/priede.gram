@@ -57,6 +57,9 @@ grammar priede
         var_def -> TYPE ID '->'! var_def_value;
         var_def_value -> exp_plusmin^ | STRING^ ;
 
+        asignable_exp -> exp_plusmin^ | STRING^;
+        id_asign -> ID '->'! asignable_exp;
+
         func_call -> ID '('! funcargs ')'!
                    | ID '()'! ;
 
@@ -92,7 +95,7 @@ grammar priede
                    |  exp_plusmin^
                    |  STRING^;
 
-        stat -> var_def^ | func_call^ | if^;
+        stat -> var_def^ | func_call^ | if^ | id_asign^;
         block -> stat*;
         root ->  block^;
     }

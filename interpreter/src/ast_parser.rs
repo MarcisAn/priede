@@ -1,6 +1,6 @@
 use crate::ast::{self, Pop};
 use crate::ast::{Eval, ValueNode};
-use crate::interpreter::{arithemtics_int, compare, define_variable, print_error};
+use crate::interpreter::{arithemtics_int, compare, define_variable, id_assign, print_error};
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 
 pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
@@ -106,6 +106,10 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
                 return ast::ValueNode::Bool(false);
             }
         }
+    } else if input.to_string() == "id_asign" {
+        let asignment = parse_function(input.children().at(1));
+        id_assign(input.children().at(0).get_value().unwrap(), asignment);
+        return ast::ValueNode::None("".to_string()).eval();
     } else {
         return ast::ValueNode::None("".to_string()).eval();
     }

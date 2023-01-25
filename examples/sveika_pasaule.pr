@@ -1,5 +1,7 @@
 sk aa -> 2
 
+aa -> 4
+
 ja 2 =2{
     drukāt("sveika pasaule")
     drukātjr(aa)

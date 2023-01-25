@@ -110,6 +110,22 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
     }
     return ValueNode::None("".to_string());
 }
+pub fn id_assign(id: String, value: ValueNode) {
+    let mut mutable_index = 0;
+    let mut iter = 0;
+    //TODO: com
+
+    unsafe {
+        for i in &VARIABLES {
+            if i.id == id {
+                mutable_index = iter;
+            }
+            iter += 1;
+        }
+
+        VARIABLES[mutable_index].value = value;
+    }
+}
 //TODO: merge next two functions
 pub fn arithemtics_int(input: AstNode) -> Result<ValueNode, String> {
     let operation = input.children().at(1).get_value().unwrap();
