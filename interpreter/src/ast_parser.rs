@@ -107,8 +107,9 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
             }
         }
     } else if input.to_string() == "id_asign" {
-        let asignment = parse_function(input.children().at(1));
-        id_assign(input.children().at(0).get_value().unwrap(), asignment);
+        let asignment = parse_function(input.children().at(2));
+        let sign = input.children().at(1).get_value().unwrap();
+        id_assign(input.children().at(0).get_value().unwrap(), asignment, sign);
         return ast::ValueNode::None("".to_string()).eval();
     } else {
         return ast::ValueNode::None("".to_string()).eval();
