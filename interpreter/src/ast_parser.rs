@@ -94,7 +94,7 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
     } else if input.to_string() == "comp_s" {
         let left = parse_function(input.children().at(0));
         let right = parse_function(input.children().at(2));
-        let comp = compare(left, right);
+        let comp = compare(left, right, input.children().at(1).get_value().unwrap());
         if comp.is_err() {
             let line = input.children().at(1).get_position().unwrap().line;
             print_error(line, comp.err().unwrap());

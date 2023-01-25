@@ -209,7 +209,7 @@ pub fn arithemtics(
 
     return res;
 }
-pub fn compare(left: ValueNode, right: ValueNode) -> Result<bool, String> {
+pub fn compare(left: ValueNode, right: ValueNode, action: String) -> Result<bool, String> {
     let mut left_type;
     let mut right_type;
     match &left {
@@ -234,10 +234,44 @@ pub fn compare(left: ValueNode, right: ValueNode) -> Result<bool, String> {
     if left_type != right_type {
         return Err("salīdzināmie datu tipi nav vienādi".to_string());
     } else {
-        if left == right {
-            return Ok(true);
+        if action == "==" {
+            if left == right {
+                return Ok(true);
+            } else {
+                return Ok(false);
+            }
+        } else if action == ">" {
+            if left > right {
+                return Ok(true);
+            } else {
+                return Ok(false);
+            }
+        } else if action == ">=" {
+            if left >= right {
+                return Ok(true);
+            } else {
+                return Ok(false);
+            }
+        } else if action == "<" {
+            if left < right {
+                return Ok(true);
+            } else {
+                return Ok(false);
+            }
+        } else if action == "<=" {
+            if left <= right {
+                return Ok(true);
+            } else {
+                return Ok(false);
+            }
+        } else if action == "!=" {
+            if left != right {
+                return Ok(true);
+            } else {
+                return Ok(false);
+            }
         } else {
-            return Ok(false);
+            return Err(format!("\"{}\"nav atpazīta salīdzināšanas darbība", action));
         }
     }
 }

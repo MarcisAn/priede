@@ -1,6 +1,6 @@
 skaitlis aaa = 4
 liels skaitlis bb = 3
 
-ja 2==2 {
+ja 2 >= 2 {
     drukāt("Sveika, pasaule!")//aaaa
 }
