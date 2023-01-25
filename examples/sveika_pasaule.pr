@@ -1,6 +1,6 @@
-skaitlis aaa = 4
-liels skaitlis bb = 3
+sk aa -> 2
 
-ja 2 >= 2 {
-    drukāt("Sveika, pasaule!")//aaaa
+ja 2 =2{
+    drukāt("sveika pasaule")
+    drukātjr(aa)
 }

@@ -17,11 +17,12 @@ https://priede.vercel.app/
 
 - Vai salīdzinājumiem izmantot divas vienādības zimēs '==', kā daudzās citās valodās, vai vienu '='?
 - Vai sazarojumiem ("ja" blokiem) nosacījumu likt iekavās? (tas pats attiecās uz cikliem un citām valodas funkcijām, kuras pieraksta līdzīgi)
+- Vai mainīgajiem būtu jābūt konstantiem pēc noklusējuma?
 - Novērtēšu jebkādas atsauksmes un ieteikumus.
 
 ## Piezīmes
 
-### Arī, ja vērtība nav ielikta mainīgajā, tai tiek piešķirts datu tips, lai tā varētu tikt izmantota tālāk. Parseris šo datu tipu nosaka pēc teksta simbolu skaita
+### Arī, ja vērtība nav ielikta mainīgajā, tai tiek piešķirts datu tips, lai to izmantotu tālāk. Parseris šo datu tipu nosaka pēc teksta simbolu skaita
 
 Varētu arī noteikt precīzāk, skatoties uz skaitļiem, bet jāatstāj rezerve, tāpēc šis varbūt nav no sliktākajiem variantiem.
 

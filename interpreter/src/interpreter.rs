@@ -234,7 +234,7 @@ pub fn compare(left: ValueNode, right: ValueNode, action: String) -> Result<bool
     if left_type != right_type {
         return Err("salīdzināmie datu tipi nav vienādi".to_string());
     } else {
-        if action == "==" {
+        if action == "=" {
             if left == right {
                 return Ok(true);
             } else {

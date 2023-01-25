@@ -44,17 +44,17 @@ grammar priede
     rules{
         BOOL_DEF -> 'būls'!;
         TEXT -> 'teksts'!;
-        NUM -> 'skaitlis'!;
-        LONG -> 'liels skaitlis'! | 'skaitlis liels'!;
-        NATURAL -> 'naturāls skailtis'! | 'skaitlis naturāls'!;
-        LONG_NAT -> 'naturāls liels skaitlis'! | 'liels naturāls skaitlis'!;
+        NUM -> 'sk'!;
+        LONG -> 'lsk'!;
+        NATURAL -> 'natsk'!;
+        LONG_NAT -> 'lnatsk'!;
 
         TYPE -> BOOL_DEF^ | TEXT^ | LONG^ | NATURAL^ | LONG_NAT^ | NUM^;
 
         TRUE -> 'PAT'! | 'PATIESS'!;
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
-        var_def -> TYPE ID '='! var_def_value;
+        var_def -> TYPE ID '->'! var_def_value;
         var_def_value -> exp_plusmin^ | STRING^ ;
 
         func_call -> ID '('! funcargs ')'!
@@ -62,7 +62,7 @@ grammar priede
 
         funcargs -> exp|exp (','! exp)*;
 
-        comp_s ->    exp '==' exp
+        comp_s ->    exp '=' exp
                    | exp '>' exp
                    | exp '>=' exp
                    | exp '<' exp
