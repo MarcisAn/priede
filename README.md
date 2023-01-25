@@ -30,6 +30,6 @@ Varētu arī noteikt precīzāk, skatoties uz skaitļiem, bet jāatstāj rezerve
 - 9 - 18 => i64
 - 19 un vairāk => u64
 
-Ieliekot vērtību mainīgajā, tās tips tiek pārrakstīts uz to, kas norādīts mainīgā deklerācijā
+Ieliekot vērtību mainīgajā, tās tips tiek pārrakstīts uz to, kas norādīts mainīgā deklarācijā
 
 ### Pašlaik netiek atļautas salīdzinājumu un aritmētiskās darbības ar vērtībām kurām ir atšķirīgi datu tipi
