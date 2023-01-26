@@ -1,0 +1,34 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Priede",
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.priede",
+          "match": "\\b(būls|teksts|sk|lsk|natsk|lnatsk|PAT|PATIESS|NEPAT|NEPATIESS|ja|citādi)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.priede",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.priede",
+          "match": "\\\\."
+        }
+      ]
+    }
+  },
+  "scopeName": "source.priede"
+}
