@@ -54,6 +54,7 @@ grammar priede
         TRUE -> 'PAT'! | 'PATIESS'!;
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
+
         var_def -> TYPE ID '->'! var_def_value;
         var_def_value -> exp_plusmin^ | STRING^ ;
 
@@ -76,9 +77,11 @@ grammar priede
         comp -> comp_s^ |
                 comp_s^ 'vai' comp |
                 comp_s^ 'un' comp|
-                BOOL^;
+                BOOL^|
+                exp^;
 
-        if -> 'ja'! comp '{'! block '}'!;
+        if -> 'ja'! comp '{'! block '}'!
+            | 'ja'! comp '{'! block '}'! 'citādi' '{'! block '}'!;
 
         exp_atom -> NUMBER^
                    | '('! exp^ ')'! 

@@ -90,6 +90,11 @@ impl Pop for ValueNode {
     fn pop_bool(&self) -> bool {
         match &self {
             ValueNode::Bool(value) => return *value,
+            ValueNode::Int(value) => return if value >= &1 { true } else { false },
+            ValueNode::Nat(value) => return if value >= &1 { true } else { false },
+            ValueNode::Long(value) => return if value >= &1 { true } else { false },
+            ValueNode::LongNat(value) => return if value >= &1 { true } else { false },
+            ValueNode::String(_) => return true,
             _ => todo!(),
         }
     }

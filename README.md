@@ -17,7 +17,6 @@ https://priede.vercel.app/
 
 - Vai salīdzinājumiem izmantot divas vienādības zimēs '==', kā daudzās citās valodās, vai vienu '='?
 - Vai sazarojumiem ("ja" blokiem) nosacījumu likt iekavās? (tas pats attiecās uz cikliem un citām valodas funkcijām, kuras pieraksta līdzīgi)
-- Vai mainīgajiem būtu jābūt konstantiem pēc noklusējuma?
 - Novērtēšu jebkādas atsauksmes un ieteikumus.
 
 ## Piezīmes
