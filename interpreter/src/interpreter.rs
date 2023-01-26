@@ -110,7 +110,7 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
     }
     return ValueNode::None("".to_string());
 }
-pub fn id_assign(id: String, value: ValueNode, sign: String) {
+pub fn id_assign(id: String, value: ValueNode) {
     let mut mutable_index = 0;
     let mut iter = 0;
     //TODO: comp types and embeded arithmetics
@@ -122,18 +122,7 @@ pub fn id_assign(id: String, value: ValueNode, sign: String) {
             }
             iter += 1;
         }
-        if sign == "->" {
-            VARIABLES[mutable_index].value = value;
-        }
-        // else if sign == "-+>" {
-        //    VARIABLES[mutable_index].value = VARIABLES[mutable_index].value + value;
-        //} else if sign == "-->" {
-        //    VARIABLES[mutable_index].value = VARIABLES[mutable_index].value - value;
-        //} else if sign == "-*>" {
-        //    VARIABLES[mutable_index].value = VARIABLES[mutable_index].value * value;
-        //} else if sign == "-/>" {
-        //    VARIABLES[mutable_index].value = VARIABLES[mutable_index].value / value;
-        //}
+        VARIABLES[mutable_index].value = value;
     }
 }
 //TODO: merge next two functions

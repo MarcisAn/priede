@@ -1,6 +1,8 @@
 use crate::ast::{self, Pop};
 use crate::ast::{Eval, ValueNode};
-use crate::interpreter::{arithemtics_int, compare, define_variable, id_assign, print_error};
+use crate::interpreter::{
+    arithemtics, arithemtics_int, compare, define_variable, id_assign, print_error,
+};
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 
 pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
@@ -107,9 +109,25 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
             }
         }
     } else if input.to_string() == "id_asign" {
-        let asignment = parse_function(input.children().at(2));
         let sign = input.children().at(1).get_value().unwrap();
-        id_assign(input.children().at(0).get_value().unwrap(), asignment, sign);
+        let left = parse_function(input.children().at(0)).clone();
+        let left_typ = left.pop_type();
+        let right = parse_function(input.children().at(2));
+        let assignment;
+        if sign == "->" {
+            assignment = parse_function(input.children().at(2));
+        } else if sign == "-->" {
+            assignment = arithemtics("-", left.clone(), right, left_typ);
+        } else if sign == "-+>" {
+            assignment = arithemtics("+", left.clone(), right, left_typ);
+        } else if sign == "-*>" {
+            assignment = arithemtics("*", left.clone(), right, left_typ);
+        } else if sign == "-/>" {
+            assignment = arithemtics("/", left.clone(), right, left_typ);
+        } else {
+            assignment = ValueNode::None("".to_string());
+        };
+        id_assign(input.children().at(0).get_value().unwrap(), assignment);
         return ast::ValueNode::None("".to_string()).eval();
     } else {
         return ast::ValueNode::None("".to_string()).eval();

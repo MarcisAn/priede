@@ -40,6 +40,7 @@ pub trait Eval {
     fn eval(&self) -> ValueNode;
 }
 pub trait Pop {
+    fn pop_type(&self) -> &str;
     fn pop_int(&self) -> i32;
     fn pop_long(&self) -> i64;
     fn pop_long_nat(&self) -> u64;
@@ -123,5 +124,20 @@ impl Pop for ValueNode {
             ValueNode::Nat(value) => return *value,
             _ => todo!(),
         }
+    }
+    fn pop_type(&self) -> &str {
+        let mut typ;
+        match &self {
+            ValueNode::Int(_) => typ = "int",
+            ValueNode::Nat(_) => typ = "nat",
+            ValueNode::Long(_) => typ = "long",
+            ValueNode::LongNat(_) => typ = "longnat",
+            ValueNode::String(_) => typ = "string",
+            ValueNode::Bool(_) => typ = "bool",
+            ValueNode::None(_) => typ = "null",
+            ValueNode::FunCall(_) => todo!(),
+            ValueNode::Id(_) => todo!(),
+        };
+        return typ;
     }
 }
