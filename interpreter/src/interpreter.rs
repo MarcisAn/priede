@@ -1,4 +1,6 @@
 use std::fmt::Error;
+use std::io::stdin;
+//use std::io::*;
 
 use crate::ast::{self, Eval, Pop, ValueNode, Var};
 use crate::ast_parser::parse_function;
@@ -23,14 +25,16 @@ pub fn func_return(input: &ast::FunCall) -> ast::ValueNode {
     if input.id == "aa" {
         return ast::ValueNode::Int(5);
     } else if input.id == "drukāt" {
-        //print!("{}", input.args[0].eval());
         print(format!("{}", input.args[0].eval()));
         return ast::ValueNode::None("".to_string());
     } else if input.id == "drukātJr" || input.id == "drukātjr" {
-        //println!("");
-        //print!("{}", input.args[0].eval());
         printnl(format!("{}", input.args[0].eval()));
         return ast::ValueNode::None("".to_string());
+    } else if input.id == "ievade" {
+        let mut user_input = String::new();
+        let stdin = stdin();
+        stdin.read_line(&mut user_input);
+        return ast::ValueNode::String(user_input);
     } else {
         return ast::ValueNode::None("".to_string());
     }
