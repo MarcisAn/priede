@@ -1,8 +1,20 @@
-use crate::IS_WASM;
+use crate::{console_log, IS_WASM};
 
 pub fn print(i: String) {
-    print!("{}", i);
+    unsafe {
+        if IS_WASM {
+            console_log(&i);
+        } else {
+            print!("{}", i);
+        }
+    }
 }
 pub fn printnl(i: String) {
-    print!("\n{}", i);
+    unsafe {
+        if IS_WASM {
+            console_log(&i);
+        } else {
+            print!("\n{}", i);
+        }
+    }
 }

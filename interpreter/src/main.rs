@@ -11,7 +11,7 @@ use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 static mut AST_STR: String = String::new();
 static mut IS_WASM: bool = false;
 use std::fs;
-/*
+
 use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 extern "C" {
@@ -24,22 +24,19 @@ extern "C" {
 pub fn run_wasm(code: String) {
     interpret(true, code, true);
 }
- */
+pub fn console_log(out: &String) {
+    log(&out);
+}
+
 pub fn main() {}
 //TODO: līnijas komentāri nestrādā koda pēdējā rindiņā
 pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
     unsafe {
         IS_WASM = isWASM;
     }
-    //let contents = fs::read_to_string(src_file).unwrap();
-    ////print!("{:?}", contents);
-    //let result = priede::parse_string(&contents);
     if isWASM {
         let result = hime::priede::parse_string(&src_file);
         let ast = result.get_ast();
-        //if print_ast {
-        //    format_ast(ast.get_root(), Vec::<bool>::new());
-        //}
         ast_parser::parse_function(ast.get_root());
     } else {
         let contents = fs::read_to_string(src_file).unwrap();
@@ -51,20 +48,6 @@ pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
         ast_parser::parse_function(ast.get_root());
     }
 }
-//fn write_to_file(input: String) -> io::Result<()> {
-//    unsafe {
-//        let data = input.as_bytes();
-//
-//        let mut pos = 0;
-//        let mut buffer = File::open("foo.txt")?;
-//
-//        while pos < data.len() {
-//            let bytes_written = buffer.write(&data[pos..])?;
-//            pos += bytes_written;
-//        }
-//        Ok(())
-//    }
-//}
 
 fn concat(input: String) {
     let text = input;

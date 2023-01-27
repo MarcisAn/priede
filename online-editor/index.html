@@ -1,25 +1,81 @@
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PRIEDE</title>
+    <title>Vite App</title>
   </head>
   <body>
-    <textarea name="code" id="code" cols="30" rows="10"></textarea>
+    <div id="app"></div>
     <button id="btn">Palaist</button>
     <h2>Programmas izvade ir pārlūka konsolē!</h2>
     <a href="https://github.com/MarcisAn/priede">github</a>
   </body>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+
+ 
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
+</link>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"
+  ></script>
   <script type="module">
     import init, { run } from "./pkg/priede_wasm.js";
-    var x = document.getElementById("code");
-    x.value = 'drukāt("Sveika, pasaule!")';
+    import { parser } from "./gram.js";
+    import {
+      foldNodeProp,
+      foldInside,
+      indentNodeProp,
+    } from "@codemirror/language";
+    import { styleTags, tags as t } from "@lezer/highlight";
+    import { LanguageSupport } from "@codemirror/language";
+    import { LRLanguage } from "@codemirror/language";
+    import { EditorView, basicSetup } from "codemirror";
+    let parserWithMetadata = parser.configure({
+      props: [
+        styleTags({
+          Identifier: t.variableName,
+          Boolean: t.bool,
+          String: t.string,
+          LineComment: t.lineComment,
+          "( )": t.paren,
+        }),
+        indentNodeProp.add({
+          Application: (context) =>
+            context.column(context.node.from) + context.unit,
+        }),
+        foldNodeProp.add({
+          Application: foldInside,
+        }),
+      ],
+    });
+    export const exampleLanguage = LRLanguage.define({
+      parser: parserWithMetadata,
+      languageData: {
+        commentTokens: { line: ";" },
+      },
+    });
+    export function example() {
+      return new LanguageSupport(exampleLanguage, []);
+    }
+
+    const editor = CodeMirror(document.querySelector("#app"), {
+      extensions: [basicSetup, example()],
+      lineNumbers: true,
+      tabSize: 2,
+      value: 'drukāt("cav")',
+      mode: example
+    });
     await init();
     var btn = document.getElementById("btn");
     btn.onclick = function () {
-      run(x.value);
+      run(editor.getValue());
     };
   </script>
 </html>
