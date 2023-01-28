@@ -12,7 +12,8 @@ grammar priede
 						|  U+2028 /* LS */
 						|  U+2029 /* PS */ ;
 
-        CommentLine		-> '//' (.* - (.* LineTerminator .*)) LineTerminator ;
+        CommentLine		-> '//' (.* - (.* LineTerminator .*)) LineTerminator 
+                        | '//' (.* - (.* LineTerminator .*));
 		CommentBlock	-> '/*' (.* - (.* '*/' .*)) '*/' ;
         SEPARATOR   -> (WHITE_SPACE | CommentLine | CommentBlock | LineTerminator)+;
 

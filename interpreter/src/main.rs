@@ -13,6 +13,8 @@ static mut IS_WASM: bool = false;
 use std::fs;
 
 use wasm_bindgen::prelude::*;
+
+#[cfg(target_os = "wasm32-unknown-unknown")]
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
@@ -20,10 +22,12 @@ extern "C" {
     fn log(s: &str);
 }
 
+#[cfg(target_os = "wasm32-unknown-unknown")]
 #[wasm_bindgen]
 pub fn run_wasm(code: String) {
     interpret(true, code, true);
 }
+#[cfg(target_os = "wasm32-unknown-unknown")]
 pub fn console_log(out: &String) {
     log(&out);
 }

@@ -1,8 +1,1 @@
-sk aa -> 2
-
-ja aa = 2 {
-    drukāt("sveika pasaule")
-}
-citādi {
-    drukāt("nav labi")
-}
+drukāt("Sveika, pasaule!")//cav
