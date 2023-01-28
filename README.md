@@ -11,7 +11,7 @@ Interpretators rakstīts Rust valodā un izmanto [Hime](https://cenotelie.fr/pro
 
 ## Tiešsaistes interpretators izmantojot WebAsembly
 
-https://priede.vercel.app/
+https://priede-editor.vercel.app/
 
 ## Jautājumi, kuros labprāt dzirdētu citus viedokļus
 
