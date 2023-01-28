@@ -13,17 +13,9 @@ Interpretators rakstīts Rust valodā un izmanto [Hime](https://cenotelie.fr/pro
 
 https://priede-editor.vercel.app/
 
-## Jautājumi, kuros labprāt dzirdētu citus viedokļus
-
-- Vai salīdzinājumiem izmantot divas vienādības zimēs '==', kā daudzās citās valodās, vai vienu '='?
-- Vai sazarojumiem ("ja" blokiem) nosacījumu likt iekavās? (tas pats attiecās uz cikliem un citām valodas funkcijām, kuras pieraksta līdzīgi)
-- Novērtēšu jebkādas atsauksmes un ieteikumus.
-
 ## Piezīmes
 
 ### Arī, ja vērtība nav ielikta mainīgajā, tai tiek piešķirts datu tips, lai to izmantotu tālāk. Parseris šo datu tipu nosaka pēc teksta simbolu skaita
-
-Varētu arī noteikt precīzāk, skatoties uz skaitļiem, bet jāatstāj rezerve, tāpēc šis varbūt nav no sliktākajiem variantiem.
 
 - Mazāk par 9 simboliem => i32
 - 9 - 18 => i64
