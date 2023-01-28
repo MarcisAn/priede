@@ -6,17 +6,34 @@
     <title>Vite App</title>
   </head>
   <body>
-    <div id="app"></div>
-    <button id="btn">Palaist</button>
-    <h2>Programmas izvade ir pārlūka konsolē!</h2>
-    <a href="https://github.com/MarcisAn/priede">github</a>
+    <textarea id="code" value="aa"></textarea>
+    <div>
+      <button id="btn">Palaist</button>
+      <h2>Programmas izvade ir pārlūka konsolē!</h2>
+      <a href="https://github.com/MarcisAn/priede">github</a>
+    </div>
+    
   </body>
   <style>
+    html{
+      height: 100%;
+    }
     body {
+      height: 100%;
       margin: 0;
+      display: flex;
+    }
+    .CodeMirror{
+      flex: 1;
+      height: 100% !important;
     }
   </style>
 
+  <script type="module" src="main.js"></script>
+  <script type="module">
+    
+    
+  </script>
  
   <link rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
@@ -25,57 +42,6 @@
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"
   ></script>
-  <script type="module">
-    import init, { run } from "./pkg/priede_wasm.js";
-    import { parser } from "./gram.js";
-    import {
-      foldNodeProp,
-      foldInside,
-      indentNodeProp,
-    } from "@codemirror/language";
-    import { styleTags, tags as t } from "@lezer/highlight";
-    import { LanguageSupport } from "@codemirror/language";
-    import { LRLanguage } from "@codemirror/language";
-    import { EditorView, basicSetup } from "codemirror";
-    let parserWithMetadata = parser.configure({
-      props: [
-        styleTags({
-          Identifier: t.variableName,
-          Boolean: t.bool,
-          String: t.string,
-          LineComment: t.lineComment,
-          "( )": t.paren,
-        }),
-        indentNodeProp.add({
-          Application: (context) =>
-            context.column(context.node.from) + context.unit,
-        }),
-        foldNodeProp.add({
-          Application: foldInside,
-        }),
-      ],
-    });
-    export const exampleLanguage = LRLanguage.define({
-      parser: parserWithMetadata,
-      languageData: {
-        commentTokens: { line: ";" },
-      },
-    });
-    export function example() {
-      return new LanguageSupport(exampleLanguage, []);
-    }
-
-    const editor = CodeMirror(document.querySelector("#app"), {
-      extensions: [basicSetup, example()],
-      lineNumbers: true,
-      tabSize: 2,
-      value: 'drukāt("cav")',
-      mode: example
-    });
-    init();
-    var btn = document.getElementById("btn");
-    btn.onclick = function () {
-      run(editor.getValue());
-    };
-  </script>
+  <link rel="stylesheet"
+  href="https://codemirror.net/5/theme/ayu-dark.css">
 </html>

@@ -4,12 +4,17 @@
 * @param {string} code
 */
 export function run(code: string): void;
+/**
+* @param {string} code
+*/
+export function run_wasm(code: string): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly run: (a: number, b: number) => void;
+  readonly run_wasm: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
 }

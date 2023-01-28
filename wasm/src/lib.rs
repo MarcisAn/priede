@@ -13,6 +13,6 @@ extern "C" {
 
 #[wasm_bindgen]
 pub fn run(code: &str) {
-    #[cfg(target_os = "wasm32-unknown-unknown")]
+    #[cfg(target_family = "wasm")]
     interpreter::run_wasm(code.to_string());
 }

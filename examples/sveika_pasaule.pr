@@ -1,1 +1,2 @@
-drukāt("Sveika, pasaule!")//cav
+sk aa -> 2
+drukāt(aa)
