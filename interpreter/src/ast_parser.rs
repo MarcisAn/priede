@@ -87,7 +87,7 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
     } else if input.to_string() == "if" {
         let comp = parse_function(input.children().at(0));
         if comp != ValueNode::None("".to_string()) {
-            if input.children().at(2).get_value().unwrap() == "citādi" {
+            if input.children().len() == 4 {
                 if comp.pop_bool() {
                     parse_function(input.children().at(1));
                 } else {

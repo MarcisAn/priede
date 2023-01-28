@@ -1,10 +1,8 @@
 sk aa -> 2
 
-teksts ievade -> ievade()
-
-ja aa+2 = 4 {
+ja aa = 2 {
     drukāt("sveika pasaule")
-    drukātjr(ievade)
-}citādi {
-    drukāt("cav")
+}
+citādi {
+    drukāt("nav labi")
 }
