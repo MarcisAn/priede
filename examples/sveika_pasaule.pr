@@ -1,2 +1,7 @@
-sk aa -> 2
-drukāt(aa)
+būls a -> 0
+sk b -> 2 
+lsk c -> 2 
+natsk d -> 2 
+lnatsk e -> 2 
+teksts f -> 'cav'
+drukāt('a')

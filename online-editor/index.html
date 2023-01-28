@@ -3,14 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>priede online editor</title>
   </head>
   <body>
-    <textarea id="code" value="aa"></textarea>
-    <div>
-      <button id="btn">Palaist</button>
-      <h2>Programmas izvade ir pārlūka konsolē!</h2>
-      <a href="https://github.com/MarcisAn/priede">github</a>
+    <textarea id="code" ></textarea>
+    <div class="side">
+      <button id="btn">IZPILDĪT</button>
     </div>
     
   </body>
@@ -22,19 +20,32 @@
       height: 100%;
       margin: 0;
       display: flex;
+      flex-direction: column;
+    }
+    button{
+      border: none;
+      background-color: rgb(0, 255, 0);
+      padding: 10px;
+      border-radius: 5px;
+    }
+    button:hover{
+      box-shadow: 2px 2px 5px 2px  rgb(121, 121, 121);
+      cursor: pointer;
     }
     .CodeMirror{
       flex: 1;
       height: 100% !important;
     }
+    .side{
+      display: flex;
+      align-items: center;
+      align-content: center;
+      flex-direction: column;
+      align-self: center;
+    }
   </style>
 
   <script type="module" src="main.js"></script>
-  <script type="module">
-    
-    
-  </script>
- 
   <link rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
 </link>

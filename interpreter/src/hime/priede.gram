@@ -55,7 +55,7 @@ grammar priede
         TRUE -> 'PAT'! | 'PATIESS'!;
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
-
+        //TODO: būlu definīcija
         var_def -> TYPE ID '->'! var_def_value;
         var_def_value -> exp_plusmin^ | STRING^ ;
 

@@ -1,10 +1,5 @@
 import { parser } from "./gram.js";
-import {
-  foldNodeProp,
-  foldInside,
-  indentNodeProp,
-  language,
-} from "@codemirror/language";
+import { foldNodeProp, foldInside, indentNodeProp } from "@codemirror/language";
 import { styleTags, tags as t } from "@lezer/highlight";
 import { LanguageSupport } from "@codemirror/language";
 import { LRLanguage } from "@codemirror/language";
@@ -63,11 +58,26 @@ export const editor = CodeMirror.fromTextArea(document.querySelector("#code"), {
   value: 'drukāt("cav")',
   theme: "ayu-dark",
 });
-//console.log(editor.options.value);
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const product = urlParams.get("preset");
+let preset = "";
+switch (product) {
+  case "sveikapasaule":
+    preset = 'drukāt("Sveika, pasaule!")';
+    break;
+
+  case "vars":
+    preset =
+      "būls a -> 0\nsk b -> 2 \nlsk c -> 2 \nnatsk d -> 2 \nlnatsk e -> 2 \nteksts f -> 'cav'\ndrukāt(a)";
+    break;
+
+  default:
+    preset = 'drukāt("Sveika, pasaule!")';
+    break;
+}
+editor.getDoc().setValue(preset);
+
 btn.onclick = function () {
   run(editor.getValue());
 };
-
-export function web_print(a) {
-  console.log(a);
-}
