@@ -15,6 +15,7 @@
   <header>
     <h1>Priede</h1>
     <h2>Latviešu valodā rakstāma programmēšanas valoda</h2>
+    <h3>4 reizes ātrāka par pythonu</h3>
   </header>
   <main>
     <h2>Sveika pasaule piemērs</h2>
