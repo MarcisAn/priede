@@ -121,6 +121,14 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         } else {
             return parse_function(input.children().at(0));
         }
+    } else if input.to_string() == "s_loop" {
+        let count = parse_function(input.children().at(0)).pop_int(); //TODO: vairāk kā inti
+        let mut counter = 0;
+        while counter < count {
+            parse_function(input.children().at(1));
+            counter += 1;
+        }
+        return ValueNode::None("".to_string());
     } else if input.to_string() == "comp_s" {
         let left = parse_function(input.children().at(0));
         let right = parse_function(input.children().at(2));
