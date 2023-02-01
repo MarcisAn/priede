@@ -1,3 +1,5 @@
-atkārtot 5 {
+sk a -> 0
+kamēr 10 >= a {
     drukātJr("cav")
+    a -+> 1
 }

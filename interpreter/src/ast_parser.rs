@@ -129,6 +129,15 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
             counter += 1;
         }
         return ValueNode::None("".to_string());
+    } else if input.to_string() == "w_loop" {
+        while true {
+            if parse_function(input.children().at(0)).pop_bool() {
+                parse_function(input.children().at(1));
+            } else {
+                break;
+            }
+        }
+        return ValueNode::None("".to_string());
     } else if input.to_string() == "comp_s" {
         let left = parse_function(input.children().at(0));
         let right = parse_function(input.children().at(2));

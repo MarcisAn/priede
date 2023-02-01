@@ -90,6 +90,8 @@ grammar priede
 
         s_loop -> 'atkārtot'! exp '{'! block '}'!;
 
+        w_loop -> 'kamēr'! comp '{'! block '}'!;
+
         exp_atom -> NUMBER^
                    | '('! exp^ ')'! 
                    |  ID^
@@ -106,7 +108,7 @@ grammar priede
                    |  exp_plusmin^
                    |  STRING^;
 
-        stat -> var_def^ | func_call^ | if^ | id_asign^ | s_loop^;
+        stat -> var_def^ | func_call^ | if^ | id_asign^ | s_loop^ | w_loop^;
         block -> stat*;
         root ->  block^;
     }
