@@ -3,11 +3,7 @@ pub fn main() {
     let arguments = arguments::parse(arguments).unwrap();
     //print!("{}", arguments.get::<bool>("bar").unwrap());
     if arguments.orphans.len() == 0 {
-        interpreter::interpret(
-            false,
-            String::from("L:/Dev/priede/examples/sveika_pasaule.pr"),
-            false,
-        );
+        interpreter::interpret(false, String::from("../examples/sveika_pasaule.pr"), false);
     } else {
         let mut print_ast: bool = false;
         if arguments.orphans.len() == 2 {
