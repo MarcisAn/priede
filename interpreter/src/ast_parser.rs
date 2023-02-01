@@ -85,9 +85,11 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         }
         return ast::ValueNode::None("".to_string()).eval();
     } else if input.to_string() == "if" {
+        //TODO: rekursīvi iet cauri 'un' 'vai' blokiem
         let comp = parse_function(input.children().at(0));
         if comp != ValueNode::None("".to_string()) {
             if input.children().len() == 4 {
+                //TODO: else if bloki
                 if comp.pop_bool() {
                     parse_function(input.children().at(1));
                 } else {
@@ -101,11 +103,30 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         }
 
         return ast::ValueNode::None("".to_string()).eval();
+    } else if input.to_string() == "comp" {
+        let left = parse_function(input.children().at(0).children().at(0));
+        let right = parse_function(input.children().at(0).children().at(2));
+        if input.children().at(0).to_string() == "un" {
+            if left.pop_bool() && right.pop_bool() {
+                return ValueNode::Bool(true);
+            } else {
+                return ValueNode::Bool(false);
+            }
+        } else if input.children().at(0).to_string() == "vai" {
+            if left.pop_bool() || right.pop_bool() {
+                return ValueNode::Bool(true);
+            } else {
+                return ValueNode::Bool(false);
+            }
+        } else {
+            return parse_function(input.children().at(0));
+        }
     } else if input.to_string() == "comp_s" {
         let left = parse_function(input.children().at(0));
         let right = parse_function(input.children().at(2));
         let comp = compare(left, right, input.children().at(1).get_value().unwrap());
         if comp.is_err() {
+            //ja nav iespējams salīdzināt abus lielumus1
             let line = input.children().at(1).get_position().unwrap().line;
             print_error(line, comp.err().unwrap());
             return ast::ValueNode::None("".to_string());

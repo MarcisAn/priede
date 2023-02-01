@@ -62,40 +62,40 @@ const TERMINALS: &[Symbol] = &[
     Symbol { id: 0x000A, name: "INTEGER" },
     Symbol { id: 0x000B, name: "NUMBER" },
     Symbol { id: 0x000C, name: "STRING" },
-    Symbol { id: 0x0028, name: "būls" },
-    Symbol { id: 0x0029, name: "teksts" },
-    Symbol { id: 0x002A, name: "sk" },
-    Symbol { id: 0x002B, name: "lsk" },
-    Symbol { id: 0x002C, name: "natsk" },
-    Symbol { id: 0x002D, name: "lnatsk" },
-    Symbol { id: 0x002E, name: "PAT" },
-    Symbol { id: 0x002F, name: "PATIESS" },
-    Symbol { id: 0x0030, name: "NEPAT" },
-    Symbol { id: 0x0031, name: "NEPATIESS" },
-    Symbol { id: 0x0032, name: "->" },
-    Symbol { id: 0x0033, name: "-+>" },
-    Symbol { id: 0x0034, name: "-->" },
-    Symbol { id: 0x0035, name: "-*>" },
-    Symbol { id: 0x0036, name: "-/>" },
-    Symbol { id: 0x0037, name: "(" },
-    Symbol { id: 0x0038, name: ")" },
-    Symbol { id: 0x0039, name: "()" },
-    Symbol { id: 0x003A, name: "," },
-    Symbol { id: 0x003C, name: "=" },
-    Symbol { id: 0x003D, name: ">" },
-    Symbol { id: 0x003E, name: ">=" },
-    Symbol { id: 0x003F, name: "<" },
-    Symbol { id: 0x0040, name: "!=" },
-    Symbol { id: 0x0041, name: "vai" },
-    Symbol { id: 0x0042, name: "un" },
-    Symbol { id: 0x0043, name: "ja" },
-    Symbol { id: 0x0044, name: "{" },
-    Symbol { id: 0x0045, name: "}" },
-    Symbol { id: 0x0046, name: "citādi" },
-    Symbol { id: 0x0047, name: "*" },
-    Symbol { id: 0x0048, name: "/" },
-    Symbol { id: 0x0049, name: "+" },
-    Symbol { id: 0x004A, name: "-" }];
+    Symbol { id: 0x002A, name: "būls" },
+    Symbol { id: 0x002B, name: "teksts" },
+    Symbol { id: 0x002C, name: "sk" },
+    Symbol { id: 0x002D, name: "lsk" },
+    Symbol { id: 0x002E, name: "natsk" },
+    Symbol { id: 0x002F, name: "lnatsk" },
+    Symbol { id: 0x0030, name: "PAT" },
+    Symbol { id: 0x0031, name: "PATIESS" },
+    Symbol { id: 0x0032, name: "NEPAT" },
+    Symbol { id: 0x0033, name: "NEPATIESS" },
+    Symbol { id: 0x0034, name: "->" },
+    Symbol { id: 0x0035, name: "-+>" },
+    Symbol { id: 0x0036, name: "-->" },
+    Symbol { id: 0x0037, name: "-*>" },
+    Symbol { id: 0x0038, name: "-/>" },
+    Symbol { id: 0x0039, name: "(" },
+    Symbol { id: 0x003A, name: ")" },
+    Symbol { id: 0x003B, name: "()" },
+    Symbol { id: 0x003C, name: "," },
+    Symbol { id: 0x003E, name: "=" },
+    Symbol { id: 0x003F, name: ">" },
+    Symbol { id: 0x0040, name: ">=" },
+    Symbol { id: 0x0041, name: "<" },
+    Symbol { id: 0x0042, name: "!=" },
+    Symbol { id: 0x0043, name: "vai" },
+    Symbol { id: 0x0044, name: "un" },
+    Symbol { id: 0x0045, name: "ja" },
+    Symbol { id: 0x0046, name: "{" },
+    Symbol { id: 0x0047, name: "}" },
+    Symbol { id: 0x0048, name: "citādi" },
+    Symbol { id: 0x0049, name: "*" },
+    Symbol { id: 0x004A, name: "/" },
+    Symbol { id: 0x004B, name: "+" },
+    Symbol { id: 0x004C, name: "-" }];
 
 /// Creates a new lexer
 fn new_lexer<'a>(
@@ -145,24 +145,28 @@ pub const ID_VARIABLE_FUNC_CALL: u32 = 0x001C;
 pub const ID_VARIABLE_FUNCARGS: u32 = 0x001D;
 /// The unique identifier for variable comp_s
 pub const ID_VARIABLE_COMP_S: u32 = 0x001E;
+/// The unique identifier for variable vai
+pub const ID_VARIABLE_VAI: u32 = 0x001F;
+/// The unique identifier for variable un
+pub const ID_VARIABLE_UN: u32 = 0x0020;
 /// The unique identifier for variable comp
-pub const ID_VARIABLE_COMP: u32 = 0x001F;
+pub const ID_VARIABLE_COMP: u32 = 0x0021;
 /// The unique identifier for variable if
-pub const ID_VARIABLE_IF: u32 = 0x0020;
+pub const ID_VARIABLE_IF: u32 = 0x0022;
 /// The unique identifier for variable exp_atom
-pub const ID_VARIABLE_EXP_ATOM: u32 = 0x0021;
+pub const ID_VARIABLE_EXP_ATOM: u32 = 0x0023;
 /// The unique identifier for variable exp_reizdal
-pub const ID_VARIABLE_EXP_REIZDAL: u32 = 0x0022;
+pub const ID_VARIABLE_EXP_REIZDAL: u32 = 0x0024;
 /// The unique identifier for variable exp_plusmin
-pub const ID_VARIABLE_EXP_PLUSMIN: u32 = 0x0023;
+pub const ID_VARIABLE_EXP_PLUSMIN: u32 = 0x0025;
 /// The unique identifier for variable exp
-pub const ID_VARIABLE_EXP: u32 = 0x0024;
+pub const ID_VARIABLE_EXP: u32 = 0x0026;
 /// The unique identifier for variable stat
-pub const ID_VARIABLE_STAT: u32 = 0x0025;
+pub const ID_VARIABLE_STAT: u32 = 0x0027;
 /// The unique identifier for variable block
-pub const ID_VARIABLE_BLOCK: u32 = 0x0026;
+pub const ID_VARIABLE_BLOCK: u32 = 0x0028;
 /// The unique identifier for variable root
-pub const ID_VARIABLE_ROOT: u32 = 0x0027;
+pub const ID_VARIABLE_ROOT: u32 = 0x0029;
 
 
 /// The collection of variables matched by this parser
@@ -187,18 +191,20 @@ const VARIABLES: &[Symbol] = &[
     Symbol { id: 0x001C, name: "func_call" },
     Symbol { id: 0x001D, name: "funcargs" },
     Symbol { id: 0x001E, name: "comp_s" },
-    Symbol { id: 0x001F, name: "comp" },
-    Symbol { id: 0x0020, name: "if" },
-    Symbol { id: 0x0021, name: "exp_atom" },
-    Symbol { id: 0x0022, name: "exp_reizdal" },
-    Symbol { id: 0x0023, name: "exp_plusmin" },
-    Symbol { id: 0x0024, name: "exp" },
-    Symbol { id: 0x0025, name: "stat" },
-    Symbol { id: 0x0026, name: "block" },
-    Symbol { id: 0x0027, name: "root" },
-    Symbol { id: 0x003B, name: "__V59" },
-    Symbol { id: 0x004B, name: "__V75" },
-    Symbol { id: 0x004C, name: "__VAxiom" }];
+    Symbol { id: 0x001F, name: "vai" },
+    Symbol { id: 0x0020, name: "un" },
+    Symbol { id: 0x0021, name: "comp" },
+    Symbol { id: 0x0022, name: "if" },
+    Symbol { id: 0x0023, name: "exp_atom" },
+    Symbol { id: 0x0024, name: "exp_reizdal" },
+    Symbol { id: 0x0025, name: "exp_plusmin" },
+    Symbol { id: 0x0026, name: "exp" },
+    Symbol { id: 0x0027, name: "stat" },
+    Symbol { id: 0x0028, name: "block" },
+    Symbol { id: 0x0029, name: "root" },
+    Symbol { id: 0x003D, name: "__V61" },
+    Symbol { id: 0x004D, name: "__V77" },
+    Symbol { id: 0x004E, name: "__VAxiom" }];
 
 /// The collection of virtuals matched by this parser
 /// The virtuals are in an order consistent with the automaton,
@@ -268,6 +274,8 @@ pub trait Visitor {
     fn on_variable_func_call(&self, _node: &AstNode) {}
     fn on_variable_funcargs(&self, _node: &AstNode) {}
     fn on_variable_comp_s(&self, _node: &AstNode) {}
+    fn on_variable_vai(&self, _node: &AstNode) {}
+    fn on_variable_un(&self, _node: &AstNode) {}
     fn on_variable_comp(&self, _node: &AstNode) {}
     fn on_variable_if(&self, _node: &AstNode) {}
     fn on_variable_exp_atom(&self, _node: &AstNode) {}
@@ -321,15 +329,17 @@ pub fn visit_ast_node<'a>(node: AstNode<'a>, visitor: &dyn Visitor) {
         0x001C => visitor.on_variable_func_call(&node),
         0x001D => visitor.on_variable_funcargs(&node),
         0x001E => visitor.on_variable_comp_s(&node),
-        0x001F => visitor.on_variable_comp(&node),
-        0x0020 => visitor.on_variable_if(&node),
-        0x0021 => visitor.on_variable_exp_atom(&node),
-        0x0022 => visitor.on_variable_exp_reizdal(&node),
-        0x0023 => visitor.on_variable_exp_plusmin(&node),
-        0x0024 => visitor.on_variable_exp(&node),
-        0x0025 => visitor.on_variable_stat(&node),
-        0x0026 => visitor.on_variable_block(&node),
-        0x0027 => visitor.on_variable_root(&node),
+        0x001F => visitor.on_variable_vai(&node),
+        0x0020 => visitor.on_variable_un(&node),
+        0x0021 => visitor.on_variable_comp(&node),
+        0x0022 => visitor.on_variable_if(&node),
+        0x0023 => visitor.on_variable_exp_atom(&node),
+        0x0024 => visitor.on_variable_exp_reizdal(&node),
+        0x0025 => visitor.on_variable_exp_plusmin(&node),
+        0x0026 => visitor.on_variable_exp(&node),
+        0x0027 => visitor.on_variable_stat(&node),
+        0x0028 => visitor.on_variable_block(&node),
+        0x0029 => visitor.on_variable_root(&node),
         _ => ()
     };
 }

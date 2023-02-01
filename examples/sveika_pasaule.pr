@@ -1,7 +1,3 @@
-būls a -> 0
-sk b -> 2 
-lsk c -> 2 
-natsk d -> 2 
-lnatsk e -> 2 
-teksts f -> 'cav'
-drukāt('a')
+ja 3 = 3 vai 1 =  4{
+    drukāt("cav")
+}

@@ -75,9 +75,13 @@ grammar priede
                    | exp '>=' exp
                    | exp '!=' exp;
 
-        comp -> comp_s^ |
-                comp_s^ 'vai' comp |
-                comp_s^ 'un' comp|
+        vai -> comp_s 'vai'! comp_s;
+
+        un -> comp_s 'un'! comp;
+
+        comp -> comp_s |
+                vai |
+                un |
                 BOOL^|
                 exp^;
 
