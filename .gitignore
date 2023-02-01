@@ -3,8 +3,8 @@ cli/target
 Hime.Redist.dll
 Hime.SDK.dll
 himecc.exe
-priedeLexer.bin
-priedeParser.bin
+#priedeLexer.bin
+#priedeParser.bin
 node_modules
 interpreter/Cargo.lock
 todo.txt
