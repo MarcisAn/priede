@@ -72,7 +72,7 @@ impl fmt::Display for ValueNode {
             ValueNode::Long(value) => write!(f, "{:}", value),
             ValueNode::LongNat(value) => write!(f, "{:}", value),
             ValueNode::None(_) => write!(f, "NULL"),
-            ValueNode::FunCall(value) => write!(f, "{:?}", crate::interpreter::func_return(value)),
+            ValueNode::FunCall(value) => write!(f, "{:?}", value),
             ValueNode::String(value) => write!(f, "{}", value),
             ValueNode::Bool(value) => write!(
                 f,

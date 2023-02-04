@@ -1,5 +1,6 @@
+use cinner::{cin, cout};
 use std::fmt::Error;
-use std::io::stdin;
+use std::io::{self, stdin, BufRead, Write};
 //use std::io::*;
 
 use crate::ast::{self, Eval, Pop, ValueNode, Var};
@@ -20,20 +21,25 @@ pub fn print_error(line: usize, msg: String) {
         .red()
     );
 }
-
+fn input_2(prompt: &str) -> io::Result<String> {
+    print!("{}", prompt);
+    io::stdout().flush()?;
+    io::stdin()
+        .lock()
+        .lines()
+        .next()
+        .unwrap()
+        .map(|x| x.trim_end().to_owned())
+}
 pub fn func_return(input: &ast::FunCall) -> ast::ValueNode {
-    if input.id == "aa" {
-        return ast::ValueNode::Int(5);
-    } else if input.id == "drukāt" {
+    if input.id == "drukāt" {
         print(format!("{}", input.args[0].eval()));
         return ast::ValueNode::None("".to_string());
     } else if input.id == "drukātJr" || input.id == "drukātjr" {
         printnl(format!("{}", input.args[0].eval()));
         return ast::ValueNode::None("".to_string());
     } else if input.id == "ievade" {
-        let mut user_input = String::new();
-        let stdin = stdin();
-        stdin.read_line(&mut user_input);
+        let mut user_input = input_2("").unwrap();
         return ast::ValueNode::String(user_input);
     } else {
         return ast::ValueNode::None("".to_string());
@@ -63,6 +69,7 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
             ValueNode::Long(value) => overwritten_value = *value as i32,
             ValueNode::LongNat(value) => overwritten_value = *value as i32,
             ValueNode::Bool(value) => overwritten_value = *value as i32,
+            ValueNode::String(value) => overwritten_value = value.parse::<i32>().unwrap(),
             _ => todo!(),
         }
         overwritten_value_node = ValueNode::Int(overwritten_value);
@@ -75,6 +82,7 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
             ValueNode::Long(value) => overwritten_value = *value as i64,
             ValueNode::LongNat(value) => overwritten_value = *value as i64,
             ValueNode::Bool(value) => overwritten_value = *value as i64,
+            ValueNode::String(value) => overwritten_value = value.parse::<i64>().unwrap(),
             _ => todo!(),
         }
         overwritten_value_node = ValueNode::Long(overwritten_value);
@@ -87,6 +95,8 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
             ValueNode::Long(value) => overwritten_value = *value as u32,
             ValueNode::LongNat(value) => overwritten_value = *value as u32,
             ValueNode::Bool(value) => overwritten_value = *value as u32,
+            ValueNode::String(value) => overwritten_value = value.parse::<u32>().unwrap(),
+
             _ => todo!(),
         }
         overwritten_value_node = ValueNode::Nat(overwritten_value);
@@ -99,6 +109,7 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
             ValueNode::Long(value) => overwritten_value = *value as u64,
             ValueNode::LongNat(value) => overwritten_value = *value as u64,
             ValueNode::Bool(value) => overwritten_value = *value as u64,
+            ValueNode::String(value) => overwritten_value = value.parse::<u64>().unwrap(),
             _ => todo!(),
         }
         overwritten_value_node = ValueNode::LongNat(overwritten_value);
@@ -117,7 +128,6 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
 pub fn id_assign(id: String, value: ValueNode) {
     let mut mutable_index = 0;
     let mut iter = 0;
-    //TODO: comp types and embeded arithmetics
 
     unsafe {
         for i in &VARIABLES {

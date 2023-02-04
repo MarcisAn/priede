@@ -26,6 +26,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "cinner"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b782d94dc2362505ef1f8f83881c745be366582e1c46539eebf275ddf84d4c91"
+
+[[package]]
 name = "colored"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -55,6 +61,7 @@ checksum = "987aeb58ef79a2d4fe8b67fac415c2fbce250b8395d2d327af9e1c3acba8d89d"
 name = "interpreter"
 version = "0.1.0"
 dependencies = [
+ "cinner",
  "colored",
  "hime_redist",
  "wasm-bindgen",
