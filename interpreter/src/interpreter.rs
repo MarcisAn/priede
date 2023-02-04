@@ -16,7 +16,7 @@ pub fn print_error(line: usize, msg: String) {
         format!(
             "Kļūda rindiņā {}: \n{}",
             line.to_string(),
-            msg.to_string().on_red()
+            msg.to_string().bright_magenta()
         )
         .red()
     );

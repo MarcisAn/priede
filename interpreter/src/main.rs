@@ -6,13 +6,20 @@ mod priede_std;
 use colored::*;
 
 extern crate hime_redist;
-use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
+use hime_redist::{
+    ast::AstNode,
+    errors::{ParseError, ParseErrorDataTrait, ParseErrorUnexpectedToken},
+    symbols::SemanticElementTrait,
+    text::TextPosition,
+};
 //use hime_redist::symbols::SemanticElementTrait;
 static mut AST_STR: String = String::new();
 static mut IS_WASM: bool = false;
 use std::fs;
 
 use wasm_bindgen::prelude::*;
+
+use crate::interpreter::print_error;
 
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen]
@@ -45,11 +52,36 @@ pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
     } else {
         let contents = fs::read_to_string(src_file).unwrap();
         let result = hime::priede::parse_string(&contents);
-        let ast = result.get_ast();
-        if print_ast {
-            format_ast(ast.get_root(), Vec::<bool>::new());
+        let err_cnt = result.get_errors().get_count();
+        let mut i = 0;
+        while i < err_cnt {
+            let error: ParseError = result.get_errors()[i].clone();
+            let tokenerror;
+            match error {
+                ParseError::UnexpectedEndOfInput(_) => todo!(),
+                ParseError::UnexpectedChar(_) => todo!(),
+                ParseError::UnexpectedToken(val) => tokenerror = val,
+                ParseError::IncorrectUTF16NoLowSurrogate(_) => todo!(),
+                ParseError::IncorrectUTF16NoHighSurrogate(_) => todo!(),
+            }
+            print_error(
+                tokenerror.get_position().line,
+                tokenerror
+                    .get_message()
+                    .replace("Unexpected token", "Negaidīts vienums")
+                    .replace("; expected", ". sagaidīts"),
+            );
+            i += 1;
         }
-        ast_parser::parse_function(ast.get_root());
+        if err_cnt == 0 {
+            let ast = result.get_ast();
+            if print_ast {
+                format_ast(ast.get_root(), Vec::<bool>::new());
+            }
+            ast_parser::parse_function(ast.get_root());
+        } else {
+            print!("{}", "Programmas izpilde atlikta".red());
+        }
     }
 }
 
