@@ -1,7 +1,5 @@
 use cinner::{cin, cout};
-use std::fmt::Error;
 use std::io::{self, stdin, BufRead, Write};
-//use std::io::*;
 
 use crate::ast::{self, Eval, Pop, ValueNode, Var};
 use crate::ast_parser::parse_function;
@@ -9,7 +7,7 @@ use crate::hime_redist::symbols::SemanticElementTrait;
 use crate::priede_std::io::{print, printnl};
 use colored::*;
 use hime_redist::ast::AstNode;
-
+use std::process;
 pub fn print_error(line: usize, msg: String) {
     println!(
         "{}",
@@ -20,6 +18,7 @@ pub fn print_error(line: usize, msg: String) {
         )
         .red()
     );
+    //process::exit(1);
 }
 fn input_2(prompt: &str) -> io::Result<String> {
     print!("{}", prompt);
@@ -125,18 +124,24 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
     }
     return ValueNode::None("".to_string());
 }
-pub fn id_assign(id: String, value: ValueNode) {
+pub fn id_assign(id: String, value: ValueNode, line: usize) {
     let mut mutable_index = 0;
     let mut iter = 0;
-
+    let mut found = false;
     unsafe {
         for i in &VARIABLES {
             if i.id == id {
                 mutable_index = iter;
+                found = true;
             }
             iter += 1;
         }
-        VARIABLES[mutable_index].value = value;
+        if found {
+            VARIABLES[mutable_index].value = value;
+        }
+    }
+    if !found {
+        print_error(line, format!("Mainīgais \"{}\" nav atrasts", id));
     }
 }
 //TODO: merge next two functions
@@ -170,7 +175,7 @@ pub fn arithemtics_int(input: AstNode) -> Result<ValueNode, String> {
         _ => todo!(),
     };
     if left_type != right_type {
-        return Err("aritmētiskās darbības locekļu datu tipi nav vienādi".to_string());
+        return Err("Aritmētiskās darbības locekļu datu tipi nav vienādi".to_string());
     } else {
         if right_type == "longnat" || left_type == "longnat" {
             return Ok(arithemtics(&operation, left_node, right_node, "longnat"));

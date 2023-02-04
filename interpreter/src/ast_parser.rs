@@ -173,7 +173,11 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         } else {
             assignment = ValueNode::None("".to_string());
         };
-        id_assign(input.children().at(0).get_value().unwrap(), assignment);
+        id_assign(
+            input.children().at(0).get_value().unwrap(),
+            assignment,
+            input.children().at(0).get_position().unwrap().line,
+        );
         return ast::ValueNode::None("".to_string()).eval();
     } else {
         return ast::ValueNode::None("".to_string()).eval();
