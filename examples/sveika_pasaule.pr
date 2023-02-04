@@ -1,1 +1,6 @@
-drukāt(5+555555555555)
+sk a2 -> ievade()
+sk a1 -> ievade()
+sk rs -> ievade()
+ja a1 > rs un a2 < rs{
+    drukāt("ir")
+}

@@ -7,7 +7,7 @@ use crate::hime_redist::symbols::SemanticElementTrait;
 use crate::priede_std::io::{print, printnl};
 use colored::*;
 use hime_redist::ast::AstNode;
-use std::process;
+use std::process::{self, exit};
 pub fn print_error(line: usize, msg: String) {
     println!(
         "{}",
@@ -38,8 +38,14 @@ pub fn func_return(input: &ast::FunCall) -> ast::ValueNode {
         printnl(format!("{}", input.args[0].eval()));
         return ast::ValueNode::None("".to_string());
     } else if input.id == "ievade" {
-        let mut user_input = input_2("").unwrap();
-        return ast::ValueNode::String(user_input);
+        if input.args.len() == 0 {
+            let mut user_input = input_2("").unwrap();
+            return ast::ValueNode::String(user_input);
+        } else {
+            let mut user_input = input_2(&format!("{}", input.args[0].eval())).unwrap();
+            return ast::ValueNode::String(user_input);
+        }
+        //return ast::ValueNode::None("".to_string());
     } else {
         return ast::ValueNode::None("".to_string());
     }
@@ -57,7 +63,52 @@ pub fn id_return(input: String) -> ast::ValueNode {
 }
 static mut VARIABLES: Vec<Var> = Vec::new();
 
-pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueNode {
+fn parse_error(line: usize) {
+    print_error(
+        line,
+        "Neizdevās ievadi pārveidot vajadzīgajā datu tipā".to_string(),
+    );
+}
+fn parsei32(value: &str, line: usize) -> i32 {
+    let parsed = value.parse::<i32>();
+    if parsed.is_ok() {
+        return parsed.unwrap();
+    } else {
+        parse_error(line);
+        return 0;
+    }
+}
+fn parseu32(value: &str, line: usize) -> u32 {
+    let parsed = value.parse::<u32>();
+    if parsed.is_ok() {
+        return parsed.unwrap();
+    } else {
+        parse_error(line);
+        return 0;
+    }
+}
+
+fn parsei64(value: &str, line: usize) -> i64 {
+    let parsed = value.parse::<i64>();
+    if parsed.is_ok() {
+        return parsed.unwrap();
+    } else {
+        parse_error(line);
+        return 0;
+    }
+}
+
+fn parseu64(value: &str, line: usize) -> u64 {
+    let parsed = value.parse::<u64>();
+    if parsed.is_ok() {
+        return parsed.unwrap();
+    } else {
+        parse_error(line);
+        return 0;
+    }
+}
+
+pub fn define_variable(id: String, var_type: String, value: ValueNode, line: usize) -> ValueNode {
     let mut overwritten_value_node: ValueNode = value.clone();
 
     if &var_type == "NUM" {
@@ -68,7 +119,7 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
             ValueNode::Long(value) => overwritten_value = *value as i32,
             ValueNode::LongNat(value) => overwritten_value = *value as i32,
             ValueNode::Bool(value) => overwritten_value = *value as i32,
-            ValueNode::String(value) => overwritten_value = value.parse::<i32>().unwrap(),
+            ValueNode::String(value) => overwritten_value = parsei32(value, line),
             _ => todo!(),
         }
         overwritten_value_node = ValueNode::Int(overwritten_value);
@@ -81,7 +132,7 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
             ValueNode::Long(value) => overwritten_value = *value as i64,
             ValueNode::LongNat(value) => overwritten_value = *value as i64,
             ValueNode::Bool(value) => overwritten_value = *value as i64,
-            ValueNode::String(value) => overwritten_value = value.parse::<i64>().unwrap(),
+            ValueNode::String(value) => overwritten_value = parsei64(value, line),
             _ => todo!(),
         }
         overwritten_value_node = ValueNode::Long(overwritten_value);
@@ -94,7 +145,7 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
             ValueNode::Long(value) => overwritten_value = *value as u32,
             ValueNode::LongNat(value) => overwritten_value = *value as u32,
             ValueNode::Bool(value) => overwritten_value = *value as u32,
-            ValueNode::String(value) => overwritten_value = value.parse::<u32>().unwrap(),
+            ValueNode::String(value) => overwritten_value = parseu32(value, line),
 
             _ => todo!(),
         }
@@ -108,7 +159,7 @@ pub fn define_variable(id: String, var_type: String, value: ValueNode) -> ValueN
             ValueNode::Long(value) => overwritten_value = *value as u64,
             ValueNode::LongNat(value) => overwritten_value = *value as u64,
             ValueNode::Bool(value) => overwritten_value = *value as u64,
-            ValueNode::String(value) => overwritten_value = value.parse::<u64>().unwrap(),
+            ValueNode::String(value) => overwritten_value = parseu64(value, line),
             _ => todo!(),
         }
         overwritten_value_node = ValueNode::LongNat(overwritten_value);

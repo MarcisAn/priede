@@ -75,7 +75,12 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         let value = parse_function(input.children().at(2));
         //print!("{}", input.children().at(2));
         //print!("{}", var_type);
-        define_variable(id, var_type, value);
+        define_variable(
+            id,
+            var_type,
+            value,
+            input.children().at(1).get_position().unwrap().line,
+        );
         return ast::ValueNode::None("".to_string());
     } else if input.to_string() == "block" {
         let mut i = 0;
