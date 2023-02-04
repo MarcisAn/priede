@@ -96,8 +96,9 @@ const TERMINALS: &[Symbol] = &[
     Symbol { id: 0x004C, name: "kamēr" },
     Symbol { id: 0x004D, name: "*" },
     Symbol { id: 0x004E, name: "/" },
-    Symbol { id: 0x004F, name: "+" },
-    Symbol { id: 0x0050, name: "-" }];
+    Symbol { id: 0x004F, name: "%" },
+    Symbol { id: 0x0050, name: "+" },
+    Symbol { id: 0x0051, name: "-" }];
 
 /// Creates a new lexer
 fn new_lexer<'a>(
@@ -211,8 +212,8 @@ const VARIABLES: &[Symbol] = &[
     Symbol { id: 0x002A, name: "block" },
     Symbol { id: 0x002B, name: "root" },
     Symbol { id: 0x003F, name: "__V63" },
-    Symbol { id: 0x0051, name: "__V81" },
-    Symbol { id: 0x0052, name: "__VAxiom" }];
+    Symbol { id: 0x0052, name: "__V82" },
+    Symbol { id: 0x0053, name: "__VAxiom" }];
 
 /// The collection of virtuals matched by this parser
 /// The virtuals are in an order consistent with the automaton,

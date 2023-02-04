@@ -100,7 +100,8 @@ grammar priede
 
         exp_reizdal -> exp_atom^
                    |  exp_reizdal '*' exp_atom
-                   |  exp_reizdal '/' exp_atom;
+                   |  exp_reizdal '/' exp_atom
+                   |  exp_reizdal '%' exp_atom;
 
         exp_plusmin -> exp_reizdal^
                    |  exp_plusmin '+' exp_reizdal

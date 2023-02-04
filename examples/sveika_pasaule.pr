@@ -1,6 +1,7 @@
-sk a2 -> ievade()
-sk a1 -> ievade()
-sk rs -> ievade()
-ja a1 > rs un a2 < rs{
-    drukāt("ir")
+sk iev -> ievade()
+ja iev%2 = 0 {
+    drukāt("pāra")
+}
+citādi {
+    drukāt("nepāra")
 }

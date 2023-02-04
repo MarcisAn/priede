@@ -288,6 +288,16 @@ pub fn arithemtics(
             }
             &_ => todo!(),
         }
+    } else if operation == "%" {
+        match typ {
+            "int" => res = ValueNode::Int(left.pop_int() % right.pop_int()).eval(),
+            "nat" => res = ValueNode::Nat(left.pop_nat() % right.pop_nat()).eval(),
+            "long" => res = ValueNode::Long(left.pop_long() % right.pop_long()).eval(),
+            "longnat" => {
+                res = ValueNode::LongNat(left.pop_long_nat() % right.pop_long_nat()).eval()
+            }
+            &_ => todo!(),
+        }
     } else {
         res = ValueNode::None("".to_string());
     }
