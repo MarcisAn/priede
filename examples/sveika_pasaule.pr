@@ -1,7 +1,3 @@
-sk iev -> ievade()
-ja iev%2 = 0 {
-    drukāt("pāra")
-}
-citādi {
-    drukāt("nepāra")
+funkcija aaa(){
+    drukāt("cav")
 }

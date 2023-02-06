@@ -1,13 +1,17 @@
 use core::fmt;
 
-//struct FuncDef {
-//    id: String,
-//    args: Vec<FuncArg>,
-//}
-//struct FuncArg {
-//    arg_type: String,
-//    arg_name: String,
-//}
+use hime_redist::ast::AstNode;
+
+pub struct FuncDef<'a> {
+    pub(crate) id: String,
+    pub(crate) args: Vec<FuncArg>,
+    pub(crate) body: AstNode<'a>,
+}
+#[derive(Debug, Clone)]
+pub struct FuncArg {
+    pub(crate) arg_type: String,
+    pub(crate) arg_name: String,
+}
 
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub struct FunCall {

@@ -92,6 +92,13 @@ grammar priede
         s_loop -> 'atkārtot'! exp '{'! block '}'!;
 
         w_loop -> 'kamēr'! comp '{'! block '}'!;
+        
+        arg -> ID ':'! TYPE;
+        func_def_args -> arg|arg (','! arg)*;
+
+        func_def -> 'funkcija'! ID '('! func_def_args ')'! '{'! block '}'!
+                   | 'funkcija'! ID '()'! '{'! block '}'!;
+
 
         exp_atom -> NUMBER^
                    | '('! exp^ ')'! 
@@ -110,7 +117,7 @@ grammar priede
                    |  exp_plusmin^
                    |  STRING^;
 
-        stat -> var_def^ | func_call^ | if^ | id_asign^ | s_loop^ | w_loop^;
+        stat -> var_def^ | func_call^ | if^ | id_asign^ | s_loop^ | w_loop^ | func_def^;
         block -> stat*;
         root ->  block^;
     }

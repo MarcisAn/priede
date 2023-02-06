@@ -1,4 +1,4 @@
-use crate::ast::{self, Pop};
+use crate::ast::{self, FuncArg, FuncDef, Pop};
 use crate::ast::{Eval, ValueNode};
 use crate::interpreter::{
     arithemtics, arithemtics_int, compare, define_variable, id_assign, print_error,
@@ -184,6 +184,48 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
             input.children().at(0).get_position().unwrap().line,
         );
         return ast::ValueNode::None("".to_string()).eval();
+    } else if input.to_string() == "func_def" {
+        let id = input.children().at(0).get_value().unwrap();
+        let mut args: Vec<FuncArg> = vec![];
+        if input.children().len() == 2 {
+            let func_def = FuncDef {
+                id,
+                args,
+                body: input.children().at(1),
+            };
+        } else {
+            let mut i = 0;
+            while i < input.children().at(1).children().len() {
+                args.push(FuncArg {
+                    arg_type: input
+                        .children()
+                        .at(1)
+                        .children()
+                        .at(i)
+                        .children()
+                        .at(1)
+                        .to_string(),
+                    arg_name: input
+                        .children()
+                        .at(1)
+                        .children()
+                        .at(i)
+                        .children()
+                        .at(0)
+                        .get_value()
+                        .unwrap(),
+                });
+                i += 1;
+            }
+            print!("{:?}", args);
+            /*
+            let func_def = FuncDef {
+                id,
+                args,
+                body: input.children().at(2),
+            };*/
+        }
+        return ast::ValueNode::None("".to_string());
     } else {
         return ast::ValueNode::None("".to_string()).eval();
     }
