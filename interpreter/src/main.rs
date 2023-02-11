@@ -2,10 +2,11 @@ mod ast;
 mod ast_parser;
 mod hime;
 mod interpreter;
-mod priede_std;
 use colored::*;
+mod libloader;
 
 extern crate hime_redist;
+extern crate priede_std;
 use hime_redist::{
     ast::AstNode,
     errors::{ParseError, ParseErrorDataTrait, ParseErrorUnexpectedToken},

@@ -81,6 +81,7 @@ dependencies = [
  "cinner",
  "colored",
  "hime_redist",
+ "priede_std",
  "wasm-bindgen",
 ]
 
@@ -116,6 +117,10 @@ name = "options"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "61a1c9b12c453182754f3126c5689324c7214265de2df79917b59de87547a916"
+
+[[package]]
+name = "priede_std"
+version = "0.1.0"
 
 [[package]]
 name = "proc-macro2"

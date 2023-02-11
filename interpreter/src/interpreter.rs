@@ -4,10 +4,12 @@ use std::io::{self, stdin, BufRead, Write};
 use crate::ast::{self, Eval, Pop, ValueNode, Var};
 use crate::ast_parser::parse_function;
 use crate::hime_redist::symbols::SemanticElementTrait;
-use crate::priede_std::io::{print, printnl};
+use crate::libloader::run_function;
+
 use colored::*;
 use hime_redist::ast::AstNode;
 use std::process::{self, exit};
+
 pub fn print_error(line: usize, msg: String) {
     println!(
         "{}",
@@ -20,32 +22,11 @@ pub fn print_error(line: usize, msg: String) {
     );
     //process::exit(1);
 }
-fn input_2(prompt: &str) -> io::Result<String> {
-    print!("{}", prompt);
-    io::stdout().flush()?;
-    io::stdin()
-        .lock()
-        .lines()
-        .next()
-        .unwrap()
-        .map(|x| x.trim_end().to_owned())
-}
+
 pub fn func_return(input: &ast::FunCall) -> ast::ValueNode {
-    if input.id == "drukāt" {
-        print(format!("{}", input.args[0].eval()));
-        return ast::ValueNode::None("".to_string());
-    } else if input.id == "drukātJr" || input.id == "drukātjr" {
-        printnl(format!("{}", input.args[0].eval()));
-        return ast::ValueNode::None("".to_string());
-    } else if input.id == "ievade" {
-        if input.args.len() == 0 {
-            let mut user_input = input_2("").unwrap();
-            return ast::ValueNode::String(user_input);
-        } else {
-            let mut user_input = input_2(&format!("{}", input.args[0].eval())).unwrap();
-            return ast::ValueNode::String(user_input);
-        }
-        //return ast::ValueNode::None("".to_string());
+    let func = run_function(&input.id, input.args.clone());
+    if func.is_ok() {
+        return func.unwrap();
     } else {
         return ast::ValueNode::None("".to_string());
     }
