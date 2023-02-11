@@ -167,13 +167,13 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         let assignment;
         if sign == "->" {
             assignment = parse_function(input.children().at(2));
-        } else if sign == "-->" {
+        } else if sign == "=:-" {
             assignment = arithemtics("-", left.clone(), right, left_typ);
-        } else if sign == "-+>" {
+        } else if sign == "=:+" {
             assignment = arithemtics("+", left.clone(), right, left_typ);
-        } else if sign == "-*>" {
+        } else if sign == "=:*" {
             assignment = arithemtics("*", left.clone(), right, left_typ);
-        } else if sign == "-/>" {
+        } else if sign == "=:/" {
             assignment = arithemtics("/", left.clone(), right, left_typ);
         } else {
             assignment = ValueNode::None("".to_string());

@@ -5,9 +5,7 @@ import React from "react";
 export default function down() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout
-      title={`${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+    <Layout title={`${siteConfig.title}`} description="Lejupielādēt PRIEDI">
       <main></main>
     </Layout>
   );
