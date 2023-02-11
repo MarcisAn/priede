@@ -47,6 +47,11 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      colorMode: {
+        defaultMode: "dark",
+        disableSwitch: false,
+        respectPrefersColorScheme: false,
+      },
       // TODO: Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
       navbar: {
