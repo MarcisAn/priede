@@ -61,7 +61,7 @@ grammar priede
         var_def_value -> exp_plusmin^ | STRING^ ;
 
         asignable_exp -> exp_plusmin^ | STRING^;
-        assign_op -> '=:'^ | '=:+'^ | '=:-'^ | '=:*'^ | '=:/'^;
+        assign_op -> '=:'^ | '=+'^ | '=-'^ | '=*'^ | '=/'^;
         id_asign -> ID assign_op asignable_exp;
 
         func_call -> ID '('! funcargs ')'!

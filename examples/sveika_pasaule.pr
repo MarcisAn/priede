@@ -1,3 +1,5 @@
-teksts aa -> ievade("cav")
+sk aa =: ievade("cav")
 
-drukāt(aa + 2)
+aa =+ 3
+
+drukāt(aa)
