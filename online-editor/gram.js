@@ -2,19 +2,15 @@
 import {LRParser} from "@lezer/lr"
 export const parser = LRParser.deserialize({
   version: 14,
-  states: "!WQYQPOOOhQPO'#CdOOQO'#Ci'#CiOOQO'#Ce'#CeQYQPOOOOQO,59O,59OOyQPO,59OOOQO-E6c-E6cOOQO1G.j1G.j",
-  stateData: "![~O[OSPOS~ORQOSQOTQOVPO~ORQOSQOTQOUTOVPO~ORQOSQOTQOUWOVPO~O",
-  goto: "u^PPPPPPPP_ePPPoXQOPSUQSOQUPTVSUXROPSU",
-  nodeNames: "⚠ LineComment Program Identifier String Boolean ) ( Application",
-  maxTerm: 13,
-  nodeProps: [
-    ["openedBy", 6,"("],
-    ["closedBy", 7,")"]
-  ],
-  skippedNodes: [0,1],
+  states: "!WQQOPOOO`OPO'#CaOOOO'#Cf'#CfOOOO'#Cd'#CdQQOPOOOOOO,58{,58{OqOPO,58{OOOO-E6b-E6bOOOO1G.g1G.g",
+  stateData: "!S~OQQORQOSQOUPO~OQQORQOSQOUPOVTO~OQQORQOSQOUPOVWO~O",
+  goto: "rZPPPPP[PPbPlXQOPSUQSOQUPTVSUXROPSU",
+  nodeNames: "⚠ Program Identifier String Boolean Application ( )",
+  maxTerm: 10,
+  skippedNodes: [0],
   repeatNodeCount: 1,
-  tokenData: "%]~R]XYzYZz]^zpqzrs!]st#yxy$Xyz$^!Q![$c!]!^$t!c!}$c#R#S$c#T#o$c~!PS[~XYzYZz]^zpqz~!`VOr!]rs!us#O!]#O#P!z#P;'S!];'S;=`#s<%lO!]~!zOS~~!}RO;'S!];'S;=`#W;=`O!]~#ZWOr!]rs!us#O!]#O#P!z#P;'S!];'S;=`#s;=`<%l!]<%lO!]~#vP;=`<%l!]~#|Q#Y#Z$S#h#i$S~$XOT~~$^OV~~$cOU~~$hSR~!Q![$c!c!}$c#R#S$c#T#o$c~$ySP~OY$tZ;'S$t;'S;=`%V<%lO$t~%YP;=`<%l$t",
+  tokenData: "$S~RWrskst#Xxy#gyz#l!Q![#q!c!}#q#R#S#q#T#o#q~nVOrkrs!Ts#Ok#O#P!Y#P;'Sk;'S;=`#R<%lOk~!YOR~~!]RO;'Sk;'S;=`!f;=`Ok~!iWOrkrs!Ts#Ok#O#P!Y#P;'Sk;'S;=`#R;=`<%lk<%lOk~#UP;=`<%lk~#[Q#Y#Z#b#h#i#b~#gOS~~#lOU~~#qOV~~#vSQ~!Q![#q!c!}#q#R#S#q#T#o#q",
   tokenizers: [0],
-  topRules: {"Program":[0,2]},
+  topRules: {"Program":[0,1]},
   tokenPrec: 0
 })

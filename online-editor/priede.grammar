@@ -4,20 +4,31 @@ expression {
   Identifier |
   String |
   Boolean |
-  Application { "(" expression* ")" }
+  Application { "(" expression* ")" |
+  Operator |
+  VarType
+  }
 }
+
 @tokens {
-  Identifier { $[a-zA-Z_0-9]+ }
 
   String { '"' (!["\\] | "\\" _)* '"' }
 
-  Boolean { "#t" | "#f" }
+  Boolean { "PAT" | "NEPAT" | "PATIESS" | "NEPATIESS" }
 
-  LineComment { ";" ![\n]* }
+  Identifier { $[a-zA-Z_0-9]+ }
+
+  LineComment { "//" ![\n]* }
+
+  VarType {"sk" | "lsk" | "natsk" | "lnatsk" | "teksts" | "būls"}
+
+  Operator {"=:" | "="| "=+"| "=-"| "=*"| "=/"}
 
   space { $[ \t\n\r]+ }
 
   "(" ")"
 }
-@skip { space | LineComment }
+
+@skip { space | LineComment }@detectDelim
+
 @detectDelim

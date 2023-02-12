@@ -73,13 +73,6 @@ export function run(code) {
     wasm.run(ptr0, len0);
 }
 
-const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
-
-cachedTextDecoder.decode();
-
-function getStringFromWasm0(ptr, len) {
-    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
-}
 /**
 * @param {string} code
 */
@@ -87,6 +80,14 @@ export function run_wasm(code) {
     const ptr0 = passStringToWasm0(code, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     const len0 = WASM_VECTOR_LEN;
     wasm.run_wasm(ptr0, len0);
+}
+
+const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+
+cachedTextDecoder.decode();
+
+function getStringFromWasm0(ptr, len) {
+    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
 }
 
 async function load(module, imports) {
@@ -123,8 +124,11 @@ async function load(module, imports) {
 function getImports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbg_log_7fb17fc1a6b3bee8 = function(arg0, arg1) {
+    imports.wbg.__wbg_log_e357baa6ac976f14 = function(arg0, arg1) {
         console.log(getStringFromWasm0(arg0, arg1));
+    };
+    imports.wbg.__wbg_alert_566d0d313751bf6b = function(arg0, arg1) {
+        alert(getStringFromWasm0(arg0, arg1));
     };
 
     return imports;

@@ -121,6 +121,9 @@ dependencies = [
 [[package]]
 name = "priede_std"
 version = "0.1.0"
+dependencies = [
+ "wasm-bindgen",
+]
 
 [[package]]
 name = "proc-macro2"

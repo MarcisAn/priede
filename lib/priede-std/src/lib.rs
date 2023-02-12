@@ -1,10 +1,26 @@
 use std::io::{self, BufRead, Write};
+use wasm_bindgen::prelude::*;
 
 #[cfg(target_family = "wasm")]
-use crate::console_log;
+#[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+
+}
+
+#[cfg(target_family = "wasm")]
+pub fn console_log(out: &String) {
+    log(&out);
+}
+#[cfg(target_family = "wasm")]
+pub fn console_log_ln(out: &String) {
+    alert(&out);
+}
 
 fn input(prompt: &str) -> io::Result<String> {
-    print!("{}", prompt);
+    print(prompt.to_string());
     io::stdout().flush()?;
     io::stdin()
         .lock()
@@ -22,7 +38,7 @@ pub fn print(i: String) -> String {
 }
 pub fn printnl(i: String) -> String {
     #[cfg(target_family = "wasm")]
-    console_log(&i);
+    alert(&i);
     print!("\n{}", i);
     i
 }

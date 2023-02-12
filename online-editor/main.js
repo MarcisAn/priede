@@ -1,14 +1,11 @@
+import init, { run } from "./pkg/priede_wasm.js";
 import { parser } from "./gram.js";
 import { foldNodeProp, foldInside, indentNodeProp } from "@codemirror/language";
 import { styleTags, tags as t } from "@lezer/highlight";
-import { LanguageSupport } from "@codemirror/language";
 import { LRLanguage } from "@codemirror/language";
-import { basicSetup } from "codemirror";
-import init, { run } from "./pkg/priede_wasm.js";
-import { completeFromList } from "@codemirror/autocomplete";
-
-init();
-var btn = document.getElementById("btn");
+import { LanguageSupport } from "@codemirror/language";
+import { EditorView, basicSetup } from "codemirror";
+import { EditorState, Compartment } from "@codemirror/state";
 
 let parserWithMetadata = parser.configure({
   props: [
@@ -17,6 +14,7 @@ let parserWithMetadata = parser.configure({
       Boolean: t.bool,
       String: t.string,
       LineComment: t.lineComment,
+      sk: t.typeName,
       "( )": t.paren,
     }),
     indentNodeProp.add({
@@ -28,36 +26,19 @@ let parserWithMetadata = parser.configure({
     }),
   ],
 });
+
 export const exampleLanguage = LRLanguage.define({
   parser: parserWithMetadata,
   languageData: {
-    commentTokens: { line: ";" },
+    commentTokens: { line: "//" },
   },
 });
-export const exampleCompletion = exampleLanguage.data.of({
-  autocomplete: completeFromList([
-    { label: "defun", type: "keyword" },
-    { label: "defvar", type: "keyword" },
-    { label: "let", type: "keyword" },
-    { label: "cons", type: "function" },
-    { label: "car", type: "function" },
-    { label: "cdr", type: "function" },
-  ]),
-});
-export function console_log(a) {
-  console.log(a);
-}
-export function example() {
-  return new LanguageSupport(exampleLanguage, [exampleCompletion]);
-}
 
-export const editor = CodeMirror.fromTextArea(document.querySelector("#code"), {
-  extensions: [basicSetup],
-  lineNumbers: true,
-  tabSize: 2,
-  value: 'drukāt("cav")',
-  theme: "ayu-dark",
-});
+function example() {
+  return new LanguageSupport(exampleLanguage);
+}
+const languageConf = new Compartment();
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const product = urlParams.get("preset");
@@ -76,8 +57,31 @@ switch (product) {
     preset = 'drukāt("Sveika, pasaule!")';
     break;
 }
-editor.getDoc().setValue(preset);
 
+const editor = new EditorView({
+  doc: preset,
+  extensions: [basicSetup, languageConf.of(example())],
+  parent: document.querySelector("#code"),
+});
+
+init();
+var btn = document.getElementById("btn");
 btn.onclick = function () {
-  run(editor.getValue());
+  let code = "";
+  editor.state.doc.text.forEach((element) => {
+    code = code + element + "\n";
+  });
+  run(code);
+};
+
+import { Terminal } from "xterm";
+import "xterm/css/xterm.css";
+var term = new Terminal();
+term.open(document.getElementById("terminal"));
+
+console.log = (...args) => {
+  term.write(...args);
+};
+alert = (...args) => {
+  term.writeln(...args);
 };

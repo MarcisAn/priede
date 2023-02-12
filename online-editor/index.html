@@ -6,10 +6,13 @@
     <title>priede online editor</title>
   </head>
   <body>
-    <textarea id="code" ></textarea>
+    <div id="code"></div>
     <div class="side">
+      <div id="terminal"></div>
+
       <button id="btn">IZPILDĪT</button>
     </div>
+    
     
   </body>
   <style>
@@ -17,10 +20,11 @@
       height: 100%;
     }
     body {
+      display: flex;
       height: 100%;
       margin: 0;
-      display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      background-color: black;
     }
     button{
       border: none;
@@ -32,23 +36,34 @@
       box-shadow: 2px 2px 5px 2px  rgb(121, 121, 121);
       cursor: pointer;
     }
-    .CodeMirror{
+    
+    .cm-editor{
       flex: 1;
       height: 100% !important;
+      background-color: rgb(199, 199, 199);
+    }
+    #code{
+      flex: 1;
     }
     .side{
+      height: 100%;
       display: flex;
       align-items: center;
       align-content: center;
       flex-direction: column;
       align-self: center;
     }
+    #terminal{
+      height: 100%;
+    }
+    
   </style>
 
   <script type="module" src="main.js"></script>
   <link rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
 </link>
+
   <script
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"

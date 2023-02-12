@@ -58,7 +58,7 @@ const config = {
         title: "PRIEDE",
         logo: {
           alt: "Priedes logo",
-          src: "img/logo.svg",
+          src: "img/priede.png",
         },
         items: [
           {
