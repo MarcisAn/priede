@@ -3,10 +3,12 @@
 expression {
   Identifier |
   String |
-  Boolean |
   Application { "(" expression* ")" |
   Operator |
-  VarType
+  VarType |
+  Number | 
+  Bool |
+  Keyword
   }
 }
 
@@ -14,9 +16,11 @@ expression {
 
   String { '"' (!["\\] | "\\" _)* '"' }
 
-  Boolean { "PAT" | "NEPAT" | "PATIESS" | "NEPATIESS" }
+  Number { $[0-9]  }
 
-  Identifier { $[a-zA-Z_0-9]+ }
+  Identifier { $[a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_-]+  }
+
+  Bool {"PAT" | "NEPAT" | "PATIESS" | "NEPATIESS"}
 
   LineComment { "//" ![\n]* }
 
@@ -26,7 +30,11 @@ expression {
 
   space { $[ \t\n\r]+ }
 
+  Keyword {"ja" | "citādi" | "atkārtot" | "kamēr" | "funkcija"}
+
   "(" ")"
+
+  @precedence {Keyword, Bool, Operator, VarType, Identifier}
 }
 
 @skip { space | LineComment }@detectDelim

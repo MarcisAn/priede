@@ -11,8 +11,18 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: "Vienkārša sintakse",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    Svg: require("@site/static/img/logo_min.svg").default,
     description: <>aaaaaa</>,
+  },
+  {
+    title: "Vienkārša sintakse",
+    Svg: require("@site/static/img/logo_min.svg").default,
+    description: <>aaaa</>,
+  },
+  {
+    title: "Vienkārša sintakse",
+    Svg: require("@site/static/img/logo_min.svg").default,
+    description: <>aaaa</>,
   },
 ];
 

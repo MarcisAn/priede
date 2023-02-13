@@ -8,9 +8,9 @@ Vispirms izvadīsim tekstu datora konsolē.
 drukāt("Sveika, pasaule")
 ```
 
-### Apskatīsim augstāko piemēru dziļāk
+### Apskatīsim augstāko piemēru plašāk
 
-- Augstākais kods izsauc funkciju "drukāt".
+- Šis kods palaiž (izsauc) funkciju "drukāt".
 
 - Funkcijas ir koda bloki, kas veic konkrētu funkciju. Funkcija "drukāt" izvada tekstu datora konsolē.
 
@@ -20,3 +20,5 @@ drukāt("Sveika, pasaule")
 - Pēc funkcijas nosaukuma seko apaļās iekavas
 
   Ja uz funkcijai netiek doti ievaddati, iekavas ir tukšas `()`, bet ja tiek doti argumenti, tie ir rakstīti iekšā iekavās. Ja argumenti ir vairāki, tie tiek atdalīti ar komatiem.
+
+  Šajā gadījumā kā arguments tiek dots teksts "Sveika, pasaule!". Viss teksts, kas nav kods ir jāliek pēdiņās. Dubultajās vai vienpēdiņās

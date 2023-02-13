@@ -1,7 +1,6 @@
-# PRIEDE
+![PRIEDE](./banner.png)
 
-Interpretēta programmēšanas valoda ar sintaksi latviešu valodā.
-Ļoti agrīnā stadijā.
+Interpretēta programmēšanas valoda ar sintaksi latviski
 
 Interpretators rakstīts Rust valodā un izmanto [Hime](https://cenotelie.fr/projects/hime) parsera ģeneratoru.
 
@@ -11,16 +10,4 @@ Interpretators rakstīts Rust valodā un izmanto [Hime](https://cenotelie.fr/pro
 
 ## Tiešsaistes interpretators izmantojot WebAsembly
 
-https://priede-editor.vercel.app/
-
-## Piezīmes
-
-### Arī, ja vērtība nav ielikta mainīgajā, tai tiek piešķirts datu tips, lai to izmantotu tālāk. Parseris šo datu tipu nosaka pēc teksta simbolu skaita
-
-- Mazāk par 9 simboliem => i32
-- 9 - 18 => i64
-- 19 un vairāk => u64
-
-Ieliekot vērtību mainīgajā, tās tips tiek pārrakstīts uz to, kas norādīts mainīgā deklarācijā
-
-### Pašlaik netiek atļautas salīdzinājumu un aritmētiskās darbības ar vērtībām kurām ir atšķirīgi datu tipi
+https://priede.vercel.app/

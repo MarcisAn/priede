@@ -36,3 +36,13 @@ iframe {
   width: 100%;
   height: 30em;
 }
+.download{
+  display: flex;
+  justify-content: center;
+  padding: 2em;
+  flex-direction: column;
+  align-items: center;
+}
+.flex-sepperator{
+  height: 50px;
+}

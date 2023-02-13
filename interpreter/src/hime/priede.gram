@@ -26,21 +26,21 @@ grammar priede
         
 
         STRING	-> '"' (
-									(. - ('"' | LineTerminator | '\\'))
-									| '\\' LineTerminator
-									| '\\' ('\'' | '"' | '\\' | [bfnrtv])
-									| '\\x' [0-9a-fA-F]{2}
-									| '\\u' [0-9a-fA-F]{4}
-									| '\\0'
-								)* '"' |
-                                '\'' (
-									(. - ('\'' | LineTerminator | '\\'))
-									| '\\' LineTerminator
-									| '\\' ('\'' | '"' | '\\' | [bfnrtv])
-									| '\\x' [0-9a-fA-F]{2}
-									| '\\u' [0-9a-fA-F]{4}
-									| '\\0'
-								)* '\'' ;
+							(. - ('"' | LineTerminator | '\\'))
+							| '\\' LineTerminator
+							| '\\' ('\'' | '"' | '\\' | [bfnrtv])
+							| '\\x' [0-9a-fA-F]{2}
+							| '\\u' [0-9a-fA-F]{4}
+							| '\\0'
+						)* '"' |
+                        '\'' (
+							(. - ('\'' | LineTerminator | '\\'))
+							| '\\' LineTerminator
+							| '\\' ('\'' | '"' | '\\' | [bfnrtv])
+							| '\\x' [0-9a-fA-F]{2}
+							| '\\u' [0-9a-fA-F]{4}
+							| '\\0'
+						)* '\'' ;
 		
     }
     rules{

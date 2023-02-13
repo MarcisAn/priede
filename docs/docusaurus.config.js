@@ -88,7 +88,7 @@ const config = {
             title: "Dokumentācija",
             items: [
               {
-                label: "Pamācība",
+                label: "Ātrā pamācība",
                 to: "/docs/intro",
               },
               {

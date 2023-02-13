@@ -12,9 +12,11 @@ function HomepageHeader() {
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <img src="img/priede.png" alt="Priedes logo" width="20%" />
+        <img src="img/logo.svg" alt="Priede" width="35%" />
         <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <br />
+        <br />
+
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
@@ -22,8 +24,16 @@ function HomepageHeader() {
             Lejupielādēt
           </Link>
         </div>
+        <br />
+        <br />
         <p className="hero__subtitle">Izmēģini pārlūkā</p>
-        <iframe src="http://localhost:5173" frameBorder="0"></iframe>
+        {process.env.NODE_ENV === "production" ? (
+          <iframe
+            src="https://priede-editor.vercel.app"
+            frameBorder="0"></iframe>
+        ) : (
+          <iframe src="http://localhost:5173" frameBorder="0"></iframe>
+        )}
       </div>
     </header>
   );

@@ -15,6 +15,12 @@ let parserWithMetadata = parser.configure({
       String: t.string,
       LineComment: t.lineComment,
       sk: t.typeName,
+      VarType: t.typeName,
+      LineComment: t.lineComment,
+      Operator: t.operatorKeyword,
+      Number: t.number,
+      Keyword: t.keyword,
+      Bool: t.bool,
       "( )": t.paren,
     }),
     indentNodeProp.add({
