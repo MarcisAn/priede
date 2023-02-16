@@ -1,5 +1,1 @@
-sk aa =: ievade("cav")
-
-aa =+ 3
-
-drukāt(aa)
+drukāt("Sveika, pasaule!")
