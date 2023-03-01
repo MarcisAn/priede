@@ -1,1 +1,3 @@
-drukāt("Sveika, pasaule!")
+sk aaa =: -3
+
+drukāt(aaa)

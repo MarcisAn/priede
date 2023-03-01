@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Mainīgie
 
 Bieži vien mēs vēlamies datus saglabāt vēlākai izmantošanai un mainīšanai.
@@ -16,8 +20,16 @@ Datu tipi:
 
 - vesels skaitlis `sk`
 
-  Šis datu tips var uzglabāt veselus skaitļus robežās no -2147483647 līdz 2147483647
+  Šis datu tips var uzglabāt veselus skaitļus robežās no -170141183460469231731687303715884105728 līdz 170141183460469231731687303715884105727
 
   ```
     sk nosaukums =: 3
+  ```
+
+- teksts `teksts`
+
+  Šis datu tips uzglabā tekstu, kas jāliek pēdiņās
+
+  ```
+    teksts nosaukums =: "cav"
   ```

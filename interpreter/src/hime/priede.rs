@@ -62,45 +62,42 @@ const TERMINALS: &[Symbol] = &[
     Symbol { id: 0x000A, name: "INTEGER" },
     Symbol { id: 0x000B, name: "NUMBER" },
     Symbol { id: 0x000C, name: "STRING" },
-    Symbol { id: 0x002F, name: "būls" },
-    Symbol { id: 0x0030, name: "teksts" },
-    Symbol { id: 0x0031, name: "sk" },
-    Symbol { id: 0x0032, name: "lsk" },
-    Symbol { id: 0x0033, name: "natsk" },
-    Symbol { id: 0x0034, name: "lnatsk" },
-    Symbol { id: 0x0035, name: "PAT" },
-    Symbol { id: 0x0036, name: "PATIESS" },
-    Symbol { id: 0x0037, name: "NEPAT" },
-    Symbol { id: 0x0038, name: "NEPATIESS" },
-    Symbol { id: 0x0039, name: "=:" },
-    Symbol { id: 0x003A, name: "=+" },
-    Symbol { id: 0x003B, name: "=-" },
-    Symbol { id: 0x003C, name: "=*" },
-    Symbol { id: 0x003D, name: "=/" },
-    Symbol { id: 0x003E, name: "(" },
-    Symbol { id: 0x003F, name: ")" },
-    Symbol { id: 0x0040, name: "()" },
-    Symbol { id: 0x0041, name: "," },
-    Symbol { id: 0x0043, name: "=" },
-    Symbol { id: 0x0044, name: ">" },
-    Symbol { id: 0x0045, name: ">=" },
-    Symbol { id: 0x0046, name: "<" },
-    Symbol { id: 0x0047, name: "!=" },
-    Symbol { id: 0x0048, name: "vai" },
-    Symbol { id: 0x0049, name: "un" },
-    Symbol { id: 0x004A, name: "ja" },
-    Symbol { id: 0x004B, name: "{" },
-    Symbol { id: 0x004C, name: "}" },
-    Symbol { id: 0x004D, name: "citādi" },
-    Symbol { id: 0x004E, name: "atkārtot" },
-    Symbol { id: 0x004F, name: "kamēr" },
-    Symbol { id: 0x0050, name: ":" },
-    Symbol { id: 0x0052, name: "funkcija" },
-    Symbol { id: 0x0053, name: "*" },
-    Symbol { id: 0x0054, name: "/" },
-    Symbol { id: 0x0055, name: "%" },
-    Symbol { id: 0x0056, name: "+" },
-    Symbol { id: 0x0057, name: "-" }];
+    Symbol { id: 0x002C, name: "būls" },
+    Symbol { id: 0x002D, name: "teksts" },
+    Symbol { id: 0x002E, name: "sk" },
+    Symbol { id: 0x002F, name: "PAT" },
+    Symbol { id: 0x0030, name: "PATIESS" },
+    Symbol { id: 0x0031, name: "NEPAT" },
+    Symbol { id: 0x0032, name: "NEPATIESS" },
+    Symbol { id: 0x0033, name: "=:" },
+    Symbol { id: 0x0034, name: "=+" },
+    Symbol { id: 0x0035, name: "=-" },
+    Symbol { id: 0x0036, name: "=*" },
+    Symbol { id: 0x0037, name: "=/" },
+    Symbol { id: 0x0038, name: "(" },
+    Symbol { id: 0x0039, name: ")" },
+    Symbol { id: 0x003A, name: "()" },
+    Symbol { id: 0x003B, name: "," },
+    Symbol { id: 0x003D, name: "=" },
+    Symbol { id: 0x003E, name: ">" },
+    Symbol { id: 0x003F, name: ">=" },
+    Symbol { id: 0x0040, name: "<" },
+    Symbol { id: 0x0041, name: "!=" },
+    Symbol { id: 0x0042, name: "vai" },
+    Symbol { id: 0x0043, name: "un" },
+    Symbol { id: 0x0044, name: "ja" },
+    Symbol { id: 0x0045, name: "{" },
+    Symbol { id: 0x0046, name: "}" },
+    Symbol { id: 0x0047, name: "citādi" },
+    Symbol { id: 0x0048, name: "atkārtot" },
+    Symbol { id: 0x0049, name: "kamēr" },
+    Symbol { id: 0x004A, name: ":" },
+    Symbol { id: 0x004C, name: "funkcija" },
+    Symbol { id: 0x004D, name: "*" },
+    Symbol { id: 0x004E, name: "/" },
+    Symbol { id: 0x004F, name: "%" },
+    Symbol { id: 0x0050, name: "+" },
+    Symbol { id: 0x0051, name: "-" }];
 
 /// Creates a new lexer
 fn new_lexer<'a>(
@@ -120,68 +117,62 @@ pub const ID_VARIABLE_BOOL_DEF: u32 = 0x000D;
 pub const ID_VARIABLE_TEXT: u32 = 0x000E;
 /// The unique identifier for variable NUM
 pub const ID_VARIABLE_NUM: u32 = 0x000F;
-/// The unique identifier for variable LONG
-pub const ID_VARIABLE_LONG: u32 = 0x0010;
-/// The unique identifier for variable NATURAL
-pub const ID_VARIABLE_NATURAL: u32 = 0x0011;
-/// The unique identifier for variable LONG_NAT
-pub const ID_VARIABLE_LONG_NAT: u32 = 0x0012;
 /// The unique identifier for variable TYPE
-pub const ID_VARIABLE_TYPE: u32 = 0x0013;
+pub const ID_VARIABLE_TYPE: u32 = 0x0010;
 /// The unique identifier for variable TRUE
-pub const ID_VARIABLE_TRUE: u32 = 0x0014;
+pub const ID_VARIABLE_TRUE: u32 = 0x0011;
 /// The unique identifier for variable FALSE
-pub const ID_VARIABLE_FALSE: u32 = 0x0015;
+pub const ID_VARIABLE_FALSE: u32 = 0x0012;
 /// The unique identifier for variable BOOL
-pub const ID_VARIABLE_BOOL: u32 = 0x0016;
+pub const ID_VARIABLE_BOOL: u32 = 0x0013;
 /// The unique identifier for variable var_def
-pub const ID_VARIABLE_VAR_DEF: u32 = 0x0017;
+pub const ID_VARIABLE_VAR_DEF: u32 = 0x0014;
 /// The unique identifier for variable var_def_value
-pub const ID_VARIABLE_VAR_DEF_VALUE: u32 = 0x0018;
+pub const ID_VARIABLE_VAR_DEF_VALUE: u32 = 0x0015;
 /// The unique identifier for variable asignable_exp
-pub const ID_VARIABLE_ASIGNABLE_EXP: u32 = 0x0019;
+pub const ID_VARIABLE_ASIGNABLE_EXP: u32 = 0x0016;
 /// The unique identifier for variable assign_op
-pub const ID_VARIABLE_ASSIGN_OP: u32 = 0x001A;
+pub const ID_VARIABLE_ASSIGN_OP: u32 = 0x0017;
 /// The unique identifier for variable id_asign
-pub const ID_VARIABLE_ID_ASIGN: u32 = 0x001B;
+pub const ID_VARIABLE_ID_ASIGN: u32 = 0x0018;
 /// The unique identifier for variable func_call
-pub const ID_VARIABLE_FUNC_CALL: u32 = 0x001C;
+pub const ID_VARIABLE_FUNC_CALL: u32 = 0x0019;
 /// The unique identifier for variable funcargs
-pub const ID_VARIABLE_FUNCARGS: u32 = 0x001D;
+pub const ID_VARIABLE_FUNCARGS: u32 = 0x001A;
 /// The unique identifier for variable comp_s
-pub const ID_VARIABLE_COMP_S: u32 = 0x001E;
+pub const ID_VARIABLE_COMP_S: u32 = 0x001B;
 /// The unique identifier for variable vai
-pub const ID_VARIABLE_VAI: u32 = 0x001F;
+pub const ID_VARIABLE_VAI: u32 = 0x001C;
 /// The unique identifier for variable un
-pub const ID_VARIABLE_UN: u32 = 0x0020;
+pub const ID_VARIABLE_UN: u32 = 0x001D;
 /// The unique identifier for variable comp
-pub const ID_VARIABLE_COMP: u32 = 0x0021;
+pub const ID_VARIABLE_COMP: u32 = 0x001E;
 /// The unique identifier for variable if
-pub const ID_VARIABLE_IF: u32 = 0x0022;
+pub const ID_VARIABLE_IF: u32 = 0x001F;
 /// The unique identifier for variable s_loop
-pub const ID_VARIABLE_S_LOOP: u32 = 0x0023;
+pub const ID_VARIABLE_S_LOOP: u32 = 0x0020;
 /// The unique identifier for variable w_loop
-pub const ID_VARIABLE_W_LOOP: u32 = 0x0024;
+pub const ID_VARIABLE_W_LOOP: u32 = 0x0021;
 /// The unique identifier for variable arg
-pub const ID_VARIABLE_ARG: u32 = 0x0025;
+pub const ID_VARIABLE_ARG: u32 = 0x0022;
 /// The unique identifier for variable func_def_args
-pub const ID_VARIABLE_FUNC_DEF_ARGS: u32 = 0x0026;
+pub const ID_VARIABLE_FUNC_DEF_ARGS: u32 = 0x0023;
 /// The unique identifier for variable func_def
-pub const ID_VARIABLE_FUNC_DEF: u32 = 0x0027;
+pub const ID_VARIABLE_FUNC_DEF: u32 = 0x0024;
 /// The unique identifier for variable exp_atom
-pub const ID_VARIABLE_EXP_ATOM: u32 = 0x0028;
+pub const ID_VARIABLE_EXP_ATOM: u32 = 0x0025;
 /// The unique identifier for variable exp_reizdal
-pub const ID_VARIABLE_EXP_REIZDAL: u32 = 0x0029;
+pub const ID_VARIABLE_EXP_REIZDAL: u32 = 0x0026;
 /// The unique identifier for variable exp_plusmin
-pub const ID_VARIABLE_EXP_PLUSMIN: u32 = 0x002A;
+pub const ID_VARIABLE_EXP_PLUSMIN: u32 = 0x0027;
 /// The unique identifier for variable exp
-pub const ID_VARIABLE_EXP: u32 = 0x002B;
+pub const ID_VARIABLE_EXP: u32 = 0x0028;
 /// The unique identifier for variable stat
-pub const ID_VARIABLE_STAT: u32 = 0x002C;
+pub const ID_VARIABLE_STAT: u32 = 0x0029;
 /// The unique identifier for variable block
-pub const ID_VARIABLE_BLOCK: u32 = 0x002D;
+pub const ID_VARIABLE_BLOCK: u32 = 0x002A;
 /// The unique identifier for variable root
-pub const ID_VARIABLE_ROOT: u32 = 0x002E;
+pub const ID_VARIABLE_ROOT: u32 = 0x002B;
 
 
 /// The collection of variables matched by this parser
@@ -191,41 +182,38 @@ const VARIABLES: &[Symbol] = &[
     Symbol { id: 0x000D, name: "BOOL_DEF" },
     Symbol { id: 0x000E, name: "TEXT" },
     Symbol { id: 0x000F, name: "NUM" },
-    Symbol { id: 0x0010, name: "LONG" },
-    Symbol { id: 0x0011, name: "NATURAL" },
-    Symbol { id: 0x0012, name: "LONG_NAT" },
-    Symbol { id: 0x0013, name: "TYPE" },
-    Symbol { id: 0x0014, name: "TRUE" },
-    Symbol { id: 0x0015, name: "FALSE" },
-    Symbol { id: 0x0016, name: "BOOL" },
-    Symbol { id: 0x0017, name: "var_def" },
-    Symbol { id: 0x0018, name: "var_def_value" },
-    Symbol { id: 0x0019, name: "asignable_exp" },
-    Symbol { id: 0x001A, name: "assign_op" },
-    Symbol { id: 0x001B, name: "id_asign" },
-    Symbol { id: 0x001C, name: "func_call" },
-    Symbol { id: 0x001D, name: "funcargs" },
-    Symbol { id: 0x001E, name: "comp_s" },
-    Symbol { id: 0x001F, name: "vai" },
-    Symbol { id: 0x0020, name: "un" },
-    Symbol { id: 0x0021, name: "comp" },
-    Symbol { id: 0x0022, name: "if" },
-    Symbol { id: 0x0023, name: "s_loop" },
-    Symbol { id: 0x0024, name: "w_loop" },
-    Symbol { id: 0x0025, name: "arg" },
-    Symbol { id: 0x0026, name: "func_def_args" },
-    Symbol { id: 0x0027, name: "func_def" },
-    Symbol { id: 0x0028, name: "exp_atom" },
-    Symbol { id: 0x0029, name: "exp_reizdal" },
-    Symbol { id: 0x002A, name: "exp_plusmin" },
-    Symbol { id: 0x002B, name: "exp" },
-    Symbol { id: 0x002C, name: "stat" },
-    Symbol { id: 0x002D, name: "block" },
-    Symbol { id: 0x002E, name: "root" },
-    Symbol { id: 0x0042, name: "__V66" },
-    Symbol { id: 0x0051, name: "__V81" },
-    Symbol { id: 0x0058, name: "__V88" },
-    Symbol { id: 0x0059, name: "__VAxiom" }];
+    Symbol { id: 0x0010, name: "TYPE" },
+    Symbol { id: 0x0011, name: "TRUE" },
+    Symbol { id: 0x0012, name: "FALSE" },
+    Symbol { id: 0x0013, name: "BOOL" },
+    Symbol { id: 0x0014, name: "var_def" },
+    Symbol { id: 0x0015, name: "var_def_value" },
+    Symbol { id: 0x0016, name: "asignable_exp" },
+    Symbol { id: 0x0017, name: "assign_op" },
+    Symbol { id: 0x0018, name: "id_asign" },
+    Symbol { id: 0x0019, name: "func_call" },
+    Symbol { id: 0x001A, name: "funcargs" },
+    Symbol { id: 0x001B, name: "comp_s" },
+    Symbol { id: 0x001C, name: "vai" },
+    Symbol { id: 0x001D, name: "un" },
+    Symbol { id: 0x001E, name: "comp" },
+    Symbol { id: 0x001F, name: "if" },
+    Symbol { id: 0x0020, name: "s_loop" },
+    Symbol { id: 0x0021, name: "w_loop" },
+    Symbol { id: 0x0022, name: "arg" },
+    Symbol { id: 0x0023, name: "func_def_args" },
+    Symbol { id: 0x0024, name: "func_def" },
+    Symbol { id: 0x0025, name: "exp_atom" },
+    Symbol { id: 0x0026, name: "exp_reizdal" },
+    Symbol { id: 0x0027, name: "exp_plusmin" },
+    Symbol { id: 0x0028, name: "exp" },
+    Symbol { id: 0x0029, name: "stat" },
+    Symbol { id: 0x002A, name: "block" },
+    Symbol { id: 0x002B, name: "root" },
+    Symbol { id: 0x003C, name: "__V60" },
+    Symbol { id: 0x004B, name: "__V75" },
+    Symbol { id: 0x0052, name: "__V82" },
+    Symbol { id: 0x0053, name: "__VAxiom" }];
 
 /// The collection of virtuals matched by this parser
 /// The virtuals are in an order consistent with the automaton,
@@ -280,9 +268,6 @@ pub trait Visitor {
     fn on_variable_bool_def(&self, _node: &AstNode) {}
     fn on_variable_text(&self, _node: &AstNode) {}
     fn on_variable_num(&self, _node: &AstNode) {}
-    fn on_variable_long(&self, _node: &AstNode) {}
-    fn on_variable_natural(&self, _node: &AstNode) {}
-    fn on_variable_long_nat(&self, _node: &AstNode) {}
     fn on_variable_type(&self, _node: &AstNode) {}
     fn on_variable_true(&self, _node: &AstNode) {}
     fn on_variable_false(&self, _node: &AstNode) {}
@@ -340,37 +325,34 @@ pub fn visit_ast_node<'a>(node: AstNode<'a>, visitor: &dyn Visitor) {
         0x000D => visitor.on_variable_bool_def(&node),
         0x000E => visitor.on_variable_text(&node),
         0x000F => visitor.on_variable_num(&node),
-        0x0010 => visitor.on_variable_long(&node),
-        0x0011 => visitor.on_variable_natural(&node),
-        0x0012 => visitor.on_variable_long_nat(&node),
-        0x0013 => visitor.on_variable_type(&node),
-        0x0014 => visitor.on_variable_true(&node),
-        0x0015 => visitor.on_variable_false(&node),
-        0x0016 => visitor.on_variable_bool(&node),
-        0x0017 => visitor.on_variable_var_def(&node),
-        0x0018 => visitor.on_variable_var_def_value(&node),
-        0x0019 => visitor.on_variable_asignable_exp(&node),
-        0x001A => visitor.on_variable_assign_op(&node),
-        0x001B => visitor.on_variable_id_asign(&node),
-        0x001C => visitor.on_variable_func_call(&node),
-        0x001D => visitor.on_variable_funcargs(&node),
-        0x001E => visitor.on_variable_comp_s(&node),
-        0x001F => visitor.on_variable_vai(&node),
-        0x0020 => visitor.on_variable_un(&node),
-        0x0021 => visitor.on_variable_comp(&node),
-        0x0022 => visitor.on_variable_if(&node),
-        0x0023 => visitor.on_variable_s_loop(&node),
-        0x0024 => visitor.on_variable_w_loop(&node),
-        0x0025 => visitor.on_variable_arg(&node),
-        0x0026 => visitor.on_variable_func_def_args(&node),
-        0x0027 => visitor.on_variable_func_def(&node),
-        0x0028 => visitor.on_variable_exp_atom(&node),
-        0x0029 => visitor.on_variable_exp_reizdal(&node),
-        0x002A => visitor.on_variable_exp_plusmin(&node),
-        0x002B => visitor.on_variable_exp(&node),
-        0x002C => visitor.on_variable_stat(&node),
-        0x002D => visitor.on_variable_block(&node),
-        0x002E => visitor.on_variable_root(&node),
+        0x0010 => visitor.on_variable_type(&node),
+        0x0011 => visitor.on_variable_true(&node),
+        0x0012 => visitor.on_variable_false(&node),
+        0x0013 => visitor.on_variable_bool(&node),
+        0x0014 => visitor.on_variable_var_def(&node),
+        0x0015 => visitor.on_variable_var_def_value(&node),
+        0x0016 => visitor.on_variable_asignable_exp(&node),
+        0x0017 => visitor.on_variable_assign_op(&node),
+        0x0018 => visitor.on_variable_id_asign(&node),
+        0x0019 => visitor.on_variable_func_call(&node),
+        0x001A => visitor.on_variable_funcargs(&node),
+        0x001B => visitor.on_variable_comp_s(&node),
+        0x001C => visitor.on_variable_vai(&node),
+        0x001D => visitor.on_variable_un(&node),
+        0x001E => visitor.on_variable_comp(&node),
+        0x001F => visitor.on_variable_if(&node),
+        0x0020 => visitor.on_variable_s_loop(&node),
+        0x0021 => visitor.on_variable_w_loop(&node),
+        0x0022 => visitor.on_variable_arg(&node),
+        0x0023 => visitor.on_variable_func_def_args(&node),
+        0x0024 => visitor.on_variable_func_def(&node),
+        0x0025 => visitor.on_variable_exp_atom(&node),
+        0x0026 => visitor.on_variable_exp_reizdal(&node),
+        0x0027 => visitor.on_variable_exp_plusmin(&node),
+        0x0028 => visitor.on_variable_exp(&node),
+        0x0029 => visitor.on_variable_stat(&node),
+        0x002A => visitor.on_variable_block(&node),
+        0x002B => visitor.on_variable_root(&node),
         _ => ()
     };
 }

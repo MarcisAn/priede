@@ -34,14 +34,7 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
             return act.unwrap();
         }
     } else if input.to_string().starts_with("NUMBER = ") {
-        //19
-        if input.get_value().unwrap().len() >= 9 {
-            return ast::ValueNode::Long(input.get_value().unwrap().parse::<i64>().unwrap());
-        } else if input.get_value().unwrap().len() >= 19 {
-            return ast::ValueNode::LongNat(input.get_value().unwrap().parse::<u64>().unwrap());
-        } else {
-            return ast::ValueNode::Int(input.get_value().unwrap().parse::<i32>().unwrap());
-        }
+        return ast::ValueNode::Int(input.get_value().unwrap().parse::<i128>().unwrap());
     } else if input.to_string() == "BOOL" {
         if input.children().at(0).to_string() == "FALSE" {
             return ast::ValueNode::Bool(false);

@@ -85,9 +85,18 @@ import "xterm/css/xterm.css";
 var term = new Terminal();
 term.open(document.getElementById("terminal"));
 
+term.onKey((e) => {
+  //console.log(e.key);
+  term.write("\u001b[36m" + e.key);
+  if (e.key == "\r") term.write("\n");
+});
+
 console.log = (...args) => {
-  term.write(...args);
+  term.write("\u001b[37m" + args);
 };
 alert = (...args) => {
   term.writeln(...args);
 };
+export function input() {
+  console.log("eeee");
+}

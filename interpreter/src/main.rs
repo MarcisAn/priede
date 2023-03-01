@@ -28,6 +28,7 @@ extern "C" {
     fn alert(s: &str);
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
+    fn input(prompt: &str) -> String;
 }
 
 #[cfg(target_family = "wasm")]
@@ -37,8 +38,8 @@ pub fn run_wasm(code: String) {
 }
 
 #[cfg(target_family = "wasm")]
-pub fn console_log(out: &String) {
-    log(&out);
+fn input_fn(prompt: &str) {
+    input("cav");
 }
 
 pub fn main() {}

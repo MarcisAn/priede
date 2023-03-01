@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Sveika pasaule
 
 Rakstot kodu, pirmais, ko vēlamies darīt - izvadīt informāciju no programmas.

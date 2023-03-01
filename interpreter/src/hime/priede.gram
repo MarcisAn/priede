@@ -47,11 +47,9 @@ grammar priede
         BOOL_DEF -> 'būls'!;
         TEXT -> 'teksts'!;
         NUM -> 'sk'!;
-        LONG -> 'lsk'!;
-        NATURAL -> 'natsk'!;
-        LONG_NAT -> 'lnatsk'!;
+        
 
-        TYPE -> BOOL_DEF^ | TEXT^ | LONG^ | NATURAL^ | LONG_NAT^ | NUM^;
+        TYPE -> BOOL_DEF^ | TEXT^ |  NUM^;
 
         TRUE -> 'PAT'! | 'PATIESS'!;
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
