@@ -17,6 +17,7 @@ pub struct FuncArg {
 pub struct FunCall {
     pub(crate) id: String,
     pub(crate) args: Vec<ValueNode>,
+    pub(crate) line: usize,
 }
 #[derive(Debug, Clone)]
 pub struct Var {

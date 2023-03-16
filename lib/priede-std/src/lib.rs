@@ -59,3 +59,12 @@ pub fn kvadratsakne(a: i128) -> i128 {
     let b = a as f64;
     b.sqrt() as i128
 }
+pub fn comp_int(a: i128, b: i128) -> bool {
+    return a == b;
+}
+pub fn comp_str(a: String, b: String) -> bool {
+    return a == b;
+}
+pub fn comp_bool(a: bool, b: bool) -> bool {
+    return a == b;
+}

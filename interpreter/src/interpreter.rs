@@ -18,7 +18,7 @@ pub fn print_error(line: usize, msg: String) {
 }
 
 pub fn func_return(input: &ast::FunCall) -> ast::ValueNode {
-    let func = run_function(&input.id, input.args.clone());
+    let func = run_function(&input.id, input.args.clone(), input.line);
     if func.is_ok() {
         return func.unwrap();
     } else {

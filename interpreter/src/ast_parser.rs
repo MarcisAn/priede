@@ -21,6 +21,7 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         return ast::ValueNode::FunCall(ast::FunCall {
             id: id.to_string(),
             args: arguments,
+            line: 0, //TODO: get proper line
         })
         .eval();
     } else if input.to_string() == "exp_plusmin" || input.to_string() == "exp_reizdal" {
