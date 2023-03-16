@@ -1,3 +1,2 @@
-sk aaa =: -3
 
-drukāt(aaa)
+drukāt(kvadrātsak(kāp(6,2)))

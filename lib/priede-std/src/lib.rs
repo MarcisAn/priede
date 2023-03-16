@@ -1,6 +1,7 @@
+use std::num;
 use std::{
     io::{self, BufRead, Write},
-    ops::Mul,
+    ops::{Mul, Shr},
 };
 use wasm_bindgen::prelude::*;
 
@@ -49,16 +50,12 @@ pub fn ievade(i: String) -> String {
     let user_input = input(&i).unwrap();
     return user_input;
 }
-/*
-pub fn kapinat<T: Ord>(base: &T, pow: &T) -> T
-where
-    T: std::cmp::Ord,
-{
-    let mut res = base;
-    let mut i = 1;
-    while i > pow {
-        res = base;
-    }
-    res
+
+pub fn kapinat(base: i128, pow: i128) -> i128 {
+    base.pow(pow as u32)
 }
-*/
+
+pub fn kvadratsakne(a: i128) -> i128 {
+    let b = a as f64;
+    b.sqrt() as i128
+}

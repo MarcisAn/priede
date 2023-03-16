@@ -4,13 +4,30 @@ sidebar_position: 3
 
 # Darbības ar skaitļiem
 
-## Aritmētiskās darbības
+## Matemātiskās darbības
 
 ```
 drukāt(2 + 2)
 drukāt(2 - 2)
 drukāt(2 * 2)
 drukāt(2 / 2)
+```
+
+### Kāpināšana
+
+Pirmais arguments - kāpināmais
+
+Otrais arguments - kāpinātājs
+
+```
+//skaitlis 2 otrajā pakāpē
+drukāt(kāp(2,2))
+```
+
+### Kvadrātskanes
+
+```
+kvadrātsak(9)
 ```
 
 ## Mainīgo iestatīšanā iekļautās darbības
