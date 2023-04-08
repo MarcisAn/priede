@@ -1,2 +1,5 @@
+iekļaut "L:/Dev/priede/examples/taisnst_kord.pr"
+
+//drukāt("L:\Dev\priede\examples\taisnst_kord.pr")
 
 test(2,2)

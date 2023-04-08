@@ -43,6 +43,7 @@ fn input_fn(prompt: &str) {
 }
 
 pub fn main() {}
+
 pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
     unsafe {
         IS_WASM = isWASM;
@@ -78,6 +79,7 @@ pub fn interpret(print_ast: bool, src_file: String, isWASM: bool) {
         if err_cnt == 0 {
             let ast = result.get_ast();
             if print_ast {
+                print!("\n");
                 format_ast(ast.get_root(), Vec::<bool>::new());
             }
             ast_parser::parse_function(ast.get_root());
