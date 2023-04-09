@@ -66,7 +66,10 @@ version = "0.1.0"
 dependencies = [
  "colored",
  "hime_redist",
+ "lazy_static",
+ "path-absolutize",
  "priede_std",
+ "relative-path",
  "wasm-bindgen",
 ]
 
@@ -104,6 +107,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "61a1c9b12c453182754f3126c5689324c7214265de2df79917b59de87547a916"
 
 [[package]]
+name = "path-absolutize"
+version = "3.0.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0f1d4993b16f7325d90c18c3c6a3327db7808752db8d208cea0acee0abd52c52"
+dependencies = [
+ "path-dedot",
+]
+
+[[package]]
+name = "path-dedot"
+version = "3.0.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9a81540d94551664b72b72829b12bd167c73c9d25fbac0e04fafa8023f7e4901"
+dependencies = [
+ "once_cell",
+]
+
+[[package]]
 name = "priede"
 version = "0.1.0"
 dependencies = [
@@ -135,6 +156,12 @@ checksum = "8856d8364d252a14d474036ea1358d63c9e6965c8e5c1885c18f73d70bff9c7b"
 dependencies = [
  "proc-macro2",
 ]
+
+[[package]]
+name = "relative-path"
+version = "1.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4bf2521270932c3c7bed1a59151222bd7643c79310f2916f01925e1e16255698"
 
 [[package]]
 name = "syn"

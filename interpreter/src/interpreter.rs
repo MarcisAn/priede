@@ -4,6 +4,7 @@ use crate::hime_redist::symbols::SemanticElementTrait;
 use crate::libloader::run_function;
 use colored::*;
 use hime_redist::ast::AstNode;
+
 pub fn print_error(line: usize, msg: String) {
     println!(
         "{}",

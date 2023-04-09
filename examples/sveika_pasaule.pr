@@ -1,4 +1,6 @@
-iekļaut "L:/Dev/priede/examples/taisnst_kord.pr"
+iekļaut "./taisnst_kord.pr"
+
+drukātJr(ox)
 
 //drukāt("L:\Dev\priede\examples\taisnst_kord.pr")
 

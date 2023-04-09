@@ -20,7 +20,7 @@ Datu tipi:
 
 - vesels skaitlis `sk`
 
-  Šis datu tips var uzglabāt veselus skaitļus robežās no -170141183460469231731687303715884105728 līdz 170141183460469231731687303715884105727
+  Šis datu tips var uzglabāt veselus skaitļus robežās no -2^128 līdz 2^128
 
   ```
     sk nosaukums =: 3

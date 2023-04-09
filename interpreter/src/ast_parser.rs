@@ -1,9 +1,9 @@
 use crate::ast::{self, FuncArg, FuncDef, Pop};
 use crate::ast::{Eval, ValueNode};
-use crate::interpret;
 use crate::interpreter::{
     arithemtics, arithemtics_int, compare, define_variable, id_assign, print_error,
 };
+use crate::{include_file, interpret};
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 
 pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
@@ -27,7 +27,10 @@ pub fn parse_function(input: AstNode<'_>) -> ast::ValueNode {
         .eval();
     } else if input.to_string() == "import" {
         let srcfile = input.children().at(1).get_value().unwrap();
-        interpret(false, srcfile[1..srcfile.len() - 1].to_string(), false);
+        include_file(
+            srcfile[1..srcfile.len() - 1].to_string(),
+            input.children().at(1).get_position().unwrap().line,
+        );
         return ast::ValueNode::None("".to_string());
     } else if input.to_string() == "exp_plusmin" || input.to_string() == "exp_reizdal" {
         // aritmētiskās darbības

@@ -11,13 +11,7 @@ const config = {
   favicon: "img/favicon.ico",
   //TODO: Set the production url of your site here
   url: "https://your-docusaurus-test-site.com",
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/",
-
-  // Even if you don't use internalization, you can use this field to set useful
-  // metadata like html lang. For example, if your site is Chinese, you may want
-  // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "lv",
     locales: ["lv"],
@@ -63,13 +57,13 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "atra-doc/helloworld",
+            docId: "/category/īsumā-par-priedi",
             position: "left",
             label: "Ātrā pamācība",
           },
           {
             type: "doc",
-            docId: "instalacija",
+            docId: "/category/dokumentacija",
             position: "left",
             label: "Dokumentācija",
           },
@@ -88,12 +82,12 @@ const config = {
             title: "Dokumentācija",
             items: [
               {
-                label: "Ātrā pamācība",
-                to: "/docs/intro",
+                label: "Īsumā par priedi",
+                to: "/docs/category/īsumā-par-priedi",
               },
               {
                 label: "Pilnā dokumentācija",
-                to: "/docs/intro",
+                to: "/docs/category/īsumā-par-priedi",
               },
             ],
           },
