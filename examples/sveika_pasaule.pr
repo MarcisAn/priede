@@ -1,7 +1,7 @@
-iekļaut "./taisnst_kord.pr"
+sk a := 4
 
-drukātJr(ox)
-
-//drukāt("L:\Dev\priede\examples\taisnst_kord.pr")
-
-test(2,2)
+funkc aa(){
+    drukāt("a")
+    aa()
+}
+aa()

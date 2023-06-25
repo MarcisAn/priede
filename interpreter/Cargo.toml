@@ -7,7 +7,6 @@ edition = "2021"
 hime_redist = "3.5.1"
 colored = "2.0.0"
 wasm-bindgen = "0.2.63"
-priede_std = {path = "../lib/priede-std"}
 path-absolutize = "3.0.14"
 lazy_static = "1.4.0"
 relative-path = "1.8.0"

@@ -68,7 +68,6 @@ dependencies = [
  "hime_redist",
  "lazy_static",
  "path-absolutize",
- "priede_std",
  "relative-path",
  "wasm-bindgen",
 ]
@@ -130,13 +129,6 @@ version = "0.1.0"
 dependencies = [
  "arguments",
  "interpreter",
-]
-
-[[package]]
-name = "priede_std"
-version = "0.1.0"
-dependencies = [
- "wasm-bindgen",
 ]
 
 [[package]]

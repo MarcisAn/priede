@@ -23,6 +23,6 @@ drukāt("Sveika, pasaule")
 
 - Pēc funkcijas nosaukuma seko apaļās iekavas
 
-  Ja uz funkcijai netiek doti ievaddati, iekavas ir tukšas `()`, bet ja tiek doti argumenti, tie ir rakstīti iekšā iekavās. Ja argumenti ir vairāki, tie tiek atdalīti ar komatiem.
+  Ja uz funkcijai netiek doti ievaddati, iekavas ir tukšas `()`, bet ja tiek doti argumenti, tie ir rakstīti iekšā iekavās. Ja argumenti ir vairāki, tie tiek atdalīti ar semikoliem.
 
   Šajā gadījumā kā arguments tiek dots teksts "Sveika, pasaule!". Viss teksts, kas nav kods ir jāliek pēdiņās. Dubultajās vai vienpēdiņās

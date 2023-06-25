@@ -21,7 +21,7 @@ grammar priede
         
         QUOTE -> '"';
         INTEGER -> [1-9] [0-9]* | '0' ;
-        NUMBER -> INTEGER | '-'INTEGER;
+        NUMBER -> INTEGER | '-' INTEGER | INTEGER','INTEGER | '-' INTEGER','INTEGER;
         
         
 
@@ -42,6 +42,7 @@ grammar priede
 							| '\\0'
 						)* '\'' ;
 		
+        CITADI -> 'citādi';
     }
     rules{
         BOOL_DEF -> 'būls'!;
@@ -55,65 +56,82 @@ grammar priede
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
 
-        var_def -> TYPE ID '=:'! var_def_value;
+        var_def -> TYPE ID ':='! var_def_value;
         var_def_value -> exp_plusmin^ | STRING^ ;
 
         asignable_exp -> exp_plusmin^ | STRING^;
-        assign_op -> '=:'^ | '=+'^ | '=-'^ | '=*'^ | '=/'^;
+        assign_op -> ':='^ | '+='^ | '-='^ | '*='^ | '/='^;
         id_asign -> ID assign_op asignable_exp;
 
-        func_call -> ID '('! funcargs ')'!
-                   | ID '()'! ;
+        func_name -> ID^;
 
-        funcargs -> exp|exp (','! exp)*;
+        func_call -> func_name '('! funcargs ')'!
+                   | func_name '()'! ;
 
-        comp_s ->    exp '=' exp
-                   | exp '>' exp
-                   | exp '>=' exp
-                   | exp '<' exp
-                   | exp '>=' exp
-                   | exp '!=' exp;
+        funcarg -> exp_t^;
 
-        vai -> comp_s 'vai'! comp_s;
+        funcargs -> funcarg|funcarg (';'! funcarg)*;
 
-        un -> comp_s 'un'! comp;
+        comp_s ->    exp_t '=' exp_t
+                   | exp_t '>' exp_t
+                   | exp_t '>=' exp_t
+                   | exp_t '<' exp_t
+                   | exp_t '<=' exp_t
+                   | exp_t '!=' exp_t;
 
-        comp -> comp_s |
-                vai |
-                un |
-                BOOL^|
-                exp^;
 
-        if -> 'ja'! comp '{'! block '}'!
-            | 'ja'! comp '{'! block '}'! 'citādi' '{'! block '}'!;
+        if -> 'ja'! exp '{'! block '}'!
+            | 'ja'! exp '{'! block '}'! CITADI '{'! block '}'!;
 
         s_loop -> 'atkārtot'! exp '{'! block '}'!;
 
-        w_loop -> 'kamēr'! comp '{'! block '}'!;
+        w_loop -> 'kamēr'! exp '{'! block '}'!;
         
-        arg -> ID ':'! TYPE;
-        func_def_args -> arg|arg (','! arg)*;
+        arg -> ID;
+        func_def_args -> arg|arg (';'! arg)*;
 
-        func_def -> 'funkcija'! ID '('! func_def_args ')'! '{'! block '}'!
-                   | 'funkcija'! ID '()'! '{'! block '}'!;
+        func_def -> 'funkc'! ID '('! func_def_args ')'! '{'! block '}'!
+                   | 'funkc'! ID '()'! '{'! block '}'!;
+
 
 
         exp_atom -> NUMBER^
                    | '('! exp^ ')'! 
                    |  ID^
-                   |  func_call^;
+                   |  func_call^
+                   | BOOL^
+                   ;
 
         exp_reizdal -> exp_atom^
-                   |  exp_reizdal '*' exp_atom
-                   |  exp_reizdal '/' exp_atom
-                   |  exp_reizdal '%' exp_atom;
+                   | reiz_dal_atl^;
+        
+        reiz_dal_atl -> 
+                    reiz^|dal^|atlik^;
+
+        reiz -> exp_reizdal '*'! exp_atom;
+        dal -> exp_reizdal '/'! exp_atom;
+        atlik -> exp_reizdal '%'! exp_atom;
 
         exp_plusmin -> exp_reizdal^
-                   |  exp_plusmin '+' exp_reizdal
-                   |  exp_plusmin '-' exp_reizdal;
-        exp ->      
-                   |  exp_plusmin^
-                   |  STRING^;
+                   |  plus^
+                   |  minus^;
+
+        plus -> exp_plusmin '+'! exp_reizdal;
+        minus -> exp_plusmin '-'! exp_reizdal;
+
+        exp_t ->      
+                exp_plusmin^ |
+                STRING^;
+
+        exp_a -> exp_t^|comp_s^;
+
+        xvai -> exp_a 'xvai'! exp_a | exp_a^;
+
+        vai -> xvai ('vai'! xvai)+ | xvai^;
+
+        un -> vai ('un'! vai)+ | vai^;
+
+        exp -> un^;
 
         import -> 'iekļaut' STRING;
 

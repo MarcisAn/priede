@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # Citu priedes failu iekļaušana
 
-Citus priedes koda failus var iekļaut izmantojot relatīvo adresi - relatīvu pret failu, kas to iekļauj
+Citus Priedes koda failus var iekļaut, izmantojot relatīvo adresi - relatīvu pret failu, kas to iekļauj
 
 Failus nevar iekļaut pārlūka interpretatorā
 
