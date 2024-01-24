@@ -1,7 +1,3 @@
-sk a := 4
-
-funkc aa(){
-    drukāt("a")
-    aa()
+ja (2 un 2 un 3 vai 1){
+    drukāt("aa")
 }
-aa()
