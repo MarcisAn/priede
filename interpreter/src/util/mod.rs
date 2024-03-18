@@ -1,28 +1,4 @@
-use std::{fs, process};
-
 use hime_redist::ast::AstNode;
-
-fn main() {}
-
-mod ast;
-mod gen;
-mod hime;
-
-pub fn compile(path: String) {
-    let file_read = fs::read_to_string(&path);
-    if file_read.is_err() {
-        println!(
-            "Neizdevās nolasīt failu {} \nPārlicinies, ka faila adrese ir pareiza!",
-            path
-        );
-        process::exit(1);
-    }
-    let contents = file_read.unwrap();
-    let result = hime::priede::parse_string(contents);
-    let ast = result.get_ast();
-    let root = ast.get_root();
-    print(root, Vec::<bool>::new());
-}
 
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
     let mut i = 0;
@@ -42,4 +18,7 @@ fn print<'a>(node: AstNode, crossings: Vec<bool>) {
         print(children.at(i), child_crossings);
         i += 1;
     }
+}
+pub fn print_ast(node: AstNode) {
+    print(node, Vec::<bool>::new());
 }

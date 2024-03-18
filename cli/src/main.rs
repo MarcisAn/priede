@@ -3,7 +3,7 @@ pub fn main() {
     let arguments = arguments::parse(arguments).unwrap();
     //print!("{}", arguments.get::<bool>("bar").unwrap());
     if arguments.orphans.len() == 0 {
-        compiler::compile(String::from("../examples/sveika_pasaule.pr"));
+        interpreter::interpret(String::from("../examples/sveika_pasaule.pr"));
     } else {
         let mut print_ast: bool = false;
         if arguments.orphans.len() == 2 {
@@ -11,6 +11,6 @@ pub fn main() {
                 print_ast = true;
             }
         }
-        compiler::compile(String::from(arguments.orphans[0].clone()));
+        interpreter::interpret(String::from(arguments.orphans[0].clone()));
     }
 }

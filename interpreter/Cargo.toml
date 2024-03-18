@@ -1,16 +1,14 @@
 [package]
-name = "compiler"
+name = "interpreter"
 version = "0.1.0"
 edition = "2021"
 
 
 [lib]
-name = "compiler"
+name = "interpreter"
 path = "src/main.rs"
 
 [dependencies]
-cranelift = "0.103.0"
-cranelift-module = "0.103.0"
-cranelift-simplejit = "0.68.0"
 hime_redist = "4.3.0"
 target-lexicon = "0.12.13"
+celsium = {path= "../../celsium"}
