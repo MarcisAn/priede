@@ -20,6 +20,22 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         parse_ast(node.child(0), block);
         parse_ast(node.child(1), block);
         block.binop(celsium::BINOP::ADD);
+    } else if title == "minus" {
+        parse_ast(node.child(0), block);
+        parse_ast(node.child(1), block);
+        block.binop(celsium::BINOP::SUBTRACT);
+    } else if title == "reiz" {
+        parse_ast(node.child(0), block);
+        parse_ast(node.child(1), block);
+        block.binop(celsium::BINOP::MULTIPLY);
+    } else if title == "dal" {
+        parse_ast(node.child(0), block);
+        parse_ast(node.child(1), block);
+        block.binop(celsium::BINOP::DIVIDE);
+    } else if title == "atlik" {
+        parse_ast(node.child(0), block);
+        parse_ast(node.child(1), block);
+        block.binop(celsium::BINOP::REMAINDER);
     } else if title == "NUMBER" {
         block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, node.get_value().unwrap());
     }
