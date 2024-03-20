@@ -3,6 +3,7 @@ use celsium::block;
 use celsium::module;
 use celsium::CelsiumProgram;
 use hime_redist::ast::AstNode;
+use hime_redist::errors::ParseError;
 use module::Module;
 use std::fs::read;
 use std::{fs, process};
@@ -18,6 +19,7 @@ mod util;
 pub fn interpret(path: String) {
     let file_content = read_file(path);
     let parse_res = hime::priede::parse_string(file_content);
+    println!("{:?}", parse_res.errors.errors);
     let ast = parse_res.get_ast();
     let root = ast.get_root();
     util::print_ast(root);
@@ -27,6 +29,9 @@ pub fn interpret(path: String) {
     let mut main_block = Block::new();
     parse_ast::parse_ast(root.child(0), &mut main_block);
     println!("{:?}", main_block.bytecode);
+    main_module.add_main_block(main_block);
+    celsius.add_module(&main_module);
+    celsius.run_program();
 }
 
 fn read_file(path: String) -> String {
