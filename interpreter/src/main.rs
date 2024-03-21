@@ -28,7 +28,7 @@ pub fn interpret(path: String) {
     let mut main_module = Module::new("main", &mut celsius);
     let mut main_block = Block::new();
     parse_ast::parse_ast(root.child(0), &mut main_block);
-    println!("{:?}", main_block.bytecode);
+    //println!("{:?}", main_block.bytecode);
     main_module.add_main_block(main_block);
     celsius.add_module(&main_module);
     celsius.run_program();

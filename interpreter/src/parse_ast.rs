@@ -11,7 +11,6 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         for arg in node.child(1) {
             parse_ast(arg, block);
         }
-
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "drukāt" {
             block.call_print_function(true);
@@ -36,6 +35,17 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         parse_ast(node.child(0), block);
         parse_ast(node.child(1), block);
         block.binop(celsium::BINOP::REMAINDER);
+    } else if title == "if" {
+        parse_ast(node.child(0), block);
+        let mut if_block = Block::new();
+        parse_ast(node.child(1), &mut if_block);
+        if node.children_count() > 2 {
+            let mut else_block = Block::new();
+            parse_ast(node.child(3), &mut else_block);
+            block.define_if_else_block(if_block, else_block)
+        } else {
+            block.define_if_block(if_block);
+        }
     } else if title == "comp_s" {
         let sign = node.child(1).get_value().unwrap();
         parse_ast(node.child(0), block);
@@ -48,6 +58,10 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
             "<=" => block.binop(celsium::BINOP::LESS_OR_EQ),
             "!=" => block.binop(celsium::BINOP::NOT_EQ),
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
+        }
+    } else if title == "block" {
+        for i in node.children() {
+            parse_ast(i, block);
         }
     } else if title == "NUMBER" {
         block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, node.get_value().unwrap());

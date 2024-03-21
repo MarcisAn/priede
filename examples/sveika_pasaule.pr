@@ -1,1 +1,5 @@
-drukāt(2 / 7)
+ja 2 < 1{
+    drukāt(7)
+} citādi {
+    drukāt(1)
+}
