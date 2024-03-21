@@ -36,6 +36,19 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         parse_ast(node.child(0), block);
         parse_ast(node.child(1), block);
         block.binop(celsium::BINOP::REMAINDER);
+    } else if title == "comp_s" {
+        let sign = node.child(1).get_value().unwrap();
+        parse_ast(node.child(0), block);
+        parse_ast(node.child(2), block);
+        match sign {
+            "=" => block.binop(celsium::BINOP::EQ),
+            ">" => block.binop(celsium::BINOP::LARGER_THAN),
+            ">=" => block.binop(celsium::BINOP::LARGER_OR_EQ),
+            "<" => block.binop(celsium::BINOP::LESS_THAN),
+            "<=" => block.binop(celsium::BINOP::LESS_OR_EQ),
+            "!=" => block.binop(celsium::BINOP::NOT_EQ),
+            _ => panic!("Neatpazīts salīdzinājuma simbols"),
+        }
     } else if title == "NUMBER" {
         block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, node.get_value().unwrap());
     }

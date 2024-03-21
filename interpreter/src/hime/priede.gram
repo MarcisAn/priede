@@ -70,7 +70,7 @@ grammar priede
         func_call -> func_name '('! funcargs ')'!
                    | func_name '()'! ;
 
-        funcarg -> exp_t^;
+        funcarg -> exp^;
 
         funcargs -> funcarg|funcarg (';'! funcarg)*;
 
