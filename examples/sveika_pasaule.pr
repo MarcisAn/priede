@@ -1,4 +1,4 @@
-ja 2 < 1{
+ja 2 < 1 un 3 < 4{
     drukāt(7)
 } citādi {
     drukāt(1)

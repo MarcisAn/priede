@@ -1,5 +1,5 @@
 use crate::ast::*;
-use celsium::{block::Block, module::Module};
+use celsium::{block::Block, module::Module, BINOP};
 use hime_redist::{
     ast::{Ast, AstNode},
     symbols::SemanticElementTrait,
@@ -59,6 +59,18 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
             "!=" => block.binop(celsium::BINOP::NOT_EQ),
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         }
+    } else if title == "un" {
+        parse_ast(node.child(0), block);
+        parse_ast(node.child(1), block);
+        block.binop(BINOP::AND);
+    } else if title == "vai" {
+        parse_ast(node.child(0), block);
+        parse_ast(node.child(1), block);
+        block.binop(BINOP::OR);
+    } else if title == "xvai" {
+        parse_ast(node.child(0), block);
+        parse_ast(node.child(1), block);
+        block.binop(BINOP::XOR);
     } else if title == "block" {
         for i in node.children() {
             parse_ast(i, block);
