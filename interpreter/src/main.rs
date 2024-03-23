@@ -34,6 +34,8 @@ pub fn interpret(path: String) {
     celsius.run_program();
 }
 
+pub fn run_wasm(code: String) {}
+
 fn read_file(path: String) -> String {
     let file_read = fs::read_to_string(&path);
     if file_read.is_err() {
