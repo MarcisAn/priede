@@ -9,10 +9,12 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
+    fn priede_print(s: &str);
 }
 
 #[wasm_bindgen]
 pub fn run(code: &str) {
     #[cfg(target_family = "wasm")]
+    priede_print("aaa");
     interpreter::run_wasm(code.to_string());
 }

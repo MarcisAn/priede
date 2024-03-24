@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
-
+import init, { run } from "./pkg/priede_wasm.js";
 import Editor from "@monaco-editor/react";
 
+export function priede_print(a) {
+  console.log(a);
+}
+
 export default function App() {
+  useEffect(() => {
+    init();
+    setTimeout(() => {
+      run("ee");
+    }, 1000);
+  }, []);
   return (
     <>
       <Editor

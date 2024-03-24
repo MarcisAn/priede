@@ -11,7 +11,6 @@ use std::{fs, process};
 fn main() {}
 
 mod ast;
-mod gen;
 mod hime;
 mod parse_ast;
 mod util;
