@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import init, { run } from "./pkg/priede_wasm.js";
 import Editor from "@monaco-editor/react";
@@ -8,11 +8,19 @@ export function priede_print(a) {
 }
 
 export default function App() {
+  const editorRef = useRef(null);
+
+  function handleEditorDidMount(editor, monaco) {
+    editorRef.current = editor;
+  }
+
+  function showValue() {
+    //alert(editorRef.current.getValue());
+    return editorRef.current.getValue();
+  }
+
   useEffect(() => {
     init();
-    setTimeout(() => {
-      run("ee");
-    }, 1000);
   }, []);
   return (
     <>
@@ -21,9 +29,15 @@ export default function App() {
         width="70vw"
         theme="vs-dark"
         defaultValue="drukāt('Sveika pasaule')"
+        onMount={handleEditorDidMount}
       />
       <div className="panel">
-        <button className="runBtn">
+        <button
+          className="runBtn"
+          onClick={() => {
+            run(showValue());
+            console.log(showValue());
+          }}>
           PALAIST
           <svg
             width="20"

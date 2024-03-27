@@ -15,6 +15,6 @@ extern "C" {
 #[wasm_bindgen]
 pub fn run(code: &str) {
     #[cfg(target_family = "wasm")]
-    priede_print("aaa");
+    priede_print(code);
     interpreter::run_wasm(code.to_string());
 }
