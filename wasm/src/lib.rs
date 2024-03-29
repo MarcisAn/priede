@@ -1,5 +1,6 @@
 use wasm_bindgen::prelude::*;
-
+extern crate console_error_panic_hook;
+use std::panic;
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
 #[cfg(feature = "wee_alloc")]
@@ -9,12 +10,13 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
-    fn priede_print(s: &str);
+    fn wasm_print(s: &str);
 }
 
 #[wasm_bindgen]
 pub fn run(code: &str) {
+    panic::set_hook(Box::new(console_error_panic_hook::hook));
     #[cfg(target_family = "wasm")]
-    priede_print(code);
+    wasm_print(code);
     interpreter::run_wasm(code.to_string());
 }

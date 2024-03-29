@@ -7,6 +7,7 @@ use hime_redist::errors::ParseError;
 use module::Module;
 use std::fs::read;
 use std::{fs, process};
+use wasm_bindgen::prelude::*;
 
 fn main() {}
 
@@ -14,6 +15,16 @@ mod ast;
 mod hime;
 mod parse_ast;
 mod util;
+
+#[cfg(feature = "wee_alloc")]
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+#[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+    fn wasm_print(s: &str);
+}
 
 pub fn interpret(path: String) {
     let file_content = read_file(path);
@@ -23,7 +34,7 @@ pub fn interpret(path: String) {
     let root = ast.get_root();
     util::print_ast(root);
 
-    let mut celsius = CelsiumProgram::new();
+    let mut celsius = CelsiumProgram::new(false);
     let mut main_module = Module::new("main", &mut celsius);
     let mut main_block = Block::new();
     parse_ast::parse_ast(root.child(0), &mut main_block);
@@ -33,7 +44,22 @@ pub fn interpret(path: String) {
     celsius.run_program();
 }
 
-pub fn run_wasm(code: String) {}
+pub fn run_wasm(code: String) {
+    let parse_res = hime::priede::parse_string(code);
+    println!("{:?}", parse_res.errors.errors);
+    let ast = parse_res.get_ast();
+    let root = ast.get_root();
+    util::print_ast(root);
+
+    let mut celsius = CelsiumProgram::new(true);
+    let mut main_module = Module::new("main", &mut celsius);
+    let mut main_block = Block::new();
+    parse_ast::parse_ast(root.child(0), &mut main_block);
+    //println!("{:?}", main_block.bytecode);
+    main_module.add_main_block(main_block);
+    celsius.add_module(&main_module);
+    celsius.run_program();
+}
 
 fn read_file(path: String) -> String {
     let file_read = fs::read_to_string(&path);

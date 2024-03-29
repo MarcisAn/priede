@@ -17,7 +17,7 @@ h1{
     width: 30vw;
 }
 .console{
-    background-color: red;
+    background-color: rgb(218, 218, 218);
     height: 100%;
 }
 .runBtn{

@@ -1,15 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import init, { run } from "./pkg/priede_wasm.js";
 import Editor from "@monaco-editor/react";
 
-export function priede_print(a) {
+export let messages = [];
+console.log(messages);
+
+export function wasm_print(a) {
   console.log(a);
+  messages.push(a);
 }
 
 export default function App() {
+  console.log(messages);
+  function add_message(msg) {
+    setConsoleMessages(consoleMessages.push(msg));
+  }
   const editorRef = useRef(null);
-
+  const [consoleMessages, setConsoleMessages] = useState(messages);
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
   }
@@ -52,7 +60,11 @@ export default function App() {
               clip-rule="evenodd"></path>
           </svg>
         </button>
-        <div className="console">aa</div>
+        <div className="console">
+          {messages.map((msg) => (
+            <p>{msg}</p>
+          ))}
+        </div>
       </div>
     </>
   );
