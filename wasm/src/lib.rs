@@ -16,7 +16,5 @@ extern "C" {
 #[wasm_bindgen]
 pub fn run(code: &str) {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
-    #[cfg(target_family = "wasm")]
-    wasm_print(code);
     interpreter::run_wasm(code.to_string());
 }

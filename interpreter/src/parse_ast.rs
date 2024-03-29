@@ -5,6 +5,13 @@ use hime_redist::{
     symbols::SemanticElementTrait,
 };
 
+fn rem_first_and_last(value: &str) -> &str {
+    let mut chars = value.chars();
+    chars.next();
+    chars.next_back();
+    chars.as_str()
+}
+
 pub fn parse_ast(node: AstNode, block: &mut Block) {
     let title = node.get_symbol().to_string();
     if title == "func_call" {
@@ -77,5 +84,10 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         }
     } else if title == "NUMBER" {
         block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, node.get_value().unwrap());
+    } else if title == "STRING" {
+        block.load_const(
+            celsium::BUILTIN_TYPES::STRING,
+            rem_first_and_last(node.get_value().unwrap()),
+        );
     }
 }
