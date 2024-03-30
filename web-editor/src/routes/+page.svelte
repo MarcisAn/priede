@@ -47,7 +47,7 @@
 			theme: 'vs-dark'
 		});
 
-		loadCode('console.log(2)', 'plaintext');
+		loadCode('drukāt("Sveika, pasaule!")', 'plaintext');
 	});
 
 	onDestroy(() => {
@@ -62,6 +62,7 @@
 		<button
 			class="runBtn"
 			on:click={() => {
+				init();
 				run(editor.getValue());
 			}}
 		>
@@ -81,6 +82,12 @@
 				></path>
 			</svg>
 		</button>
-		<div class="console">{$messages}</div>
+		<div class="console">
+			{#each $messages as message}
+				<div class="consoleMessage">
+					{message}
+				</div>
+			{/each}
+		</div>
 	</div>
 </div>

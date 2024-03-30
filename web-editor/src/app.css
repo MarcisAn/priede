@@ -38,7 +38,13 @@ h1 {
     background-color: rgb(218, 218, 218);
     height: 100%;
 }
-
+.consoleMessage {
+    background-color: rgb(184, 184, 184);
+    margin: 5px;
+    padding-left: 8px;
+    border-radius: 4px;
+    font-size: larger;
+}
 .runBtn {
     margin: 2vh;
     background-color: rgb(78, 248, 78);
