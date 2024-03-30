@@ -1,26 +1,45 @@
-html, body, #root{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
     height: 100%;
 }
-body{
+
+body {
     margin: 0px;
 }
-#root{
+
+.root {
     display: flex;
     flex-direction: row;
+    height: 100%;
 }
-h1{
+
+.editor{
+    flex: 1;
+    width: 700px;
+    overflow: hidden;
+}
+
+h1 {
     margin: auto;
 }
-.panel{
+
+.panel {
     display: flex;
     flex-direction: column;
-    width: 30vw;
+    width: 20rem;
 }
-.console{
+
+.console {
     background-color: rgb(218, 218, 218);
     height: 100%;
 }
-.runBtn{
+
+.runBtn {
     margin: 2vh;
     background-color: rgb(78, 248, 78);
     height: 6vh;
