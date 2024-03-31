@@ -82,6 +82,13 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         for i in node.children() {
             parse_ast(i, block);
         }
+    } else if title == "s_loop" {
+        let mut loop_block = Block::new();
+        parse_ast(node.child(1), &mut loop_block);
+        block.define_simple_loop(
+            loop_block,
+            node.child(0).get_value().unwrap().parse::<usize>().unwrap(),
+        );
     } else if title == "NUMBER" {
         block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, node.get_value().unwrap());
     } else if title == "STRING" {

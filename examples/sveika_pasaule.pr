@@ -1,1 +1,3 @@
-drukāt("Sveika pasaule")
+atkārtot 5 {
+    drukāt(2)
+}
