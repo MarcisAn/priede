@@ -1,3 +1,2 @@
-atkārtot 5 {
-    drukāt(2)
-}
+drukāt(2)
+drukāt("ahah")

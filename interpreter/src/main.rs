@@ -39,7 +39,7 @@ pub fn interpret(path: String, verbose: u8) {
     let mut main_module = Module::new("main", &mut celsius);
     let mut main_block = Block::new();
 
-    parse_ast::parse_ast(root.child(0), &mut main_block);
+    parse_ast::parse_ast(root, &mut main_block);
 
     if verbose >= 1 {
         util::print_ast(root);
