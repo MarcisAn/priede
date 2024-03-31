@@ -38,7 +38,6 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
             node.child(1).get_value().unwrap(),
         )
     } else if title.starts_with("ID") {
-        println!("called");
         block.load_variable(node.get_value().unwrap());
     } else if title == "plus" || title == "string_plus" {
         parse_ast(node.child(0), block);

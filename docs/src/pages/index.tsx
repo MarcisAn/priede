@@ -17,23 +17,26 @@ function HomepageHeader() {
         <br />
         <br />
 
-        <div className={styles.buttons}>
+        <div className={styles.buttons} style={{ display: "flex", gap: "7px" }}>
           <Link
             className="button button--secondary button--lg"
             to="/lejupielade">
             Lejupielādēt
           </Link>
+          <Link
+            className="button button--secondary button--lg"
+            to="https://priede-editor.vercel.app">
+            Izmēģināt
+          </Link>
         </div>
+        <Link
+          className="button button--primary button--lg"
+          style={{ marginTop: "3em" }}
+          to="/docs/kas-ir-priede">
+          DOKUMENTĀCIJA
+        </Link>
         <br />
         <br />
-        <p className="hero__subtitle">Izmēģini pārlūkā</p>
-        {process.env.NODE_ENV === "production" ? (
-          <iframe
-            src="https://priede-editor.vercel.app"
-            frameBorder="0"></iframe>
-        ) : (
-          <iframe src="http://localhost:5173" frameBorder="0"></iframe>
-        )}
       </div>
     </header>
   );
@@ -46,9 +49,10 @@ export default function Home(): JSX.Element {
       title={`${siteConfig.title}`}
       description="Priedes valodas dokumentācija">
       <HomepageHeader />
-      <main>
+      {/*<main>
+        
         <HomepageFeatures />
-      </main>
+      </main>*/}
     </Layout>
   );
 }

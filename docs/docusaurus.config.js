@@ -7,10 +7,10 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "PRIEDE",
-  tagline: "Programmēšanas valoda ar sintaksi latviski",
+  tagline: "Latviski rakstāma programmēšanas valoda",
   favicon: "img/favicon.ico",
   //TODO: Set the production url of your site here
-  url: "https://your-docusaurus-test-site.com",
+  url: "https://priede.vercel.app",
   baseUrl: "/",
   i18n: {
     defaultLocale: "lv",
@@ -57,20 +57,18 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "/category/īsumā-par-priedi",
-            position: "left",
-            label: "Ātrā pamācība",
-          },
-          {
-            type: "doc",
-            docId: "/category/dokumentacija",
+            docId: "kas-ir-priede",
             position: "left",
             label: "Dokumentācija",
           },
-          { to: "/blog", label: "Blogs", position: "left" },
           {
             href: "https://github.com/MarcisAn/priede",
             label: "GitHub",
+            position: "right",
+          },
+          {
+            href: "https://priede-editor.vercel.app",
+            label: "Tiešsaistes redaktors",
             position: "right",
           },
         ],
@@ -79,15 +77,10 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Dokumentācija",
             items: [
               {
-                label: "Īsumā par priedi",
-                to: "/docs/category/īsumā-par-priedi",
-              },
-              {
-                label: "Pilnā dokumentācija",
-                to: "/docs/category/īsumā-par-priedi",
+                label: "Dokumentācija",
+                to: "/docs/kas-ir-priede",
               },
             ],
           },
@@ -96,8 +89,8 @@ const config = {
             title: "Saites",
             items: [
               {
-                label: "Blogs",
-                to: "/blog",
+                label: "WEB redaktors",
+                to: "https://priede-editor.vercel.app",
               },
               {
                 label: "GitHub",

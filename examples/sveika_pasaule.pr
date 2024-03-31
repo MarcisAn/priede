@@ -1,1 +1,3 @@
-drukāt("a" + "a")
+atkārtot 3+2 {
+    drukāt("Teksts tiks izprintēts 3 reizes")
+}

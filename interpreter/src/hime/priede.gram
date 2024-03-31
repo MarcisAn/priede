@@ -47,7 +47,7 @@ grammar priede
         CITADI -> 'citādi';
     }
     rules{
-        BOOL_DEF -> 'būls'! 'bl';
+        BOOL_DEF -> 'būls'! | 'bl'!;
         TEXT -> 'teksts'! | 'tk'!;
         NUM -> 'sk'! | 'skaitlis'!;
         
