@@ -13,6 +13,7 @@ with open("./pkg/priede_wasm.js", 'r') as file:
         file.write(new_content)
         
 if os.name == 'nt':   
+    os. remove("./pkg/.gitignore")
     os.system('cmd /c  "robocopy  ./pkg ../web-editor/src/pkg" /E /MOVE /NFL /NDL /NJH /NJS /nc /ns /np')
 else:
     print("wasm package moving to web-editor not implemented on other platforms")

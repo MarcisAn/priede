@@ -1,3 +1,1 @@
-tk aa : 2+2
-
-drukāt(aa)
+drukāt("a" + "a")

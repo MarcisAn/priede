@@ -62,7 +62,7 @@ grammar priede
         var_def_value -> exp_plusmin^ | STRING^ ;
 
         asignable_exp -> exp_plusmin^ | STRING^;
-        assign_op -> ':='^ | '+='^ | '-='^ | '*='^ | '/='^;
+        assign_op -> ':'^ | '+='^ | '-='^ | '*='^ | '/='^;
         id_asign -> ID assign_op asignable_exp;
 
         func_name -> ID^;
@@ -101,8 +101,7 @@ grammar priede
                    | '('! exp^ ')'! 
                    |  ID^
                    |  func_call^
-                   | BOOL^
-                   ;
+                   | BOOL^;
 
         exp_reizdal -> exp_atom^
                    | reiz_dal_atl^;
@@ -123,7 +122,10 @@ grammar priede
 
         exp_t ->      
                 exp_plusmin^ |
-                STRING^;
+                STRING^  |
+                string_plus^;
+
+        string_plus -> STRING '+'! STRING;
 
         exp_a -> exp_t^|comp_s^;
 

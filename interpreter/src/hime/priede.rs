@@ -75,52 +75,48 @@ pub const TERMINALS: &[Symbol] = &[
         name: "CITADI"
     },
     Symbol {
-        id: 0x0038,
+        id: 0x0039,
         name: "būls"
     },
     Symbol {
-        id: 0x0039,
+        id: 0x003A,
         name: "bl"
     },
     Symbol {
-        id: 0x003A,
+        id: 0x003B,
         name: "teksts"
     },
     Symbol {
-        id: 0x003B,
+        id: 0x003C,
         name: "tk"
     },
     Symbol {
-        id: 0x003C,
+        id: 0x003D,
         name: "sk"
     },
     Symbol {
-        id: 0x003D,
+        id: 0x003E,
         name: "skaitlis"
     },
     Symbol {
-        id: 0x003E,
+        id: 0x003F,
         name: "PAT"
     },
     Symbol {
-        id: 0x003F,
+        id: 0x0040,
         name: "PATIESS"
     },
     Symbol {
-        id: 0x0040,
+        id: 0x0041,
         name: "NEPAT"
     },
     Symbol {
-        id: 0x0041,
+        id: 0x0042,
         name: "NEPATIESS"
     },
     Symbol {
-        id: 0x0042,
-        name: ":"
-    },
-    Symbol {
         id: 0x0043,
-        name: ":="
+        name: ":"
     },
     Symbol {
         id: 0x0044,
@@ -318,24 +314,26 @@ pub const ID_VARIABLE_PLUS: u32 = 0x002C;
 pub const ID_VARIABLE_MINUS: u32 = 0x002D;
 /// The unique identifier for variable `exp_t`
 pub const ID_VARIABLE_EXP_T: u32 = 0x002E;
+/// The unique identifier for variable `string_plus`
+pub const ID_VARIABLE_STRING_PLUS: u32 = 0x002F;
 /// The unique identifier for variable `exp_a`
-pub const ID_VARIABLE_EXP_A: u32 = 0x002F;
+pub const ID_VARIABLE_EXP_A: u32 = 0x0030;
 /// The unique identifier for variable `xvai`
-pub const ID_VARIABLE_XVAI: u32 = 0x0030;
+pub const ID_VARIABLE_XVAI: u32 = 0x0031;
 /// The unique identifier for variable `vai`
-pub const ID_VARIABLE_VAI: u32 = 0x0031;
+pub const ID_VARIABLE_VAI: u32 = 0x0032;
 /// The unique identifier for variable `un`
-pub const ID_VARIABLE_UN: u32 = 0x0032;
+pub const ID_VARIABLE_UN: u32 = 0x0033;
 /// The unique identifier for variable `exp`
-pub const ID_VARIABLE_EXP: u32 = 0x0033;
+pub const ID_VARIABLE_EXP: u32 = 0x0034;
 /// The unique identifier for variable `import`
-pub const ID_VARIABLE_IMPORT: u32 = 0x0034;
+pub const ID_VARIABLE_IMPORT: u32 = 0x0035;
 /// The unique identifier for variable `stat`
-pub const ID_VARIABLE_STAT: u32 = 0x0035;
+pub const ID_VARIABLE_STAT: u32 = 0x0036;
 /// The unique identifier for variable `block`
-pub const ID_VARIABLE_BLOCK: u32 = 0x0036;
+pub const ID_VARIABLE_BLOCK: u32 = 0x0037;
 /// The unique identifier for variable `root`
-pub const ID_VARIABLE_ROOT: u32 = 0x0037;
+pub const ID_VARIABLE_ROOT: u32 = 0x0038;
 
 
 /// The collection of variables matched by this parser
@@ -476,38 +474,42 @@ pub const VARIABLES: &[Symbol] = &[
     },
     Symbol {
         id: 0x002F,
-        name: "exp_a"
+        name: "string_plus"
     },
     Symbol {
         id: 0x0030,
-        name: "xvai"
+        name: "exp_a"
     },
     Symbol {
         id: 0x0031,
-        name: "vai"
+        name: "xvai"
     },
     Symbol {
         id: 0x0032,
-        name: "un"
+        name: "vai"
     },
     Symbol {
         id: 0x0033,
-        name: "exp"
+        name: "un"
     },
     Symbol {
         id: 0x0034,
-        name: "import"
+        name: "exp"
     },
     Symbol {
         id: 0x0035,
-        name: "stat"
+        name: "import"
     },
     Symbol {
         id: 0x0036,
-        name: "block"
+        name: "stat"
     },
     Symbol {
         id: 0x0037,
+        name: "block"
+    },
+    Symbol {
+        id: 0x0038,
         name: "root"
     },
     Symbol {
@@ -628,6 +630,7 @@ pub trait Visitor {
     fn on_variable_plus(&self, _node: &AstNode) {}
     fn on_variable_minus(&self, _node: &AstNode) {}
     fn on_variable_exp_t(&self, _node: &AstNode) {}
+    fn on_variable_string_plus(&self, _node: &AstNode) {}
     fn on_variable_exp_a(&self, _node: &AstNode) {}
     fn on_variable_xvai(&self, _node: &AstNode) {}
     fn on_variable_vai(&self, _node: &AstNode) {}
@@ -692,15 +695,16 @@ pub fn visit_ast_node(node: AstNode, visitor: &dyn Visitor) {
         0x002C => visitor.on_variable_plus(&node),
         0x002D => visitor.on_variable_minus(&node),
         0x002E => visitor.on_variable_exp_t(&node),
-        0x002F => visitor.on_variable_exp_a(&node),
-        0x0030 => visitor.on_variable_xvai(&node),
-        0x0031 => visitor.on_variable_vai(&node),
-        0x0032 => visitor.on_variable_un(&node),
-        0x0033 => visitor.on_variable_exp(&node),
-        0x0034 => visitor.on_variable_import(&node),
-        0x0035 => visitor.on_variable_stat(&node),
-        0x0036 => visitor.on_variable_block(&node),
-        0x0037 => visitor.on_variable_root(&node),
+        0x002F => visitor.on_variable_string_plus(&node),
+        0x0030 => visitor.on_variable_exp_a(&node),
+        0x0031 => visitor.on_variable_xvai(&node),
+        0x0032 => visitor.on_variable_vai(&node),
+        0x0033 => visitor.on_variable_un(&node),
+        0x0034 => visitor.on_variable_exp(&node),
+        0x0035 => visitor.on_variable_import(&node),
+        0x0036 => visitor.on_variable_stat(&node),
+        0x0037 => visitor.on_variable_block(&node),
+        0x0038 => visitor.on_variable_root(&node),
         _ => ()
     };
 }
