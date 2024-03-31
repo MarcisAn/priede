@@ -1,2 +1,3 @@
-drukāt(2)
-drukāt("ahah")
+tk aa : 2+2
+
+drukāt(aa)

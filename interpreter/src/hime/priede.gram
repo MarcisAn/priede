@@ -47,9 +47,9 @@ grammar priede
         CITADI -> 'citādi';
     }
     rules{
-        BOOL_DEF -> 'būls'!;
-        TEXT -> 'teksts'!;
-        NUM -> 'sk'!;
+        BOOL_DEF -> 'būls'! 'bl';
+        TEXT -> 'teksts'! | 'tk'!;
+        NUM -> 'sk'! | 'skaitlis'!;
         
 
         TYPE -> BOOL_DEF^ | TEXT^ |  NUM^;
@@ -58,7 +58,7 @@ grammar priede
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
 
-        var_def -> TYPE ID ':='! var_def_value;
+        var_def -> TYPE ID ':'! var_def_value;
         var_def_value -> exp_plusmin^ | STRING^ ;
 
         asignable_exp -> exp_plusmin^ | STRING^;

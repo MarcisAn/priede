@@ -80,146 +80,162 @@ pub const TERMINALS: &[Symbol] = &[
     },
     Symbol {
         id: 0x0039,
-        name: "teksts"
+        name: "bl"
     },
     Symbol {
         id: 0x003A,
-        name: "sk"
+        name: "teksts"
     },
     Symbol {
         id: 0x003B,
-        name: "PAT"
+        name: "tk"
     },
     Symbol {
         id: 0x003C,
-        name: "PATIESS"
+        name: "sk"
     },
     Symbol {
         id: 0x003D,
-        name: "NEPAT"
+        name: "skaitlis"
     },
     Symbol {
         id: 0x003E,
-        name: "NEPATIESS"
+        name: "PAT"
     },
     Symbol {
         id: 0x003F,
-        name: ":="
+        name: "PATIESS"
     },
     Symbol {
         id: 0x0040,
-        name: "+="
+        name: "NEPAT"
     },
     Symbol {
         id: 0x0041,
-        name: "-="
+        name: "NEPATIESS"
     },
     Symbol {
         id: 0x0042,
-        name: "*="
+        name: ":"
     },
     Symbol {
         id: 0x0043,
-        name: "/="
+        name: ":="
     },
     Symbol {
         id: 0x0044,
-        name: "("
+        name: "+="
     },
     Symbol {
         id: 0x0045,
-        name: ")"
+        name: "-="
     },
     Symbol {
         id: 0x0046,
-        name: "()"
+        name: "*="
     },
     Symbol {
         id: 0x0047,
-        name: ";"
+        name: "/="
+    },
+    Symbol {
+        id: 0x0048,
+        name: "("
     },
     Symbol {
         id: 0x0049,
-        name: "="
+        name: ")"
     },
     Symbol {
         id: 0x004A,
-        name: ">"
+        name: "()"
     },
     Symbol {
         id: 0x004B,
-        name: ">="
-    },
-    Symbol {
-        id: 0x004C,
-        name: "<"
+        name: ";"
     },
     Symbol {
         id: 0x004D,
-        name: "<="
+        name: "="
     },
     Symbol {
         id: 0x004E,
-        name: "!="
+        name: ">"
     },
     Symbol {
         id: 0x004F,
-        name: "ja"
+        name: ">="
     },
     Symbol {
         id: 0x0050,
-        name: "{"
+        name: "<"
     },
     Symbol {
         id: 0x0051,
-        name: "}"
+        name: "<="
     },
     Symbol {
         id: 0x0052,
-        name: "atkārtot"
+        name: "!="
     },
     Symbol {
         id: 0x0053,
-        name: "kamēr"
+        name: "ja"
+    },
+    Symbol {
+        id: 0x0054,
+        name: "{"
     },
     Symbol {
         id: 0x0055,
-        name: "funkc"
+        name: "}"
     },
     Symbol {
         id: 0x0056,
-        name: "*"
+        name: "atkārtot"
     },
     Symbol {
         id: 0x0057,
-        name: "/"
-    },
-    Symbol {
-        id: 0x0058,
-        name: "%"
+        name: "kamēr"
     },
     Symbol {
         id: 0x0059,
-        name: "+"
+        name: "funkc"
     },
     Symbol {
         id: 0x005A,
-        name: "-"
+        name: "*"
     },
     Symbol {
         id: 0x005B,
-        name: "xvai"
+        name: "/"
     },
     Symbol {
         id: 0x005C,
-        name: "vai"
+        name: "%"
+    },
+    Symbol {
+        id: 0x005D,
+        name: "+"
     },
     Symbol {
         id: 0x005E,
-        name: "un"
+        name: "-"
+    },
+    Symbol {
+        id: 0x005F,
+        name: "xvai"
     },
     Symbol {
         id: 0x0060,
+        name: "vai"
+    },
+    Symbol {
+        id: 0x0062,
+        name: "un"
+    },
+    Symbol {
+        id: 0x0064,
         name: "iekļaut"
     }
 ];
@@ -495,27 +511,27 @@ pub const VARIABLES: &[Symbol] = &[
         name: "root"
     },
     Symbol {
-        id: 0x0048,
-        name: "__V72"
+        id: 0x004C,
+        name: "__V76"
     },
     Symbol {
-        id: 0x0054,
-        name: "__V84"
-    },
-    Symbol {
-        id: 0x005D,
-        name: "__V93"
-    },
-    Symbol {
-        id: 0x005F,
-        name: "__V95"
+        id: 0x0058,
+        name: "__V88"
     },
     Symbol {
         id: 0x0061,
         name: "__V97"
     },
     Symbol {
-        id: 0x0062,
+        id: 0x0063,
+        name: "__V99"
+    },
+    Symbol {
+        id: 0x0065,
+        name: "__V101"
+    },
+    Symbol {
+        id: 0x0066,
         name: "__VAxiom"
     }
 ];

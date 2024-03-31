@@ -1,3 +1,5 @@
+use core::panic;
+
 use crate::ast::*;
 use celsium::{block::Block, module::Module, BINOP};
 use hime_redist::{
@@ -22,6 +24,22 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         if func_name == "drukāt" {
             block.call_print_function(true);
         }
+    } else if title == "var_def" {
+        parse_ast(node.child(2), block);
+        block.define_variable(
+            match node.child(0).to_string().as_str() {
+                "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
+                "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
+                "TEXT" => celsium::BUILTIN_TYPES::STRING,
+
+                _ => panic!(),
+            },
+            celsium::module::VISIBILITY::PRIVATE,
+            node.child(1).get_value().unwrap(),
+        )
+    } else if title.starts_with("ID") {
+        println!("called");
+        block.load_variable(node.get_value().unwrap());
     } else if title == "plus" {
         parse_ast(node.child(0), block);
         parse_ast(node.child(1), block);
