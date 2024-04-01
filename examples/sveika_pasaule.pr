@@ -1,8 +1,6 @@
-drukāt("Sveika, pasaule!")
+skaitlis a : 0
 
-//šis ir komentārs, kas tiks ignorēts izpildot programmu
-
-/*
-Šis arī ir komentārs, bet tas
-var aizņemt vairākas rindiņas
-*/
+kamēr (a < 5) {
+    drukāt("Teksts tiks printēts 5 reizes")
+    a++
+}

@@ -101,11 +101,17 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         }
     } else if title == "s_loop" {
         let mut loop_block = Block::new();
+        let mut loop_count_block = Block::new();
+
         parse_ast(node.child(1), &mut loop_block);
-        block.define_simple_loop(
-            loop_block,
-            node.child(0).get_value().unwrap().parse::<usize>().unwrap(),
-        );
+        parse_ast(node.child(0), &mut loop_count_block);
+        block.define_simple_loop(loop_block, loop_count_block);
+    } else if title == "w_loop" {
+        let mut loop_block = Block::new();
+        let mut conditional_block = Block::new();
+        parse_ast(node.child(0), &mut conditional_block);
+        parse_ast(node.child(1), &mut loop_block);
+        block.define_while_loop(loop_block, conditional_block);
     } else if title == "id_asign" {
         let operator = node.child(1).get_value().unwrap();
         let var_name = node.child(0).get_value().unwrap();
