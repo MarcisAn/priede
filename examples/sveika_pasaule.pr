@@ -1,3 +1,8 @@
-atkārtot 3+2 {
-    drukāt("Teksts tiks izprintēts 3 reizes")
-}
+drukāt("Sveika, pasaule!")
+
+//šis ir komentārs, kas tiks ignorēts izpildot programmu
+
+/*
+Šis arī ir komentārs, bet tas
+var aizņemt vairākas rindiņas
+*/

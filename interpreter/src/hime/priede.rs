@@ -120,118 +120,122 @@ pub const TERMINALS: &[Symbol] = &[
     },
     Symbol {
         id: 0x0044,
-        name: "+="
+        name: "+:"
     },
     Symbol {
         id: 0x0045,
-        name: "-="
+        name: "-:"
     },
     Symbol {
         id: 0x0046,
-        name: "*="
+        name: "*:"
     },
     Symbol {
         id: 0x0047,
-        name: "/="
+        name: "/:"
     },
     Symbol {
         id: 0x0048,
-        name: "("
+        name: "++"
     },
     Symbol {
         id: 0x0049,
-        name: ")"
+        name: "("
     },
     Symbol {
         id: 0x004A,
-        name: "()"
+        name: ")"
     },
     Symbol {
         id: 0x004B,
+        name: "()"
+    },
+    Symbol {
+        id: 0x004C,
         name: ";"
     },
     Symbol {
-        id: 0x004D,
+        id: 0x004E,
         name: "="
     },
     Symbol {
-        id: 0x004E,
+        id: 0x004F,
         name: ">"
     },
     Symbol {
-        id: 0x004F,
+        id: 0x0050,
         name: ">="
     },
     Symbol {
-        id: 0x0050,
+        id: 0x0051,
         name: "<"
     },
     Symbol {
-        id: 0x0051,
+        id: 0x0052,
         name: "<="
     },
     Symbol {
-        id: 0x0052,
+        id: 0x0053,
         name: "!="
     },
     Symbol {
-        id: 0x0053,
+        id: 0x0054,
         name: "ja"
     },
     Symbol {
-        id: 0x0054,
+        id: 0x0055,
         name: "{"
     },
     Symbol {
-        id: 0x0055,
+        id: 0x0056,
         name: "}"
     },
     Symbol {
-        id: 0x0056,
+        id: 0x0057,
         name: "atkārtot"
     },
     Symbol {
-        id: 0x0057,
+        id: 0x0058,
         name: "kamēr"
     },
     Symbol {
-        id: 0x0059,
+        id: 0x005A,
         name: "funkc"
     },
     Symbol {
-        id: 0x005A,
+        id: 0x005B,
         name: "*"
     },
     Symbol {
-        id: 0x005B,
+        id: 0x005C,
         name: "/"
     },
     Symbol {
-        id: 0x005C,
+        id: 0x005D,
         name: "%"
     },
     Symbol {
-        id: 0x005D,
+        id: 0x005E,
         name: "+"
     },
     Symbol {
-        id: 0x005E,
+        id: 0x005F,
         name: "-"
     },
     Symbol {
-        id: 0x005F,
+        id: 0x0060,
         name: "xvai"
     },
     Symbol {
-        id: 0x0060,
+        id: 0x0061,
         name: "vai"
     },
     Symbol {
-        id: 0x0062,
+        id: 0x0063,
         name: "un"
     },
     Symbol {
-        id: 0x0064,
+        id: 0x0065,
         name: "iekļaut"
     }
 ];
@@ -513,27 +517,27 @@ pub const VARIABLES: &[Symbol] = &[
         name: "root"
     },
     Symbol {
-        id: 0x004C,
-        name: "__V76"
+        id: 0x004D,
+        name: "__V77"
     },
     Symbol {
-        id: 0x0058,
-        name: "__V88"
+        id: 0x0059,
+        name: "__V89"
     },
     Symbol {
-        id: 0x0061,
-        name: "__V97"
+        id: 0x0062,
+        name: "__V98"
     },
     Symbol {
-        id: 0x0063,
-        name: "__V99"
-    },
-    Symbol {
-        id: 0x0065,
-        name: "__V101"
+        id: 0x0064,
+        name: "__V100"
     },
     Symbol {
         id: 0x0066,
+        name: "__V102"
+    },
+    Symbol {
+        id: 0x0067,
         name: "__VAxiom"
     }
 ];

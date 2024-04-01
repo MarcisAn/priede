@@ -25,3 +25,14 @@ ja a > 1 {
     drukāt(a)
 }
 ```
+
+```
+drukāt("Sveika, pasaule!")
+
+//šis ir komentārs, kas tiks ignorēts izpildot programmu
+
+/*
+Šis arī ir komentārs, bet tas
+var aizņemt vairākas rindiņas
+*/
+```

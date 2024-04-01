@@ -106,6 +106,33 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
             loop_block,
             node.child(0).get_value().unwrap().parse::<usize>().unwrap(),
         );
+    } else if title == "id_asign" {
+        let operator = node.child(1).get_value().unwrap();
+        let var_name = node.child(0).get_value().unwrap();
+        if operator == ":" {
+            parse_ast(node.child(2), block);
+        } else if operator == "+:" {
+            block.load_variable(var_name);
+            parse_ast(node.child(2), block);
+            block.binop(BINOP::ADD);
+        } else if operator == "-:" {
+            block.load_variable(var_name);
+            parse_ast(node.child(2), block);
+            block.binop(BINOP::SUBTRACT);
+        } else if operator == "*:" {
+            block.load_variable(var_name);
+            parse_ast(node.child(2), block);
+            block.binop(BINOP::MULTIPLY);
+        } else if operator == "/:" {
+            block.load_variable(var_name);
+            parse_ast(node.child(2), block);
+            block.binop(BINOP::DIVIDE);
+        } else if operator == "++" {
+            block.load_variable(var_name);
+            block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
+            block.binop(BINOP::ADD);
+        }
+        block.assign_variable(var_name);
     } else if title == "NUMBER" {
         block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, node.get_value().unwrap());
     } else if title == "STRING" {
