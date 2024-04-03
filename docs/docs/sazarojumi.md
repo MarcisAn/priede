@@ -58,7 +58,7 @@ ja 5 != 2 {
 ### Pieejamie operatori
 
 - `un` - abām izteiksmēm jābūt patiesām, lai izpildītos kopējā izteiksme
-- `vai` - vienai vai abām izteiksmēm, lai izpildītos kopējā izteiksme
+- `vai` - jāizpildās vienai vai abām izteiksmēm, lai izpildītos kopējā izteiksme
 - `xvai` - jāizpildās tikai vienai no abām izteiksmēm, lai izpildītos kopējā izteiksme
 
 ```

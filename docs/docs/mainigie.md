@@ -42,7 +42,6 @@ būls a : PAT
 ja a {
     drukāt("Būla mainīgais a ir patiess")
 }
-
 ```
 
 ## Mainīgo pārdefinēšana
@@ -57,7 +56,6 @@ drukāt(a)
 a : 4
 
 drukāt(a)
-
 ```
 
 Mainīgajam norādot jaunu vērtību, nav nepieciešams atkārtoti minēt tā datu tipu.
@@ -67,19 +65,13 @@ Mainīgajam norādot jaunu vērtību, nav nepieciešams atkārtoti minēt tā da
 Bieži nepieciešams jau esošam mainīgam pieskaitīt vērtību. Tā vietā lai to rakstītu šādi:
 
 ```
-sk a : 3
-
 a : a + 3
-
 ```
 
 ...Priede piedāvā to darīt vienkāršāk
 
 ```
-sk a : 3
-
 a +: 3
-
 ```
 
 Abi piemēri dara vienu un to pašu.
@@ -87,10 +79,7 @@ Abi piemēri dara vienu un to pašu.
 Ja nepieciešams mainīgajam pieskaitīt skaitli `1`, tad pieraksts var būt vēl vienkāršāks
 
 ```
-sk a : 3
-
 a++
-
 ```
 
 #### Pieejamie operatori:
