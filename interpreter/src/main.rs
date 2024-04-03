@@ -35,6 +35,8 @@ pub fn interpret(path: String, verbose: u8) {
     let ast = parse_res.get_ast();
     let root = ast.get_root();
 
+    util::print_ast(root);
+
     let mut celsius = CelsiumProgram::new(false);
     let mut main_module = Module::new("main", &mut celsius);
     let mut main_block = Block::new();

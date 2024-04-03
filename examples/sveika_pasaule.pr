@@ -1,6 +1,3 @@
-skaitlis a : 0
+saraksts sk aa : [a;a;2]
 
-kamēr (a < 5) {
-    drukāt("Teksts tiks printēts 5 reizes")
-    a++
-}
+aa.ff().tt.rr(a)

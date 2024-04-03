@@ -45,6 +45,7 @@ grammar priede
 						)* '\'' ;
 		
         CITADI -> 'citādi';
+        ARRAY -> 'saraksts';
     }
     rules{
         BOOL_DEF -> 'būls'! | 'bl'!;
@@ -58,21 +59,43 @@ grammar priede
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
 
-        var_def -> TYPE ID ':'! var_def_value;
+        array -> ID '[' exp ']';
+
+        var_def -> TYPE ID ':'! var_def_value
+                | ARRAY TYPE  ID ':'! '['! array_def_value ']'!
+                | ARRAY TYPE  ID ':'! '['! ']'!;
+
+        array_def_value -> var_def_value
+                |var_def_value (';'! var_def_value)*;
+
         var_def_value -> exp_plusmin^ | STRING^ ;
 
         asignable_exp -> exp_plusmin^ | STRING^;
         assign_op -> ':'^ | '+:'^ | '-:'^ | '*:'^ | '/:'^;
-        id_asign -> ID assign_op asignable_exp|ID '++' ;
+        id_asign -> ID assign_op asignable_exp
+                    |   ID '++' ;
 
         func_name -> ID^;
 
         func_call -> func_name '('! funcargs ')'!
                    | func_name '()'! ;
 
+        
+
         funcarg -> exp^;
 
         funcargs -> funcarg|funcarg (';'! funcarg)*;
+
+        dot_call -> ID '.'! ID 
+                | dot_call_fn^
+                | dot_call '.'! ID;
+
+        dot_call_fn -> 
+                ID '.'! ID '()'!
+                | ID '.'! ID '('! funcargs ')'!
+                |dot_call '.'! ID '()'!
+                | dot_call '.'! ID '('! funcargs ')'!;
+
 
         comp_s ->    exp_t '=' exp_t
                    | exp_t '>' exp_t
@@ -101,6 +124,7 @@ grammar priede
                    | '('! exp^ ')'! 
                    |  ID^
                    |  func_call^
+                   | dot_call^
                    | BOOL^;
 
         exp_reizdal -> exp_atom^
@@ -139,7 +163,7 @@ grammar priede
 
         import -> 'iekļaut' STRING;
 
-        stat -> var_def^ | func_call^ | if^ | id_asign^ | s_loop^ | w_loop^ | func_def^ | import^;
+        stat -> var_def^ | func_call^ | dot_call^ | if^ | id_asign^ | s_loop^ | w_loop^ | func_def^ | import^;
         block -> stat*;
         root ->  block^;
     }

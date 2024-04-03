@@ -24,6 +24,7 @@ atkārtot 3 {
 
 ```
 skaitlis atkartojumi : 3
+
 atkārtot atkartojumi {
     drukāt("Teksts tiks izprintēts 3 reizes")
 }
