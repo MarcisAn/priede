@@ -25,18 +25,30 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
             block.call_print_function(true);
         }
     } else if title == "var_def" {
-        parse_ast(node.child(2), block);
-        block.define_variable(
-            match node.child(0).to_string().as_str() {
-                "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-                "TEXT" => celsium::BUILTIN_TYPES::STRING,
+        println!("{}", node.child(0).get_symbol().to_string());
+        if node.child(0).get_symbol().to_string() == "ARRAY" {
+            for i in node.child(3).children() {
+                parse_ast(i, block);
+            }
+            block.define_array(
+                celsium::module::VISIBILITY::PRIVATE,
+                node.child(2).get_value().unwrap().to_string(),
+                node.child(3).children().len(),
+            )
+        } else {
+            parse_ast(node.child(2), block);
+            block.define_variable(
+                match node.child(0).to_string().as_str() {
+                    "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
+                    "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
+                    "TEXT" => celsium::BUILTIN_TYPES::STRING,
 
-                _ => panic!(),
-            },
-            celsium::module::VISIBILITY::PRIVATE,
-            node.child(1).get_value().unwrap(),
-        )
+                    _ => panic!(),
+                },
+                celsium::module::VISIBILITY::PRIVATE,
+                node.child(1).get_value().unwrap(),
+            )
+        }
     } else if title.starts_with("ID") {
         block.load_variable(node.get_value().unwrap());
     } else if title == "plus" || title == "string_plus" {

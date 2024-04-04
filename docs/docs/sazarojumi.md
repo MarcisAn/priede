@@ -28,6 +28,17 @@ ja (2 = 2) {
 }
 ```
 
+Pēc šī bloka var sekot vēl viens bloks, kas izpildās, ja izteiksme ir nepatiesa. To ievada ar vārdu `citādi`.
+
+```
+ja 2 = 2 {
+    drukāt("Divi ir vienāds ar divi")
+}
+citādi{
+    drukāt("Matemātika sabruka")
+}
+```
+
 ## Salīdzinājumi
 
 ### Pieejamie operatori:
