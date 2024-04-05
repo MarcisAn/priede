@@ -59,7 +59,7 @@ grammar priede
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
 
-        array -> ID '[' exp ']';
+        array -> ID '['! exp ']'!;
 
         var_def -> TYPE ID ':'! var_def_value
                 | ARRAY TYPE  ID ':'! '['! array_def_value ']'!
@@ -125,7 +125,8 @@ grammar priede
                    |  ID^
                    |  func_call^
                    | dot_call^
-                   | BOOL^;
+                   | BOOL^
+                   | array^;
 
         exp_reizdal -> exp_atom^
                    | reiz_dal_atl^;

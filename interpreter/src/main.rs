@@ -6,6 +6,7 @@ use hime_redist::ast::AstNode;
 use hime_redist::errors::ParseError;
 use module::Module;
 use std::fs::read;
+use std::panic;
 use std::{fs, process};
 use wasm_bindgen::prelude::*;
 
@@ -58,13 +59,15 @@ pub fn run_wasm(code: String) {
     let ast = parse_res.get_ast();
     let root = ast.get_root();
 
-    let mut celsius = CelsiumProgram::new(true);
-    let mut main_module = Module::new("main", &mut celsius);
-    let mut main_block = Block::new();
-    parse_ast::parse_ast(root.child(0), &mut main_block);
-    main_module.add_main_block(main_block);
-    celsius.add_module(&main_module);
-    celsius.run_program();
+    let result = panic::catch_unwind(|| {
+        let mut celsius = CelsiumProgram::new(true);
+        let mut main_module = Module::new("main", &mut celsius);
+        let mut main_block = Block::new();
+        parse_ast::parse_ast(root.child(0), &mut main_block);
+        main_module.add_main_block(main_block);
+        celsius.add_module(&main_module);
+        celsius.run_program();
+    });
 }
 
 fn read_file(path: String) -> String {

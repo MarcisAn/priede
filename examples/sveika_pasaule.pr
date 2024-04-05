@@ -1,3 +1,3 @@
 saraksts sk aa : [1;2;"2"]
 
-drukāt(aa)
+drukāt(aa[0])

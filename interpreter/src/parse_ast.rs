@@ -49,6 +49,9 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
                 node.child(1).get_value().unwrap(),
             )
         }
+    } else if title == "array" {
+        parse_ast(node.child(1), block);
+        block.load_from_array(node.child(0).get_value().unwrap());
     } else if title.starts_with("ID") {
         block.load_variable(node.get_value().unwrap());
     } else if title == "plus" || title == "string_plus" {
