@@ -1,3 +1,10 @@
-saraksts sk aa : [1;2;"2"]
+saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
-drukāt(aa[0])
+
+sk skaitītajs : 0
+
+//aizvieot 3 ar saraksta garumu
+kamēr skaitītajs <= 3 { 
+    drukāt(augļi[skaitītajs])
+    skaitītajs++
+}

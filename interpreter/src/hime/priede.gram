@@ -62,8 +62,8 @@ grammar priede
         array -> ID '['! exp ']'!;
 
         var_def -> TYPE ID ':'! var_def_value
-                | ARRAY TYPE  ID ':'! '['! array_def_value ']'!
-                | ARRAY TYPE  ID ':'! '['! ']'!;
+                | ARRAY  ID ':'! '['! array_def_value ']'!
+                | ARRAY  ID ':'! '['! ']'!;
 
         array_def_value -> var_def_value
                 |var_def_value (';'! var_def_value)*;

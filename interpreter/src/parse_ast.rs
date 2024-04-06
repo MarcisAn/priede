@@ -27,13 +27,13 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
     } else if title == "var_def" {
         println!("{}", node.child(0).get_symbol().to_string());
         if node.child(0).get_symbol().to_string() == "ARRAY" {
-            for i in node.child(3).children() {
+            for i in node.child(2).children() {
                 parse_ast(i, block);
             }
             block.define_array(
                 celsium::module::VISIBILITY::PRIVATE,
-                node.child(2).get_value().unwrap().to_string(),
-                node.child(3).children().len(),
+                node.child(1).get_value().unwrap().to_string(),
+                node.child(2).children().len(),
             )
         } else {
             parse_ast(node.child(2), block);
