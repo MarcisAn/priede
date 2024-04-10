@@ -1,7 +1,11 @@
 use core::panic;
 
 use crate::ast::*;
-use celsium::{block::Block, module::Module, BINOP};
+use celsium::{
+    block::Block,
+    module::{FunctionSignature, Module, VISIBILITY},
+    BINOP,
+};
 use hime_redist::{
     ast::{Ast, AstNode},
     symbols::SemanticElementTrait,
@@ -49,6 +53,18 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
                 node.child(1).get_value().unwrap(),
             )
         }
+    } else if title == "func_def" {
+        let mut body = Block::new();
+        parse_ast(node.child(1), &mut body);
+        block.define_function(
+            body,
+            VISIBILITY::PUBLIC,
+            FunctionSignature {
+                name: node.child(0).get_value().unwrap().to_string(),
+                return_type: celsium::module::FunctionReturnType::NONE,
+                args: vec![],
+            },
+        )
     } else if title == "array" {
         parse_ast(node.child(1), block);
         block.load_from_array(node.child(0).get_value().unwrap());

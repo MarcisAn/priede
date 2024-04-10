@@ -1,10 +1,3 @@
-saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+funkc aa() {
 
-
-sk skaitītajs : 0
-
-//aizvieot 3 ar saraksta garumu
-kamēr skaitītajs <= 3 { 
-    drukāt(augļi[skaitītajs])
-    skaitītajs++
 }
