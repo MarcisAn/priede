@@ -21,12 +21,15 @@ fn rem_first_and_last(value: &str) -> &str {
 pub fn parse_ast(node: AstNode, block: &mut Block) {
     let title = node.get_symbol().to_string();
     if title == "func_call" {
-        for arg in node.child(1) {
-            parse_ast(arg, block);
+        if node.children_count() > 1 {
+            for arg in node.child(1) {
+                parse_ast(arg, block);
+            }
         }
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "drukāt" {
             block.call_print_function(true);
+            block.call_function(func_name);
         }
     } else if title == "var_def" {
         println!("{}", node.child(0).get_symbol().to_string());

@@ -1,3 +1,5 @@
 funkc aa() {
-
+    drukāt(2)
 }
+
+aa()
