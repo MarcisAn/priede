@@ -44,8 +44,13 @@ pub fn interpret(path: String, verbose: u8) {
 
     if verbose >= 1 {
         util::print_ast(root);
-        println!("{:?}", main_block.bytecode);
+        let mut i = 0;
+        while i < main_block.bytecode.len() {
+            println!("{} {:?}", i, main_block.bytecode[i]);
+            i += 1;
+        }
     }
+
     main_module.add_main_block(main_block);
     celsius.add_module(&main_module);
     celsius.run_program();

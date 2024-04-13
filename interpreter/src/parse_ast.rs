@@ -3,7 +3,7 @@ use core::panic;
 use crate::ast::*;
 use celsium::{
     block::Block,
-    module::{FunctionSignature, Module, VISIBILITY},
+    module::{FuncArg, FunctionSignature, Module, VISIBILITY},
     BINOP,
 };
 use hime_redist::{
@@ -29,6 +29,7 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "drukāt" {
             block.call_print_function(true);
+        } else {
             block.call_function(func_name);
         }
     } else if title == "var_def" {
@@ -58,14 +59,33 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         }
     } else if title == "func_def" {
         let mut body = Block::new();
-        parse_ast(node.child(1), &mut body);
+        let mut args: Vec<FuncArg> = vec![];
+
+        if node.children_count() > 2 {
+            //when the function takes arguments
+            parse_ast(node.child(2), &mut body);
+            for arg in node.child(1).children() {
+                args.push(FuncArg {
+                    name: arg.child(1).get_value().unwrap().to_string(),
+                    arg_type: match arg.child(0).to_string().as_str() {
+                        "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
+                        "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
+                        "TEXT" => celsium::BUILTIN_TYPES::MAGIC_INT,
+                        _ => panic!(),
+                    },
+                })
+            }
+        } else {
+            parse_ast(node.child(1), &mut body);
+        }
+
         block.define_function(
             body,
             VISIBILITY::PUBLIC,
             FunctionSignature {
                 name: node.child(0).get_value().unwrap().to_string(),
                 return_type: celsium::module::FunctionReturnType::NONE,
-                args: vec![],
+                args: args,
             },
         )
     } else if title == "array" {
