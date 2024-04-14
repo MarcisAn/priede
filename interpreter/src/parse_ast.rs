@@ -32,6 +32,9 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         } else {
             block.call_function(func_name);
         }
+    } else if title == "return_st" {
+        parse_ast(node.child(1), block);
+        block.return_from_function();
     } else if title == "var_def" {
         println!("{}", node.child(0).get_symbol().to_string());
         if node.child(0).get_symbol().to_string() == "ARRAY" {

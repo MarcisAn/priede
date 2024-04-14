@@ -4,31 +4,66 @@ sidebar_position: 6
 
 # Funkcijas
 
-Reizēm nepieciešams kādu funkcionalitāti atkārtot vairākas reizes programmā.
+Reizēm nepieciešams kādu funkcionalitāti atkārtot vairākas reizes programmā. Tā vietā lai rakstītu kodu vairākas reizes, Priede piedāvā izmantot funkcijas.
 
 ```
-sk aa : 2
-
-aa * 2 + 1
-drukāt(aa)
-aa * 2 + 1
-drukāt(aa)
-aa * 2 + 1
-drukāt(aa)
+funkc sasveicināties() {
+    drukāt("Sveika pasaule!")
+}
+sasveicināties()
+drukāt("Tagad padaram kaut ko citu")
+sasveicināties()
 ```
 
-Tā vietā lai rakstītu kodu vairākas reizes, Priede piedāvā izmantot funkcijas
+Šajā piemērā mēs varam divreiz nerakstīt rindiņu `drukāt("Sveika pasaule!")`, bet rakstīt to funkcijā, ko tālāk varam izsaukt pēc vajadzības. Šis padara kodu vieglāk labojamu. Ja mēs pēkšņi vēlētos izmainīt sveiciena tekstu uz "Sveiciens no Prides", tad nevajadzētu tekstu mainīt vairākās vietās, bet gan tikai vienreiz, funkcijas definīcijā.
 
 ```
-sk aa : 2
+funkc sasveicināties() {
+    drukāt("Sveiciens no Prides")
+}
+sasveicināties()
+drukāt("Tagad padaram kaut ko citu")
+sasveicināties()
+```
 
-funkc reizinat_un_saskaitit() {
-    aa : aa * 2 + 1
+## Funkcijas argumenti
+
+Gadījumu, kad mēs gribam lai funkcija dara pilnīgi to pašu vairākas reizes, ir maz. Biežāk mēs vēlamies funkcijai iedot kādus datus apstrādāšanai. Tādejādi, funkciju var izmantot visā kodā, bet ar nelielām izmaiņām.
+
+```
+funkc piesk5(sk : a) {
+    drukāt(a + 5)
 }
 
-reizinat_un_saskaitit()
-drukāt(aa)
-reizinat_un_saskaitit()
-drukāt(aa)
+piesk5(4)
+piesk5(2)
+```
+
+Šajā piemērā mēs izveidojam funkciju, kura pieskaita argumentam skaitli 5 un izdrukā rezultātu. Pēc tam mēs varam izsaukt šo funkciju ar dažādiem skaitļiem un funkcija veiks to pašu darbību ar tiem abiem.
+
+### Vairāki argumenti
+
+Funkcijas var saņemt vairākus argumentus, tos atdalot ar semikoliem gan definīcijā, gan izsaucot funkciju
 
 ```
+funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
+    drukāt(saskaitamais + 5 * reizinatajs)
+}
+
+piesk_un_reiz(4;5)
+piesk_un_reiz(2;3)
+```
+
+## Vērtību atgriešana
+
+Līdz šim mēs tikai printējām vērtības no funkcijas, lai gan bieži vien mēs vēlētos saņemt vērtības atpakaļ
+
+```
+funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
+    atgirest (saskaitamais + 5 * reizinatajs)
+}
+
+drukāt(piesk_un_reiz(4;5))
+```
+
+Atšķirībā no iepriekšējā piemēra, šeit funkcija pati neko neprintē, bet gan atgriež vērtību, kas tiek izpirntēta, atsevišķi, izsaucot funkciju.

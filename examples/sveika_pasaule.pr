@@ -1,5 +1,5 @@
-funkc aa(sk : aaa) {
-    drukāt(aaa + 5)
+funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
+    atgirest (saskaitamais + 5 * reizinatajs)
 }
 
-aa(2)
+drukāt(piesk_un_reiz(4;5))
