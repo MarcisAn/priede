@@ -14,13 +14,13 @@ Mainīgajos var uzglabāt dažāda veida informāciju: skaitļus, tekstu un būl
 - `teksts` vai `tk` - teksta vērtība
 - `būls` vai `bl` - būla vērtība
 
-```
+```priede
 skaitlis a : 2
 
 drukāt(a)
 ```
 
-```
+```priede
 teksts a : "Sveika, pasaule!"
 
 drukāt(a)
@@ -30,13 +30,13 @@ Būla vērtības ir `1` vai `2` vai arī `PATIESS` un `NEPATIESS`, vai arī saī
 
 Būli ir veids kā samazināt nepieciešamo datora atmiņas daudzumu programmas izpildei.
 
-```
+```priede
 būls a : PAT
 
 drukāt(a)
 ```
 
-```
+```priede
 būls a : PAT
 
 ja a {
@@ -48,7 +48,7 @@ ja a {
 
 Tāpēc jau tos sauc par 'mainīgajiem', jo to vērtība var tikt mainīta programmas izpildes gaitā.
 
-```
+```priede
 sk a : 3
 
 drukāt(a)
@@ -64,13 +64,13 @@ Mainīgajam norādot jaunu vērtību, nav nepieciešams atkārtoti minēt tā da
 
 Bieži nepieciešams jau esošam mainīgam pieskaitīt vērtību. Tā vietā lai to rakstītu šādi:
 
-```
+```priede
 a : a + 3
 ```
 
 ...Priede piedāvā to darīt vienkāršāk
 
-```
+```priede
 a +: 3
 ```
 
@@ -78,7 +78,7 @@ Abi piemēri dara vienu un to pašu.
 
 Ja nepieciešams mainīgajam pieskaitīt skaitli `1`, tad pieraksts var būt vēl vienkāršāks
 
-```
+```priede
 a++
 ```
 

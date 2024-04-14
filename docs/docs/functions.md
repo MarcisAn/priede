@@ -6,7 +6,7 @@ sidebar_position: 6
 
 Reizēm nepieciešams kādu funkcionalitāti atkārtot vairākas reizes programmā. Tā vietā lai rakstītu kodu vairākas reizes, Priede piedāvā izmantot funkcijas.
 
-```
+```priede
 funkc sasveicināties() {
     drukāt("Sveika pasaule!")
 }
@@ -17,7 +17,7 @@ sasveicināties()
 
 Šajā piemērā mēs varam divreiz nerakstīt rindiņu `drukāt("Sveika pasaule!")`, bet rakstīt to funkcijā, ko tālāk varam izsaukt pēc vajadzības. Šis padara kodu vieglāk labojamu. Ja mēs pēkšņi vēlētos izmainīt sveiciena tekstu uz "Sveiciens no Prides", tad nevajadzētu tekstu mainīt vairākās vietās, bet gan tikai vienreiz, funkcijas definīcijā.
 
-```
+```priede
 funkc sasveicināties() {
     drukāt("Sveiciens no Prides")
 }
@@ -30,7 +30,7 @@ sasveicināties()
 
 Gadījumu, kad mēs gribam lai funkcija dara pilnīgi to pašu vairākas reizes, ir maz. Biežāk mēs vēlamies funkcijai iedot kādus datus apstrādāšanai. Tādejādi, funkciju var izmantot visā kodā, bet ar nelielām izmaiņām.
 
-```
+```priede
 funkc piesk5(sk : a) {
     drukāt(a + 5)
 }
@@ -45,7 +45,7 @@ piesk5(2)
 
 Funkcijas var saņemt vairākus argumentus, tos atdalot ar semikoliem gan definīcijā, gan izsaucot funkciju
 
-```
+```priede
 funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
     drukāt(saskaitamais + 5 * reizinatajs)
 }
@@ -58,7 +58,7 @@ piesk_un_reiz(2;3)
 
 Līdz šim mēs tikai printējām vērtības no funkcijas, lai gan bieži vien mēs vēlētos saņemt vērtības atpakaļ
 
-```
+```priede
 funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
     atgirest (saskaitamais + 5 * reizinatajs)
 }

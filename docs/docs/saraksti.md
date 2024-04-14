@@ -6,7 +6,7 @@ sidebar_position: 5
 
 Reizēm nepieciešams uzglabāt vairākas vērtības, kas ir ar vienādu nozīmi.
 
-```
+```priede
 tk auglis1 : "ābols"
 tk auglis2 : "bumbieris"
 tk auglis3 : "banāns"
@@ -19,7 +19,7 @@ Tā vietā var izmantot sarakstus
 
 ## Sarakstu definēšana
 
-```
+```priede
 saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 ```
 
@@ -27,7 +27,7 @@ Saraksta definīcijai izmanto vārdu `saraksts`, kam seko saraksta nosaukums. Ta
 
 ## Datu nolasīšana no saraksta
 
-```
+```priede
 saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
 drukāt(augļi[0])
@@ -37,7 +37,7 @@ Lai nolasītu saraksta konkrētu pozīciju izmanto saraksta nosaukumu, kuram sek
 
 ## Visu elementu izdruka
 
-```
+```priede
 saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
 sk skaitītajs : 0

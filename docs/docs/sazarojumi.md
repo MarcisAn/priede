@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Koda sazarojumi
 
-```
+```priede
 ja 2 = 2 {
     drukāt("Divi ir vienāds ar divi")
 }
@@ -18,7 +18,7 @@ Pēc vārda `ja` seko izteiksme, kas nosaka vai sazarojums tiks izpildīts. Pēc
 
 Izteiksme var būt vai nebūt apaļajās iekavās
 
-```
+```priede
 ja 2 = 2 {
     drukāt("Divi ir vienāds ar divi")
 }
@@ -30,7 +30,7 @@ ja (2 = 2) {
 
 Pēc šī bloka var sekot vēl viens bloks, kas izpildās, ja izteiksme ir nepatiesa. To ievada ar vārdu `citādi`.
 
-```
+```priede
 ja 2 = 2 {
     drukāt("Divi ir vienāds ar divi")
 }
@@ -50,7 +50,7 @@ citādi{
 - `<=` - vērtība pa labi ir lielāka vai vienāda
 - `!=` - vērtības nav vienādas
 
-```
+```priede
 ja 3 > 2 {
     drukāt("Trīs ir lielāks par divi")
 }
@@ -72,7 +72,7 @@ ja 5 != 2 {
 - `vai` - jāizpildās vienai vai abām izteiksmēm, lai izpildītos kopējā izteiksme
 - `xvai` - jāizpildās tikai vienai no abām izteiksmēm, lai izpildītos kopējā izteiksme
 
-```
+```priede
 ja 3 > 2 un 5 < 7 {
     drukāt("Trīs ir lielāks par divi un pieci ir mazāks par septiņi")
 }

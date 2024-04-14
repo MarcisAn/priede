@@ -8,7 +8,7 @@ Reizēm, kodu ir vajadzības atkārtot vairākas reizes, tomēr tā vietā lai t
 
 ## Vienkāršs cikls
 
-```
+```priede
 drukāt("Teksts tiks izprintēts 3 reizes")
 drukāt("Teksts tiks izprintēts 3 reizes")
 drukāt("Teksts tiks izprintēts 3 reizes")
@@ -16,13 +16,13 @@ drukāt("Teksts tiks izprintēts 3 reizes")
 
 Mēs varam aizvietot ar:
 
-```
+```priede
 atkārtot 3 {
     drukāt("Teksts tiks izprintēts 3 reizes")
 }
 ```
 
-```
+```priede
 skaitlis atkartojumi : 3
 
 atkārtot atkartojumi {
@@ -34,7 +34,7 @@ atkārtot atkartojumi {
 
 Ar `kamēr` ciklu mēs varam kodu atkārtot, kamēr izteiksme ir patiesa
 
-```
+```priede
 kamēr 2+2 = 4{
     drukāt("Teksts tiks printēts bezgalīgi")
 }
@@ -42,7 +42,7 @@ kamēr 2+2 = 4{
 
 Šāds cikls darbosies bezgalīgi, jo 2+2 vienmēr būs 4 un šī izteiksme nemainīies laika gaitā.
 
-```
+```priede
 skaitlis a : 0
 
 kamēr (a < 5) {
