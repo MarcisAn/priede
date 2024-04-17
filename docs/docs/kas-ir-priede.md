@@ -32,6 +32,15 @@ ja a > 1 {
 ```
 
 ```priede
+ja 2 = 2 {
+    drukāt("Divi ir vienāds ar divi")
+}
+citādi{
+    drukāt("Matemātika sabruka")
+}
+```
+
+```priede
 
 drukāt("Sveika, pasaule!")
 
@@ -42,4 +51,27 @@ drukāt("Sveika, pasaule!")
 var aizņemt vairākas rindiņas
 */
 
+```
+
+```priede
+teksts a : "Sveika, pasaule!"
+
+drukāt(a)
+```
+
+```priede
+funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
+    atgirest (saskaitamais + 5 * reizinatajs)
+}
+
+drukāt(piesk_un_reiz(4;5))
+```
+
+```priede
+skaitlis a : 0
+
+kamēr (a < 5) {
+    drukāt("Teksts tiks printēts 5 reizes")
+    a++
+}
 ```
