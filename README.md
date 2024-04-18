@@ -1,13 +1,13 @@
 ![PRIEDE](./banner.png)
 
-Interpretēta programmēšanas valoda ar sintaksi latviski
+https://priede.vercel.app/
 
-Interpretators rakstīts Rust valodā un izmanto [Hime](https://cenotelie.fr/projects/hime) parsera ģeneratoru.
+Viegli lasāma un rakstāma programmēšanas valoda ar sintaksi latviski
+
+Izmanto [Celsium](https://github.com/MarcisAn/celsium)
 
 ## Sveika pasaule piemērs:
 
     drukāt("Sveika, pasaule!")
 
-## Tiešsaistes interpretators izmantojot WebAsembly
 
-https://priede.vercel.app/
