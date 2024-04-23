@@ -29,6 +29,8 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "drukāt" {
             block.call_print_function(true);
+        } else if func_name == "ievade"{
+            block.input_function();
         } else {
             block.call_function(func_name);
         }

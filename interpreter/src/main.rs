@@ -69,6 +69,7 @@ pub fn run_wasm(code: String) {
         parse_ast::parse_ast(root.child(0), &mut main_block);
         main_module.add_main_block(main_block);
         celsius.add_module(&main_module);
+
         celsius.run_program();
     });
 }

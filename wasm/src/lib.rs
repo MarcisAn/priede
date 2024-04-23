@@ -11,6 +11,8 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 extern "C" {
     fn alert(s: &str);
     fn wasm_print(s: &str);
+    fn wasm_input(s: &str);
+
 }
 
 #[wasm_bindgen]

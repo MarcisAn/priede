@@ -7,8 +7,10 @@
 	import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
 	import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 	import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
-	import { messages } from '../lib/priede';
+	import { clear, messages, reply_to_input } from '../lib/priede';
 	import init, { run } from '../pkg/priede_wasm.js';
+
+	let answer = "";
 
 	let editorElement: HTMLDivElement;
 	let editor: monaco.editor.IStandaloneCodeEditor;
@@ -63,6 +65,7 @@
 			class="runBtn"
 			on:click={() => {
 				init();
+				//clear();
 				run(editor.getValue());
 			}}
 		>
@@ -83,9 +86,14 @@
 			</svg>
 		</button>
 		<div class="console">
-			{#each $messages as message}
+			{#each $messages as message, index}
 				<div class="consoleMessage">
-					{message}
+					{#if message.typ == "out"}
+						{message.text}
+					{:else}
+						<input bind:value={answer} style="margin: 5px;" type="text">
+						<button on:click={() => reply_to_input(answers)}>-></button>
+					{/if}
 				</div>
 			{/each}
 		</div>

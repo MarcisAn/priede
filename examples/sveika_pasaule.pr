@@ -1,5 +1,6 @@
-funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
-    atgirest (saskaitamais + 5 * reizinatajs)
-}
+skaitlis a : 0
 
-drukāt(piesk_un_reiz(4;5))
+kamēr (a < 5) {
+    drukāt("Teksts tiks printēts 5 reizes")
+    a++
+}

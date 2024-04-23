@@ -1,4 +1,4 @@
-import { wasm_print } from "../lib/priede.js";
+import { wasm_print, wasm_input } from "../lib/priede.js";
 let wasm;
 
 const heap = new Array(128).fill(undefined);
@@ -112,14 +112,6 @@ export function run(code) {
     wasm.run(ptr0, len0);
 }
 
-function handleError(f, args) {
-    try {
-        return f.apply(this, args);
-    } catch (e) {
-        wasm.__wbindgen_exn_store(addHeapObject(e));
-    }
-}
-
 let cachedInt32Memory0 = null;
 
 function getInt32Memory0() {
@@ -127,6 +119,14 @@ function getInt32Memory0() {
         cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
     }
     return cachedInt32Memory0;
+}
+
+function handleError(f, args) {
+    try {
+        return f.apply(this, args);
+    } catch (e) {
+        wasm.__wbindgen_exn_store(addHeapObject(e));
+    }
 }
 
 async function __wbg_load(module, imports) {
@@ -165,6 +165,13 @@ function __wbg_get_imports() {
     imports.wbg = {};
     imports.wbg.__wbg_wasmprint_b6c4fd6e9403da92 = function(arg0, arg1) {
         wasm_print(getStringFromWasm0(arg0, arg1));
+    };
+    imports.wbg.__wbg_wasminput_f725114a38ff33c6 = function(arg0) {
+        const ret = wasm_input();
+        const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len1;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr1;
     };
     imports.wbg.__wbg_crypto_d05b68a3572bb8ca = function(arg0) {
         const ret = getObject(arg0).crypto;
