@@ -20,3 +20,17 @@ pub fn run(code: &str) {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
     interpreter::run_wasm(code.to_string());
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::run;
+
+    #[test]
+    fn it_works() {
+        let input = "
+        teksts a : \"Sveika, pasaule!\" \
+        \
+        drukāt(a)";
+        run(input);
+    }
+}

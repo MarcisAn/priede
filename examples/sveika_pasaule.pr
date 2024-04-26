@@ -1,6 +1,1 @@
-skaitlis a : 0
-
-kamēr (a < 5) {
-    drukāt("Teksts tiks printēts 5 reizes")
-    a++
-}
+drukāt("Sveika, pasaule!")

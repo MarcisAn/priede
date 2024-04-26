@@ -10,6 +10,9 @@ use std::panic;
 use std::{fs, process};
 use wasm_bindgen::prelude::*;
 
+use crate::util::format_ast;
+use crate::util::get_ast_formated;
+
 fn main() {}
 
 mod ast;
@@ -36,8 +39,8 @@ pub fn interpret(path: String, verbose: u8) {
     let ast = parse_res.get_ast();
     let root = ast.get_root();
 
-    let mut celsius = CelsiumProgram::new(false);
-    let mut main_module = Module::new("main", &mut celsius);
+    let mut celsium = CelsiumProgram::new(false);
+    let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new();
 
     parse_ast::parse_ast(root, &mut main_block);
@@ -52,8 +55,8 @@ pub fn interpret(path: String, verbose: u8) {
     }
 
     main_module.add_main_block(main_block);
-    celsius.add_module(&main_module);
-    celsius.run_program();
+    celsium.add_module(&main_module);
+    celsium.run_program();
 }
 
 pub fn run_wasm(code: String) {
@@ -62,16 +65,14 @@ pub fn run_wasm(code: String) {
     let ast = parse_res.get_ast();
     let root = ast.get_root();
 
-    let result = panic::catch_unwind(|| {
-        let mut celsius = CelsiumProgram::new(true);
-        let mut main_module = Module::new("main", &mut celsius);
+        let mut celsium = CelsiumProgram::new(true);
+        let mut main_module = Module::new("main", &mut celsium);
         let mut main_block = Block::new();
-        parse_ast::parse_ast(root.child(0), &mut main_block);
-        main_module.add_main_block(main_block);
-        celsius.add_module(&main_module);
+        parse_ast::parse_ast(root, &mut main_block);
+        main_module.add_main_block(main_block.clone());
+        celsium.add_module(&main_module);
 
-        celsius.run_program();
-    });
+        celsium.run_program();
 }
 
 fn read_file(path: String) -> String {
@@ -84,4 +85,33 @@ fn read_file(path: String) -> String {
         process::exit(1);
     }
     file_read.unwrap()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        let input = "
+        teksts a : \"Sveika, pasaule!\" \
+        \
+        drukāt(a)";
+
+        let parse_res = hime::priede::parse_string(input.to_owned());
+        println!("{:?}", parse_res.errors.errors);
+        let ast = parse_res.get_ast();
+        let root = ast.get_root();
+
+        let result = panic::catch_unwind(|| {
+            let mut celsium = CelsiumProgram::new(true);
+            let mut main_module = Module::new("main", &mut celsium);
+            let mut main_block = Block::new();
+            parse_ast::parse_ast(root.child(0), &mut main_block);
+            main_module.add_main_block(main_block);
+            celsium.add_module(&main_module);
+
+            celsium.run_program();
+        });
+    }
 }

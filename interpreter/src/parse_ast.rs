@@ -4,7 +4,7 @@ use crate::ast::*;
 use celsium::{
     block::Block,
     module::{FuncArg, FunctionSignature, Module, VISIBILITY},
-    BINOP,
+    bytecode::BINOP,
 };
 use hime_redist::{
     ast::{Ast, AstNode},
@@ -101,23 +101,23 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
     } else if title == "plus" || title == "string_plus" {
         parse_ast(node.child(0), block);
         parse_ast(node.child(1), block);
-        block.binop(celsium::BINOP::ADD);
+        block.binop(BINOP::ADD);
     } else if title == "minus" {
         parse_ast(node.child(0), block);
         parse_ast(node.child(1), block);
-        block.binop(celsium::BINOP::SUBTRACT);
+        block.binop(BINOP::SUBTRACT);
     } else if title == "reiz" {
         parse_ast(node.child(0), block);
         parse_ast(node.child(1), block);
-        block.binop(celsium::BINOP::MULTIPLY);
+        block.binop(BINOP::MULTIPLY);
     } else if title == "dal" {
         parse_ast(node.child(0), block);
         parse_ast(node.child(1), block);
-        block.binop(celsium::BINOP::DIVIDE);
+        block.binop(BINOP::DIVIDE);
     } else if title == "atlik" {
         parse_ast(node.child(0), block);
         parse_ast(node.child(1), block);
-        block.binop(celsium::BINOP::REMAINDER);
+        block.binop(BINOP::REMAINDER);
     } else if title == "if" {
         parse_ast(node.child(0), block);
         let mut if_block = Block::new();
@@ -134,12 +134,12 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         parse_ast(node.child(0), block);
         parse_ast(node.child(2), block);
         match sign {
-            "=" => block.binop(celsium::BINOP::EQ),
-            ">" => block.binop(celsium::BINOP::LARGER_THAN),
-            ">=" => block.binop(celsium::BINOP::LARGER_OR_EQ),
-            "<" => block.binop(celsium::BINOP::LESS_THAN),
-            "<=" => block.binop(celsium::BINOP::LESS_OR_EQ),
-            "!=" => block.binop(celsium::BINOP::NOT_EQ),
+            "=" => block.binop(BINOP::EQ),
+            ">" => block.binop(BINOP::LARGER_THAN),
+            ">=" => block.binop(BINOP::LARGER_OR_EQ),
+            "<" => block.binop(BINOP::LESS_THAN),
+            "<=" => block.binop(BINOP::LESS_OR_EQ),
+            "!=" => block.binop(BINOP::NOT_EQ),
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         }
     } else if title == "un" {
