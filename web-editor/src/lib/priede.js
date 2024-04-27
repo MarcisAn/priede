@@ -7,7 +7,6 @@ export const messages = writable([]);
 export function wasm_print(a) {
 	console.log(a);
 	// @ts-ignore
-	//alert(a);
 	messages.update((currentData) => {
 		return [{ typ: 'out', text: a }, ...currentData];
 	});
@@ -15,13 +14,13 @@ export function wasm_print(a) {
 export function clear() {
 	messages.set([]);
 }
-export function wasm_input() {
+
+export async function wasm_input() {
 	// @ts-ignore
 	messages.update((currentData) => {
 		return [{ typ: 'in' }, ...currentData];
 	});
-	setTimeout(() => {
-		return 'cav';
-	}, 2000);
+	
+	return "cav";
+
 }
-export function reply_to_input(text) {}

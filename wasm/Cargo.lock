@@ -19,9 +19,11 @@ name = "celsium"
 version = "0.1.6"
 dependencies = [
  "getrandom",
+ "js-sys",
  "num",
  "rand",
  "wasm-bindgen",
+ "wasm-bindgen-futures",
 ]
 
 [[package]]

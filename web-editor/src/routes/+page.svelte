@@ -65,7 +65,7 @@
 			class="runBtn"
 			on:click={() => {
 				init();
-				//clear();
+				clear();
 				run(editor.getValue());
 			}}
 		>

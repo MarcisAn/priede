@@ -2,16 +2,11 @@ use block::Block;
 use celsium::block;
 use celsium::module;
 use celsium::CelsiumProgram;
-use hime_redist::ast::AstNode;
-use hime_redist::errors::ParseError;
 use module::Module;
-use std::fs::read;
 use std::panic;
 use std::{fs, process};
 use wasm_bindgen::prelude::*;
 
-use crate::util::format_ast;
-use crate::util::get_ast_formated;
 
 fn main() {}
 
@@ -65,14 +60,14 @@ pub fn run_wasm(code: String) {
     let ast = parse_res.get_ast();
     let root = ast.get_root();
 
-        let mut celsium = CelsiumProgram::new(true);
-        let mut main_module = Module::new("main", &mut celsium);
-        let mut main_block = Block::new();
-        parse_ast::parse_ast(root, &mut main_block);
-        main_module.add_main_block(main_block.clone());
-        celsium.add_module(&main_module);
+    let mut celsium = CelsiumProgram::new(true);
+    let mut main_module = Module::new("main", &mut celsium);
+    let mut main_block = Block::new();
+    parse_ast::parse_ast(root, &mut main_block);
+    main_module.add_main_block(main_block.clone());
+    celsium.add_module(&main_module);
 
-        celsium.run_program();
+    celsium.run_program();
 }
 
 fn read_file(path: String) -> String {

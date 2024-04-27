@@ -1,3 +1,4 @@
 {
-    "rust-analyzer.showUnlinkedFileNotification": false
+  "rust-analyzer.linkedProjects": [".\\linter\\Cargo.toml"],
+  "rust-analyzer.showUnlinkedFileNotification": false
 }
