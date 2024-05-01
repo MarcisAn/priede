@@ -1,4 +1,4 @@
 {
-  "rust-analyzer.linkedProjects": [".\\linter\\Cargo.toml"],
+  "rust-analyzer.linkedProjects": [".\\linter\\Cargo.toml", ".\\stumbrs\\Cargo.toml", ".\\interpreter\\Cargo.toml"],
   "rust-analyzer.showUnlinkedFileNotification": false
 }

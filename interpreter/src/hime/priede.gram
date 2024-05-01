@@ -165,7 +165,11 @@ grammar priede
 
         import -> 'iekļaut' STRING;
 
-        stat -> var_def^ | func_call^ | dot_call^ | if^ | id_asign^ | s_loop^ | w_loop^ | func_def^ | import^ | return_st^;
+        multiple_ids -> ID | ID (';'! ID)*;
+
+        multiple_id_define -> '{'! multiple_ids '}'! ':'! exp;
+
+        stat -> var_def^ | multiple_id_define^ | func_call^ | dot_call^ | if^ | id_asign^ | s_loop^ | w_loop^ | func_def^ | import^ | return_st^;
         block -> stat*;
         root ->  block^;
     }

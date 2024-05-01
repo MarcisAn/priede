@@ -3,13 +3,14 @@ use core::panic;
 use crate::ast::*;
 use celsium::{
     block::Block,
-    module::{FuncArg, FunctionSignature, Module, VISIBILITY},
     bytecode::BINOP,
+    module::{FuncArg, FunctionSignature, Module, VISIBILITY},
 };
 use hime_redist::{
     ast::{Ast, AstNode},
     symbols::SemanticElementTrait,
 };
+use stumbrs::*;
 
 fn rem_first_and_last(value: &str) -> &str {
     let mut chars = value.chars();
@@ -29,11 +30,43 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "drukāt" {
             block.call_print_function(true);
-        } else if func_name == "ievade"{
+        } else if func_name == "ievade" {
             block.input_function();
         } else {
             block.call_function(func_name);
         }
+    } else if title == "multiple_id_define" {
+        if node.child(1).child(0).get_value().unwrap() != "STUMBRS" {
+            panic!("Šeit var izmantot tikai 'STUMBRS' funkciju.");
+        }
+        let path = node
+            .child(1)
+            .child(1)
+            .child(0)
+            .get_value()
+            .unwrap()
+            .to_owned();
+        let mut chars = path.chars();
+        chars.next();
+        chars.next_back();
+        let data = stumbrs::load_stumbrs_data(chars.as_str().to_string());
+        let mut counter = 0;
+        for unit in data.units {
+            let data_type = match unit.data_type.as_str() {
+                "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
+                "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
+                "TEXT" => celsium::BUILTIN_TYPES::STRING,
+                _ => panic!(),
+            };
+            block.load_const(data_type.clone(), &unit.value);
+            block.define_variable(
+                data_type,
+                VISIBILITY::PRIVATE,
+                node.child(0).child(counter).get_value().unwrap(),
+            );
+            counter += 1;
+        }
+        println!("multipl ids");
     } else if title == "return_st" {
         parse_ast(node.child(1), block);
         block.return_from_function();

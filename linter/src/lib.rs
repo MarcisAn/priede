@@ -1,8 +1,5 @@
-extern crate hime_redist;
 
-use hime_redist::ast::AstNode;
-
-pub fn lint(ast: AstNode)  {
+pub fn lint()  {
     
 }
 

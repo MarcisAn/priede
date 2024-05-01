@@ -6,9 +6,11 @@ use module::Module;
 use std::panic;
 use std::{fs, process};
 use wasm_bindgen::prelude::*;
+extern crate stumbrs;
+use stumbrs::load_stumbrs_data;
 
-
-fn main() {}
+fn main() {
+}
 
 mod ast;
 mod hime;
@@ -34,7 +36,7 @@ pub fn interpret(path: String, verbose: u8) {
     let ast = parse_res.get_ast();
     let root = ast.get_root();
 
-    let mut celsium = CelsiumProgram::new(false);
+    let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new();
 
@@ -60,7 +62,7 @@ pub fn run_wasm(code: String) {
     let ast = parse_res.get_ast();
     let root = ast.get_root();
 
-    let mut celsium = CelsiumProgram::new(true);
+    let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new();
     parse_ast::parse_ast(root, &mut main_block);
@@ -99,7 +101,7 @@ mod tests {
         let root = ast.get_root();
 
         let result = panic::catch_unwind(|| {
-            let mut celsium = CelsiumProgram::new(true);
+            let mut celsium = CelsiumProgram::new();
             let mut main_module = Module::new("main", &mut celsium);
             let mut main_block = Block::new();
             parse_ast::parse_ast(root.child(0), &mut main_block);

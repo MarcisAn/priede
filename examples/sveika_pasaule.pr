@@ -1,1 +1,5 @@
-drukāt("Sveika, pasaule!")
+
+{a;b} : STUMBRS("E:/Dev/priede/examples/testdata.pd")
+
+drukāt(a)
+drukāt(b)
