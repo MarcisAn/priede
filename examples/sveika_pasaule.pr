@@ -1,5 +1,7 @@
+funkc atgriezt_skaitli() {
+    atgriezt(2)
+}
 
-{a;b} : STUMBRS("E:/Dev/priede/examples/testdata.pd")
+atgriezt_skaitli()
 
-drukāt(a)
-drukāt(b)
+drukāt()

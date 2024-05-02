@@ -4,7 +4,7 @@ use crate::ast::*;
 use celsium::{
     block::Block,
     bytecode::BINOP,
-    module::{FuncArg, FunctionSignature, Module, VISIBILITY},
+    module::{FuncArg, FunctionSignature, Module, VISIBILITY}, BUILTIN_TYPES,
 };
 use hime_redist::{
     ast::{Ast, AstNode},
@@ -58,7 +58,12 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
                 "TEXT" => celsium::BUILTIN_TYPES::STRING,
                 _ => panic!(),
             };
-            block.load_const(data_type.clone(), &unit.value);
+            if unit.data_type.as_str() == "TEXT" {
+                block.load_const(data_type.clone(), rem_first_and_last(&unit.value));
+            }
+            else{
+                block.load_const(data_type.clone(), &unit.value);
+            }
             block.define_variable(
                 data_type,
                 VISIBILITY::PRIVATE,

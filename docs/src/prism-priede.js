@@ -49,7 +49,7 @@ Prism.languages.priede = {
     alias: "important",
   },
 
-  keyword: /\b(?:citādi|saraksts|atgriest|atkārtot|kamēr|funkc|ja|iekļaut)\b/i,
+  keyword: /\b(?:citādi|saraksts|atgriezt|atkārtot|kamēr|funkc|ja|iekļaut)\b/i,
   function: /[^(); \t,\n+*\-=?>:\\\/<&%\[\]]+(?=\()/,
   punctuation: /[{}[\]():,]/,
 };

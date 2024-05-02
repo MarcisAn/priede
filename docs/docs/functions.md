@@ -60,7 +60,7 @@ Līdz šim mēs tikai printējām vērtības no funkcijas, lai gan bieži vien m
 
 ```priede
 funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
-    atgirest (saskaitamais + 5 * reizinatajs)
+    atgriezt (saskaitamais + 5 * reizinatajs)
 }
 
 drukāt(piesk_un_reiz(4;5))

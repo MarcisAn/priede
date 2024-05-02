@@ -46,7 +46,7 @@ grammar stumbrs
 		
         CITADI -> 'citādi';
         ARRAY -> 'saraksts';
-        RETURN -> 'atgriest';
+        RETURN -> 'atgriezt';
     }
     rules{
         BOOL_DEF -> 'būls'! | 'bl'!;
