@@ -25,6 +25,12 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 extern "C" {
     fn alert(s: &str);
     fn wasm_print(s: &str);
+    fn get_stumbrs_data() -> String;
+}
+
+pub fn get_stumbrs_data_wasm() -> String{
+    //#[cfg(target_family = "wasm")]
+    get_stumbrs_data()
 }
 
 pub fn interpret(path: String, verbose: u8) {
@@ -40,7 +46,7 @@ pub fn interpret(path: String, verbose: u8) {
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new();
 
-    parse_ast::parse_ast(root, &mut main_block);
+    parse_ast::parse_ast(root, &mut main_block, false);
 
     if verbose >= 1 {
         util::print_ast(root);
@@ -65,7 +71,7 @@ pub fn run_wasm(code: String) {
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new();
-    parse_ast::parse_ast(root, &mut main_block);
+    parse_ast::parse_ast(root, &mut main_block, true);
     main_module.add_main_block(main_block.clone());
     celsium.add_module(&main_module);
 
@@ -104,7 +110,7 @@ mod tests {
             let mut celsium = CelsiumProgram::new();
             let mut main_module = Module::new("main", &mut celsium);
             let mut main_block = Block::new();
-            parse_ast::parse_ast(root.child(0), &mut main_block);
+            parse_ast::parse_ast(root.child(0), &mut main_block, false);
             main_module.add_main_block(main_block);
             celsium.add_module(&main_module);
 

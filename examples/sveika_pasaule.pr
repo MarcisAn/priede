@@ -1,7 +1,1 @@
-funkc atgriezt_skaitli() {
-    atgriezt(2)
-}
-
-atgriezt_skaitli()
-
-drukāt()
+drukāt(ievade("aa"))

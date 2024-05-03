@@ -6,7 +6,7 @@ with open("./pkg/priede_wasm.js", 'r') as file:
     existing_content = file.read()
 
     # Combine the new text with the existing content
-    new_content = "import { wasm_print, wasm_input } from \"../lib/priede.js\";\n" + existing_content
+    new_content = "import { wasm_print, wasm_input, get_stumbrs_data } from \"../lib/priede.js\";\n" + existing_content
 
     # Write the combined content back to the file
     with open("./pkg/priede_wasm.js", 'w') as file:

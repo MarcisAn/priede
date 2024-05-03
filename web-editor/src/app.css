@@ -60,3 +60,16 @@ h1 {
     gap: 5px;
     cursor: pointer;
 }
+
+.switchBtn{
+    padding: 1rem;
+    background-color: aliceblue;
+}
+
+#stumbrsEditor{
+    height: 100%;
+}
+
+#examplePicker{
+    margin: 0.5rem;
+}

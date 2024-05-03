@@ -1,5 +1,6 @@
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
 export const messages = writable([]);
+export const stumbrsData = writable("");
 /**
  * @param {any} a
  */
@@ -13,6 +14,9 @@ export function wasm_print(a) {
 }
 export function clear() {
 	messages.set([]);
+}
+export function get_stumbrs_data() {
+	return get(stumbrsData);
 }
 
 export async function wasm_input() {

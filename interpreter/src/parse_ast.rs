@@ -11,6 +11,7 @@ use hime_redist::{
     symbols::SemanticElementTrait,
 };
 use stumbrs::*;
+use super::get_stumbrs_data;
 
 fn rem_first_and_last(value: &str) -> &str {
     let mut chars = value.chars();
@@ -19,12 +20,12 @@ fn rem_first_and_last(value: &str) -> &str {
     chars.as_str()
 }
 
-pub fn parse_ast(node: AstNode, block: &mut Block) {
+pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
     let title = node.get_symbol().to_string();
     if title == "func_call" {
         if node.children_count() > 1 {
             for arg in node.child(1) {
-                parse_ast(arg, block);
+                parse_ast(arg, block, is_wasm);
             }
         }
         let func_name = node.child(0).get_value().unwrap();
@@ -49,7 +50,10 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
         let mut chars = path.chars();
         chars.next();
         chars.next_back();
-        let data = stumbrs::load_stumbrs_data(chars.as_str().to_string());
+        let data = match is_wasm {
+            false =>stumbrs::load_stumbrs_data_file(chars.as_str().to_string()),
+            true => stumbrs::load_stumbrs_data(get_stumbrs_data()), 
+        };
         let mut counter = 0;
         for unit in data.units {
             let data_type = match unit.data_type.as_str() {
@@ -71,15 +75,14 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
             );
             counter += 1;
         }
-        println!("multipl ids");
     } else if title == "return_st" {
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(1), block, is_wasm);
         block.return_from_function();
     } else if title == "var_def" {
         println!("{}", node.child(0).get_symbol().to_string());
         if node.child(0).get_symbol().to_string() == "ARRAY" {
             for i in node.child(2).children() {
-                parse_ast(i, block);
+                parse_ast(i, block, is_wasm);
             }
             block.define_array(
                 celsium::module::VISIBILITY::PRIVATE,
@@ -87,7 +90,7 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
                 node.child(2).children().len(),
             )
         } else {
-            parse_ast(node.child(2), block);
+            parse_ast(node.child(2), block, is_wasm);
             block.define_variable(
                 match node.child(0).to_string().as_str() {
                     "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
@@ -106,7 +109,7 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
 
         if node.children_count() > 2 {
             //when the function takes arguments
-            parse_ast(node.child(2), &mut body);
+            parse_ast(node.child(2), &mut body, is_wasm);
             for arg in node.child(1).children() {
                 args.push(FuncArg {
                     name: arg.child(1).get_value().unwrap().to_string(),
@@ -119,7 +122,7 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
                 })
             }
         } else {
-            parse_ast(node.child(1), &mut body);
+            parse_ast(node.child(1), &mut body, is_wasm);
         }
 
         block.define_function(
@@ -132,45 +135,45 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
             },
         )
     } else if title == "array" {
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(1), block, is_wasm);
         block.load_from_array(node.child(0).get_value().unwrap());
     } else if title.starts_with("ID") {
         block.load_variable(node.get_value().unwrap());
     } else if title == "plus" || title == "string_plus" {
-        parse_ast(node.child(0), block);
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm);
         block.binop(BINOP::ADD);
     } else if title == "minus" {
-        parse_ast(node.child(0), block);
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm);
         block.binop(BINOP::SUBTRACT);
     } else if title == "reiz" {
-        parse_ast(node.child(0), block);
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm);
         block.binop(BINOP::MULTIPLY);
     } else if title == "dal" {
-        parse_ast(node.child(0), block);
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm);
         block.binop(BINOP::DIVIDE);
     } else if title == "atlik" {
-        parse_ast(node.child(0), block);
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm);
         block.binop(BINOP::REMAINDER);
     } else if title == "if" {
-        parse_ast(node.child(0), block);
+        parse_ast(node.child(0), block, is_wasm);
         let mut if_block = Block::new();
-        parse_ast(node.child(1), &mut if_block);
+        parse_ast(node.child(1), &mut if_block, is_wasm);
         if node.children_count() > 2 {
             let mut else_block = Block::new();
-            parse_ast(node.child(3), &mut else_block);
+            parse_ast(node.child(3), &mut else_block, is_wasm);
             block.define_if_else_block(if_block, else_block)
         } else {
             block.define_if_block(if_block);
         }
     } else if title == "comp_s" {
         let sign = node.child(1).get_value().unwrap();
-        parse_ast(node.child(0), block);
-        parse_ast(node.child(2), block);
+        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(2), block, is_wasm);
         match sign {
             "=" => block.binop(BINOP::EQ),
             ">" => block.binop(BINOP::LARGER_THAN),
@@ -181,54 +184,54 @@ pub fn parse_ast(node: AstNode, block: &mut Block) {
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         }
     } else if title == "un" {
-        parse_ast(node.child(0), block);
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm);
         block.binop(BINOP::AND);
     } else if title == "vai" {
-        parse_ast(node.child(0), block);
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm);
         block.binop(BINOP::OR);
     } else if title == "xvai" {
-        parse_ast(node.child(0), block);
-        parse_ast(node.child(1), block);
+        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm);
         block.binop(BINOP::XOR);
     } else if title == "block" {
         for i in node.children() {
-            parse_ast(i, block);
+            parse_ast(i, block, is_wasm);
         }
     } else if title == "s_loop" {
         let mut loop_block = Block::new();
         let mut loop_count_block = Block::new();
 
-        parse_ast(node.child(1), &mut loop_block);
-        parse_ast(node.child(0), &mut loop_count_block);
+        parse_ast(node.child(1), &mut loop_block, is_wasm);
+        parse_ast(node.child(0), &mut loop_count_block, is_wasm);
         block.define_simple_loop(loop_block, loop_count_block);
     } else if title == "w_loop" {
         let mut loop_block = Block::new();
         let mut conditional_block = Block::new();
-        parse_ast(node.child(0), &mut conditional_block);
-        parse_ast(node.child(1), &mut loop_block);
+        parse_ast(node.child(0), &mut conditional_block, is_wasm);
+        parse_ast(node.child(1), &mut loop_block, is_wasm);
         block.define_while_loop(loop_block, conditional_block);
     } else if title == "id_asign" {
         let operator = node.child(1).get_value().unwrap();
         let var_name = node.child(0).get_value().unwrap();
         if operator == ":" {
-            parse_ast(node.child(2), block);
+            parse_ast(node.child(2), block, is_wasm);
         } else if operator == "+:" {
             block.load_variable(var_name);
-            parse_ast(node.child(2), block);
+            parse_ast(node.child(2), block, is_wasm);
             block.binop(BINOP::ADD);
         } else if operator == "-:" {
             block.load_variable(var_name);
-            parse_ast(node.child(2), block);
+            parse_ast(node.child(2), block, is_wasm);
             block.binop(BINOP::SUBTRACT);
         } else if operator == "*:" {
             block.load_variable(var_name);
-            parse_ast(node.child(2), block);
+            parse_ast(node.child(2), block, is_wasm);
             block.binop(BINOP::MULTIPLY);
         } else if operator == "/:" {
             block.load_variable(var_name);
-            parse_ast(node.child(2), block);
+            parse_ast(node.child(2), block, is_wasm);
             block.binop(BINOP::DIVIDE);
         } else if operator == "++" {
             block.load_variable(var_name);

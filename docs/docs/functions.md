@@ -17,14 +17,7 @@ sasveicināties()
 
 Šajā piemērā mēs varam divreiz nerakstīt rindiņu `drukāt("Sveika pasaule!")`, bet rakstīt to funkcijā, ko tālāk varam izsaukt pēc vajadzības. Šis padara kodu vieglāk labojamu. Ja mēs pēkšņi vēlētos izmainīt sveiciena tekstu uz "Sveiciens no Prides", tad nevajadzētu tekstu mainīt vairākās vietās, bet gan tikai vienreiz, funkcijas definīcijā.
 
-```priede
-funkc sasveicināties() {
-    drukāt("Sveiciens no Prides")
-}
-sasveicināties()
-drukāt("Tagad padaram kaut ko citu")
-sasveicināties()
-```
+
 
 ## Funkcijas argumenti
 

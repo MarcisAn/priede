@@ -39,7 +39,37 @@ pub struct StumbrsUnit {
     pub value: String,
 }
 
-pub fn load_stumbrs_data(path: String) -> StumbrsData {
+pub fn load_stumbrs_data(data: String) -> StumbrsData {
+    let parse_res = hime::stumbrs::parse_string(data);
+    println!("{:?}", parse_res.errors.errors);
+    let ast = parse_res.get_ast();
+    let root = ast.get_root();
+    print_ast(root);
+
+    let number_of_units = root.child(0).children_count();
+    let mut counter = 0;
+    let mut units: Vec<StumbrsUnit> = vec![];
+    while counter < number_of_units {
+        units.push(StumbrsUnit {
+            data_type: root
+                .child(0)
+                .child(counter)
+                .child(0)
+                .get_symbol()
+                .to_string(),
+            value: root.child(1).child(counter).child(0).get_value().unwrap().to_string(),
+        });
+        counter += 1;
+    }
+
+    println!("{:?}", units);
+
+    return StumbrsData {
+        units: units
+    };
+}
+
+pub fn load_stumbrs_data_file(path: String) -> StumbrsData {
     print!("{}", path);
     let data_file_content = fs::read_to_string(path).unwrap();
     let parse_res = hime::stumbrs::parse_string(data_file_content);
