@@ -1,17 +1,18 @@
 use core::panic;
 
+use super::get_stumbrs_data;
 use crate::ast::*;
 use celsium::{
     block::Block,
     bytecode::BINOP,
-    module::{FuncArg, FunctionSignature, Module, VISIBILITY}, BUILTIN_TYPES,
+    module::{FuncArg, FunctionSignature, Module, VISIBILITY},
+    BUILTIN_TYPES,
 };
 use hime_redist::{
     ast::{Ast, AstNode},
     symbols::SemanticElementTrait,
 };
 use stumbrs::*;
-use super::get_stumbrs_data;
 
 fn rem_first_and_last(value: &str) -> &str {
     let mut chars = value.chars();
@@ -30,9 +31,11 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
         }
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "drukāt" {
-            block.call_print_function(true);
+            block.call_special_function(celsium::SpecialFunctions::PRINT);
         } else if func_name == "ievade" {
-            block.input_function();
+            block.call_special_function(celsium::SpecialFunctions::INPUT);
+        } else if func_name == "jukums" {
+            block.call_special_function(celsium::SpecialFunctions::RANDOM);
         } else {
             block.call_function(func_name);
         }
@@ -51,8 +54,8 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
         chars.next();
         chars.next_back();
         let data = match is_wasm {
-            false =>stumbrs::load_stumbrs_data_file(chars.as_str().to_string()),
-            true => stumbrs::load_stumbrs_data(get_stumbrs_data()), 
+            false => stumbrs::load_stumbrs_data_file(chars.as_str().to_string()),
+            true => stumbrs::load_stumbrs_data(get_stumbrs_data()),
         };
         let mut counter = 0;
         for unit in data.units {
@@ -64,8 +67,7 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
             };
             if unit.data_type.as_str() == "TEXT" {
                 block.load_const(data_type.clone(), rem_first_and_last(&unit.value));
-            }
-            else{
+            } else {
                 block.load_const(data_type.clone(), &unit.value);
             }
             block.define_variable(
