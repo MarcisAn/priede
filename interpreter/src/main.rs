@@ -99,7 +99,7 @@ mod tests {
         let input = "
         teksts a : \"Sveika, pasaule!\" \
         \
-        drukāt(a)";
+        izvade(a)";
 
         let parse_res = hime::priede::parse_string(input.to_owned());
         println!("{:?}", parse_res.errors.errors);

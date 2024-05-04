@@ -30,8 +30,11 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
             }
         }
         let func_name = node.child(0).get_value().unwrap();
-        if func_name == "drukāt" {
-            block.call_special_function(celsium::SpecialFunctions::PRINT);
+        if func_name == "izvade" {
+            block.call_special_function(celsium::SpecialFunctions::PRINT { newline: true });
+        } else if func_name == "izvadetp" {
+            block.call_special_function(celsium::SpecialFunctions::PRINT { newline: false });
+
         } else if func_name == "ievade" {
             block.call_special_function(celsium::SpecialFunctions::INPUT);
         } else if func_name == "jukums" {
@@ -242,7 +245,12 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
         }
         block.assign_variable(var_name);
     } else if title == "NUMBER" {
-        block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, node.get_value().unwrap());
+        let number_as_str = &node.get_value().unwrap();
+        if number_as_str.contains(",") {
+            block.load_const(celsium::BUILTIN_TYPES::FLOAT, &number_as_str.replace(",", "."));
+        } else {
+            block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, &number_as_str);
+        }
     } else if title == "STRING" {
         block.load_const(
             celsium::BUILTIN_TYPES::STRING,

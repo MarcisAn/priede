@@ -51,7 +51,7 @@
 			theme: 'vs-dark'
 		});
 
-		loadCode('drukāt("Sveika, pasaule!")', 'plaintext');
+		loadCode('izvade("Sveika, pasaule!")', 'plaintext');
 	});
 
 	onDestroy(() => {

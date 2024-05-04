@@ -29,7 +29,7 @@ mod tests {
         let input = "
         teksts a : \"Sveika, pasaule!\" \
         \
-        drukāt(a)";
+        izvade(a)";
         run(input);
     }
 }

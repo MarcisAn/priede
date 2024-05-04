@@ -8,6 +8,6 @@ Izmanto [Celsium](https://github.com/MarcisAn/celsium)
 
 ## Sveika pasaule piemērs:
 
-    drukāt("Sveika, pasaule!")
+    izvade("Sveika, pasaule!")
 
 

@@ -17,13 +17,13 @@ Mainīgajos var uzglabāt dažāda veida informāciju: skaitļus, tekstu un būl
 ```priede
 skaitlis a : 2
 
-drukāt(a)
+izvade(a)
 ```
 
 ```priede
 teksts a : "Sveika, pasaule!"
 
-drukāt(a)
+izvade(a)
 ```
 
 Būla vērtības ir `1` vai `2` vai arī `PATIESS` un `NEPATIESS`, vai arī saīsinātā versija `PAT` un `NEPAT`.
@@ -33,14 +33,14 @@ Būli ir veids kā samazināt nepieciešamo datora atmiņas daudzumu programmas 
 ```priede
 būls a : PAT
 
-drukāt(a)
+izvade(a)
 ```
 
 ```priede
 būls a : PAT
 
 ja a {
-    drukāt("Būla mainīgais a ir patiess")
+    izvade("Būla mainīgais a ir patiess")
 }
 ```
 
@@ -51,11 +51,11 @@ Tāpēc jau tos sauc par 'mainīgajiem', jo to vērtība var tikt mainīta progr
 ```priede
 sk a : 3
 
-drukāt(a)
+izvade(a)
 
 a : 4
 
-drukāt(a)
+izvade(a)
 ```
 
 Mainīgajam norādot jaunu vērtību, nav nepieciešams atkārtoti minēt tā datu tipu.

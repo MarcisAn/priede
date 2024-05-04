@@ -6,11 +6,11 @@ sidebar_position: 2
 
 ```priede
 ja 2 = 2 {
-    drukāt("Divi ir vienāds ar divi")
+    izvade("Divi ir vienāds ar divi")
 }
 
 ja 2+2 = 4 {
-    drukāt("Divi plus divi ir vienāds ar četri")
+    izvade("Divi plus divi ir vienāds ar četri")
 }
 ```
 
@@ -20,11 +20,11 @@ Izteiksme var būt vai nebūt apaļajās iekavās
 
 ```priede
 ja 2 = 2 {
-    drukāt("Divi ir vienāds ar divi")
+    izvade("Divi ir vienāds ar divi")
 }
 
 ja (2 = 2) {
-    drukāt("Divi ir vienāds ar divi")
+    izvade("Divi ir vienāds ar divi")
 }
 ```
 
@@ -32,10 +32,10 @@ Pēc šī bloka var sekot vēl viens bloks, kas izpildās, ja izteiksme ir nepat
 
 ```priede
 ja 2 = 2 {
-    drukāt("Divi ir vienāds ar divi")
+    izvade("Divi ir vienāds ar divi")
 }
 citādi{
-    drukāt("Matemātika sabruka")
+    izvade("Matemātika sabruka")
 }
 ```
 
@@ -52,15 +52,15 @@ citādi{
 
 ```priede
 ja 3 > 2 {
-    drukāt("Trīs ir lielāks par divi")
+    izvade("Trīs ir lielāks par divi")
 }
 
 ja 1 < 2 {
-    drukāt("Viens ir mazāks par divi")
+    izvade("Viens ir mazāks par divi")
 }
 
 ja 5 != 2 {
-    drukāt("Pieci nav vienāds ar divi")
+    izvade("Pieci nav vienāds ar divi")
 }
 ```
 
@@ -74,14 +74,14 @@ ja 5 != 2 {
 
 ```priede
 ja 3 > 2 un 5 < 7 {
-    drukāt("Trīs ir lielāks par divi un pieci ir mazāks par septiņi")
+    izvade("Trīs ir lielāks par divi un pieci ir mazāks par septiņi")
 }
 
 ja 1 < 2  vai 3 > 1{
-    drukāt("Viens ir mazāks par divi vai trīs lielāks par viens")
+    izvade("Viens ir mazāks par divi vai trīs lielāks par viens")
 }
 
 ja 1 < 2 xvai 3 < 1{
-    drukāt("Viens ir mazāks par divi, bet trīs nav mazāks par viens")
+    izvade("Viens ir mazāks par divi, bet trīs nav mazāks par viens")
 }
 ```

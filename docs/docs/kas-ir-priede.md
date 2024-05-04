@@ -9,7 +9,7 @@ Priede ir vienkārši lasāma un rakstāma programmēšanas valoda ar sintaksi l
 ## Pāris piemēri:
 
 ```priede
-drukāt("Sveika, pasaule!")
+izvade("Sveika, pasaule!")
 
 ```
 
@@ -17,7 +17,7 @@ drukāt("Sveika, pasaule!")
 
 skaitlis a : 2
 
-drukāt(a)
+izvade(a)
 
 ```
 
@@ -26,23 +26,23 @@ drukāt(a)
 skaitlis a : 2
 
 ja a > 1 {
-    drukāt(a)
+    izvade(a)
 }
 
 ```
 
 ```priede
 ja 2 = 2 {
-    drukāt("Divi ir vienāds ar divi")
+    izvade("Divi ir vienāds ar divi")
 }
 citādi{
-    drukāt("Matemātika sabruka")
+    izvade("Matemātika sabruka")
 }
 ```
 
 ```priede
 
-drukāt("Sveika, pasaule!")
+izvade("Sveika, pasaule!")
 
 //šis ir komentārs, kas tiks ignorēts izpildot programmu
 
@@ -56,7 +56,7 @@ var aizņemt vairākas rindiņas
 ```priede
 teksts a : "Sveika, pasaule!"
 
-drukāt(a)
+izvade(a)
 ```
 
 ```priede
@@ -64,14 +64,14 @@ funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
     atgriezt(saskaitamais + 5 * reizinatajs)
 }
 
-drukāt(piesk_un_reiz(4;5))
+izvade(piesk_un_reiz(4;5))
 ```
 
 ```priede
 skaitlis a : 0
 
 kamēr (a < 5) {
-    drukāt("Teksts tiks printēts 5 reizes")
+    izvade("Teksts tiks printēts 5 reizes")
     a++
 }
 ```

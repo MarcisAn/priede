@@ -47,7 +47,7 @@ Funkcijai argumentā jāpadod Stumbra datu faila adrese.
 
 
 ja vecums < 18 {
-    drukāt("Neraža! Nevar piedalīties vēlēšanās.")
+    izvade("Neraža! Nevar piedalīties vēlēšanās.")
 }
 ```
 
@@ -62,7 +62,7 @@ Izmantojot Priedes online versiju, izsaucot `STUMBRS` funkciju, nav jānorāda a
 
 
 ja vecums < 18 {
-    drukāt("Neraža! Nevar piedalīties vēlēšanās.")
+    izvade("Neraža! Nevar piedalīties vēlēšanās.")
 }
 ```
 
