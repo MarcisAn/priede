@@ -38,6 +38,8 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
         } else if func_name == "ievade" {
             block.call_special_function(celsium::SpecialFunctions::INPUT);
         } else if func_name == "jukums" {
+            parse_ast(node.child(1).child(0), block, is_wasm);
+            parse_ast(node.child(1).child(1), block, is_wasm);
             block.call_special_function(celsium::SpecialFunctions::RANDOM);
         } else {
             block.call_function(func_name);

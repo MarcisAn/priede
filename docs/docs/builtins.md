@@ -20,10 +20,11 @@ Ievades funkcijas nedarbojās online redaktorā.
 
 ## Nejaušs skaitlis
 
-Funkcijas atgriež nejaušu 8 bitu skaitli (robežās 0-255)
+Funkcijas atgriež nejaušu 8 bitu skaitli noteiktās robežās
 
 ```priede
-sk skaitlis : jukums()
+sk skaitlis : jukums(0;10)
 
 izvade(skaitlis)
+//tiks izvadīts nejaušs skaitlis robežās 0-10
 ```
