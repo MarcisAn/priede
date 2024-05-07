@@ -75,7 +75,7 @@ grammar stumbrs
 
 
 
-        SCHEM_ITEM -> TYPE ID;
+        SCHEM_ITEM -> TYPE ID| '[]' ID;
 
         SCHEMATIC -> SCHEM_ITEM*;
 

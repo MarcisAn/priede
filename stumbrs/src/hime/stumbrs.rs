@@ -139,19 +139,23 @@ pub const TERMINALS: &[Symbol] = &[
         name: ")"
     },
     Symbol {
-        id: 0x002D,
-        name: "["
+        id: 0x002C,
+        name: "[]"
     },
     Symbol {
         id: 0x002E,
+        name: "["
+    },
+    Symbol {
+        id: 0x002F,
         name: "]"
     },
     Symbol {
-        id: 0x0030,
+        id: 0x0031,
         name: "{"
     },
     Symbol {
-        id: 0x0031,
+        id: 0x0032,
         name: "}"
     }
 ];
@@ -263,15 +267,15 @@ pub const VARIABLES: &[Symbol] = &[
         name: "__V41"
     },
     Symbol {
-        id: 0x002C,
-        name: "__V44"
+        id: 0x002D,
+        name: "__V45"
     },
     Symbol {
-        id: 0x002F,
-        name: "__V47"
+        id: 0x0030,
+        name: "__V48"
     },
     Symbol {
-        id: 0x0032,
+        id: 0x0033,
         name: "__VAxiom"
     }
 ];

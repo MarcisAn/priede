@@ -1,1 +1,3 @@
-izvade(jukums(0;10))
+{vārds; vecums} : STUMBRS("E:/Dev/priede/examples/testdata.st")
+
+izvade(vecums[0] + 2 )

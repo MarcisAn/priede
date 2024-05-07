@@ -34,7 +34,6 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
             block.call_special_function(celsium::SpecialFunctions::PRINT { newline: true });
         } else if func_name == "izvadetp" {
             block.call_special_function(celsium::SpecialFunctions::PRINT { newline: false });
-
         } else if func_name == "ievade" {
             block.call_special_function(celsium::SpecialFunctions::INPUT);
         } else if func_name == "jukums" {
@@ -64,22 +63,56 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
         };
         let mut counter = 0;
         for unit in data.units {
-            let data_type = match unit.data_type.as_str() {
-                "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-                "TEXT" => celsium::BUILTIN_TYPES::STRING,
-                _ => panic!(),
-            };
-            if unit.data_type.as_str() == "TEXT" {
-                block.load_const(data_type.clone(), rem_first_and_last(&unit.value));
+            if unit.data_type.as_str() == "[]" {
+                let values: Vec<StumbrsArrayValue>;
+                match unit.value {
+                    StumbrsValue::Array { value } => values =  value,
+                    StumbrsValue::SimpleValue { value:_ } => panic!(),
+                }
+                for val in &values{
+                    
+                    block.load_const(match val.data_type {
+                        StumbrsArrayDataTypes::MAGIC_INT => BUILTIN_TYPES::MAGIC_INT,
+                        StumbrsArrayDataTypes::BOOL => BUILTIN_TYPES::BOOL,
+                        StumbrsArrayDataTypes::STRING => BUILTIN_TYPES::STRING,
+                        StumbrsArrayDataTypes::OBJECT => BUILTIN_TYPES::OBJECT,
+                        StumbrsArrayDataTypes::FLOAT => BUILTIN_TYPES::FLOAT,
+                    }, &val.value);
+                }
+                block.define_array(
+                    VISIBILITY::PRIVATE,
+                    node.child(0)
+                        .child(counter)
+                        .get_value()
+                        .unwrap()
+                        .to_string(),
+                    values.len(),
+                )
             } else {
-                block.load_const(data_type.clone(), &unit.value);
+                let data_type = match unit.data_type.as_str() {
+                    "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
+                    "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
+                    "TEXT" => celsium::BUILTIN_TYPES::STRING,
+                    _ => panic!(),
+                };
+                if unit.data_type.as_str() == "TEXT" {
+                    block.load_const(data_type.clone(), rem_first_and_last(match &unit.value {
+                        StumbrsValue::SimpleValue { value } => &value,
+                        StumbrsValue::Array { value } => panic!(),
+                    } ));
+                } else {
+                    block.load_const(data_type.clone(), match &unit.value {
+                        StumbrsValue::SimpleValue { value } => &value,
+                        StumbrsValue::Array { value } => panic!(),
+                    } );
+                }
+                block.define_variable(
+                    data_type,
+                    VISIBILITY::PRIVATE,
+                    node.child(0).child(counter).get_value().unwrap(),
+                );
             }
-            block.define_variable(
-                data_type,
-                VISIBILITY::PRIVATE,
-                node.child(0).child(counter).get_value().unwrap(),
-            );
+
             counter += 1;
         }
     } else if title == "return_st" {
@@ -183,11 +216,11 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
         parse_ast(node.child(2), block, is_wasm);
         match sign {
             "=" => block.binop(BINOP::EQ),
-            ">" => block.binop(BINOP::LARGER_THAN),
-            ">=" => block.binop(BINOP::LARGER_OR_EQ),
-            "<" => block.binop(BINOP::LESS_THAN),
-            "<=" => block.binop(BINOP::LESS_OR_EQ),
-            "!=" => block.binop(BINOP::NOT_EQ),
+            ">" => block.binop(BINOP::LargerThan),
+            ">=" => block.binop(BINOP::LargerOrEq),
+            "<" => block.binop(BINOP::LessThan),
+            "<=" => block.binop(BINOP::LessOrEq),
+            "!=" => block.binop(BINOP::NotEq),
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         }
     } else if title == "un" {
@@ -249,7 +282,10 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
     } else if title == "NUMBER" {
         let number_as_str = &node.get_value().unwrap();
         if number_as_str.contains(",") {
-            block.load_const(celsium::BUILTIN_TYPES::FLOAT, &number_as_str.replace(",", "."));
+            block.load_const(
+                celsium::BUILTIN_TYPES::FLOAT,
+                &number_as_str.replace(",", "."),
+            );
         } else {
             block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, &number_as_str);
         }

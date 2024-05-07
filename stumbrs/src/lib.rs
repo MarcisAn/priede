@@ -36,7 +36,26 @@ pub struct StumbrsData {
 #[derive(Clone, Debug)]
 pub struct StumbrsUnit {
     pub data_type: String,
+    pub value: StumbrsValue,
+}
+
+#[derive(Clone, Debug)]
+pub enum StumbrsValue {
+    SimpleValue { value: String },
+    Array { value: Vec<StumbrsArrayValue> },
+}
+#[derive(Clone, Debug)]
+pub enum StumbrsArrayDataTypes {
+    MAGIC_INT,
+    BOOL,
+    STRING,
+    OBJECT,
+    FLOAT
+}
+#[derive(Clone, Debug)]
+pub struct StumbrsArrayValue {
     pub value: String,
+    pub data_type: StumbrsArrayDataTypes
 }
 
 pub fn load_stumbrs_data(data: String) -> StumbrsData {
@@ -57,16 +76,20 @@ pub fn load_stumbrs_data(data: String) -> StumbrsData {
                 .child(0)
                 .get_symbol()
                 .to_string(),
-            value: root.child(1).child(counter).child(0).get_value().unwrap().to_string(),
+            value: StumbrsValue::SimpleValue { value: root
+                .child(1)
+                .child(counter)
+                .child(0)
+                .get_value()
+                .unwrap()
+                .to_string() },
         });
         counter += 1;
     }
 
     println!("{:?}", units);
 
-    return StumbrsData {
-        units: units
-    };
+    return StumbrsData { units: units };
 }
 
 pub fn load_stumbrs_data_file(path: String) -> StumbrsData {
@@ -82,23 +105,72 @@ pub fn load_stumbrs_data_file(path: String) -> StumbrsData {
     let mut counter = 0;
     let mut units: Vec<StumbrsUnit> = vec![];
     while counter < number_of_units {
-        units.push(StumbrsUnit {
+        if root.child(1).child(counter).child(0).to_string() == "array" {
+            let values_count = root
+                    .child(1)
+                    .child(counter)
+                    .child(0).children_count();
+            let mut array_index_counter = 0;
+            let mut values: Vec<StumbrsArrayValue> = vec![];
+            while array_index_counter < values_count -1 {
+                let val = root
+                    .child(1)
+                    .child(counter)
+                    .child(0).child(array_index_counter).get_value().unwrap().to_string();
+                let data_type = root
+                    .child(1)
+                    .child(counter)
+                    .child(0).child(array_index_counter).get_symbol().name;
+                values.push(StumbrsArrayValue { value: val.clone(), data_type: match data_type {
+                    "NUMBER" => if val.contains(",") {
+                        StumbrsArrayDataTypes::FLOAT
+                    }
+                    else{
+                        StumbrsArrayDataTypes::MAGIC_INT
+                    },
+                    "STRING" => StumbrsArrayDataTypes::STRING,
+                    "BOOL" => StumbrsArrayDataTypes::BOOL,
+                    _ => panic!()
+                } });
+                array_index_counter += 1;
+            } 
+            units.push(StumbrsUnit {
             data_type: root
                 .child(0)
                 .child(counter)
                 .child(0)
                 .get_symbol()
                 .to_string(),
-            value: root.child(1).child(counter).child(0).get_value().unwrap().to_string(),
+            value: StumbrsValue::Array { 
+                value: values,
+            },
         });
+        } else {
+            units.push(StumbrsUnit {
+            data_type: root
+                .child(0)
+                .child(counter)
+                .child(0)
+                .get_symbol()
+                .to_string(),
+            value: StumbrsValue::SimpleValue {
+                value: root
+                    .child(1)
+                    .child(counter)
+                    .child(0)
+                    .get_value()
+                    .unwrap()
+                    .to_string(),
+            },
+        });
+        }
+        
         counter += 1;
     }
 
     println!("{:?}", units);
 
-    return StumbrsData {
-        units: units
-    };
+    return StumbrsData { units: units };
 }
 
 #[cfg(test)]

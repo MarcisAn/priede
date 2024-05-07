@@ -1,8 +1,8 @@
 {
     teksts vārds
-    skaitlis vecums
+    [] vecums
 }
 {
     "Miķelis"
-    2
+    [2;2;2;2]
 }
