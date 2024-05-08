@@ -84,9 +84,11 @@ a++
 
 #### Pieejamie operatori:
 
-- `:`
-- `+:`
-- `++`
-- `-:`
-- `*:`
-- `/:`
+- `:`  Norāda mainīgo 
+- `+:` Pieskaita mainīgajam vērtību
+- `++` Pieskaita mainīgajam `1`
+- `--` Atņem mainīgajam `1`
+- `-:` Atņem mainīgajam
+- `*:` Reizina mainīgo
+- `/:` Dala mainīgo
+
