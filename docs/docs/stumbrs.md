@@ -4,7 +4,7 @@ sidebar_position: 8
 
 # "Stumbrs" datu formāts
 
-Priede piedāvā programmas ievaddatus definēt atsevišķā failā, kura nolasīšana ir integrēta Priedē.
+Priede piedāvā programmas ievaddatus definēt atsevišķā failā, kura nolasīšana ir cieši integrēta Priedē.
 
 ## Stumbra datu pieraksts
 
@@ -51,7 +51,7 @@ ja vecums < 18 {
 }
 ```
 
-Mainīgo nosaukumi tiek noteikti Priedes kodā un it neatkarīgi no tiem, kas noteikti Stumbra datu shēma. Datu tipi tiek noteikti no shēmas.
+Mainīgo nosaukumi tiek noteikti Priedes kodā un ir neatkarīgi no tiem, kas noteikti Stumbra datu shēmā. Datu tipi tiek noteikti no shēmas.
 
 ## Stumbra izmantošana online redaktorā
 

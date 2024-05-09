@@ -32,8 +32,11 @@ Būli ir veids kā samazināt nepieciešamo datora atmiņas daudzumu programmas 
 
 ```priede
 būls a : PAT
+būls b : NEPAT
+
 
 izvade(a)
+izvade(b)
 ```
 
 ```priede
@@ -76,13 +79,13 @@ a +: 3
 
 Abi piemēri dara vienu un to pašu.
 
-Ja nepieciešams mainīgajam pieskaitīt skaitli `1`, tad pieraksts var būt vēl vienkāršāks
+Ja nepieciešams mainīgajam pieskaitīt skaitli `1`, tad pieraksts var būt vēl vienkāršāks.
 
 ```priede
 a++
 ```
 
-#### Pieejamie operatori:
+## Pieejamie operatori:
 
 - `:` Norāda mainīgajam vērtību
 - `+:` Pieskaita mainīgajam vērtību

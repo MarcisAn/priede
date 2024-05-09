@@ -32,11 +32,11 @@ piesk5(4)
 piesk5(2)
 ```
 
-Šajā piemērā mēs izveidojam funkciju, kura pieskaita argumentam skaitli 5 un izdrukā rezultātu. Pēc tam mēs varam izsaukt šo funkciju ar dažādiem skaitļiem un funkcija veiks to pašu darbību ar tiem abiem.
+Šajā piemērā mēs izveidojam funkciju, kura pieskaita argumentam skaitli `5` un izdrukā rezultātu. Pēc tam mēs varam izsaukt šo funkciju ar dažādiem skaitļiem un funkcija veiks to pašu darbību ar tiem abiem.
 
 ### Vairāki argumenti
 
-Funkcijas var saņemt vairākus argumentus, tos atdalot ar semikoliem gan definīcijā, gan izsaucot funkciju
+Funkcijas var saņemt vairākus argumentus, tos atdalot ar semikoliem gan definīcijā, gan izsaucot funkciju.
 
 ```priede
 funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
@@ -49,7 +49,7 @@ piesk_un_reiz(2;3)
 
 ## Vērtību atgriešana
 
-Līdz šim mēs tikai printējām vērtības no funkcijas, lai gan bieži vien mēs vēlētos saņemt vērtības atpakaļ
+Līdz šim mēs tikai printējām vērtības no funkcijas, lai gan, bieži vien, mēs vēlētos saņemt vērtības atpakaļ.
 
 ```priede
 funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {

@@ -6,7 +6,7 @@ sidebar_position: 7
 
 Funkcijas Priedē var definēt lietotājs, bet daļa funkciju jau ir iekļautas Priedē.
 
-`izvade()` funcija jau parādījās iepriekš, bet ir vēl vairākas citas iebūvētās funkcijas
+`izvade()` funcija jau parādījās iepriekš dokumentācijā, bet ir vēl vairākas citas iebūvētās funkcijas.
 
 ## Izvade bez jaunas rindiņas
 
@@ -21,6 +21,7 @@ teksts vards : ievade()
 ```
 
 Ievades funkcija vienmēr atgriezīs tekstu, pat ja ievadītie dati šķietami ir skaitlis.
+
 ```priede
 izvade("Kāds ir tavs vecums?")
 
@@ -35,7 +36,7 @@ Ievades funkcijas nedarbojās online redaktorā.
 
 ## Nejaušs skaitlis
 
-Funkcijas atgriež nejaušu 8 bitu skaitli noteiktās robežās
+Funkcija `jukums()` atgriež nejaušu skaitli noteiktās robežās.
 
 ```priede
 sk skaitlis : jukums(0;10)

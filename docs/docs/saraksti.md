@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Saraksti
 
-Reizēm nepieciešams uzglabāt vairākas vērtības, kas ir ar vienādu nozīmi.
+Reizēm nepieciešams uzglabāt vairākas vērtības ar vienādu nozīmi.
 
 ```priede
 tk auglis1 : "ābols"
@@ -15,7 +15,7 @@ tk auglis4 : "apelsīns"
 
 Šis piemērs nebūtu vēlams, jo, pirmkārt, jāraksta daudz teksta, otrkārt, nevar vienkārši pievienot vai noņemt vērtības.
 
-Tā vietā var izmantot sarakstus
+Tā vietā var izmantot sarakstus.
 
 ## Sarakstu definēšana
 

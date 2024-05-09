@@ -14,9 +14,9 @@ ja 2+2 = 4 {
 }
 ```
 
-Pēc vārda `ja` seko izteiksme, kas nosaka vai sazarojums tiks izpildīts. Pēc tam, kvadrātiekavās seko kods, kas tiks izpildīts gadījumā ja izteiksme izrādīsies patiesa
+Pēc vārda `ja` seko izteiksme, kas nosaka vai sazarojums tiks izpildīts. Pēc tam, kvadrātiekavās seko kods, kas tiks izpildīts gadījumā, ja izteiksme izrādīsies patiesa.
 
-Izteiksme var būt vai nebūt apaļajās iekavās
+Izteiksme var būt, vai nebūt apaļajās iekavās.
 
 ```priede
 ja 2 = 2 {
