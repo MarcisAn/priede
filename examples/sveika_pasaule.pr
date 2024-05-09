@@ -1,3 +1,9 @@
 {vārds; vecums} : STUMBRS("E:/Dev/priede/examples/testdata.st")
 
+sk ee : 9
+izvade(ee)
+ee --
+izvade(ee)
+
+
 izvade(vecums[0] + 2 )

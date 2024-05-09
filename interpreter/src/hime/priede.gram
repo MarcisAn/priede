@@ -74,7 +74,7 @@ grammar priede
         asignable_exp -> exp_plusmin^ | STRING^;
         assign_op -> ':'^ | '+:'^ | '-:'^ | '*:'^ | '/:'^;
         id_asign -> ID assign_op asignable_exp
-                    |   ID '++' ;
+                    |   ID '++' | ID '--' ;
 
         func_name -> ID^;
 

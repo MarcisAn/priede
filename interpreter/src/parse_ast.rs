@@ -278,6 +278,11 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
             block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
             block.binop(BINOP::ADD);
         }
+        else if operator == "--" {
+            block.load_variable(var_name);
+            block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
+            block.binop(BINOP::SUBTRACT);
+        }
         block.assign_variable(var_name);
     } else if title == "NUMBER" {
         let number_as_str = &node.get_value().unwrap();

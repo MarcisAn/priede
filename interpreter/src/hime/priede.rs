@@ -164,102 +164,106 @@ pub const TERMINALS: &[Symbol] = &[
     },
     Symbol {
         id: 0x0056,
-        name: "("
+        name: "--"
     },
     Symbol {
         id: 0x0057,
-        name: ")"
+        name: "("
     },
     Symbol {
         id: 0x0058,
+        name: ")"
+    },
+    Symbol {
+        id: 0x0059,
         name: "()"
     },
     Symbol {
-        id: 0x005A,
+        id: 0x005B,
         name: "."
     },
     Symbol {
-        id: 0x005B,
+        id: 0x005C,
         name: "="
     },
     Symbol {
-        id: 0x005C,
+        id: 0x005D,
         name: ">"
     },
     Symbol {
-        id: 0x005D,
+        id: 0x005E,
         name: ">="
     },
     Symbol {
-        id: 0x005E,
+        id: 0x005F,
         name: "<"
     },
     Symbol {
-        id: 0x005F,
+        id: 0x0060,
         name: "<="
     },
     Symbol {
-        id: 0x0060,
+        id: 0x0061,
         name: "!="
     },
     Symbol {
-        id: 0x0061,
+        id: 0x0062,
         name: "ja"
     },
     Symbol {
-        id: 0x0062,
+        id: 0x0063,
         name: "{"
     },
     Symbol {
-        id: 0x0063,
+        id: 0x0064,
         name: "}"
     },
     Symbol {
-        id: 0x0064,
+        id: 0x0065,
         name: "atkārtot"
     },
     Symbol {
-        id: 0x0065,
+        id: 0x0066,
         name: "kamēr"
     },
     Symbol {
-        id: 0x0067,
+        id: 0x0068,
         name: "funkc"
     },
     Symbol {
-        id: 0x0068,
+        id: 0x0069,
         name: "*"
     },
     Symbol {
-        id: 0x0069,
+        id: 0x006A,
         name: "/"
     },
     Symbol {
-        id: 0x006A,
+        id: 0x006B,
         name: "%"
     },
     Symbol {
-        id: 0x006B,
+        id: 0x006C,
         name: "+"
     },
     Symbol {
-        id: 0x006C,
+        id: 0x006D,
         name: "-"
     },
     Symbol {
-        id: 0x006D,
+        id: 0x006E,
         name: "xvai"
     },
     Symbol {
-        id: 0x006E,
+        id: 0x006F,
         name: "vai"
     },
     Symbol {
-        id: 0x0070,
+        id: 0x0071,
         name: "un"
     },
     Symbol {
-        id: 0x0072,
+        id: 0x0073,
         name: "iekļaut"
     }
 ];
@@ -587,24 +591,20 @@ pub const VARIABLES: &[Symbol] = &[
         name: "__V80"
     },
     Symbol {
-        id: 0x0059,
-        name: "__V89"
+        id: 0x005A,
+        name: "__V90"
     },
     Symbol {
-        id: 0x0066,
-        name: "__V102"
+        id: 0x0067,
+        name: "__V103"
     },
     Symbol {
-        id: 0x006F,
-        name: "__V111"
+        id: 0x0070,
+        name: "__V112"
     },
     Symbol {
-        id: 0x0071,
-        name: "__V113"
-    },
-    Symbol {
-        id: 0x0073,
-        name: "__V115"
+        id: 0x0072,
+        name: "__V114"
     },
     Symbol {
         id: 0x0074,
@@ -612,6 +612,10 @@ pub const VARIABLES: &[Symbol] = &[
     },
     Symbol {
         id: 0x0075,
+        name: "__V117"
+    },
+    Symbol {
+        id: 0x0076,
         name: "__VAxiom"
     }
 ];
