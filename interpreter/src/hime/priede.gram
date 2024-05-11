@@ -73,7 +73,7 @@ grammar priede
 
         asignable_exp -> exp^;
         assign_op -> ':'^ | '+:'^ | '-:'^ | '*:'^ | '/:'^;
-        id_asign -> ID assign_op asignable_exp
+        id_assign -> ID assign_op asignable_exp
                     |   ID '++' | ID '--' ;
 
         func_name -> ID^;
@@ -168,7 +168,7 @@ grammar priede
 
         multiple_id_define -> '{'! multiple_ids '}'! ':'! exp;
 
-        stat -> var_def^ | multiple_id_define^ | func_call^ | dot_call^ | if^ | id_asign^ | s_loop^ | w_loop^ | func_def^ | import^ | return_st^;
+        stat -> var_def^ | multiple_id_define^ | func_call^ | dot_call^ | if^ | id_assign^ | s_loop^ | w_loop^ | func_def^ | import^ | return_st^;
         block -> stat*;
         root ->  block^;
     }

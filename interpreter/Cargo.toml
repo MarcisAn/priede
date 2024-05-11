@@ -15,3 +15,5 @@ celsium = {path= "../../celsium"}
 stumbrs = {path = "../stumbrs"}
 wasm-bindgen = "0.2.92"
 console_error_panic_hook = "0.1.7"
+annotate-snippets = "0.11.2"
+anstream = "0.6.14"

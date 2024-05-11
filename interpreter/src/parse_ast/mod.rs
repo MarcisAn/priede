@@ -1,18 +1,20 @@
 use core::panic;
-
-use super::get_stumbrs_data;
-use crate::ast::*;
+mod stumbrs;
+mod math_ops;
+mod id_assign;
+use id_assign::id_assign;
 use celsium::{
     block::Block,
     bytecode::BINOP,
-    module::{FuncArg, FunctionSignature, Module, VISIBILITY},
+    module::{FuncArg, FunctionSignature, VISIBILITY},
     BUILTIN_TYPES,compile_time_checker::CompileTimeChecker
 };
 use hime_redist::{
-    ast::{Ast, AstNode},
+    ast::AstNode,
     symbols::SemanticElementTrait,
 };
 use stumbrs::*;
+
 
 fn rem_first_and_last(value: &str) -> &str {
     let mut chars = value.chars();
@@ -44,80 +46,14 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool, typestack: &mu
             block.call_function(func_name);
         }
     } else if title == "multiple_id_define" {
-        if node.child(1).child(0).get_value().unwrap() != "STUMBRS" {
-            panic!("Šeit var izmantot tikai 'STUMBRS' funkciju.");
-        }
-        let path = node
-            .child(1)
-            .child(1)
-            .child(0)
-            .get_value()
-            .unwrap()
-            .to_owned();
-        let mut chars = path.chars();
-        chars.next();
-        chars.next_back();
-        let data = match is_wasm {
-            false => stumbrs::load_stumbrs_data_file(chars.as_str().to_string()),
-            true => stumbrs::load_stumbrs_data(get_stumbrs_data()),
-        };
-        let mut counter = 0;
-        for unit in data.units {
-            if unit.data_type.as_str() == "[]" {
-                let values: Vec<StumbrsArrayValue>;
-                match unit.value {
-                    StumbrsValue::Array { value } => values =  value,
-                    StumbrsValue::SimpleValue { value:_ } => panic!(),
-                }
-                for val in &values{
-                    
-                    block.load_const(match val.data_type {
-                        StumbrsArrayDataTypes::MAGIC_INT => BUILTIN_TYPES::MAGIC_INT,
-                        StumbrsArrayDataTypes::BOOL => BUILTIN_TYPES::BOOL,
-                        StumbrsArrayDataTypes::STRING => BUILTIN_TYPES::STRING,
-                        StumbrsArrayDataTypes::OBJECT => BUILTIN_TYPES::OBJECT,
-                        StumbrsArrayDataTypes::FLOAT => BUILTIN_TYPES::FLOAT,
-                    }, &val.value);
-                }
-                block.define_array(
-                    VISIBILITY::PRIVATE,
-                    node.child(0)
-                        .child(counter)
-                        .get_value()
-                        .unwrap()
-                        .to_string(),
-                    values.len(),
-                )
-            } else {
-                let data_type = match unit.data_type.as_str() {
-                    "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                    "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-                    "TEXT" => celsium::BUILTIN_TYPES::STRING,
-                    _ => panic!(),
-                };
-                if unit.data_type.as_str() == "TEXT" {
-                    block.load_const(data_type.clone(), rem_first_and_last(match &unit.value {
-                        StumbrsValue::SimpleValue { value } => &value,
-                        StumbrsValue::Array { value } => panic!(),
-                    } ));
-                } else {
-                    block.load_const(data_type.clone(), match &unit.value {
-                        StumbrsValue::SimpleValue { value } => &value,
-                        StumbrsValue::Array { value } => panic!(),
-                    } );
-                }
-                block.define_variable(
-                    data_type,
-                    VISIBILITY::PRIVATE,
-                    node.child(0).child(counter).get_value().unwrap(),
-                );
-            }
 
-            counter += 1;
-        }
+        stumbrs_define(node, block, typestack, is_wasm);
+
     } else if title == "return_st" {
+
         parse_ast(node.child(1), block, is_wasm, typestack);
         block.return_from_function();
+
     } else if title == "var_def" {
         println!("{}", node.child(0).get_symbol().to_string());
         if node.child(0).get_symbol().to_string() == "ARRAY" {
@@ -181,28 +117,15 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool, typestack: &mu
         block.load_from_array(node.child(0).get_value().unwrap());
     } else if title.starts_with("ID") {
         block.load_variable(node.get_value().unwrap());
-    } else if title == "plus" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        let res = typestack.binop(BINOP::ADD);
-        println!("{:?}", res);
-        block.binop(BINOP::ADD);
-    } else if title == "minus" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::SUBTRACT);
-    } else if title == "reiz" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::MULTIPLY);
-    } else if title == "dal" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::DIVIDE);
-    } else if title == "atlik" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::REMAINDER);
+    } else if title == "plus" || title == "minus" || title == "reiz" || title == "dal" || title == "atlik" {
+        math_ops::math_ops(match title.as_str() {
+            "plus" => BINOP::ADD,
+            "minus" => BINOP::SUBTRACT,
+            "reiz" => BINOP::MULTIPLY,
+            "dal" => BINOP::DIVIDE,
+            "atlik" => BINOP::REMAINDER,
+            _ => panic!()
+        }, node, block, typestack, is_wasm);
     } else if title == "if" {
         parse_ast(node.child(0), block, is_wasm, typestack);
         let mut if_block = Block::new();
@@ -256,39 +179,10 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool, typestack: &mu
         parse_ast(node.child(0), &mut conditional_block, is_wasm, typestack);
         parse_ast(node.child(1), &mut loop_block, is_wasm, typestack);
         block.define_while_loop(loop_block, conditional_block);
-    } else if title == "id_asign" {
-        let operator = node.child(1).get_value().unwrap();
-        let var_name = node.child(0).get_value().unwrap();
-        if operator == ":" {
-            parse_ast(node.child(2), block, is_wasm, typestack);
-        } else if operator == "+:" {
-            block.load_variable(var_name);
-            parse_ast(node.child(2), block, is_wasm, typestack);
-            typestack.binop(BINOP::ADD);
-            block.binop(BINOP::ADD);
-        } else if operator == "-:" {
-            block.load_variable(var_name);
-            parse_ast(node.child(2), block, is_wasm, typestack);
-            block.binop(BINOP::SUBTRACT);
-        } else if operator == "*:" {
-            block.load_variable(var_name);
-            parse_ast(node.child(2), block, is_wasm, typestack);
-            block.binop(BINOP::MULTIPLY);
-        } else if operator == "/:" {
-            block.load_variable(var_name);
-            parse_ast(node.child(2), block, is_wasm, typestack);
-            block.binop(BINOP::DIVIDE);
-        } else if operator == "++" {
-            block.load_variable(var_name);
-            block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
-            typestack.binop(BINOP::ADD);
-            block.binop(BINOP::ADD);
-        } else if operator == "--" {
-            block.load_variable(var_name);
-            block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
-            block.binop(BINOP::SUBTRACT);
-        }
-        block.assign_variable(var_name);
+    } else if title == "id_assign" {
+
+        id_assign(node, block, typestack, is_wasm);
+
     } else if title == "NUMBER" {
         let number_as_str = &node.get_value().unwrap();
         if number_as_str.contains(",") {
