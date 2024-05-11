@@ -69,9 +69,9 @@ grammar priede
         array_def_value -> var_def_value
                 |var_def_value (';'! var_def_value)*;
 
-        var_def_value -> exp_plusmin^ | STRING^ ;
+        var_def_value -> exp^ ;
 
-        asignable_exp -> exp_plusmin^ | STRING^;
+        asignable_exp -> exp^;
         assign_op -> ':'^ | '+:'^ | '-:'^ | '*:'^ | '/:'^;
         id_asign -> ID assign_op asignable_exp
                     |   ID '++' | ID '--' ;
@@ -122,6 +122,7 @@ grammar priede
         return_st -> RETURN  exp;
 
         exp_atom -> NUMBER^
+                   | STRING^
                    | '('! exp^ ')'! 
                    |  ID^
                    |  func_call^
@@ -147,11 +148,9 @@ grammar priede
         minus -> exp_plusmin '-'! exp_reizdal;
 
         exp_t ->      
-                exp_plusmin^ |
-                STRING^  |
-                string_plus^;
+                exp_plusmin^;
 
-        string_plus -> STRING '+'! STRING;
+
 
         exp_a -> exp_t^|comp_s^;
 

@@ -6,7 +6,7 @@ use celsium::{
     block::Block,
     bytecode::BINOP,
     module::{FuncArg, FunctionSignature, Module, VISIBILITY},
-    BUILTIN_TYPES,
+    BUILTIN_TYPES,compile_time_checker::CompileTimeChecker
 };
 use hime_redist::{
     ast::{Ast, AstNode},
@@ -21,12 +21,12 @@ fn rem_first_and_last(value: &str) -> &str {
     chars.as_str()
 }
 
-pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
+pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool, typestack: &mut CompileTimeChecker) {
     let title = node.get_symbol().to_string();
     if title == "func_call" {
         if node.children_count() > 1 {
             for arg in node.child(1) {
-                parse_ast(arg, block, is_wasm);
+                parse_ast(arg, block, is_wasm, typestack);
             }
         }
         let func_name = node.child(0).get_value().unwrap();
@@ -37,8 +37,8 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
         } else if func_name == "ievade" {
             block.call_special_function(celsium::SpecialFunctions::INPUT);
         } else if func_name == "jukums" {
-            parse_ast(node.child(1).child(0), block, is_wasm);
-            parse_ast(node.child(1).child(1), block, is_wasm);
+            parse_ast(node.child(1).child(0), block, is_wasm, typestack);
+            parse_ast(node.child(1).child(1), block, is_wasm, typestack);
             block.call_special_function(celsium::SpecialFunctions::RANDOM);
         } else {
             block.call_function(func_name);
@@ -116,13 +116,13 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
             counter += 1;
         }
     } else if title == "return_st" {
-        parse_ast(node.child(1), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm, typestack);
         block.return_from_function();
     } else if title == "var_def" {
         println!("{}", node.child(0).get_symbol().to_string());
         if node.child(0).get_symbol().to_string() == "ARRAY" {
             for i in node.child(2).children() {
-                parse_ast(i, block, is_wasm);
+                parse_ast(i, block, is_wasm, typestack);
             }
             block.define_array(
                 celsium::module::VISIBILITY::PRIVATE,
@@ -130,7 +130,9 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
                 node.child(2).children().len(),
             )
         } else {
-            parse_ast(node.child(2), block, is_wasm);
+            parse_ast(node.child(2), block, is_wasm, typestack);
+            let typ_of_init_value = typestack.pop();
+            println!("{:?}", typ_of_init_value);
             block.define_variable(
                 match node.child(0).to_string().as_str() {
                     "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
@@ -149,7 +151,7 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
 
         if node.children_count() > 2 {
             //when the function takes arguments
-            parse_ast(node.child(2), &mut body, is_wasm);
+            parse_ast(node.child(2), &mut body, is_wasm, typestack);
             for arg in node.child(1).children() {
                 args.push(FuncArg {
                     name: arg.child(1).get_value().unwrap().to_string(),
@@ -162,7 +164,7 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
                 })
             }
         } else {
-            parse_ast(node.child(1), &mut body, is_wasm);
+            parse_ast(node.child(1), &mut body, is_wasm, typestack);
         }
 
         block.define_function(
@@ -175,45 +177,47 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
             },
         )
     } else if title == "array" {
-        parse_ast(node.child(1), block, is_wasm);
+        parse_ast(node.child(1), block, is_wasm, typestack);
         block.load_from_array(node.child(0).get_value().unwrap());
     } else if title.starts_with("ID") {
         block.load_variable(node.get_value().unwrap());
-    } else if title == "plus" || title == "string_plus" {
-        parse_ast(node.child(0), block, is_wasm);
-        parse_ast(node.child(1), block, is_wasm);
+    } else if title == "plus" {
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        parse_ast(node.child(1), block, is_wasm, typestack);
+        let res = typestack.binop(BINOP::ADD);
+        println!("{:?}", res);
         block.binop(BINOP::ADD);
     } else if title == "minus" {
-        parse_ast(node.child(0), block, is_wasm);
-        parse_ast(node.child(1), block, is_wasm);
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        parse_ast(node.child(1), block, is_wasm, typestack);
         block.binop(BINOP::SUBTRACT);
     } else if title == "reiz" {
-        parse_ast(node.child(0), block, is_wasm);
-        parse_ast(node.child(1), block, is_wasm);
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        parse_ast(node.child(1), block, is_wasm, typestack);
         block.binop(BINOP::MULTIPLY);
     } else if title == "dal" {
-        parse_ast(node.child(0), block, is_wasm);
-        parse_ast(node.child(1), block, is_wasm);
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        parse_ast(node.child(1), block, is_wasm, typestack);
         block.binop(BINOP::DIVIDE);
     } else if title == "atlik" {
-        parse_ast(node.child(0), block, is_wasm);
-        parse_ast(node.child(1), block, is_wasm);
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        parse_ast(node.child(1), block, is_wasm, typestack);
         block.binop(BINOP::REMAINDER);
     } else if title == "if" {
-        parse_ast(node.child(0), block, is_wasm);
+        parse_ast(node.child(0), block, is_wasm, typestack);
         let mut if_block = Block::new();
-        parse_ast(node.child(1), &mut if_block, is_wasm);
+        parse_ast(node.child(1), &mut if_block, is_wasm, typestack);
         if node.children_count() > 2 {
             let mut else_block = Block::new();
-            parse_ast(node.child(3), &mut else_block, is_wasm);
+            parse_ast(node.child(3), &mut else_block, is_wasm, typestack);
             block.define_if_else_block(if_block, else_block)
         } else {
             block.define_if_block(if_block);
         }
     } else if title == "comp_s" {
         let sign = node.child(1).get_value().unwrap();
-        parse_ast(node.child(0), block, is_wasm);
-        parse_ast(node.child(2), block, is_wasm);
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        parse_ast(node.child(2), block, is_wasm, typestack);
         match sign {
             "=" => block.binop(BINOP::EQ),
             ">" => block.binop(BINOP::LargerThan),
@@ -224,61 +228,62 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         }
     } else if title == "un" {
-        parse_ast(node.child(0), block, is_wasm);
-        parse_ast(node.child(1), block, is_wasm);
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        parse_ast(node.child(1), block, is_wasm, typestack);
         block.binop(BINOP::AND);
     } else if title == "vai" {
-        parse_ast(node.child(0), block, is_wasm);
-        parse_ast(node.child(1), block, is_wasm);
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        parse_ast(node.child(1), block, is_wasm, typestack);
         block.binop(BINOP::OR);
     } else if title == "xvai" {
-        parse_ast(node.child(0), block, is_wasm);
-        parse_ast(node.child(1), block, is_wasm);
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        parse_ast(node.child(1), block, is_wasm, typestack);
         block.binop(BINOP::XOR);
     } else if title == "block" {
         for i in node.children() {
-            parse_ast(i, block, is_wasm);
+            parse_ast(i, block, is_wasm, typestack);
         }
     } else if title == "s_loop" {
         let mut loop_block = Block::new();
         let mut loop_count_block = Block::new();
 
-        parse_ast(node.child(1), &mut loop_block, is_wasm);
-        parse_ast(node.child(0), &mut loop_count_block, is_wasm);
+        parse_ast(node.child(1), &mut loop_block, is_wasm, typestack);
+        parse_ast(node.child(0), &mut loop_count_block, is_wasm, typestack);
         block.define_simple_loop(loop_block, loop_count_block);
     } else if title == "w_loop" {
         let mut loop_block = Block::new();
         let mut conditional_block = Block::new();
-        parse_ast(node.child(0), &mut conditional_block, is_wasm);
-        parse_ast(node.child(1), &mut loop_block, is_wasm);
+        parse_ast(node.child(0), &mut conditional_block, is_wasm, typestack);
+        parse_ast(node.child(1), &mut loop_block, is_wasm, typestack);
         block.define_while_loop(loop_block, conditional_block);
     } else if title == "id_asign" {
         let operator = node.child(1).get_value().unwrap();
         let var_name = node.child(0).get_value().unwrap();
         if operator == ":" {
-            parse_ast(node.child(2), block, is_wasm);
+            parse_ast(node.child(2), block, is_wasm, typestack);
         } else if operator == "+:" {
             block.load_variable(var_name);
-            parse_ast(node.child(2), block, is_wasm);
+            parse_ast(node.child(2), block, is_wasm, typestack);
+            typestack.binop(BINOP::ADD);
             block.binop(BINOP::ADD);
         } else if operator == "-:" {
             block.load_variable(var_name);
-            parse_ast(node.child(2), block, is_wasm);
+            parse_ast(node.child(2), block, is_wasm, typestack);
             block.binop(BINOP::SUBTRACT);
         } else if operator == "*:" {
             block.load_variable(var_name);
-            parse_ast(node.child(2), block, is_wasm);
+            parse_ast(node.child(2), block, is_wasm, typestack);
             block.binop(BINOP::MULTIPLY);
         } else if operator == "/:" {
             block.load_variable(var_name);
-            parse_ast(node.child(2), block, is_wasm);
+            parse_ast(node.child(2), block, is_wasm, typestack);
             block.binop(BINOP::DIVIDE);
         } else if operator == "++" {
             block.load_variable(var_name);
             block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
+            typestack.binop(BINOP::ADD);
             block.binop(BINOP::ADD);
-        }
-        else if operator == "--" {
+        } else if operator == "--" {
             block.load_variable(var_name);
             block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
             block.binop(BINOP::SUBTRACT);
@@ -291,13 +296,16 @@ pub fn parse_ast(node: AstNode, block: &mut Block, is_wasm: bool) {
                 celsium::BUILTIN_TYPES::FLOAT,
                 &number_as_str.replace(",", "."),
             );
+            typestack.push(BUILTIN_TYPES::FLOAT);
         } else {
             block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, &number_as_str);
+            typestack.push(BUILTIN_TYPES::MAGIC_INT);
         }
     } else if title == "STRING" {
         block.load_const(
             celsium::BUILTIN_TYPES::STRING,
             rem_first_and_last(node.get_value().unwrap()),
         );
+        typestack.push(BUILTIN_TYPES::STRING)
     }
 }

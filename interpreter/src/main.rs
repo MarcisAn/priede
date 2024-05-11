@@ -1,6 +1,7 @@
 use block::Block;
 use celsium::block;
 use celsium::module;
+use celsium::compile_time_checker::CompileTimeChecker;
 use celsium::CelsiumProgram;
 use module::Module;
 use std::panic;
@@ -46,7 +47,7 @@ pub fn interpret(path: String, verbose: u8) {
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new();
 
-    parse_ast::parse_ast(root, &mut main_block, false);
+    parse_ast::parse_ast(root, &mut main_block, false, &mut CompileTimeChecker::new());
 
     if verbose >= 1 {
         util::print_ast(root);
@@ -71,7 +72,7 @@ pub fn run_wasm(code: String) {
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new();
-    parse_ast::parse_ast(root, &mut main_block, true);
+    parse_ast::parse_ast(root, &mut main_block, true, &mut CompileTimeChecker::new());
     main_module.add_main_block(main_block.clone());
     celsium.add_module(&main_module);
 
@@ -110,7 +111,7 @@ mod tests {
             let mut celsium = CelsiumProgram::new();
             let mut main_module = Module::new("main", &mut celsium);
             let mut main_block = Block::new();
-            parse_ast::parse_ast(root.child(0), &mut main_block, false);
+            parse_ast::parse_ast(root.child(0), &mut main_block, false, &mut CompileTimeChecker::new());
             main_module.add_main_block(main_block);
             celsium.add_module(&main_module);
 
