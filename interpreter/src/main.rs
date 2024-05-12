@@ -5,23 +5,16 @@ use celsium::module;
 use celsium::CelsiumProgram;
 use errors::parser_error;
 use hime_redist::errors::ParseErrorDataTrait;
-use hime_redist::errors::ParseErrorUnexpectedToken;
 use module::Module;
-use std::any::Any;
-use std::error::Error;
-use std::fmt;
-use std::fmt::Debug;
 use std::panic;
 use std::process::exit;
 use std::{fs, process};
 use wasm_bindgen::prelude::*;
 extern crate stumbrs;
-use stumbrs::load_stumbrs_data;
-mod errors;
+pub mod errors;
 
 fn main() {}
 
-mod ast;
 mod hime;
 mod parse_ast;
 mod util;
@@ -62,25 +55,35 @@ pub fn interpret(path: String, verbose: u8) {
             hime_redist::errors::ParseError::IncorrectUTF16NoHighSurrogate(_) => todo!(),
         };
         let mut err_str = err.to_string();
-        let expected_start = err.to_string().find("; expected").unwrap() ;
+        let expected_start = err.to_string().find("; expected").unwrap();
         let _ = err_str.split_off(expected_start);
         let unexpected_token = rem_first_and_last(&err_str.split_off(17)).to_string();
-        parser_error(unexpected_token, &file_content, &path, err.get_position().line, err.get_position().column);
+        parser_error(
+            unexpected_token,
+            &file_content,
+            &path,
+            err.get_position().line,
+            err.get_position().column,
+        );
     }
     if parse_res.errors.errors.len() > 0 {
         exit(0);
     }
     let ast = parse_res.get_ast();
     let root = ast.get_root();
+    util::print_ast(root);
 
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new();
 
-    parse_ast::parse_ast(root, &mut main_block, false, &mut CompileTimeChecker::new());
-
+    parse_ast::parse_ast(
+        root,
+        &mut main_block,
+        false,
+        &mut CompileTimeChecker::new(file_content, path),
+    );
     if verbose >= 1 {
-        util::print_ast(root);
         let mut i = 0;
         while i < main_block.bytecode.len() {
             println!("{} {:?}", i, main_block.bytecode[i]);
@@ -94,7 +97,7 @@ pub fn interpret(path: String, verbose: u8) {
 }
 
 pub fn run_wasm(code: String) {
-    let parse_res = hime::priede::parse_string(code);
+    let parse_res = hime::priede::parse_string(code.clone());
     println!("{:?}", parse_res.errors.errors);
     let ast = parse_res.get_ast();
     let root = ast.get_root();
@@ -102,7 +105,12 @@ pub fn run_wasm(code: String) {
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new();
-    parse_ast::parse_ast(root, &mut main_block, true, &mut CompileTimeChecker::new());
+    parse_ast::parse_ast(
+        root,
+        &mut main_block,
+        true,
+        &mut CompileTimeChecker::new(code, "".to_owned()),
+    );
     main_module.add_main_block(main_block.clone());
     celsium.add_module(&main_module);
 
@@ -119,38 +127,4 @@ fn read_file(path: String) -> String {
         process::exit(1);
     }
     file_read.unwrap()
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let input = "
-        teksts a : \"Sveika, pasaule!\" \
-        \
-        izvade(a)";
-
-        let parse_res = hime::priede::parse_string(input.to_owned());
-        println!("{:?}", parse_res.errors.errors);
-        let ast = parse_res.get_ast();
-        let root = ast.get_root();
-
-        let result = panic::catch_unwind(|| {
-            let mut celsium = CelsiumProgram::new();
-            let mut main_module = Module::new("main", &mut celsium);
-            let mut main_block = Block::new();
-            parse_ast::parse_ast(
-                root.child(0),
-                &mut main_block,
-                false,
-                &mut CompileTimeChecker::new(),
-            );
-            main_module.add_main_block(main_block);
-            celsium.add_module(&main_module);
-
-            celsium.run_program();
-        });
-    }
 }
