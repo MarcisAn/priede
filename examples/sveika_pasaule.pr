@@ -1,3 +1,7 @@
-decim a : 3,2
 
-izvade(a)
+
+
+
+sk r : 2
+
+izvade(r + PAT)

@@ -1,5 +1,5 @@
 use core::panic;
-use std::process::exit;
+use std::{error, process::exit};
 mod id_assign;
 mod math_ops;
 mod stumbrs;
@@ -14,7 +14,7 @@ use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 use id_assign::id_assign;
 use stumbrs::*;
 
-use crate::errors::{incorect_init_value, math_error};
+use crate::errors::{self, incorect_init_value, math_error};
 
 fn rem_first_and_last(value: &str) -> &str {
     let mut chars = value.chars();
@@ -102,6 +102,7 @@ pub fn parse_ast(
                 );
                 exit(0);
             }
+            typestack.def_var(node.child(1).get_value().unwrap().to_string(), data_type_marked.clone());
             block.define_variable(
                 data_type_marked,
                 celsium::module::VISIBILITY::PRIVATE,
@@ -144,6 +145,15 @@ pub fn parse_ast(
         parse_ast(node.child(1), block, is_wasm, typestack);
         block.load_from_array(node.child(0).get_value().unwrap());
     } else if title.starts_with("ID") {
+        let type_if_exists = typestack.check_var(node.get_value().unwrap().to_string());
+        if type_if_exists.is_none(){
+            errors::undefined_var(format!("Mainīgais ar nosaukumu '{}' nav definēts", node.get_value().unwrap()), &typestack.source_files[typestack.current_file],
+                &typestack.source_file_paths[typestack.current_file], node.get_position().unwrap().line, node.get_position().unwrap().column);
+            exit(0);
+        }
+        else{
+            typestack.push(type_if_exists.unwrap());
+        }
         block.load_variable(node.get_value().unwrap());
     } else if title == "plus"
         || title == "minus"

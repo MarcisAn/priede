@@ -24,8 +24,13 @@ pub fn parser_error(unexpected: String, source: &str, path: &str, line: usize, c
 }
 pub fn math_error(msg: &str, source: &str, path: &str, line: usize, col: usize) {
     let error_title = &format!("{}", msg);
+    println!("Kļūda! {}\nrindiņā {}\nfailā {}", error_title, line, path);
+    
+    /* 
+    let correct_line_endings = source.replace("\r\n", "\n");
+
     let message = Level::Error.title(&error_title).snippet(
-        Snippet::source(&source)
+        Snippet::source(&correct_line_endings)
             .line_start(line)
             .origin(path)
             .fold(true)
@@ -36,12 +41,15 @@ pub fn math_error(msg: &str, source: &str, path: &str, line: usize, col: usize) 
     );
 
     let renderer = Renderer::styled();
-    anstream::println!("{}", renderer.render(message));
+    anstream::println!("{}", renderer.render(message));*/
 }
 pub fn incorect_init_value(msg: String, source: &str, path: &str, line: usize, col: usize) {
     let error_title = &format!("{}", msg);
+    println!("Kļūda! {}\nrindiņā {}\nfailā {}", error_title, line, path);
+    /* 
+    let correct_line_endings = source.replace("\r\n", "\r\n");
     let message = Level::Error.title(&error_title).snippet(
-        Snippet::source(&source)
+        Snippet::source(&correct_line_endings)
             .line_start(line)
             .origin(path)
             .fold(true)
@@ -52,5 +60,23 @@ pub fn incorect_init_value(msg: String, source: &str, path: &str, line: usize, c
     );
 
     let renderer = Renderer::styled();
-    anstream::println!("{}", renderer.render(message));
+    anstream::println!("{}", renderer.render(message));*/
+}
+pub fn undefined_var(msg: String, source: &str, path: &str, line: usize, col: usize) {
+    let error_title = &format!("{}", msg);
+    println!("Kļūda! {}\n{}. rindiņā \nfailā {}", error_title, line, path);/* 
+    let correct_line_endings = source.replace("\r\n", "\r");
+    let message = Level::Error.title(&error_title).snippet(
+        Snippet::source(&correct_line_endings)
+            .line_start(line)
+            .origin(path)
+            .fold(true)
+            .annotation(
+                Level::Error
+                    .span(col-1..col)
+            )
+    );
+
+    let renderer = Renderer::styled();
+    anstream::println!("{}", renderer.render(message));*/
 }
