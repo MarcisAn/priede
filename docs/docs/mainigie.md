@@ -13,6 +13,7 @@ Mainīgajos var uzglabāt dažāda veida informāciju: skaitļus, tekstu un būl
 - `skaitlis` vai `sk` - skaitliska vērtība
 - `teksts` vai `tk` - teksta vērtība
 - `būls` vai `bl` - būla vērtība
+- `decim` - decimālskaitļa vērtība
 
 ```priede
 skaitlis a : 2

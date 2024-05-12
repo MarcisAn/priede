@@ -52,9 +52,10 @@ grammar priede
         BOOL_DEF -> 'būls'! | 'bl'!;
         TEXT -> 'teksts'! | 'tk'!;
         NUM -> 'sk'! | 'skaitlis'!;
+        FLOAT -> 'decim'!;
         
 
-        TYPE -> BOOL_DEF^ | TEXT^ |  NUM^;
+        TYPE -> BOOL_DEF^ | TEXT^ |  NUM^ | FLOAT^;
 
         TRUE -> 'PAT'! | 'PATIESS'!;
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;

@@ -71,7 +71,7 @@ pub fn parse_ast(
                 "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
                 "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
                 "TEXT" => celsium::BUILTIN_TYPES::STRING,
-
+                "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
                 _ => panic!(),
             };
             //parse the init value
@@ -80,10 +80,12 @@ pub fn parse_ast(
             let typ_of_init_value = typestack.pop();
             if typ_of_init_value.clone().unwrap() != data_type_marked {
                 incorect_init_value(
-                    format!("Mainīgā datu tips ir norādīts kā `{}`, bet piešķirtā sākotnējā vērtība ir `{}`.", match node.child(0).to_string().as_str() {
+                    format!("Mainīgā datu tips ir norādīts kā `{}`, bet piešķirtā sākotnējā vērtība ir `{}`.",
+                    match node.child(0).to_string().as_str() {
                         "NUM" => "skaitlis",
                         "BOOL_DEF" => "būls",
                         "TEXT" => "tekts",
+                        "FLOAT" => "decimālskaitlis",
                         _ => panic!()
                     }, 
                     match typ_of_init_value.unwrap() {
@@ -120,6 +122,7 @@ pub fn parse_ast(
                         "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
                         "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
                         "TEXT" => celsium::BUILTIN_TYPES::MAGIC_INT,
+                        "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
                         _ => panic!(),
                     },
                 })

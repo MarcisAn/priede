@@ -1,1 +1,3 @@
-sk a : "a"
+decim a : 3,2
+
+izvade(a)

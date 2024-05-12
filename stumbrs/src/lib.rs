@@ -130,6 +130,7 @@ pub fn load_stumbrs_data_file(path: String) -> StumbrsData {
                     },
                     "STRING" => StumbrsArrayDataTypes::STRING,
                     "BOOL" => StumbrsArrayDataTypes::BOOL,
+                    "FLOAT" => StumbrsArrayDataTypes::FLOAT,
                     _ => panic!()
                 } });
                 array_index_counter += 1;

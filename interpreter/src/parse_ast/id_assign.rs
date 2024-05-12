@@ -24,10 +24,12 @@ pub fn id_assign(
             block.load_variable(var_name);
             parse_ast(node.child(2), block, is_wasm, typestack);
             block.binop(BINOP::SUBTRACT);
+            typestack.binop(BINOP::SUBTRACT);
         } else if operator == "*:" {
             block.load_variable(var_name);
             parse_ast(node.child(2), block, is_wasm, typestack);
             block.binop(BINOP::MULTIPLY);
+            typestack.binop(BINOP::MULTIPLY);
         } else if operator == "/:" {
             block.load_variable(var_name);
             parse_ast(node.child(2), block, is_wasm, typestack);

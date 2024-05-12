@@ -87,75 +87,79 @@ pub const TERMINALS: &[Symbol] = &[
         name: "RETURN"
     },
     Symbol {
-        id: 0x001E,
+        id: 0x001F,
         name: "būls"
     },
     Symbol {
-        id: 0x001F,
+        id: 0x0020,
         name: "bl"
     },
     Symbol {
-        id: 0x0020,
+        id: 0x0021,
         name: "teksts"
     },
     Symbol {
-        id: 0x0021,
+        id: 0x0022,
         name: "tk"
     },
     Symbol {
-        id: 0x0022,
+        id: 0x0023,
         name: "sk"
     },
     Symbol {
-        id: 0x0023,
+        id: 0x0024,
         name: "skaitlis"
     },
     Symbol {
-        id: 0x0024,
-        name: "PAT"
-    },
-    Symbol {
         id: 0x0025,
-        name: "PATIESS"
+        name: "decim"
     },
     Symbol {
         id: 0x0026,
-        name: "NEPAT"
+        name: "PAT"
     },
     Symbol {
         id: 0x0027,
-        name: "NEPATIESS"
+        name: "PATIESS"
     },
     Symbol {
         id: 0x0028,
-        name: ";"
+        name: "NEPAT"
+    },
+    Symbol {
+        id: 0x0029,
+        name: "NEPATIESS"
     },
     Symbol {
         id: 0x002A,
-        name: "("
-    },
-    Symbol {
-        id: 0x002B,
-        name: ")"
+        name: ";"
     },
     Symbol {
         id: 0x002C,
-        name: "[]"
+        name: "("
+    },
+    Symbol {
+        id: 0x002D,
+        name: ")"
     },
     Symbol {
         id: 0x002E,
+        name: "[]"
+    },
+    Symbol {
+        id: 0x0030,
         name: "["
     },
     Symbol {
-        id: 0x002F,
+        id: 0x0031,
         name: "]"
     },
     Symbol {
-        id: 0x0031,
+        id: 0x0033,
         name: "{"
     },
     Symbol {
-        id: 0x0032,
+        id: 0x0034,
         name: "}"
     }
 ];
@@ -178,28 +182,30 @@ pub const ID_VARIABLE_BOOL_DEF: u32 = 0x0010;
 pub const ID_VARIABLE_TEXT: u32 = 0x0011;
 /// The unique identifier for variable `NUM`
 pub const ID_VARIABLE_NUM: u32 = 0x0012;
+/// The unique identifier for variable `FLOAT`
+pub const ID_VARIABLE_FLOAT: u32 = 0x0013;
 /// The unique identifier for variable `TYPE`
-pub const ID_VARIABLE_TYPE: u32 = 0x0013;
+pub const ID_VARIABLE_TYPE: u32 = 0x0014;
 /// The unique identifier for variable `TRUE`
-pub const ID_VARIABLE_TRUE: u32 = 0x0014;
+pub const ID_VARIABLE_TRUE: u32 = 0x0015;
 /// The unique identifier for variable `FALSE`
-pub const ID_VARIABLE_FALSE: u32 = 0x0015;
+pub const ID_VARIABLE_FALSE: u32 = 0x0016;
 /// The unique identifier for variable `BOOL`
-pub const ID_VARIABLE_BOOL: u32 = 0x0016;
+pub const ID_VARIABLE_BOOL: u32 = 0x0017;
 /// The unique identifier for variable `array`
-pub const ID_VARIABLE_ARRAY: u32 = 0x0017;
+pub const ID_VARIABLE_ARRAY: u32 = 0x0018;
 /// The unique identifier for variable `exp_atom`
-pub const ID_VARIABLE_EXP_ATOM: u32 = 0x0018;
+pub const ID_VARIABLE_EXP_ATOM: u32 = 0x0019;
 /// The unique identifier for variable `SCHEM_ITEM`
-pub const ID_VARIABLE_SCHEM_ITEM: u32 = 0x0019;
+pub const ID_VARIABLE_SCHEM_ITEM: u32 = 0x001A;
 /// The unique identifier for variable `SCHEMATIC`
-pub const ID_VARIABLE_SCHEMATIC: u32 = 0x001A;
+pub const ID_VARIABLE_SCHEMATIC: u32 = 0x001B;
 /// The unique identifier for variable `VALUE`
-pub const ID_VARIABLE_VALUE: u32 = 0x001B;
+pub const ID_VARIABLE_VALUE: u32 = 0x001C;
 /// The unique identifier for variable `VALUES`
-pub const ID_VARIABLE_VALUES: u32 = 0x001C;
+pub const ID_VARIABLE_VALUES: u32 = 0x001D;
 /// The unique identifier for variable `root`
-pub const ID_VARIABLE_ROOT: u32 = 0x001D;
+pub const ID_VARIABLE_ROOT: u32 = 0x001E;
 
 
 /// The collection of variables matched by this parser
@@ -220,62 +226,66 @@ pub const VARIABLES: &[Symbol] = &[
     },
     Symbol {
         id: 0x0013,
-        name: "TYPE"
+        name: "FLOAT"
     },
     Symbol {
         id: 0x0014,
-        name: "TRUE"
+        name: "TYPE"
     },
     Symbol {
         id: 0x0015,
-        name: "FALSE"
+        name: "TRUE"
     },
     Symbol {
         id: 0x0016,
-        name: "BOOL"
+        name: "FALSE"
     },
     Symbol {
         id: 0x0017,
-        name: "array"
+        name: "BOOL"
     },
     Symbol {
         id: 0x0018,
-        name: "exp_atom"
+        name: "array"
     },
     Symbol {
         id: 0x0019,
-        name: "SCHEM_ITEM"
+        name: "exp_atom"
     },
     Symbol {
         id: 0x001A,
-        name: "SCHEMATIC"
+        name: "SCHEM_ITEM"
     },
     Symbol {
         id: 0x001B,
-        name: "VALUE"
+        name: "SCHEMATIC"
     },
     Symbol {
         id: 0x001C,
-        name: "VALUES"
+        name: "VALUE"
     },
     Symbol {
         id: 0x001D,
+        name: "VALUES"
+    },
+    Symbol {
+        id: 0x001E,
         name: "root"
     },
     Symbol {
-        id: 0x0029,
-        name: "__V41"
+        id: 0x002B,
+        name: "__V43"
     },
     Symbol {
-        id: 0x002D,
-        name: "__V45"
+        id: 0x002F,
+        name: "__V47"
     },
     Symbol {
-        id: 0x0030,
-        name: "__V48"
+        id: 0x0032,
+        name: "__V50"
     },
     Symbol {
-        id: 0x0033,
+        id: 0x0035,
         name: "__VAxiom"
     }
 ];
@@ -344,6 +354,7 @@ pub trait Visitor {
     fn on_variable_bool_def(&self, _node: &AstNode) {}
     fn on_variable_text(&self, _node: &AstNode) {}
     fn on_variable_num(&self, _node: &AstNode) {}
+    fn on_variable_float(&self, _node: &AstNode) {}
     fn on_variable_type(&self, _node: &AstNode) {}
     fn on_variable_true(&self, _node: &AstNode) {}
     fn on_variable_false(&self, _node: &AstNode) {}
@@ -382,17 +393,18 @@ pub fn visit_ast_node(node: AstNode, visitor: &dyn Visitor) {
         0x0010 => visitor.on_variable_bool_def(&node),
         0x0011 => visitor.on_variable_text(&node),
         0x0012 => visitor.on_variable_num(&node),
-        0x0013 => visitor.on_variable_type(&node),
-        0x0014 => visitor.on_variable_true(&node),
-        0x0015 => visitor.on_variable_false(&node),
-        0x0016 => visitor.on_variable_bool(&node),
-        0x0017 => visitor.on_variable_array(&node),
-        0x0018 => visitor.on_variable_exp_atom(&node),
-        0x0019 => visitor.on_variable_schem_item(&node),
-        0x001A => visitor.on_variable_schematic(&node),
-        0x001B => visitor.on_variable_value(&node),
-        0x001C => visitor.on_variable_values(&node),
-        0x001D => visitor.on_variable_root(&node),
+        0x0013 => visitor.on_variable_float(&node),
+        0x0014 => visitor.on_variable_type(&node),
+        0x0015 => visitor.on_variable_true(&node),
+        0x0016 => visitor.on_variable_false(&node),
+        0x0017 => visitor.on_variable_bool(&node),
+        0x0018 => visitor.on_variable_array(&node),
+        0x0019 => visitor.on_variable_exp_atom(&node),
+        0x001A => visitor.on_variable_schem_item(&node),
+        0x001B => visitor.on_variable_schematic(&node),
+        0x001C => visitor.on_variable_value(&node),
+        0x001D => visitor.on_variable_values(&node),
+        0x001E => visitor.on_variable_root(&node),
         _ => ()
     };
 }

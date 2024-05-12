@@ -61,6 +61,7 @@ pub fn stumbrs_define(node: AstNode, block: &mut Block, typestack: &mut CompileT
                     "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
                     "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
                     "TEXT" => celsium::BUILTIN_TYPES::STRING,
+                    "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
                     _ => panic!(),
                 };
                 if unit.data_type.as_str() == "TEXT" {
