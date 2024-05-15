@@ -8,3 +8,4 @@ himecc.exe
 node_modules
 interpreter/Cargo.lock
 todo.txt
+__pycache__
