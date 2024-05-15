@@ -1,7 +1,3 @@
+sk a : 4
 
-
-
-
-sk r : 2
-
-izvade(r + PAT)
+izvade(a)

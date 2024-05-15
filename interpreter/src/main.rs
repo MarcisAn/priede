@@ -69,9 +69,13 @@ pub fn interpret(path: String, verbose: u8) {
     if parse_res.errors.errors.len() > 0 {
         exit(0);
     }
+    
     let ast = parse_res.get_ast();
     let root = ast.get_root();
-    util::print_ast(root);
+    if verbose > 1 {
+        util::print_ast(root);
+
+    }
 
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
@@ -83,7 +87,8 @@ pub fn interpret(path: String, verbose: u8) {
         false,
         &mut CompileTimeChecker::new(file_content, path),
     );
-    if verbose >= 1 {
+    if verbose > 2 {
+
         let mut i = 0;
         while i < main_block.bytecode.len() {
             println!("{} {:?}", i, main_block.bytecode[i]);
@@ -126,5 +131,5 @@ fn read_file(path: String) -> String {
         );
         process::exit(1);
     }
-    file_read.unwrap()
+    file_read.unwrap() 
 }
