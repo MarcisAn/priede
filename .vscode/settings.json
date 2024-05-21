@@ -1,4 +1,9 @@
 {
-  "rust-analyzer.linkedProjects": [".\\linter\\Cargo.toml", ".\\stumbrs\\Cargo.toml", ".\\interpreter\\Cargo.toml"],
-  "rust-analyzer.showUnlinkedFileNotification": false
+  "rust-analyzer.linkedProjects": [
+    ".\\linter\\Cargo.toml",
+    ".\\stumbrs\\Cargo.toml",
+    ".\\interpreter\\Cargo.toml",
+    ".\\launcher//src-tauri\\Cargo.toml"
+  ],
+  "rust-analyzer.showUnlinkedFileNotification": true
 }
