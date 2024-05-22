@@ -1,3 +1,6 @@
+use std::io;
+use std::io::prelude::*;
+
 pub fn main() {
     let arguments = std::env::args();
     let arguments = arguments::parse(arguments).unwrap();
@@ -6,14 +9,26 @@ pub fn main() {
         interpreter::interpret(String::from("../examples/sveika_pasaule.pr"), 1);
     } else {
         let mut verbose: u8 = 0;
-        if arguments.orphans.len() == 2 {
+        let mut halt = false;
+        if arguments.orphans.len() >= 2 {
+            println!("{:?}", arguments.orphans);
             if arguments.orphans[1] == "ast" {
                 verbose = 2;
             }
             else if arguments.orphans[1] == "v3" {
                 verbose = 3;
             }
+            if arguments.orphans[2] == "halt" {
+                halt = true;
+            }
         }
         interpreter::interpret(String::from(arguments.orphans[0].clone()), verbose);
+        if halt {
+            let mut stdin = io::stdin();
+            let mut stdout = io::stdout();
+            write!(stdout, "Programmas izpilde veiksmīga. Piespied ENTER taustiņu, lai aizvērtu šo logu!").unwrap();
+            stdout.flush().unwrap();
+            let _ = stdin.read(&mut [0u8]).unwrap();
+        }
     }
 }

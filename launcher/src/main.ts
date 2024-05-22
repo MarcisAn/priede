@@ -1,11 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog";
 
-let greetInputEl: HTMLInputElement | null;
-let greetMsgEl: HTMLElement | null;
-
-// Open a selection dialog for image files
-
 async function load(callback: Function) {
   const selected = await open({
     multiple: false,
@@ -17,11 +12,8 @@ async function load(callback: Function) {
     ],
   });
   if (selected === null) {
-    // user selected multiple files
   } else {
     console.log(selected);
-    //@ts-ignore
-    //document.getElementById("selectedfile").innerText = selected;
     callback(selected);
   }
 }
@@ -31,6 +23,7 @@ async function runfile(filename: string) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("contextmenu", (event) => event.preventDefault());
   document.getElementById("openfile")?.addEventListener("click", (e) => {
     e.preventDefault();
     load(

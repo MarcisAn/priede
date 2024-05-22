@@ -8,7 +8,7 @@ def build(version):
     os.chdir("../cli")
     os.system('cargo build -r')
     #dest_dir = "../../../releases/" + version
-    new_name = "priede_cli_" + version + ".exe"
+    new_name = "priede.exe"
     #current_file_name = "priede-cli.exe"
     #os.chdir("./target/release/")
     #os.rename("./Cargo.lock", "../releases/"+ version +"/priede_cli_" + version + ".exe")

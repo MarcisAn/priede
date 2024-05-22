@@ -7,14 +7,14 @@ use std::{io, process::Command, thread::sleep, time::Duration};
 fn run_command_in_console(command: &str, args: &[&str])  {
     let mut cmd = Command::new("cmd");
 
-    cmd.arg("/K").arg(command).args(args);
+    cmd.arg("").arg(command).args(args);
 
     let status = cmd.spawn();
 }
 
 #[tauri::command]
 fn runfile(name: &str) {
-    run_command_in_console("E:/Dev/priede/releases/0-1-0/priede_cli_0-1-0.exe", &[name]);
+    run_command_in_console("E:/Dev/priede/releases/0-1-0/priede_cli_0-1-0.exe", &[name, "v0", "halt"]);
 }
 
 fn main() {

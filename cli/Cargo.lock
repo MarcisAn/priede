@@ -305,6 +305,7 @@ name = "priede-cli"
 version = "0.1.0"
 dependencies = [
  "arguments",
+ "colored",
  "interpreter",
 ]
 
