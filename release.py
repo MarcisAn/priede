@@ -7,13 +7,13 @@ def build(version):
     build_wasm()
     os.chdir("../cli")
     os.system('cargo build -r')
-    #dest_dir = "../../../releases/" + version
-    new_name = "priede.exe"
-    #current_file_name = "priede-cli.exe"
-    #os.chdir("./target/release/")
-    #os.rename("./Cargo.lock", "../releases/"+ version +"/priede_cli_" + version + ".exe")
     os.mkdir("../releases/" + version)
-    os.rename("./target/release/priede-cli.exe", os.path.join("..\\releases\\" + version + "\\", new_name))
+    os.rename("./target/release/priede-cli.exe", os.path.join("..\\releases\\" + version + "\\", "priede.exe"))
+    os.chdir("../launcher")
+    os.system('cargo tauri build')
+    os.rename("./src-tauri/target/release/launcher.exe", os.path.join("..\\releases\\" + version + "\\", "priede_launcher.exe"))
+    
+    
     
 
 releases = json.load(open("releases.json"))

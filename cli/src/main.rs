@@ -4,29 +4,28 @@ use std::io::prelude::*;
 pub fn main() {
     let arguments = std::env::args();
     let arguments = arguments::parse(arguments).unwrap();
-    //print!("{}", arguments.get::<u8>("bar").unwrap());
+    let mut halt = false;
     if arguments.orphans.len() == 0 {
         interpreter::interpret(String::from("../examples/sveika_pasaule.pr"), 1);
     } else {
         let mut verbose: u8 = 0;
-        let mut halt = false;
         if arguments.orphans.len() >= 2 {
-            println!("{:?}", arguments.orphans);
             if arguments.orphans[1] == "ast" {
                 verbose = 2;
-            }
-            else if arguments.orphans[1] == "v3" {
+            } else if arguments.orphans[1] == "v3" {
                 verbose = 3;
             }
-            if arguments.orphans[2] == "halt" {
-                halt = true;
+            if arguments.orphans.len() >= 3 {
+                if arguments.orphans[2] == "halt" {
+                    halt = true;
+                }
             }
         }
         interpreter::interpret(String::from(arguments.orphans[0].clone()), verbose);
         if halt {
             let mut stdin = io::stdin();
             let mut stdout = io::stdout();
-            write!(stdout, "Programmas izpilde veiksmīga. Piespied ENTER taustiņu, lai aizvērtu šo logu!").unwrap();
+            write!(stdout, "Programmas izpilde veiksmīga. Šo logu var aizvērt.").unwrap();
             stdout.flush().unwrap();
             let _ = stdin.read(&mut [0u8]).unwrap();
         }
