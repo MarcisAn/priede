@@ -56,14 +56,31 @@ pub fn parse_ast(
         parse_ast(node.child(1), block, is_wasm, typestack);
         block.return_from_function();
     } else if title == "var_def" {
-        if node.child(0).get_symbol().to_string() == "ARRAY" {
-            for i in node.child(2).children() {
+        if node.child(1).get_symbol().to_string() == "ARRAY" {
+            //user marked data type
+            let data_type_marked = match node.child(0).to_string().as_str() {
+                "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
+                "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
+                "TEXT" => celsium::BUILTIN_TYPES::STRING,
+                "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
+                _ => panic!(),
+            };
+            
+
+            let mut init_value_counter = 0;
+            for i in node.child(3).children() {
                 parse_ast(i, block, is_wasm, typestack);
+                let type_of_init_val = typestack.pop();
+                if type_of_init_val.clone().unwrap() != data_type_marked.clone() {
+                    errors::array_element_wrong_type(node.child(2).get_value().unwrap().to_string(), init_value_counter, data_type_marked.clone(), type_of_init_val.unwrap().clone(), &typestack.source_files[typestack.current_file],
+                    &typestack.source_file_paths[typestack.current_file], node.child(1).get_position().unwrap().line, node.child(1).get_position().unwrap().line);
+                }
+                init_value_counter += 1;
             }
             block.define_array(
                 celsium::module::VISIBILITY::PRIVATE,
-                node.child(1).get_value().unwrap().to_string(),
-                node.child(2).children().len(),
+                node.child(2).get_value().unwrap().to_string(),
+                node.child(3).children().len(),
             )
         } else {
             //user marked data type

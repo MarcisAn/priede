@@ -20,15 +20,15 @@ Tā vietā var izmantot sarakstus.
 ## Sarakstu definēšana
 
 ```priede
-saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 ```
 
-Saraksta definīcijai izmanto vārdu `saraksts`, kam seko saraksta nosaukums. Tad, kvadrātiekavās saraksta sākotnējās vērtības atdalītas ar semikoliem.
+Sarakstu definējot, vispirms jānorāda datu tips vērtībām sarakstā, tad vārds `saraksts`, kam seko saraksta nosaukums. Tad, kvadrātiekavās saraksta sākotnējās vērtības atdalītas ar semikoliem.
 
 ## Datu nolasīšana no saraksta
 
 ```priede
-saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
 izvade(augļi[0])
 ```
@@ -38,7 +38,7 @@ Lai nolasītu saraksta konkrētu pozīciju izmanto saraksta nosaukumu, kuram sek
 ## Visu elementu izdruka
 
 ```priede
-saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
 sk skaitītajs : 0
 

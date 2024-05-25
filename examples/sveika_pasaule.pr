@@ -1,1 +1,8 @@
-saraksts augļi : [2;2;2;2]
+tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+
+sk skaitītajs : 0
+
+kamēr skaitītajs <= 3 { //aizvieot 3 ar saraksta garumu
+    izvade(augļi[skaitītajs])
+    skaitītajs++
+}
