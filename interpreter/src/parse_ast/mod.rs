@@ -14,7 +14,7 @@ use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 use id_assign::id_assign;
 use stumbrs::*;
 
-use crate::errors::{self, incorect_init_value, math_error};
+use crate::errors::{self, array_element_wrong_type_index, incorect_init_value, math_error};
 
 fn rem_first_and_last(value: &str) -> &str {
     let mut chars = value.chars();
@@ -57,6 +57,7 @@ pub fn parse_ast(
         block.return_from_function();
     } else if title == "var_def" {
         if node.child(1).get_symbol().to_string() == "ARRAY" {
+            let array_name = node.child(2).get_value().unwrap();
             //user marked data type
             let data_type_marked = match node.child(0).to_string().as_str() {
                 "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
@@ -77,9 +78,10 @@ pub fn parse_ast(
                 }
                 init_value_counter += 1;
             }
+            typestack.def_array(array_name, data_type_marked, node.child(3).children().len());
             block.define_array(
                 celsium::module::VISIBILITY::PRIVATE,
-                node.child(2).get_value().unwrap().to_string(),
+                array_name.to_string(),
                 node.child(3).children().len(),
             )
         } else {
@@ -159,10 +161,37 @@ pub fn parse_ast(
             },
         )
     } else if title == "array" {
+        let array_name = node.child(0).get_value().unwrap();
+        //parse the index
         parse_ast(node.child(1), block, is_wasm, typestack);
-        block.load_from_array(node.child(0).get_value().unwrap());
+        let index_type = typestack.pop().unwrap();
+        if index_type != BUILTIN_TYPES::MAGIC_INT {
+            array_element_wrong_type_index(array_name.to_string(), BUILTIN_TYPES::MAGIC_INT, index_type, &typestack.source_files[typestack.current_file],
+                    &typestack.source_file_paths[typestack.current_file],
+                    node.child(1).get_position().unwrap().line,
+                    node.child(1).get_position().unwrap().column)
+        }
+        let check = typestack.check_array_type_and_length(array_name);
+        if check.is_none(){
+            errors::undefined_var(format!("Saraksts `{}` nav definēts", array_name), &typestack.source_files[typestack.current_file],
+                    &typestack.source_file_paths[typestack.current_file],
+                    node.child(1).get_position().unwrap().line,
+                    node.child(1).get_position().unwrap().column)
+        }
+        let (array_type, array_length) = check.unwrap();
+        if node.child(1).get_symbol().to_string() == "NUMBER"{
+            let index_number: usize = node.child(1).get_value().unwrap().parse().unwrap();
+            if array_length-1 < index_number{
+                 errors::array_element_index_too_high(array_name.to_string(), array_length, index_number, &typestack.source_files[typestack.current_file],
+                    &typestack.source_file_paths[typestack.current_file],
+                    node.child(1).get_position().unwrap().line);
+            }
+        }
+        typestack.push(array_type);
+        //load using the index at top of the stack
+        block.load_from_array(array_name);
     } else if title.starts_with("ID") {
-        let type_if_exists = typestack.check_var(node.get_value().unwrap().to_string());
+        let type_if_exists = typestack.check_var(node.get_value().unwrap());
         if type_if_exists.is_none(){
             errors::undefined_var(format!("Mainīgais ar nosaukumu '{}' nav definēts", node.get_value().unwrap()), &typestack.source_files[typestack.current_file],
                 &typestack.source_file_paths[typestack.current_file], node.get_position().unwrap().line, node.get_position().unwrap().column);
