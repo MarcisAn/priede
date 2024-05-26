@@ -45,5 +45,10 @@ pub fn id_assign(
             block.binop(BINOP::SUBTRACT);
         }
         block.assign_variable(var_name);
+    } else if title == "array_assign" {
+        parse_ast(node.child(1), block, is_wasm, typestack);
+        parse_ast(node.child(0).child(1), block, is_wasm, typestack);
+        block.assign_to_array(node.child(0).child(0).get_value().unwrap());
+
     }
 }
