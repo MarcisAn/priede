@@ -1,4 +1,3 @@
-use std::process::exit;
 use celsium::{ block::Block, compile_time_checker::CompileTimeChecker };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
@@ -29,7 +28,6 @@ use return_st::return_st;
 mod id;
 use id::id;
 
-use crate::errors;
 
 pub fn parse_ast(
     node: AstNode,
@@ -38,12 +36,27 @@ pub fn parse_ast(
     typestack: &mut CompileTimeChecker
 ) {
     let title = node.get_symbol().to_string();
-    
+
     if title == "block" {
         for i in node.children() {
             parse_ast(i, block, is_wasm, typestack);
         }
     }
+
+    if title == "dot_call"{
+        //let check_var = typestack.check_var(node.child(0).get_value().unwrap());
+        let check_array = typestack.check_array_type_and_length(node.child(0).get_value().unwrap());
+        
+        if check_array.is_some(){
+            if node.child(1).get_value().unwrap() == "garums" {
+                block.get_array_length(node.child(0).get_value().unwrap());
+                typestack.push(celsium::BUILTIN_TYPES::MAGIC_INT)
+            }
+        }
+        
+    }
+
+
 
     id(node, &title, block, typestack);
     return_st(node, &title, block, typestack, is_wasm);

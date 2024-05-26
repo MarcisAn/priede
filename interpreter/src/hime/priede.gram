@@ -77,7 +77,7 @@ grammar priede
 
         id_assign -> ID assign_op asignable_exp
                     |   ID '++' | ID '--' ;
-                    
+
         array_assign -> array ':'! asignable_exp;
 
         func_name -> ID^;
@@ -91,15 +91,7 @@ grammar priede
 
         funcargs -> funcarg|funcarg (';'! funcarg)*;
 
-        dot_call -> ID '.'! ID 
-                | dot_call_fn^
-                | dot_call '.'! ID;
-
-        dot_call_fn -> 
-                ID '.'! ID '()'!
-                | ID '.'! ID '('! funcargs ')'!
-                |dot_call '.'! ID '()'!
-                | dot_call '.'! ID '('! funcargs ')'!;
+        
 
 
         comp_s ->    exp_t '=' exp_t
@@ -125,14 +117,33 @@ grammar priede
 
         return_st -> RETURN  exp;
 
-        exp_atom -> NUMBER^
+        dotable ->  NUMBER^
+                   | STRING^
+                   |  ID^
+                   |  func_call^
+                   | BOOL^
+                   | array^;
+
+        exp_atom_no_dot -> NUMBER^
                    | STRING^
                    | '('! exp^ ')'! 
                    |  ID^
                    |  func_call^
-                   | dot_call^
                    | BOOL^
                    | array^;
+
+        exp_atom -> exp_atom_no_dot^
+                    | dot_call^;
+
+        dot_call -> dotable '.'! ID
+                | dot_call '.'! ID
+                | dot_call_fn^;
+
+        dot_call_fn -> 
+                  dotable '.'! ID '()'!
+                | dotable '.'! ID '('! funcargs ')'!
+                | dot_call '.'! ID '()'!
+                | dot_call '.'! ID '('! funcargs ')'!;
 
         exp_reizdal -> exp_atom^
                    | reiz_dal_atl^;
@@ -172,7 +183,18 @@ grammar priede
 
         multiple_id_define -> '{'! multiple_ids '}'! ':'! exp;
 
-        stat -> var_def^ | multiple_id_define^ | func_call^ | dot_call^ | if^ | id_assign^ | array_assign^ | s_loop^ | w_loop^ | func_def^ | import^ | return_st^;
+        stat -> var_def^ 
+        | multiple_id_define^ 
+        | func_call^ 
+        | if^ 
+        | id_assign^ 
+        | array_assign^ 
+        | s_loop^ 
+        | w_loop^ 
+        | func_def^ 
+        | import^ 
+        | return_st^
+        | dot_call^;
         block -> stat*;
         root ->  block^;
     }

@@ -35,6 +35,27 @@ izvade(augļi[0])
 
 Lai nolasītu saraksta konkrētu pozīciju izmanto saraksta nosaukumu, kuram seko kvadrātiekavas ar šī elementa pozīciju sarakstā, **sākot skaitīt no nulles**.
 
+## Elementa pārdefinēšana
+
+```priede
+tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+
+izvade(augļi[0])
+
+augļi[0] : "kivi"
+
+izvade(augļi[0])
+
+```
+
+## Saraksta garuma atrašana
+
+```priede
+tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+
+izvade(augļi.garums)
+```
+
 ## Visu elementu izdruka
 
 ```priede
@@ -42,7 +63,7 @@ tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
 sk skaitītajs : 0
 
-kamēr skaitītajs <= 3 { //aizvieot 3 ar saraksta garumu
+kamēr skaitītajs < augļi.garums {
     izvade(augļi[skaitītajs])
     skaitītajs++
 }

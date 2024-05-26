@@ -1,5 +1,3 @@
-sk saraksts aa : [1;2;3;4;5]
+tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
-aa[2] : 4
-
-izvade(aa[2])
+izvade(augļi.garums)
