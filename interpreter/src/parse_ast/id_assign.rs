@@ -1,17 +1,17 @@
-use celsium::{
-    block::Block, bytecode::BINOP, compile_time_checker::CompileTimeChecker
-};
-use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
+use celsium::{ block::Block, bytecode::BINOP, compile_time_checker::CompileTimeChecker };
+use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use super::parse_ast;
 
 pub fn id_assign(
     node: AstNode,
+    title: &str,
     block: &mut Block,
     typestack: &mut CompileTimeChecker,
-    is_wasm: bool,
+    is_wasm: bool
 ) {
-    let operator = node.child(1).get_value().unwrap();
+    if title == "id_assign" {
+        let operator = node.child(1).get_value().unwrap();
         let var_name = node.child(0).get_value().unwrap();
         if operator == ":" {
             parse_ast(node.child(2), block, is_wasm, typestack);
@@ -45,4 +45,5 @@ pub fn id_assign(
             block.binop(BINOP::SUBTRACT);
         }
         block.assign_variable(var_name);
+    }
 }

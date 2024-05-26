@@ -7,6 +7,35 @@ use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 use super::parse_ast;
 
 pub fn math_ops(
+    node: AstNode,
+    title: &str,
+    block: &mut Block,
+    typestack: &mut CompileTimeChecker,
+    is_wasm: bool
+){
+    if title == "plus"
+        || title == "minus"
+        || title == "reiz"
+        || title == "dal"
+        || title == "atlik"
+    {
+        calculate(
+            match title {
+                "plus" => BINOP::ADD,
+                "minus" => BINOP::SUBTRACT,
+                "reiz" => BINOP::MULTIPLY,
+                "dal" => BINOP::DIVIDE,
+                "atlik" => BINOP::REMAINDER,
+                _ => panic!(),
+            },
+            node,
+            block,
+            typestack,
+            is_wasm,
+        );
+    }
+}
+fn calculate(
     binop: BINOP,
     node: AstNode,
     block: &mut Block,
@@ -27,4 +56,6 @@ pub fn math_ops(
         exit(0);
     }
     block.binop(binop);
+
+    
 }

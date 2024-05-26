@@ -50,3 +50,9 @@ pub fn format_ast<'a>(node: AstNode, crossings: Vec<bool>, string:  String) -> S
     }
     return string_;
 }
+pub fn rem_first_and_last(value: &str) -> &str {
+    let mut chars = value.chars();
+    chars.next();
+    chars.next_back();
+    chars.as_str()
+}

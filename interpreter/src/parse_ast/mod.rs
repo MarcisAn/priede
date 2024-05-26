@@ -1,327 +1,61 @@
-use core::panic;
-use std::{error, process::exit};
+use std::process::exit;
+use celsium::{ block::Block, compile_time_checker::CompileTimeChecker };
+use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
+
 mod id_assign;
-mod math_ops;
-mod stumbrs;
-use celsium::{
-    block::Block,
-    bytecode::BINOP,
-    compile_time_checker::CompileTimeChecker,
-    module::{FuncArg, FunctionSignature, VISIBILITY},
-    BUILTIN_TYPES,
-};
-use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 use id_assign::id_assign;
-use stumbrs::*;
+mod math_ops;
+use math_ops::math_ops;
+mod stumbrs;
+use stumbrs::stumbrs_define;
+mod var_def;
+use var_def::var_def;
+mod constants;
+use constants::parse_constants;
+mod comparisons;
+use comparisons::comparisons;
+mod array;
+use array::array;
+mod func_call;
+use func_call::func_call;
+mod func_def;
+use func_def::func_def;
+mod loops;
+use loops::loops;
+mod if_stat;
+use if_stat::if_stat;
+mod return_st;
+use return_st::return_st;
+mod id;
+use id::id;
 
-use crate::errors::{self, array_element_wrong_type_index, incorect_init_value, math_error};
-
-fn rem_first_and_last(value: &str) -> &str {
-    let mut chars = value.chars();
-    chars.next();
-    chars.next_back();
-    chars.as_str()
-}
+use crate::errors;
 
 pub fn parse_ast(
     node: AstNode,
     block: &mut Block,
     is_wasm: bool,
-    typestack: &mut CompileTimeChecker,
+    typestack: &mut CompileTimeChecker
 ) {
     let title = node.get_symbol().to_string();
-    if title == "func_call" {
-        if node.children_count() > 1 {
-            for arg in node.child(1) {
-                parse_ast(arg, block, is_wasm, typestack);
-            }
-        }
-        let func_name = node.child(0).get_value().unwrap();
-        if func_name == "izvade" {
-            block.call_special_function(celsium::SpecialFunctions::PRINT { newline: true });
-        } else if func_name == "izvadetp" {
-            block.call_special_function(celsium::SpecialFunctions::PRINT { newline: false });
-        } else if func_name == "ievade" {
-            block.call_special_function(celsium::SpecialFunctions::INPUT);
-        } else if func_name == "jukums" {
-            parse_ast(node.child(1).child(0), block, is_wasm, typestack);
-            parse_ast(node.child(1).child(1), block, is_wasm, typestack);
-            block.call_special_function(celsium::SpecialFunctions::RANDOM);
-        } else {
-            block.call_function(func_name);
-        }
-    } else if title == "multiple_id_define" {
-        stumbrs_define(node, block, typestack, is_wasm);
-    } else if title == "return_st" {
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        block.return_from_function();
-    } else if title == "var_def" {
-        if node.child(1).get_symbol().to_string() == "ARRAY" {
-            let array_name = node.child(2).get_value().unwrap();
-            //user marked data type
-            let data_type_marked = match node.child(0).to_string().as_str() {
-                "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-                "TEXT" => celsium::BUILTIN_TYPES::STRING,
-                "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
-                _ => panic!(),
-            };
-            
-
-            let mut init_value_counter = 0;
-            for i in node.child(3).children() {
-                parse_ast(i, block, is_wasm, typestack);
-                let type_of_init_val = typestack.pop();
-                if type_of_init_val.clone().unwrap() != data_type_marked.clone() {
-                    errors::array_element_wrong_type(node.child(2).get_value().unwrap().to_string(), init_value_counter, data_type_marked.clone(), type_of_init_val.unwrap().clone(), &typestack.source_files[typestack.current_file],
-                    &typestack.source_file_paths[typestack.current_file], node.child(1).get_position().unwrap().line, node.child(1).get_position().unwrap().line);
-                }
-                init_value_counter += 1;
-            }
-            typestack.def_array(array_name, data_type_marked, node.child(3).children().len());
-            block.define_array(
-                celsium::module::VISIBILITY::PRIVATE,
-                array_name.to_string(),
-                node.child(3).children().len(),
-            )
-        } else {
-            //user marked data type
-            let data_type_marked = match node.child(0).to_string().as_str() {
-                "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-                "TEXT" => celsium::BUILTIN_TYPES::STRING,
-                "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
-                _ => panic!(),
-            };
-            //parse the init value
-            parse_ast(node.child(2), block, is_wasm, typestack);
-            //get they type of the init value
-            let typ_of_init_value = typestack.pop();
-            if typ_of_init_value.clone().unwrap() != data_type_marked {
-                incorect_init_value(
-                    format!("Mainīgā datu tips ir norādīts kā `{}`, bet piešķirtā sākotnējā vērtība ir `{}`.",
-                    match node.child(0).to_string().as_str() {
-                        "NUM" => "skaitlis",
-                        "BOOL_DEF" => "būls",
-                        "TEXT" => "tekts",
-                        "FLOAT" => "decimālskaitlis",
-                        _ => panic!()
-                    }, 
-                    match typ_of_init_value.unwrap() {
-                        BUILTIN_TYPES::MAGIC_INT => "skaitlis",
-                        BUILTIN_TYPES::BOOL => "būls",
-                        BUILTIN_TYPES::STRING => "teksts",
-                        BUILTIN_TYPES::OBJECT => "objekts",
-                        BUILTIN_TYPES::FLOAT => "decimālskaitlis",
-                    } ),
-                    &typestack.source_files[typestack.current_file],
-                    &typestack.source_file_paths[typestack.current_file],
-                    node.child(1).get_position().unwrap().line,
-                    node.child(1).get_position().unwrap().column,
-                );
-                exit(0);
-            }
-            typestack.def_var(node.child(1).get_value().unwrap().to_string(), data_type_marked.clone());
-            block.define_variable(
-                data_type_marked,
-                celsium::module::VISIBILITY::PRIVATE,
-                node.child(1).get_value().unwrap(),
-            )
-        }
-    } else if title == "func_def" {
-        let mut body = Block::new();
-        let mut args: Vec<FuncArg> = vec![];
-
-        if node.children_count() > 2 {
-            //when the function takes arguments
-            parse_ast(node.child(2), &mut body, is_wasm, typestack);
-            for arg in node.child(1).children() {
-                args.push(FuncArg {
-                    name: arg.child(1).get_value().unwrap().to_string(),
-                    arg_type: match arg.child(0).to_string().as_str() {
-                        "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                        "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-                        "TEXT" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                        "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
-                        _ => panic!(),
-                    },
-                })
-            }
-        } else {
-            parse_ast(node.child(1), &mut body, is_wasm, typestack);
-        }
-
-        block.define_function(
-            body,
-            VISIBILITY::PUBLIC,
-            FunctionSignature {
-                name: node.child(0).get_value().unwrap().to_string(),
-                return_type: celsium::module::FunctionReturnType::NONE,
-                args: args,
-            },
-        )
-    } else if title == "array" {
-        let array_name = node.child(0).get_value().unwrap();
-        //parse the index
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        let index_type = typestack.pop().unwrap();
-        if index_type != BUILTIN_TYPES::MAGIC_INT {
-            array_element_wrong_type_index(array_name.to_string(), BUILTIN_TYPES::MAGIC_INT, index_type, &typestack.source_files[typestack.current_file],
-                    &typestack.source_file_paths[typestack.current_file],
-                    node.child(1).get_position().unwrap().line,
-                    node.child(1).get_position().unwrap().column)
-        }
-        let check = typestack.check_array_type_and_length(array_name);
-        if check.is_none(){
-            errors::undefined_var(format!("Saraksts `{}` nav definēts", array_name), &typestack.source_files[typestack.current_file],
-                    &typestack.source_file_paths[typestack.current_file],
-                    node.child(1).get_position().unwrap().line,
-                    node.child(1).get_position().unwrap().column)
-        }
-        let (array_type, array_length) = check.unwrap();
-        if node.child(1).get_symbol().to_string() == "NUMBER"{
-            let index_number: usize = node.child(1).get_value().unwrap().parse().unwrap();
-            if array_length-1 < index_number{
-                 errors::array_element_index_too_high(array_name.to_string(), array_length, index_number, &typestack.source_files[typestack.current_file],
-                    &typestack.source_file_paths[typestack.current_file],
-                    node.child(1).get_position().unwrap().line);
-            }
-        }
-        typestack.push(array_type);
-        //load using the index at top of the stack
-        block.load_from_array(array_name);
-    } else if title.starts_with("ID") {
-        let type_if_exists = typestack.check_var(node.get_value().unwrap());
-        if type_if_exists.is_none(){
-            errors::undefined_var(format!("Mainīgais ar nosaukumu '{}' nav definēts", node.get_value().unwrap()), &typestack.source_files[typestack.current_file],
-                &typestack.source_file_paths[typestack.current_file], node.get_position().unwrap().line, node.get_position().unwrap().column);
-            exit(0);
-        }
-        else{
-            typestack.push(type_if_exists.unwrap());
-        }
-        block.load_variable(node.get_value().unwrap());
-    } else if title == "plus"
-        || title == "minus"
-        || title == "reiz"
-        || title == "dal"
-        || title == "atlik"
-    {
-        math_ops::math_ops(
-            match title.as_str() {
-                "plus" => BINOP::ADD,
-                "minus" => BINOP::SUBTRACT,
-                "reiz" => BINOP::MULTIPLY,
-                "dal" => BINOP::DIVIDE,
-                "atlik" => BINOP::REMAINDER,
-                _ => panic!(),
-            },
-            node,
-            block,
-            typestack,
-            is_wasm,
-        );
-    } else if title == "if" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        let mut if_block = Block::new();
-        parse_ast(node.child(1), &mut if_block, is_wasm, typestack);
-        if node.children_count() > 2 {
-            let mut else_block = Block::new();
-            parse_ast(node.child(3), &mut else_block, is_wasm, typestack);
-            block.define_if_else_block(if_block, else_block)
-        } else {
-            block.define_if_block(if_block);
-        }
-    } else if title == "comp_s" {
-        let sign = node.child(1).get_value().unwrap();
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        parse_ast(node.child(2), block, is_wasm, typestack);
-        let checked_type = match sign {
-            "=" => typestack.binop(BINOP::EQ),
-            ">" => typestack.binop(BINOP::LargerThan),
-            ">=" => typestack.binop(BINOP::LargerOrEq),
-            "<" => typestack.binop(BINOP::LessThan),
-            "<=" => typestack.binop(BINOP::LessOrEq),
-            "!=" => typestack.binop(BINOP::NotEq),
-            _ => panic!("Neatpazīts salīdzinājuma simbols"),
-        };
-        if checked_type.is_none() {
-            math_error(
-                "Ar šiem datu tipiem nevar veikt šo matemātisko darbību",
-                &typestack.source_files[typestack.current_file],
-                &typestack.source_file_paths[typestack.current_file],
-                node.child(0).get_position().unwrap().line,
-                node.child(0).get_position().unwrap().column,
-            );
-            exit(0);
-        }
-        match sign {
-            "=" => block.binop(BINOP::EQ),
-            ">" => block.binop(BINOP::LargerThan),
-            ">=" => block.binop(BINOP::LargerOrEq),
-            "<" => block.binop(BINOP::LessThan),
-            "<=" => block.binop(BINOP::LessOrEq),
-            "!=" => block.binop(BINOP::NotEq),
-            _ => panic!("Neatpazīts salīdzinājuma simbols"),
-        }
-    } else if title == "un" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::AND);
-    } else if title == "vai" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::OR);
-    } else if title == "xvai" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-        parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::XOR);
-    } else if title == "block" {
+    
+    if title == "block" {
         for i in node.children() {
             parse_ast(i, block, is_wasm, typestack);
         }
-    } else if title == "s_loop" {
-        let mut loop_block = Block::new();
-        let mut loop_count_block = Block::new();
-
-        parse_ast(node.child(1), &mut loop_block, is_wasm, typestack);
-        parse_ast(node.child(0), &mut loop_count_block, is_wasm, typestack);
-        block.define_simple_loop(loop_block, loop_count_block);
-    } else if title == "w_loop" {
-        let mut loop_block = Block::new();
-        let mut conditional_block = Block::new();
-        parse_ast(node.child(0), &mut conditional_block, is_wasm, typestack);
-        parse_ast(node.child(1), &mut loop_block, is_wasm, typestack);
-        block.define_while_loop(loop_block, conditional_block);
-    } else if title == "id_assign" {
-        id_assign(node, block, typestack, is_wasm);
-    } else if title == "NUMBER" {
-        let number_as_str = &node.get_value().unwrap();
-        if number_as_str.contains(",") {
-            block.load_const(
-                celsium::BUILTIN_TYPES::FLOAT,
-                &number_as_str.replace(",", "."),
-            );
-            typestack.push(BUILTIN_TYPES::FLOAT);
-        } else {
-            block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, &number_as_str);
-            typestack.push(BUILTIN_TYPES::MAGIC_INT);
-        }
-    } else if title == "STRING" {
-        block.load_const(
-            celsium::BUILTIN_TYPES::STRING,
-            rem_first_and_last(node.get_value().unwrap()),
-        );
-        typestack.push(BUILTIN_TYPES::STRING)
-    } else if title == "BOOL" {
-        block.load_const(
-            BUILTIN_TYPES::BOOL,
-            match node.child(0).to_string().as_str() {
-                "TRUE" => "1",
-                "FALSE" => "0",
-                _ => panic!(),
-            },
-        );
-        typestack.push(BUILTIN_TYPES::BOOL);
     }
+
+    id(node, &title, block, typestack);
+    return_st(node, &title, block, typestack, is_wasm);
+    if_stat(node, &title, block, typestack, is_wasm);
+    stumbrs_define(node, &title, block, typestack, is_wasm);
+    loops(node, &title, block, typestack, is_wasm);
+    func_def(node, &title, block, typestack, is_wasm);
+    func_call(node, &title, block, typestack, is_wasm);
+    array(node, &title, block, typestack, is_wasm);
+    math_ops(node, &title, block, typestack, is_wasm);
+    comparisons(node, &title, block, typestack, is_wasm);
+    id_assign(node, &title, block, typestack, is_wasm);
+    parse_constants(node, &title, typestack, block);
+    var_def(node, title, typestack, is_wasm, block);
 }
