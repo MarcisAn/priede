@@ -79,7 +79,7 @@ pub fn interpret(path: String, verbose: u8) {
 
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
-    let mut main_block = Block::new();
+    let mut main_block = Block::new(root.id());
 
     parse_ast::parse_ast(
         root,
@@ -109,7 +109,7 @@ pub fn run_wasm(code: String) {
 
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
-    let mut main_block = Block::new();
+    let mut main_block = Block::new(root.id());
     parse_ast::parse_ast(
         root,
         &mut main_block,

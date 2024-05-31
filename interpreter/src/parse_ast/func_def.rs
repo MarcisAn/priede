@@ -1,5 +1,8 @@
-
-use celsium::{ block::Block, compile_time_checker::CompileTimeChecker, module::{FuncArg, FunctionSignature, VISIBILITY} };
+use celsium::{
+    block::Block,
+    compile_time_checker::CompileTimeChecker,
+    module::{ FuncArg, FunctionSignature, VISIBILITY },
+};
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use super::parse_ast;
@@ -12,7 +15,13 @@ pub fn func_def(
     is_wasm: bool
 ) {
     if title == "func_def" {
-        let mut body = Block::new();
+        let mut body = Block::new(
+            if node.children_count() > 2 {
+                node.child(2).id()
+            } else {
+                node.child(1).id()
+            }
+        );
         let mut args: Vec<FuncArg> = vec![];
 
         if node.children_count() > 2 {
@@ -28,20 +37,16 @@ pub fn func_def(
                         "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
                         _ => panic!(),
                     },
-                })
+                });
             }
         } else {
             parse_ast(node.child(1), &mut body, is_wasm, typestack);
         }
 
-        block.define_function(
-            body,
-            VISIBILITY::PUBLIC,
-            FunctionSignature {
-                name: node.child(0).get_value().unwrap().to_string(),
-                return_type: celsium::module::FunctionReturnType::NONE,
-                args: args,
-            },
-        )
+        block.define_function(body, VISIBILITY::PUBLIC, FunctionSignature {
+            name: node.child(0).get_value().unwrap().to_string(),
+            return_type: celsium::module::FunctionReturnType::NONE,
+            args: args,
+        })
     }
 }

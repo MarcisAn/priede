@@ -195,6 +195,7 @@ grammar priede
         | import^ 
         | return_st^
         | dot_call^;
+
         block -> stat*;
         root ->  block^;
     }

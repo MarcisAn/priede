@@ -11,15 +11,15 @@ pub fn loops(
     is_wasm: bool
 ) {
     if title == "s_loop" {
-        let mut loop_block = Block::new();
-        let mut loop_count_block = Block::new();
+        let mut loop_block = Block::new(node.child(1).id());
+        let mut loop_count_block = Block::new(node.child(0).id());
 
         parse_ast(node.child(1), &mut loop_block, is_wasm, typestack);
         parse_ast(node.child(0), &mut loop_count_block, is_wasm, typestack);
         block.define_simple_loop(loop_block, loop_count_block);
     } else if title == "w_loop" {
-        let mut loop_block = Block::new();
-        let mut conditional_block = Block::new();
+        let mut loop_block = Block::new(node.child(1).id());
+        let mut conditional_block = Block::new(node.child(0).id());
         parse_ast(node.child(0), &mut conditional_block, is_wasm, typestack);
         parse_ast(node.child(1), &mut loop_block, is_wasm, typestack);
         block.define_while_loop(loop_block, conditional_block);
