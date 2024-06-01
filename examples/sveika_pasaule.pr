@@ -1,3 +1,10 @@
-atkārtot 3 {
-    izvade("Teksts tiks izprintēts 3 reizes")
+sk a : 1
+izvade(a)
+
+sk b : 1
+izvade(b)
+
+ja 2=2 {
+    sk b : 3
+    izvade(b)
 }

@@ -4,7 +4,9 @@ use celsium::compile_time_checker::CompileTimeChecker;
 use celsium::module;
 use celsium::CelsiumProgram;
 use errors::parser_error;
+use hime_redist::ast::AstNode;
 use hime_redist::errors::ParseErrorDataTrait;
+use hime_redist::symbols::SemanticElementTrait;
 use module::Module;
 use std::panic;
 use std::process::exit;
@@ -74,12 +76,14 @@ pub fn interpret(path: String, verbose: u8) {
     let root = ast.get_root();
     if verbose > 1 {
         util::print_ast(root);
-
     }
 
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new(root.id());
+
+    let mut block_ids: Vec<usize> = vec![];
+    //parse_block_ids(root, &mut block_ids);
 
     parse_ast::parse_ast(
         root,
@@ -99,6 +103,15 @@ pub fn interpret(path: String, verbose: u8) {
     main_module.add_main_block(main_block);
     celsium.add_module(&main_module);
     celsium.run_program();
+}
+
+fn parse_block_ids(node: AstNode, block_ids: &mut Vec<usize>){
+    for child_node in node.children(){
+        if node.get_symbol().name == "block"{
+            //println!("{}", node.id());
+        }
+        parse_block_ids(child_node, block_ids);
+    }
 }
 
 pub fn run_wasm(code: String) {

@@ -2,7 +2,7 @@ use std::process::exit;
 
 use celsium::{ block::Block, compile_time_checker::CompileTimeChecker, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::errors;
+use crate::{errors, util::get_closest_block};
 
 use super::parse_ast;
 
@@ -49,7 +49,8 @@ pub fn var_def(
             block.define_array(
                 celsium::module::VISIBILITY::PRIVATE,
                 array_name.to_string(),
-                node.child(3).children().len()
+                node.child(3).children().len(),
+                block.ast_id
             )
         } else {
             //user marked data type
@@ -90,14 +91,17 @@ pub fn var_def(
                 );
                 exit(0);
             }
+            let varname = node.child(1).get_value().unwrap().to_string();
             typestack.def_var(
-                node.child(1).get_value().unwrap().to_string(),
-                data_type_marked.clone()
+                (get_closest_block(node).to_string() + "_" + varname.as_str()),
+                data_type_marked.clone(),
+                block.ast_id
             );
             block.define_variable(
                 data_type_marked,
                 celsium::module::VISIBILITY::PRIVATE,
-                node.child(1).get_value().unwrap()
+                node.child(1).get_value().unwrap(),
+                block.ast_id
             )
         }
     }

@@ -16,31 +16,33 @@ pub fn id_assign(
         if operator == ":" {
             parse_ast(node.child(2), block, is_wasm, typestack);
         } else if operator == "+:" {
-            block.load_variable(var_name);
+            block.load_variable(var_name, block.ast_id);
             parse_ast(node.child(2), block, is_wasm, typestack);
             typestack.binop(BINOP::ADD);
             block.binop(BINOP::ADD);
         } else if operator == "-:" {
-            block.load_variable(var_name);
+            block.load_variable(var_name, block.ast_id);
+
             parse_ast(node.child(2), block, is_wasm, typestack);
             block.binop(BINOP::SUBTRACT);
             typestack.binop(BINOP::SUBTRACT);
         } else if operator == "*:" {
-            block.load_variable(var_name);
+            block.load_variable(var_name, block.ast_id);
+
             parse_ast(node.child(2), block, is_wasm, typestack);
             block.binop(BINOP::MULTIPLY);
             typestack.binop(BINOP::MULTIPLY);
         } else if operator == "/:" {
-            block.load_variable(var_name);
+            block.load_variable(var_name, block.ast_id);
             parse_ast(node.child(2), block, is_wasm, typestack);
             block.binop(BINOP::DIVIDE);
         } else if operator == "++" {
-            block.load_variable(var_name);
+            block.load_variable(var_name, block.ast_id);
             block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
             typestack.binop(BINOP::ADD);
             block.binop(BINOP::ADD);
         } else if operator == "--" {
-            block.load_variable(var_name);
+            block.load_variable(var_name, block.ast_id);
             block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
             block.binop(BINOP::SUBTRACT);
         }

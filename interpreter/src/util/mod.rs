@@ -1,4 +1,4 @@
-use hime_redist::ast::AstNode;
+use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
     let mut i = 0;
@@ -55,4 +55,14 @@ pub fn rem_first_and_last(value: &str) -> &str {
     chars.next();
     chars.next_back();
     chars.as_str()
+}
+
+pub fn get_closest_block(node: AstNode) -> usize {
+    if node.get_symbol().to_string() == "block" {
+        return node.id();
+    } else {
+        let parrent = node.parent().unwrap();
+        //should not panic because the root is a block
+        get_closest_block(parrent)
+    }
 }

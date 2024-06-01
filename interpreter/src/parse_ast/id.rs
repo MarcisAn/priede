@@ -1,19 +1,18 @@
-use std::process::exit;
+use std::{process::exit};
 
 use celsium::{ block::Block, compile_time_checker::CompileTimeChecker };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::errors;
+use crate::{errors, util::get_closest_block};
 
 
-pub fn id(
-    node: AstNode,
-    title: &str,
-    block: &mut Block,
-    typestack: &mut CompileTimeChecker
-) {
+
+
+
+pub fn id(node: AstNode, title: &str, block: &mut Block, typestack: &mut CompileTimeChecker) {
     if title.starts_with("ID") {
-        let type_if_exists = typestack.check_var(node.get_value().unwrap());
+        let closest_block = get_closest_block(node);
+        let type_if_exists = typestack.check_var(&(closest_block.to_string() + "_" + node.get_value().unwrap()));
         if type_if_exists.is_none() {
             errors::undefined_var(
                 format!("Mainīgais ar nosaukumu '{}' nav definēts", node.get_value().unwrap()),
@@ -26,6 +25,6 @@ pub fn id(
         } else {
             typestack.push(type_if_exists.unwrap());
         }
-        block.load_variable(node.get_value().unwrap());
+        block.load_variable(node.get_value().unwrap(), block.ast_id);
     }
 }

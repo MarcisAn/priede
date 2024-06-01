@@ -60,7 +60,8 @@ pub fn stumbrs_define(
                 block.define_array(
                     VISIBILITY::PRIVATE,
                     node.child(0).child(counter).get_value().unwrap().to_string(),
-                    values.len()
+                    values.len(),
+                    block.ast_id
                 );
             } else {
                 let data_type = match unit.data_type.as_str() {
@@ -87,7 +88,8 @@ pub fn stumbrs_define(
                 block.define_variable(
                     data_type,
                     VISIBILITY::PRIVATE,
-                    node.child(0).child(counter).get_value().unwrap()
+                    node.child(0).child(counter).get_value().unwrap(),
+                    block.ast_id
                 );
             }
 
