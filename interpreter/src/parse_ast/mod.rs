@@ -42,7 +42,7 @@ pub fn parse_ast(
             parse_ast(i, block, is_wasm, typestack);
         }
     }
-
+/* 
     if title == "dot_call"{
         //let check_var = typestack.check_var(node.child(0).get_value().unwrap());
         let check_array = typestack.check_array_type_and_length(node.child(0).get_value().unwrap());
@@ -54,7 +54,7 @@ pub fn parse_ast(
             }
         }
         
-    }
+    }*/
 
 
 

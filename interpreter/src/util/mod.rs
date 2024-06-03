@@ -1,3 +1,4 @@
+use celsium::compile_time_checker::CompileTimeChecker;
 use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
@@ -65,4 +66,21 @@ pub fn get_closest_block(node: AstNode) -> usize {
         //should not panic because the root is a block
         get_closest_block(parrent)
     }
+}
+
+pub fn get_closest_scope(target_name: String, starting_scope: usize, compilehelper: &mut CompileTimeChecker, node: AstNode) -> Option<usize> {
+    let closest_block = get_closest_block(node);
+    let mut counter = 0;
+    for var in compilehelper.defined_variables.clone(){
+        if var.name == target_name && var.scope == closest_block{
+            return Some(counter);
+        }
+        counter += 1; 
+    }
+    let node_parrent = node.parent();
+    if node_parrent.is_none() {
+        return None
+    }
+    get_closest_scope(target_name, starting_scope, compilehelper, node.parent().unwrap());
+    return None;
 }

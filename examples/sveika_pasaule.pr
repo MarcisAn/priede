@@ -1,10 +1,12 @@
-sk a : 1
-izvade(a)
-
 sk b : 1
 izvade(b)
 
 ja 2=2 {
-    sk b : 3
+    sk b : 2
     izvade(b)
+    ja 2=2 {
+        izvade(b)
+    }
 }
+
+izvade(b)

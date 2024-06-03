@@ -39,8 +39,9 @@ pub fn array(
                     node.child(1).get_position().unwrap().line);
             }
         }
-        typestack.push(array_type);
+        //TODO:arrays
+        //typestack.push(array_type);
         //load using the index at top of the stack
-        block.load_from_array(array_name);
+        //block.load_from_array(array_name);
     }
 }

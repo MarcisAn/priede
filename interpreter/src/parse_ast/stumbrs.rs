@@ -57,12 +57,14 @@ pub fn stumbrs_define(
                         &val.value
                     );
                 }
+                //TODO: typed arrays in stumbrs
+                /*typestack.def_array(node.child(0).child(counter).get_value().unwrap(), data_type, values.len());
                 block.define_array(
                     VISIBILITY::PRIVATE,
-                    node.child(0).child(counter).get_value().unwrap().to_string(),
+                    ,
                     values.len(),
                     block.ast_id
-                );
+                );*/
             } else {
                 let data_type = match unit.data_type.as_str() {
                     "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
@@ -85,12 +87,8 @@ pub fn stumbrs_define(
                         StumbrsValue::Array { value: _ } => panic!(),
                     });
                 }
-                block.define_variable(
-                    data_type,
-                    VISIBILITY::PRIVATE,
-                    node.child(0).child(counter).get_value().unwrap(),
-                    block.ast_id
-                );
+                let var_id = typestack.def_var(node.child(0).child(counter).get_value().unwrap().to_string(), data_type.clone(), block.ast_id);
+                block.define_variable(data_type, var_id);
             }
 
             counter += 1;

@@ -83,7 +83,7 @@ pub fn interpret(path: String, verbose: u8) {
     let mut main_block = Block::new(root.id());
 
     let mut block_ids: Vec<usize> = vec![];
-    //parse_block_ids(root, &mut block_ids);
+    parse_block_ids(root, &mut block_ids);
 
     parse_ast::parse_ast(
         root,

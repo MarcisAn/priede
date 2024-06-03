@@ -45,12 +45,10 @@ pub fn var_def(
                 }
                 init_value_counter += 1;
             }
-            typestack.def_array(array_name, data_type_marked, node.child(3).children().len());
+            let var_id = typestack.def_array(array_name, data_type_marked, node.child(3).children().len());
             block.define_array(
-                celsium::module::VISIBILITY::PRIVATE,
-                array_name.to_string(),
                 node.child(3).children().len(),
-                block.ast_id
+                var_id
             )
         } else {
             //user marked data type
@@ -92,17 +90,15 @@ pub fn var_def(
                 exit(0);
             }
             let varname = node.child(1).get_value().unwrap().to_string();
-            typestack.def_var(
-                (get_closest_block(node).to_string() + "_" + varname.as_str()),
+            let var_id = typestack.def_var(
+                varname,
                 data_type_marked.clone(),
                 block.ast_id
             );
             block.define_variable(
                 data_type_marked,
-                celsium::module::VISIBILITY::PRIVATE,
-                node.child(1).get_value().unwrap(),
-                block.ast_id
-            )
+                var_id,
+            );
         }
     }
 }
