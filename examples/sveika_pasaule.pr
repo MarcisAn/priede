@@ -1,11 +1,14 @@
-sk b : 1
-izvade(b)
+sk b : 4
 
 ja 2=2 {
     sk b : 2
-    izvade(b)
+        izvade(b)
+
     ja 2=2 {
         izvade(b)
+        ja 2=2 {
+            izvade(b)
+        }
     }
 }
 

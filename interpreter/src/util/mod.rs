@@ -69,10 +69,12 @@ pub fn get_closest_block(node: AstNode) -> usize {
 }
 
 pub fn get_closest_scope(target_name: String, starting_scope: usize, compilehelper: &mut CompileTimeChecker, node: AstNode) -> Option<usize> {
-    let closest_block = get_closest_block(node);
+    println!("{:?}", compilehelper.defined_variables);
+    println!("startingscope: {}, nodeif: {}", starting_scope, node.id());
     let mut counter = 0;
     for var in compilehelper.defined_variables.clone(){
-        if var.name == target_name && var.scope == closest_block{
+        if var.name == target_name && var.scope == starting_scope{
+            println!("called");
             return Some(counter);
         }
         counter += 1; 
@@ -81,6 +83,5 @@ pub fn get_closest_scope(target_name: String, starting_scope: usize, compilehelp
     if node_parrent.is_none() {
         return None
     }
-    get_closest_scope(target_name, starting_scope, compilehelper, node.parent().unwrap());
-    return None;
+    get_closest_scope(target_name, node_parrent.unwrap().id(), compilehelper, node_parrent.unwrap())
 }
