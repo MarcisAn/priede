@@ -1,6 +1,6 @@
 use celsium::{
     block::Block,
-    compile_time_checker::CompileTimeChecker,
+    compiletime_helper::CompileTimeHelper,
     module::{ FuncArg, FunctionSignature, VISIBILITY },
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
@@ -11,7 +11,7 @@ pub fn func_def(
     node: AstNode,
     title: &str,
     block: &mut Block,
-    typestack: &mut CompileTimeChecker,
+    typestack: &mut CompileTimeHelper,
     is_wasm: bool
 ) {
     if title == "func_def" {

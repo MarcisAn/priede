@@ -1,4 +1,4 @@
-use celsium::{ block::Block, compile_time_checker::CompileTimeChecker };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 mod id_assign;
@@ -33,7 +33,7 @@ pub fn parse_ast(
     node: AstNode,
     block: &mut Block,
     is_wasm: bool,
-    typestack: &mut CompileTimeChecker
+    typestack: &mut CompileTimeHelper
 ) {
     let title = node.get_symbol().to_string();
 

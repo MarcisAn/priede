@@ -1,5 +1,5 @@
-use celsium::compile_time_checker::CompileTimeChecker;
-use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
+use celsium::{ compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
+use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
     let mut i = 0;
@@ -25,9 +25,9 @@ pub fn print_ast(node: AstNode) {
 }
 pub fn get_ast_formated(node: AstNode) -> String {
     let input = String::new();
-    format_ast(node, Vec::<bool>::new(),  input)
+    format_ast(node, Vec::<bool>::new(), input)
 }
-pub fn format_ast<'a>(node: AstNode, crossings: Vec<bool>, string:  String) -> String{
+pub fn format_ast<'a>(node: AstNode, crossings: Vec<bool>, string: String) -> String {
     let mut string_ = string.clone();
     let mut i = 0;
     if !crossings.is_empty() {
@@ -68,20 +68,48 @@ pub fn get_closest_block(node: AstNode) -> usize {
     }
 }
 
-pub fn get_closest_scope(target_name: String, starting_scope: usize, compilehelper: &mut CompileTimeChecker, node: AstNode) -> Option<usize> {
-    println!("{:?}", compilehelper.defined_variables);
-    println!("startingscope: {}, nodeif: {}", starting_scope, node.id());
+pub fn get_closest_scope(
+    target_name: String,
+    starting_scope: usize,
+    compilehelper: &mut CompileTimeHelper,
+    node: AstNode
+) -> Option<usize> {
     let mut counter = 0;
-    for var in compilehelper.defined_variables.clone(){
-        if var.name == target_name && var.scope == starting_scope{
-            println!("called");
+    for var in compilehelper.defined_variables.clone() {
+        if var.name == target_name && var.scope == starting_scope {
             return Some(counter);
         }
-        counter += 1; 
+        counter += 1;
+    }
+    for var in compilehelper.defined_arrays.clone() {
+        if var.name == target_name && var.scope == starting_scope {
+            return Some(counter);
+        }
+        counter += 1;
     }
     let node_parrent = node.parent();
     if node_parrent.is_none() {
-        return None
+        return None;
     }
     get_closest_scope(target_name, node_parrent.unwrap().id(), compilehelper, node_parrent.unwrap())
+}
+
+pub fn data_type_from_str(inp: &str) -> BUILTIN_TYPES {
+    return match inp {
+        "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
+        "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
+        "TEXT" => celsium::BUILTIN_TYPES::STRING,
+        "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
+        _ => panic!(),
+    };
+}
+
+pub fn str_from_data_type(inp: BUILTIN_TYPES) -> String {
+    match inp {
+        BUILTIN_TYPES::MAGIC_INT => "skaitlis".into(),
+        BUILTIN_TYPES::BOOL => "būls".into(),
+        BUILTIN_TYPES::STRING => "teksts".into(),
+        BUILTIN_TYPES::OBJECT => "objekts".into(),
+        BUILTIN_TYPES::FLOAT => "decimālskaitlis".into(),
+    }
 }

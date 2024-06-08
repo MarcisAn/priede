@@ -1,6 +1,6 @@
 use std::process::exit;
 
-use celsium::{ block::Block, bytecode::BINOP, compile_time_checker::CompileTimeChecker };
+use celsium::{ block::Block, bytecode::BINOP, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use super::parse_ast;
@@ -9,7 +9,7 @@ pub fn comparisons(
     node: AstNode,
     title: &str,
     block: &mut Block,
-    typestack: &mut CompileTimeChecker,
+    typestack: &mut CompileTimeHelper,
     is_wasm: bool
 ) {
     if title == "comp_s" {

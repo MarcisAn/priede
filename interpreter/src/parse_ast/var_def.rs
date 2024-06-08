@@ -1,15 +1,15 @@
 use std::process::exit;
 
-use celsium::{ block::Block, compile_time_checker::CompileTimeChecker, BUILTIN_TYPES };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{errors, util::get_closest_block};
+use crate::{errors, util::{self, get_closest_block}};
 
 use super::parse_ast;
 
 pub fn var_def(
     node: AstNode,
     title: String,
-    typestack: &mut CompileTimeChecker,
+    typestack: &mut CompileTimeHelper,
     is_wasm: bool,
     block: &mut Block
 ) {
@@ -19,13 +19,7 @@ pub fn var_def(
         if node.child(1).get_symbol().to_string() == "ARRAY" {
             let array_name = node.child(2).get_value().unwrap();
             //user marked data type
-            let data_type_marked = match node.child(0).to_string().as_str() {
-                "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-                "TEXT" => celsium::BUILTIN_TYPES::STRING,
-                "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
-                _ => panic!(),
-            };
+            let data_type_marked = util::data_type_from_str(node.child(0).to_string().as_str());
 
             let mut init_value_counter = 0;
             for i in node.child(3).children() {
@@ -45,20 +39,14 @@ pub fn var_def(
                 }
                 init_value_counter += 1;
             }
-            let var_id = typestack.def_array(array_name, data_type_marked, node.child(3).children().len());
+            let var_id = typestack.def_array(array_name, data_type_marked, node.child(3).children().len(), block.ast_id);
             block.define_array(
                 node.child(3).children().len(),
                 var_id
             )
         } else {
             //user marked data type
-            let data_type_marked = match node.child(0).to_string().as_str() {
-                "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-                "TEXT" => celsium::BUILTIN_TYPES::STRING,
-                "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
-                _ => panic!(),
-            };
+            let data_type_marked = util::data_type_from_str(node.child(0).to_string().as_str());
             //parse the init value
             parse_ast(node.child(2), block, is_wasm, typestack);
             //get they type of the init value
@@ -67,20 +55,8 @@ pub fn var_def(
                 errors::incorect_init_value(
                     format!(
                         "Mainīgā datu tips ir norādīts kā `{}`, bet piešķirtā sākotnējā vērtība ir `{}`.",
-                        match node.child(0).to_string().as_str() {
-                            "NUM" => "skaitlis",
-                            "BOOL_DEF" => "būls",
-                            "TEXT" => "tekts",
-                            "FLOAT" => "decimālskaitlis",
-                            _ => panic!(),
-                        },
-                        match typ_of_init_value.unwrap() {
-                            BUILTIN_TYPES::MAGIC_INT => "skaitlis",
-                            BUILTIN_TYPES::BOOL => "būls",
-                            BUILTIN_TYPES::STRING => "teksts",
-                            BUILTIN_TYPES::OBJECT => "objekts",
-                            BUILTIN_TYPES::FLOAT => "decimālskaitlis",
-                        }
+                        util::str_from_data_type(util::data_type_from_str(node.child(0).to_string().as_str())),
+                        util::str_from_data_type(typ_of_init_value.unwrap())
                     ),
                     &typestack.source_files[typestack.current_file],
                     &typestack.source_file_paths[typestack.current_file],
@@ -96,7 +72,6 @@ pub fn var_def(
                 block.ast_id
             );
             block.define_variable(
-                data_type_marked,
                 var_id,
             );
         }

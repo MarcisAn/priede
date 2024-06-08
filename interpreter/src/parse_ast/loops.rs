@@ -1,4 +1,4 @@
-use celsium::{ block::Block, compile_time_checker::CompileTimeChecker };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper };
 use hime_redist::ast::AstNode;
 
 use super::parse_ast;
@@ -7,7 +7,7 @@ pub fn loops(
     node: AstNode,
     title: &str,
     block: &mut Block,
-    typestack: &mut CompileTimeChecker,
+    typestack: &mut CompileTimeHelper,
     is_wasm: bool
 ) {
     if title == "s_loop" {

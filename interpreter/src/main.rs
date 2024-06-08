@@ -1,6 +1,6 @@
 use block::Block;
 use celsium::block;
-use celsium::compile_time_checker::CompileTimeChecker;
+use celsium::compiletime_helper::CompileTimeHelper;
 use celsium::module;
 use celsium::CelsiumProgram;
 use errors::parser_error;
@@ -89,7 +89,7 @@ pub fn interpret(path: String, verbose: u8) {
         root,
         &mut main_block,
         false,
-        &mut CompileTimeChecker::new(file_content, path),
+        &mut CompileTimeHelper::new(file_content, path),
     );
     if verbose > 2 {
 
@@ -127,7 +127,7 @@ pub fn run_wasm(code: String) {
         root,
         &mut main_block,
         true,
-        &mut CompileTimeChecker::new(code, "".to_owned()),
+        &mut CompileTimeHelper::new(code, "".to_owned()),
     );
     main_module.add_main_block(main_block.clone());
     celsium.add_module(&main_module);

@@ -1,3 +1,3 @@
-atkārtot 3 {
-    izvade("Teksts tiks izprintēts 3 reizes")
-}
+sk saraksts a : [3;1;1]
+
+izvade(a[0])

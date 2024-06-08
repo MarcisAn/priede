@@ -1,6 +1,6 @@
 use celsium::{
     block::Block,
-    compile_time_checker::CompileTimeChecker,
+    compiletime_helper::CompileTimeHelper,
     module::VISIBILITY,
     BUILTIN_TYPES,
 };
@@ -20,7 +20,7 @@ pub fn stumbrs_define(
     node: AstNode,
     title: &str,
     block: &mut Block,
-    typestack: &mut CompileTimeChecker,
+    typestack: &mut CompileTimeHelper,
     is_wasm: bool
 ) {
     if title == "multiple_id_define" {
@@ -88,7 +88,7 @@ pub fn stumbrs_define(
                     });
                 }
                 let var_id = typestack.def_var(node.child(0).child(counter).get_value().unwrap().to_string(), data_type.clone(), block.ast_id);
-                block.define_variable(data_type, var_id);
+                block.define_variable(var_id);
             }
 
             counter += 1;

@@ -1,11 +1,11 @@
-use celsium::{ block::Block, compile_time_checker::CompileTimeChecker, BUILTIN_TYPES };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 use crate::util::rem_first_and_last;
 
 
 pub fn parse_constants(node: AstNode,
     title: &str,
-    typestack: &mut CompileTimeChecker,
+    typestack: &mut CompileTimeHelper,
     block: &mut Block,) {
  if title == "NUMBER" {
         let number_as_str = &node.get_value().unwrap();
