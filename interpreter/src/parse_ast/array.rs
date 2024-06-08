@@ -1,7 +1,7 @@
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{errors, util::get_closest_scope};
+use crate::{errors, util::{self, get_closest_scope}};
 
 use super::parse_ast;
 
@@ -14,6 +14,16 @@ pub fn array(
 ) {
     if title == "array" {
         let array_name = node.child(0).get_value().unwrap();
+        let array = util::get_closest_scope(array_name.to_string(), block.ast_id, typestack, node);
+        if array.is_none() {
+            errors::undefined_var(
+                format!("Saraksts `{}` nav definēts", array_name),
+                &typestack.source_files[typestack.current_file],
+                &typestack.source_file_paths[typestack.current_file],
+                node.child(1).get_position().unwrap().line,
+                node.child(1).get_position().unwrap().column
+            );
+        }
         //parse the index
         parse_ast(node.child(1), block, is_wasm, typestack);
         let index_type = typestack.pop().unwrap();
@@ -28,17 +38,12 @@ pub fn array(
                 node.child(1).get_position().unwrap().column
             );
         }
-        let check = typestack.check_array_type_and_length(array_name);
-        if check.is_none() {
-            errors::undefined_var(
-                format!("Saraksts `{}` nav definēts", array_name),
-                &typestack.source_files[typestack.current_file],
-                &typestack.source_file_paths[typestack.current_file],
-                node.child(1).get_position().unwrap().line,
-                node.child(1).get_position().unwrap().column
-            );
-        }
-        let (array_type, array_length) = check.unwrap();
+        
+        let array_type_anf_len = typestack.get_array_type_and_length(array.unwrap()).unwrap();
+        let array_length = array_type_anf_len.1;
+        let array_type = array_type_anf_len.0;
+
+        //extra check if the index is number
         if node.child(1).get_symbol().to_string() == "NUMBER" {
             let index_number: usize = node.child(1).get_value().unwrap().parse().unwrap();
             if array_length - 1 < index_number {
@@ -51,16 +56,6 @@ pub fn array(
                     node.child(1).get_position().unwrap().line
                 );
             }
-        }
-        let array = get_closest_scope(array_name.to_owned(), block.ast_id, typestack, node);
-        if array.is_none() {
-            errors::undefined_var(
-                format!("Saraksts ar nosaukumu '{}' nav definēts šajā blokā.", node.get_value().unwrap()),
-                &typestack.source_files[typestack.current_file],
-                &typestack.source_file_paths[typestack.current_file],
-                node.get_position().unwrap().line,
-                node.get_position().unwrap().column
-            );
         }
 
         typestack.push(array_type);

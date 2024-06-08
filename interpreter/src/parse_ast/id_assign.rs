@@ -52,7 +52,7 @@ pub fn id_assign(
         }
         block.assign_variable(var_id);
     } else if title == "array_assign" {
-        let var_name = node.child(0).get_value().unwrap();
+        let var_name = node.child(0).child(0).get_value().unwrap();
         let var_id = get_closest_scope(var_name.to_string(), block.ast_id, typestack, node).unwrap();
 
         parse_ast(node.child(1), block, is_wasm, typestack);

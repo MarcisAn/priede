@@ -23,7 +23,8 @@ pub fn id(node: AstNode, title: &str, block: &mut Block, typestack: &mut Compile
             );
             exit(0);
         } else {
-            typestack.push(typestack.defined_variables[var_id.unwrap()].data_type.clone());
+            let data_type = typestack.get_var_type(var_id.unwrap()).unwrap();
+            typestack.push(data_type);
             block.load_variable(var_id.unwrap());
         }
     }

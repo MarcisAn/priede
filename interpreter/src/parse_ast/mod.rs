@@ -28,6 +28,7 @@ use return_st::return_st;
 mod id;
 use id::id;
 
+use crate::{ errors, util };
 
 pub fn parse_ast(
     node: AstNode,
@@ -42,21 +43,29 @@ pub fn parse_ast(
             parse_ast(i, block, is_wasm, typestack);
         }
     }
-/* 
-    if title == "dot_call"{
-        //let check_var = typestack.check_var(node.child(0).get_value().unwrap());
-        let check_array = typestack.check_array_type_and_length(node.child(0).get_value().unwrap());
-        
-        if check_array.is_some(){
-            if node.child(1).get_value().unwrap() == "garums" {
-                block.get_array_length(node.child(0).get_value().unwrap());
-                typestack.push(celsium::BUILTIN_TYPES::MAGIC_INT)
+
+    if title == "dot_call" {
+        if node.child(1).get_value().unwrap() == "garums" {
+            let array_name = node.child(0).get_value().unwrap().to_string();
+            let array_id = util::get_closest_scope(
+                array_name.clone(),
+                block.ast_id,
+                typestack,
+                node
+            );
+            if array_id.is_none() {
+                errors::undefined_var(
+                    format!("Saraksts `{}` nav definēts", array_name),
+                    &typestack.source_files[typestack.current_file],
+                    &typestack.source_file_paths[typestack.current_file],
+                    node.child(1).get_position().unwrap().line,
+                    node.child(1).get_position().unwrap().column
+                );
             }
+            block.get_array_length(array_id.unwrap());
+            typestack.push(celsium::BUILTIN_TYPES::MAGIC_INT);
         }
-        
-    }*/
-
-
+    }
 
     id(node, &title, block, typestack);
     return_st(node, &title, block, typestack, is_wasm);

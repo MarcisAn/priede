@@ -74,18 +74,15 @@ pub fn get_closest_scope(
     compilehelper: &mut CompileTimeHelper,
     node: AstNode
 ) -> Option<usize> {
-    let mut counter = 0;
     for var in compilehelper.defined_variables.clone() {
         if var.name == target_name && var.scope == starting_scope {
-            return Some(counter);
+            return Some(var.id);
         }
-        counter += 1;
     }
     for var in compilehelper.defined_arrays.clone() {
         if var.name == target_name && var.scope == starting_scope {
-            return Some(counter);
+            return Some(var.id);
         }
-        counter += 1;
     }
     let node_parrent = node.parent();
     if node_parrent.is_none() {
