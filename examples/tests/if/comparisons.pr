@@ -1,0 +1,11 @@
+ja 3 > 2 {
+    izvade("Trīs ir lielāks par divi")
+}
+
+ja 1 < 2 {
+    izvade("Viens ir mazāks par divi")
+}
+
+ja 5 != 2 {
+    izvade("Pieci nav vienāds ar divi")
+}

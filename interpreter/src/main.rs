@@ -43,6 +43,7 @@ fn rem_first_and_last(value: &str) -> &str {
     chars.as_str()
 }
 
+
 pub fn interpret(path: String, verbose: u8) {
     let file_content = read_file(path.clone());
 

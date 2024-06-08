@@ -1,0 +1,7 @@
+ja 2 = 2 {
+    izvade("Divi ir vienāds ar divi")
+}
+
+ja 2+2 = 4 {
+    izvade("Divi plus divi ir vienāds ar četri")
+}

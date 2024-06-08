@@ -1,0 +1,34 @@
+skaitlis a : 2
+
+izvade(a)
+
+teksts a : "Sveika, pasaule!"
+
+izvade(a)
+
+būls a : PAT
+būls b : NEPAT
+
+
+izvade(a)
+izvade(b)
+
+būls a : PAT
+
+ja a {
+    izvade("Būla mainīgais a ir patiess")
+}
+
+sk a : 3
+
+izvade(a)
+
+a : 4
+
+izvade(a)
+
+a : a + 3
+
+a +: 3
+
+a++

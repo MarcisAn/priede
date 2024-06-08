@@ -1,7 +1,3 @@
 tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
-izvade(augļi[0])
-
-augļi[0] : "kivi"
-
-izvade(augļi[0])
+izvade(augļi.garums)

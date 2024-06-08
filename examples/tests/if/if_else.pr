@@ -1,0 +1,6 @@
+ja 2 = 2 {
+    izvade("Divi ir vienāds ar divi")
+}
+citādi{
+    izvade("Matemātika sabruka")
+}
