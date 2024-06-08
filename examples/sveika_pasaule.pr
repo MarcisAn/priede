@@ -1,6 +1,8 @@
-funkc piesk5(sk : a) {
+funkc piesk5(sk : a;sk : b) {
     izvade(a)
+    izvade(b)
+
 }
 
-piesk5(4)
-piesk5(2)
+piesk5(4;2)
+piesk5(2;1)

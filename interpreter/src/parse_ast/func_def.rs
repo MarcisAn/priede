@@ -28,7 +28,8 @@ pub fn func_def(
 
         if node.children_count() == 3 {
             //when the function takes arguments
-            for arg in node.child(1).children() {
+            let args_tree = node.child(1).children();
+            for arg in args_tree.iter().rev() {
                 let arg_name = arg.child(1).get_value().unwrap().to_string();
                 let arg_type =  util::data_type_from_str(arg.child(0).to_string().as_str());
                 args.push(FuncArg {
