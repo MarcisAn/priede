@@ -5,6 +5,8 @@ use celsium::{
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
+use crate::util;
+
 use super::parse_ast;
 
 pub fn func_def(
@@ -24,21 +26,22 @@ pub fn func_def(
         );
         let mut args: Vec<FuncArg> = vec![];
 
-        if node.children_count() > 2 {
+        if node.children_count() == 3 {
             //when the function takes arguments
-            parse_ast(node.child(2), &mut body, is_wasm, typestack);
             for arg in node.child(1).children() {
+                let arg_name = arg.child(1).get_value().unwrap().to_string();
+                let arg_type =  util::data_type_from_str(arg.child(0).to_string().as_str());
                 args.push(FuncArg {
-                    name: arg.child(1).get_value().unwrap().to_string(),
-                    arg_type: match arg.child(0).to_string().as_str() {
-                        "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                        "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-                        "TEXT" => celsium::BUILTIN_TYPES::MAGIC_INT,
-                        "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
-                        _ => panic!(),
-                    },
+                    name: arg_name.clone(),
+                    arg_type: arg_type.clone()
                 });
+                let var_id = typestack.def_var(arg_name, arg_type, body.ast_id);
+                body.define_variable(var_id);
             }
+
+            parse_ast(node.child(2), &mut body, is_wasm, typestack);
+            
+            
         } else {
             parse_ast(node.child(1), &mut body, is_wasm, typestack);
         }

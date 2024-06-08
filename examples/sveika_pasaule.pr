@@ -1,7 +1,6 @@
-tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+funkc piesk5(sk : a) {
+    izvade(a)
+}
 
-izvade(augļi[0])
-
-augļi[0] : "kivi"
-
-izvade(augļi[0])
+piesk5(4)
+piesk5(2)
