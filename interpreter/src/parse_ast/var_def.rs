@@ -31,10 +31,8 @@ pub fn var_def(
                         init_value_counter,
                         data_type_marked.clone(),
                         type_of_init_val.unwrap().clone(),
-                        &current_file,
-                        &current_file_path,
-                        node.child(1).get_position().unwrap().line,
-                        node.child(1).get_position().unwrap().column
+                        typestack,
+                        node
                     );
                 }
                 init_value_counter += 1;
@@ -58,9 +56,8 @@ pub fn var_def(
                         util::str_from_data_type(util::data_type_from_str(node.child(0).to_string().as_str())),
                         util::str_from_data_type(typ_of_init_value.unwrap())
                     ),
-                    &typestack.source_files[typestack.current_file],
-                    &typestack.source_file_paths[typestack.current_file],
-                    util::get_closest_node_location(node)
+                    typestack,
+                    node
                 );
                 exit(0);
             }

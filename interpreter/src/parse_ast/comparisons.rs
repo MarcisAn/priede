@@ -3,7 +3,7 @@ use std::process::exit;
 use celsium::{ block::Block, bytecode::BINOP, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::util;
+use crate::{errors, util};
 
 use super::parse_ast;
 
@@ -28,11 +28,9 @@ pub fn comparisons(
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         };
         if checked_type.is_none() {
-            crate::errors::math_error(
-                "Ar šiem datu tipiem nevar veikt šo matemātisko darbību",
-                &typestack.source_files[typestack.current_file],
-                &typestack.source_file_paths[typestack.current_file],
-                util::get_closest_node_location(node)
+            errors::math_error(
+                typestack,
+                node
             );
             exit(0);
         }

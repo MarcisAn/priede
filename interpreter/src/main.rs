@@ -8,6 +8,7 @@ use hime_redist::ast::AstNode;
 use hime_redist::errors::ParseErrorDataTrait;
 use hime_redist::symbols::SemanticElementTrait;
 use module::Module;
+use util::get_closest_node_location;
 use std::panic;
 use std::process::exit;
 use std::{fs, process};
@@ -47,6 +48,8 @@ fn rem_first_and_last(value: &str) -> &str {
 pub fn interpret(path: String, verbose: u8) {
     let file_content = read_file(path.clone());
 
+    let mut compile_helper = CompileTimeHelper::new(file_content.clone(), path);
+
     //send code to hime and get ast root
     let parse_res = hime::priede::parse_string(file_content.clone());
     for parse_err in parse_res.errors.clone().errors {
@@ -63,10 +66,8 @@ pub fn interpret(path: String, verbose: u8) {
         let unexpected_token = rem_first_and_last(&err_str.split_off(17)).to_string();
         parser_error(
             unexpected_token,
-            &file_content,
-            &path,
-            err.get_position().line,
-            err.get_position().column,
+            err.get_position(),
+            &mut compile_helper
         );
     }
     if parse_res.errors.errors.len() > 0 {
@@ -90,7 +91,7 @@ pub fn interpret(path: String, verbose: u8) {
         root,
         &mut main_block,
         false,
-        &mut CompileTimeHelper::new(file_content, path),
+        &mut compile_helper,
     );
     
     if verbose > 2 {

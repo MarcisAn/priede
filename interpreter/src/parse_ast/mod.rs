@@ -56,9 +56,8 @@ pub fn parse_ast(
             if array_id.is_none() {
                 errors::undefined_var(
                     format!("Saraksts `{}` nav definēts", array_name),
-                    &typestack.source_files[typestack.current_file],
-                    &typestack.source_file_paths[typestack.current_file],
-                    util::get_closest_node_location(node)
+                    typestack,
+                    node
                 );
             }
             block.get_array_length(array_id.unwrap());

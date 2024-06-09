@@ -46,12 +46,7 @@ fn calculate(
     parse_ast(node.child(1), block, is_wasm, typestack);
     let res = typestack.binop(binop.clone());
     if res.is_none() {
-        math_error(
-            "Ar šiem datu tipiem nevar veikt šo matemātisko darbību",
-            &typestack.source_files[typestack.current_file],
-            &typestack.source_file_paths[typestack.current_file],
-            util::get_closest_node_location(node)
-        );
+        math_error(typestack, node);
         exit(0);
     }
     block.binop(binop);

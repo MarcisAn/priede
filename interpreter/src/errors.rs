@@ -2,43 +2,42 @@ use std::process::exit;
 
 use annotate_snippets::{ Level, Renderer, Snippet };
 use anstream;
-use celsium::BUILTIN_TYPES;
+use celsium::{ compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
 use colored::Colorize;
-use hime_redist::text::TextPosition;
+use hime_redist::{ast::AstNode, text::TextPosition};
 
-pub fn parser_error(unexpected: String, source: &str, path: &str, line: usize, col: usize) {
+use crate::util::{self, get_closest_node_location};
+
+pub fn parser_error(unexpected: String, position: TextPosition, compilehelper: &mut CompileTimeHelper) {
     let error_title = if unexpected == "saraksts" {
         format!("NEATPAZĪTS SIMBOLS `{}`\nIespējams aizmirsi norādīt saraksta elementu datu tipu", unexpected)
     } else {
         format!("NEATPAZĪTS SIMBOLS `{}`", unexpected)
     };
-    common_error(error_title.to_string(), line, path);
+    common_error(&error_title, position, compilehelper);
 }
-pub fn math_error(msg: &str, source: &str, path: &str, position: TextPosition) {
-    let error_title = &format!("{}", msg);
-    common_error(msg.to_string(), position.line, path);
+pub fn math_error(compilehelper: &mut CompileTimeHelper, node: AstNode) {
+    common_error(
+        "Ar šiem datu tipiem nevar veikt šo matemātisko darbību",
+        util::get_closest_node_location(node),
+        compilehelper
+    );
 }
-pub fn incorect_init_value(msg: String, source: &str, path: &str, position: TextPosition) {
-    let error_title = &format!("{}", msg);
-    common_error(msg.to_string(), position.line, path);
+pub fn incorect_init_value(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
+    common_error(&msg, util::get_closest_node_location(node), compilehelper);
 }
-pub fn undefined_var(msg: String, source: &str, path: &str, position: TextPosition) {
-    let error_title = &format!("{}", msg);
-    common_error(msg.to_string(), position.line, path);
+pub fn undefined_var(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
+    common_error(&msg, util::get_closest_node_location(node), compilehelper);
 }
-pub fn undefined_func(msg: String, source: &str, path: &str, position: TextPosition) {
-    let error_title = &format!("{}", msg);
-    common_error(msg.to_string(), position.line, path);
+pub fn undefined_func(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
+    common_error(&msg, util::get_closest_node_location(node), compilehelper);
 }
 pub fn array_element_wrong_type(
     array_name: String,
     element_index: usize,
     expected_type: BUILTIN_TYPES,
     found_type: BUILTIN_TYPES,
-    source: &str,
-    path: &str,
-    line: usize,
-    col: usize
+    compilehelper: &mut CompileTimeHelper, node: AstNode
 ) {
     let expected = match expected_type {
         BUILTIN_TYPES::MAGIC_INT => "skaitlis",
@@ -55,25 +54,22 @@ pub fn array_element_wrong_type(
         BUILTIN_TYPES::FLOAT => "decimālskaitlis",
     };
     common_error(
-        format!(
+        &format!(
             "Definējot sarakstu `{}`, tā sākotnējā vērtība pozīcijā {} ir ar nepareizu datu tipu. Nepieciešams {}, bet atrasts {}.",
             array_name,
             element_index,
             expected,
             found
         ),
-        line,
-        path
+        util::get_closest_node_location(node),
+        compilehelper
     );
 }
 pub fn array_element_wrong_type_index(
     array_name: String,
     expected_type: BUILTIN_TYPES,
     found_type: BUILTIN_TYPES,
-    source: &str,
-    path: &str,
-    line: usize,
-    col: usize
+    compilehelper: &mut CompileTimeHelper, node: AstNode
 ) {
     let expected = match expected_type {
         BUILTIN_TYPES::MAGIC_INT => "skaitlis",
@@ -90,37 +86,36 @@ pub fn array_element_wrong_type_index(
         BUILTIN_TYPES::FLOAT => "decimālskaitlis",
     };
     common_error(
-        format!(
+        &format!(
             "Nepareizs indeksa datu tips, indeksējot sarakstu `{}`. Nepieciešams {}, bet atrasts {}.",
             array_name,
             expected,
             found
         ),
-        line,
-        path
+        get_closest_node_location(node),
+        compilehelper
     );
 }
 pub fn array_element_index_too_high(
     array_name: String,
     expected_index: usize,
     found_index: usize,
-    source: &str,
-    path: &str,
-    line: usize
+    compilehelper: &mut CompileTimeHelper, node: AstNode
 ) {
     common_error(
-        format!(
+        &format!(
             "Sarakstu `{}` garums ir {}, bet ir mēģinājums to indeksēt ar indeksu {}.\nSarakstu indeksi tiek skaitīti no nulles.",
             array_name,
             expected_index,
             found_index
         ),
-        line,
-        path
+        get_closest_node_location(node),
+        compilehelper
     );
 }
 
-fn common_error(msg: String, line: usize, path: &str) {
-    println!("{}\n{}\nFaila \"{}\"\n{}. rindiņā", "Kļūda: ".red(), msg.red(), path, line);
+fn common_error(msg: &str, position: TextPosition, compilehelper: &mut CompileTimeHelper) {
+    let path = &compilehelper.source_file_paths[compilehelper.current_file];
+    println!("{}\n{}\nFaila \"{}\"\n{}. rindiņā", "Kļūda: ".red(), msg.red(), path, position.line);
     exit(0);
 }

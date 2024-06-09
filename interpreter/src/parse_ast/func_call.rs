@@ -39,9 +39,8 @@ pub fn func_call(
             if func_id.is_none() {
                 errors::undefined_func(
                     format!("Funkcija `{}` nav definēta", func_name),
-                    &typestack.source_files[typestack.current_file],
-                    &typestack.source_file_paths[typestack.current_file],
-                    util::get_closest_node_location(node)
+                    typestack,
+                    node
                 );
             }
             let func_return_type = typestack.get_func_return_type(func_id.unwrap()).unwrap();

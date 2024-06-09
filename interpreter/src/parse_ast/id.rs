@@ -16,9 +16,8 @@ pub fn id(node: AstNode, title: &str, block: &mut Block, typestack: &mut Compile
         if var_id.is_none() {
             errors::undefined_var(
                 format!("Mainīgais ar nosaukumu '{}' nav definēts šajā blokā.", node.get_value().unwrap()),
-                &typestack.source_files[typestack.current_file],
-                &typestack.source_file_paths[typestack.current_file],
-                util::get_closest_node_location(node)
+                typestack,
+                node
             );
             exit(0);
         } else {
