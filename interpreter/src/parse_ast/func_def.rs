@@ -43,8 +43,8 @@ pub fn func_def(
                 body.define_variable(var_id);
             }
             
-            typestack.def_function(func_name.clone(), args.clone(), block.ast_id);
             parse_ast(node.child(2), &mut body, is_wasm, typestack);
+            typestack.def_function(func_name.clone(), args.clone(), block.ast_id);
         } else {
             parse_ast(node.child(1), &mut body, is_wasm, typestack);
             typestack.def_function(func_name.clone(), args.clone(), block.ast_id);

@@ -6,7 +6,7 @@ use celsium::{ compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
 use colored::Colorize;
 use hime_redist::{ast::AstNode, text::TextPosition};
 
-use crate::util::{self, get_closest_node_location};
+use crate::util::{self, get_closest_node_location, str_from_data_type};
 
 pub fn parser_error(unexpected: String, position: TextPosition, compilehelper: &mut CompileTimeHelper) {
     let error_title = if unexpected == "saraksts" {
@@ -32,6 +32,16 @@ pub fn undefined_var(msg: String, compilehelper: &mut CompileTimeHelper, node: A
 pub fn undefined_func(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
     common_error(&msg, util::get_closest_node_location(node), compilehelper);
 }
+pub fn wrong_argument_count(func_name: String, expected: usize, found: usize, node: AstNode, compilehelper: &mut CompileTimeHelper){
+    let position = util::get_closest_node_location(node);
+    let msg = format!("Fukcija {} sagaida {} argumentu{}, bet šeit tiek padot{} {} argument{}", func_name, expected, if expected == 1 {""} else {"s"}, if expected == 1 {"s"} else {"i"}, found, if expected == 1 {"s"} else {"i"});
+    common_error(&msg, position, compilehelper);
+}
+pub fn wrong_argument_type(func_name: String, arg_index: usize ,expected: BUILTIN_TYPES, found: BUILTIN_TYPES, node: AstNode, compilehelper: &mut CompileTimeHelper){
+    let position = util::get_closest_node_location(node);
+    let msg = format!("Fukcija `{}` kā {}. argumentu sagaida datu tipu `{}`, bet atrasts arguments ar tipu `{}`.", func_name, arg_index, str_from_data_type(expected), str_from_data_type(found));
+    common_error(&msg, position, compilehelper);
+}
 pub fn array_element_wrong_type(
     array_name: String,
     element_index: usize,
@@ -39,20 +49,8 @@ pub fn array_element_wrong_type(
     found_type: BUILTIN_TYPES,
     compilehelper: &mut CompileTimeHelper, node: AstNode
 ) {
-    let expected = match expected_type {
-        BUILTIN_TYPES::MAGIC_INT => "skaitlis",
-        BUILTIN_TYPES::BOOL => "būls",
-        BUILTIN_TYPES::STRING => "teksts",
-        BUILTIN_TYPES::OBJECT => "objekts",
-        BUILTIN_TYPES::FLOAT => "decimālskaitlis",
-    };
-    let found = match found_type {
-        BUILTIN_TYPES::MAGIC_INT => "skaitlis",
-        BUILTIN_TYPES::BOOL => "būls",
-        BUILTIN_TYPES::STRING => "teksts",
-        BUILTIN_TYPES::OBJECT => "objekts",
-        BUILTIN_TYPES::FLOAT => "decimālskaitlis",
-    };
+    let expected = str_from_data_type(expected_type);
+    let found = util::str_from_data_type(found_type);
     common_error(
         &format!(
             "Definējot sarakstu `{}`, tā sākotnējā vērtība pozīcijā {} ir ar nepareizu datu tipu. Nepieciešams {}, bet atrasts {}.",
@@ -71,20 +69,8 @@ pub fn array_element_wrong_type_index(
     found_type: BUILTIN_TYPES,
     compilehelper: &mut CompileTimeHelper, node: AstNode
 ) {
-    let expected = match expected_type {
-        BUILTIN_TYPES::MAGIC_INT => "skaitlis",
-        BUILTIN_TYPES::BOOL => "būls",
-        BUILTIN_TYPES::STRING => "teksts",
-        BUILTIN_TYPES::OBJECT => "objekts",
-        BUILTIN_TYPES::FLOAT => "decimālskaitlis",
-    };
-    let found = match found_type {
-        BUILTIN_TYPES::MAGIC_INT => "skaitlis",
-        BUILTIN_TYPES::BOOL => "būls",
-        BUILTIN_TYPES::STRING => "teksts",
-        BUILTIN_TYPES::OBJECT => "objekts",
-        BUILTIN_TYPES::FLOAT => "decimālskaitlis",
-    };
+    let expected = str_from_data_type(expected_type);
+    let found = util::str_from_data_type(found_type);
     common_error(
         &format!(
             "Nepareizs indeksa datu tips, indeksējot sarakstu `{}`. Nepieciešams {}, bet atrasts {}.",

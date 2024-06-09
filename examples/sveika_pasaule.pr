@@ -1,6 +1,5 @@
-funkc piesk5() {
-    izvade(2 + 3)
-    atgriezt 2
+funkc aa(sk e; tk r) {
+    atgriezt e
 }
 
-izvade(piesk5() + PAT)
+aa("a"; 2)
