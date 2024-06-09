@@ -13,12 +13,10 @@ pub fn func_call(
     is_wasm: bool
 ) {
     if title == "func_call" {
-        let mut func_args_found: Vec<BUILTIN_TYPES> = vec![];
         if node.children_count() > 1 {
             //if funccall has arguments
             for arg in node.child(1).children().iter().rev() {
                 parse_ast(arg, block, is_wasm, typestack);
-                func_args_found.push(typestack.pop().unwrap());
             }
         }
         let func_name = node.child(0).get_value().unwrap();
@@ -33,6 +31,16 @@ pub fn func_call(
             //parse_ast(node.child(1).child(1), block, is_wasm, typestack);
             block.call_special_function(celsium::SpecialFunctions::RANDOM);
         } else {
+            let mut func_args_found: Vec<BUILTIN_TYPES> = vec![];
+            if node.children_count() > 1 {
+                //if funccall has arguments
+                for arg in node.child(1).children().iter().rev() {
+                    parse_ast(arg, block, is_wasm, typestack);
+                    let arg_type = typestack.pop().unwrap();
+                    func_args_found.push(arg_type.clone());
+                    typestack.push(arg_type);
+                }
+            }
             let func_id = util::get_closest_scope(
                 func_name.to_string(),
                 block.ast_id,
@@ -47,7 +55,10 @@ pub fn func_call(
                 );
             }
             let func_return_type = typestack.get_func_return_type(func_id.unwrap()).unwrap();
-            let func_args = typestack.get_func_args(func_id.unwrap()).unwrap();
+            let mut func_args = typestack.get_func_args(func_id.unwrap()).unwrap();
+            func_args.reverse();
+            func_args_found.reverse();
+            
 
             //first check if argument cound is valid
             if func_args.len() != func_args_found.len() {
@@ -60,11 +71,18 @@ pub fn func_call(
                 );
             }
             //then check if arguement types are valid
-            let mut counter = 0; 
-            for expected_arg in func_args{
+            let mut counter = 0;
+            for expected_arg in func_args {
                 let found_arg = &func_args_found[counter];
                 if expected_arg.arg_type != *found_arg {
-                    errors::wrong_argument_type(func_name.to_string(), counter + 1, expected_arg.arg_type, found_arg.clone(), node, typestack);
+                    errors::wrong_argument_type(
+                        func_name.to_string(),
+                        counter + 1,
+                        expected_arg.arg_type,
+                        found_arg.clone(),
+                        node,
+                        typestack
+                    );
                 }
                 counter += 1;
             }

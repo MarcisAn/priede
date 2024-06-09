@@ -1,5 +1,5 @@
-funkc aa(sk e; tk r) {
-    atgriezt e
+funkc aa(sk a; sk b; tk c) {
+    izvade(a)
 }
 
-aa("a"; 2)
+aa(1; 3; 2)
