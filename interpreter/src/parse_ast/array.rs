@@ -20,8 +20,7 @@ pub fn array(
                 format!("Saraksts `{}` nav definēts", array_name),
                 &typestack.source_files[typestack.current_file],
                 &typestack.source_file_paths[typestack.current_file],
-                node.child(1).get_position().unwrap().line,
-                node.child(1).get_position().unwrap().column
+                util::get_closest_node_location(node)
             );
         }
         //parse the index

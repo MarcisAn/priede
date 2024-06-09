@@ -92,8 +92,8 @@ pub fn interpret(path: String, verbose: u8) {
         false,
         &mut CompileTimeHelper::new(file_content, path),
     );
+    
     if verbose > 2 {
-
         let mut i = 0;
         while i < main_block.bytecode.len() {
             println!("{} {:?}", i, main_block.bytecode[i]);

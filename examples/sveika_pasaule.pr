@@ -1,8 +1,6 @@
-funkc piesk5(sk : a;sk : b) {
-    izvade(a)
-    izvade(b)
-
+funkc piesk5() {
+    izvade(2 + 3)
+    atgriezt 2
 }
 
-piesk5(4;2)
-piesk5(2;1)
+izvade(piesk5() + PAT)

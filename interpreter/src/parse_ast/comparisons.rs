@@ -3,6 +3,8 @@ use std::process::exit;
 use celsium::{ block::Block, bytecode::BINOP, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
+use crate::util;
+
 use super::parse_ast;
 
 pub fn comparisons(
@@ -30,8 +32,7 @@ pub fn comparisons(
                 "Ar šiem datu tipiem nevar veikt šo matemātisko darbību",
                 &typestack.source_files[typestack.current_file],
                 &typestack.source_file_paths[typestack.current_file],
-                node.child(0).get_position().unwrap().line,
-                node.child(0).get_position().unwrap().column,
+                util::get_closest_node_location(node)
             );
             exit(0);
         }

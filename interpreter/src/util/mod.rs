@@ -1,5 +1,5 @@
 use celsium::{ compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
-use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
+use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
     let mut i = 0;
@@ -84,11 +84,28 @@ pub fn get_closest_scope(
             return Some(var.id);
         }
     }
+    for function in &compilehelper.defined_functions {
+        if function.name == target_name && function.scope == starting_scope{
+            return Some(function.id);
+        }
+    }
     let node_parrent = node.parent();
     if node_parrent.is_none() {
         return None;
     }
     get_closest_scope(target_name, node_parrent.unwrap().id(), compilehelper, node_parrent.unwrap())
+}
+
+pub fn get_closest_node_location(node: AstNode) -> TextPosition {
+    if node.get_position().is_some(){
+        return node.get_position().unwrap();
+    }
+    else{
+        for child in node.children(){
+            return get_closest_node_location(child);
+        }
+        panic!();
+    }
 }
 
 pub fn data_type_from_str(inp: &str) -> BUILTIN_TYPES {

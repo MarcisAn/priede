@@ -17,6 +17,9 @@ pub fn func_def(
     is_wasm: bool
 ) {
     if title == "func_def" {
+        let func_name = node.child(0).get_value().unwrap().to_string();
+
+
         let mut body = Block::new(
             if node.children_count() > 2 {
                 node.child(2).id()
@@ -39,16 +42,17 @@ pub fn func_def(
                 let var_id = typestack.def_var(arg_name, arg_type, body.ast_id);
                 body.define_variable(var_id);
             }
-
+            
+            typestack.def_function(func_name.clone(), args.clone(), block.ast_id);
             parse_ast(node.child(2), &mut body, is_wasm, typestack);
-            
-            
         } else {
             parse_ast(node.child(1), &mut body, is_wasm, typestack);
+            typestack.def_function(func_name.clone(), args.clone(), block.ast_id);
         }
 
+
         block.define_function(body, VISIBILITY::PUBLIC, FunctionSignature {
-            name: node.child(0).get_value().unwrap().to_string(),
+            name: func_name,
             return_type: celsium::module::FunctionReturnType::NONE,
             args: args,
         })
