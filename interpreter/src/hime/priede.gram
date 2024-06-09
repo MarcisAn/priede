@@ -47,6 +47,7 @@ grammar priede
         CITADI -> 'citādi';
         ARRAY -> 'saraksts';
         RETURN -> 'atgriezt';
+        INCLUDE -> 'iekļaut';
     }
     rules{
         BOOL_DEF -> 'būls'! | 'bl'!;
@@ -62,6 +63,8 @@ grammar priede
         BOOL -> TRUE | FALSE;
 
         array -> ID '['! exp ']'!;
+
+        include -> INCLUDE! STRING;
 
         var_def -> TYPE ID ':'! var_def_value
                 | TYPE ARRAY  ID ':'! '['! array_def_value ']'!
@@ -177,11 +180,12 @@ grammar priede
 
         exp -> un^;
 
-        import -> 'iekļaut' STRING;
 
         multiple_ids -> ID | ID (';'! ID)*;
 
         multiple_id_define -> '{'! multiple_ids '}'! ':'! exp;
+
+
 
         stat -> var_def^ 
         | multiple_id_define^ 
@@ -192,9 +196,9 @@ grammar priede
         | s_loop^ 
         | w_loop^ 
         | func_def^ 
-        | import^ 
         | return_st^
-        | dot_call^;
+        | dot_call^
+        | include^;
 
         block -> stat*;
         root ->  block^;

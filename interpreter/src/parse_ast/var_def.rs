@@ -8,7 +8,7 @@ use super::parse_ast;
 
 pub fn var_def(
     node: AstNode,
-    title: String,
+    title: &str,
     typestack: &mut CompileTimeHelper,
     is_wasm: bool,
     block: &mut Block

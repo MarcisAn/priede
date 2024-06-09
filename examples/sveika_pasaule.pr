@@ -1,5 +1,1 @@
-funkc aa(sk a; sk b; tk c) {
-    izvade(a)
-}
-
-aa(1; 3; 2)
+iekļaut "E:/Dev/priede/examples/tests/if/if_else.pr"

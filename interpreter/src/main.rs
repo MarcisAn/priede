@@ -142,8 +142,10 @@ pub fn run_wasm(code: String) {
 }
 
 fn read_file(path: String) -> String {
+    println!("{} {:?}",path, path);
     let file_read = fs::read_to_string(&path);
     if file_read.is_err() {
+        println!("{}", file_read.err().unwrap());
         println!("Neizdevās nolasīt failu {} \nPārlicinies, ka faila adrese ir pareiza!", path);
         process::exit(1);
     }

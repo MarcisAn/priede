@@ -77,5 +77,9 @@ pub fn parse_ast(
     comparisons(node, &title, block, typestack, is_wasm);
     id_assign(node, &title, block, typestack, is_wasm);
     parse_constants(node, &title, typestack, block);
-    var_def(node, title, typestack, is_wasm, block);
+    var_def(node, &title, typestack, is_wasm, block);
+
+    if title == "include" {
+        crate::interpret(util::rem_first_and_last(node.child(0).get_value().unwrap()).to_string(), 3);
+    }
 }
