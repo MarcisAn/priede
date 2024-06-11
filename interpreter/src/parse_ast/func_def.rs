@@ -1,3 +1,5 @@
+use std::thread::scope;
+
 use celsium::{
     block::Block,
     compiletime_helper::CompileTimeHelper,
@@ -22,9 +24,9 @@ pub fn func_def(
 
         let mut body = Block::new(
             if node.children_count() > 2 {
-                node.child(2).id()
+                block.scope.change_ast_id(node.child(2).id())
             } else {
-                node.child(1).id()
+                block.scope.change_ast_id(node.child(1).id())
             }
         );
         let mut args: Vec<FuncArg> = vec![];
@@ -39,15 +41,15 @@ pub fn func_def(
                     name: arg_name.clone(),
                     arg_type: arg_type.clone()
                 });
-                let var_id = typestack.def_var(arg_name, arg_type, body.ast_id);
+                let var_id = typestack.def_var(arg_name, arg_type, body.scope.clone());
                 body.define_variable(var_id);
             }
             
             parse_ast(node.child(2), &mut body, is_wasm, typestack);
-            typestack.def_function(func_name.clone(), args.clone(), block.ast_id);
+            typestack.def_function(func_name.clone(), args.clone(), block.scope.clone());
         } else {
             parse_ast(node.child(1), &mut body, is_wasm, typestack);
-            typestack.def_function(func_name.clone(), args.clone(), block.ast_id);
+            typestack.def_function(func_name.clone(), args.clone(), block.scope.clone());
         }
 
 

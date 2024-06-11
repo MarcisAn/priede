@@ -17,7 +17,7 @@ pub fn id_assign(
         let var_name = node.child(0).get_value().unwrap();
         let var_id = get_closest_scope(
             var_name.to_string(),
-            block.ast_id,
+            block.scope.clone(),
             typestack,
             node
         ).unwrap();
@@ -70,7 +70,7 @@ pub fn id_assign(
         let var_name = node.child(0).child(0).get_value().unwrap();
         let var_id = get_closest_scope(
             var_name.to_string(),
-            block.ast_id,
+            block.scope.clone(),
             typestack,
             node
         ).unwrap();

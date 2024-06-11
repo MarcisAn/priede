@@ -1,1 +1,8 @@
-iekļaut "E:/Dev/priede/examples/tests/if/if_else.pr"
+sk a : 3
+
+ja 2=2 {
+    sk a : 1
+    izvade(a)
+}
+
+izvade(a)

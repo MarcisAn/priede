@@ -3,11 +3,14 @@ use celsium::block;
 use celsium::compiletime_helper::CompileTimeHelper;
 use celsium::module;
 use celsium::CelsiumProgram;
+use celsium::Scope;
 use errors::parser_error;
 use hime_redist::ast::AstNode;
+use hime_redist::errors::ParseError;
 use hime_redist::errors::ParseErrorDataTrait;
 use hime_redist::errors::ParseErrorUnexpectedChar;
 use hime_redist::errors::ParseErrorUnexpectedToken;
+use hime_redist::errors::ParseErrors;
 use hime_redist::symbols::SemanticElementTrait;
 use module::Module;
 use util::get_closest_node_location;
@@ -66,7 +69,7 @@ fn unexpected_char_error(err: ParseErrorUnexpectedChar, compilehelper: &mut Comp
 pub fn interpret(path: String, verbose: u8) {
     let file_content = read_file(path.clone());
 
-    let mut compile_helper = CompileTimeHelper::new(file_content.clone(), path);
+    let mut compile_helper = CompileTimeHelper::new(file_content.clone(), path.clone());
 
     //send code to hime and get ast root
     let parse_res = hime::priede::parse_string(file_content.clone());
@@ -91,7 +94,7 @@ pub fn interpret(path: String, verbose: u8) {
 
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
-    let mut main_block = Block::new(root.id());
+    let mut main_block = Block::new(Scope { ast_id: root.id(), module_path: path });
 
     let mut block_ids: Vec<usize> = vec![];
     parse_block_ids(root, &mut block_ids);
@@ -128,7 +131,7 @@ pub fn run_wasm(code: String) {
 
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
-    let mut main_block = Block::new(root.id());
+    let mut main_block = Block::new(Scope{ast_id: root.id(), module_path: "".to_string()});
     parse_ast::parse_ast(
         root,
         &mut main_block,
@@ -141,7 +144,7 @@ pub fn run_wasm(code: String) {
     celsium.run_program();
 }
 
-fn read_file(path: String) -> String {
+pub fn read_file(path: String) -> String {
     println!("{} {:?}",path, path);
     let file_read = fs::read_to_string(&path);
     if file_read.is_err() {
@@ -150,4 +153,21 @@ fn read_file(path: String) -> String {
         process::exit(1);
     }
     file_read.unwrap()
+}
+
+pub fn parser_errors(errors: Vec<ParseError>, compile_helper: &mut CompileTimeHelper){
+    for parse_err in errors.clone() {
+            match parse_err {
+                hime_redist::errors::ParseError::UnexpectedEndOfInput(_) => todo!(),
+                hime_redist::errors::ParseError::UnexpectedChar(err) =>
+                    unexpected_char_error(err, compile_helper),
+                hime_redist::errors::ParseError::UnexpectedToken(err) =>
+                    unexpected_token_error(err, compile_helper),
+                hime_redist::errors::ParseError::IncorrectUTF16NoLowSurrogate(_) => todo!(),
+                hime_redist::errors::ParseError::IncorrectUTF16NoHighSurrogate(_) => todo!(),
+            }
+        }
+        if errors.len() > 0 {
+            exit(0);
+        }
 }

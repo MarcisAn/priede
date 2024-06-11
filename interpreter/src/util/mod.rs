@@ -1,4 +1,4 @@
-use celsium::{ compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
+use celsium::{ compiletime_helper::CompileTimeHelper, Scope, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
@@ -70,22 +70,23 @@ pub fn get_closest_block(node: AstNode) -> usize {
 
 pub fn get_closest_scope(
     target_name: String,
-    starting_scope: usize,
+    starting_scope: Scope,
     compilehelper: &mut CompileTimeHelper,
     node: AstNode
 ) -> Option<usize> {
+    let starting_ast_id = starting_scope.ast_id;
     for var in compilehelper.defined_variables.clone() {
-        if var.name == target_name && var.scope == starting_scope {
+        if var.name == target_name && var.scope.ast_id == starting_ast_id {
             return Some(var.id);
         }
     }
     for var in compilehelper.defined_arrays.clone() {
-        if var.name == target_name && var.scope == starting_scope {
+        if var.name == target_name && var.scope.ast_id == starting_ast_id {
             return Some(var.id);
         }
     }
     for function in &compilehelper.defined_functions {
-        if function.name == target_name && function.scope == starting_scope{
+        if function.name == target_name && function.scope.ast_id == starting_ast_id {
             return Some(function.id);
         }
     }
@@ -93,15 +94,19 @@ pub fn get_closest_scope(
     if node_parrent.is_none() {
         return None;
     }
-    get_closest_scope(target_name, node_parrent.unwrap().id(), compilehelper, node_parrent.unwrap())
+    get_closest_scope(
+        target_name,
+        Scope { ast_id: node_parrent.unwrap().id(), module_path: starting_scope.module_path },
+        compilehelper,
+        node_parrent.unwrap()
+    )
 }
 
 pub fn get_closest_node_location(node: AstNode) -> TextPosition {
-    if node.get_position().is_some(){
+    if node.get_position().is_some() {
         return node.get_position().unwrap();
-    }
-    else{
-        for child in node.children(){
+    } else {
+        for child in node.children() {
             return get_closest_node_location(child);
         }
         panic!();

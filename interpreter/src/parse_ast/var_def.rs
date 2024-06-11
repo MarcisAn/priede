@@ -1,6 +1,6 @@
 use std::process::exit;
 
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, Scope, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 use crate::{errors, util::{self, get_closest_block}};
 
@@ -13,8 +13,6 @@ pub fn var_def(
     is_wasm: bool,
     block: &mut Block
 ) {
-    let current_file = typestack.source_files[typestack.current_file].clone();
-    let current_file_path = typestack.source_file_paths[typestack.current_file].clone();
     if title == "var_def" {
         if node.child(1).get_symbol().to_string() == "ARRAY" {
             let array_name = node.child(2).get_value().unwrap();
@@ -37,7 +35,7 @@ pub fn var_def(
                 }
                 init_value_counter += 1;
             }
-            let var_id = typestack.def_array(array_name, data_type_marked, node.child(3).children().len(), block.ast_id);
+            let var_id = typestack.def_array(array_name, data_type_marked, node.child(3).children().len(), block.scope.clone());
             block.define_array(
                 node.child(3).children().len(),
                 var_id
@@ -65,7 +63,7 @@ pub fn var_def(
             let var_id = typestack.def_var(
                 varname,
                 data_type_marked.clone(),
-                block.ast_id
+                block.scope.clone()
             );
             block.define_variable(
                 var_id,

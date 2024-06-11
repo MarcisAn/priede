@@ -1,4 +1,6 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper };
+use std::fs::create_dir;
+
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, Scope };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 mod id_assign;
@@ -28,7 +30,7 @@ use return_st::return_st;
 mod id;
 use id::id;
 
-use crate::{ errors, util };
+use crate::{ errors, hime, util };
 
 pub fn parse_ast(
     node: AstNode,
@@ -49,7 +51,7 @@ pub fn parse_ast(
             let array_name = node.child(0).get_value().unwrap().to_string();
             let array_id = util::get_closest_scope(
                 array_name.clone(),
-                block.ast_id,
+                block.scope.clone(),
                 typestack,
                 node
             );
@@ -80,6 +82,16 @@ pub fn parse_ast(
     var_def(node, &title, typestack, is_wasm, block);
 
     if title == "include" {
-        crate::interpret(util::rem_first_and_last(node.child(0).get_value().unwrap()).to_string(), 3);
+        let path = util::rem_first_and_last(node.child(2).get_value().unwrap()).to_string();
+        let file_content = crate::read_file(path.clone());
+        let parse_res = hime::priede::parse_string(file_content.clone());
+        crate::parser_errors(parse_res.errors.clone().errors, typestack);
+
+        let ast = parse_res.get_ast();
+        let root = ast.get_root();
+
+        typestack.change_module(file_content, path.clone());
+        let mut module_main_block = Block::new(Scope{ ast_id: root.id(), module_path: path });
+        parse_ast(root, block, is_wasm, typestack)
     }
 }

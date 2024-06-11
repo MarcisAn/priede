@@ -43,7 +43,7 @@ pub fn func_call(
             }
             let func_id = util::get_closest_scope(
                 func_name.to_string(),
-                block.ast_id,
+                block.scope.clone(),
                 typestack,
                 node
             );

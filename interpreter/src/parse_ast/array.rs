@@ -14,7 +14,7 @@ pub fn array(
 ) {
     if title == "array" {
         let array_name = node.child(0).get_value().unwrap();
-        let array = util::get_closest_scope(array_name.to_string(), block.ast_id, typestack, node);
+        let array = util::get_closest_scope(array_name.to_string(), block.scope.clone(), typestack, node);
         if array.is_none() {
             errors::undefined_var(
                 format!("Saraksts `{}` nav definēts", array_name),

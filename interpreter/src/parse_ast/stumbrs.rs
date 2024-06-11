@@ -87,7 +87,7 @@ pub fn stumbrs_define(
                         StumbrsValue::Array { value: _ } => panic!(),
                     });
                 }
-                let var_id = typestack.def_var(node.child(0).child(counter).get_value().unwrap().to_string(), data_type.clone(), block.ast_id);
+                let var_id = typestack.def_var(node.child(0).child(counter).get_value().unwrap().to_string(), data_type.clone(), block.scope.clone());
                 block.define_variable(var_id);
             }
 

@@ -48,6 +48,8 @@ grammar priede
         ARRAY -> 'saraksts';
         RETURN -> 'atgriezt';
         INCLUDE -> 'iekļaut';
+        FROM -> 'no';
+        EXPORT -> 'eksp';
     }
     rules{
         BOOL_DEF -> 'būls'! | 'bl'!;
@@ -64,11 +66,17 @@ grammar priede
 
         array -> ID '['! exp ']'!;
 
-        include -> INCLUDE! STRING;
+        include_list -> '{'! ID+ '}'!;
+
+        include -> INCLUDE! include_list FROM STRING;
+
+        array_def -> TYPE ARRAY  ID ':'! '['! array_def_value ']'!
+                | TYPE ARRAY  ID ':'! '['! ']'!;
 
         var_def -> TYPE ID ':'! var_def_value
-                | TYPE ARRAY  ID ':'! '['! array_def_value ']'!
-                | TYPE ARRAY  ID ':'! '['! ']'!;
+                | array_def^
+                | TYPE ID ':'! var_def_value
+                | array_def^;
 
         array_def_value -> var_def_value
                 |var_def_value (';'! var_def_value)*;
