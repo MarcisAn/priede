@@ -75,8 +75,8 @@ grammar priede
 
         var_def -> TYPE ID ':'! var_def_value
                 | array_def^
-                | TYPE ID ':'! var_def_value
-                | array_def^;
+                | EXPORT TYPE ID ':'! var_def_value
+                | EXPORT array_def^;
 
         array_def_value -> var_def_value
                 |var_def_value (';'! var_def_value)*;
@@ -124,7 +124,9 @@ grammar priede
         func_def_args -> arg|arg (';'! arg)*;
 
         func_def -> 'funkc'! ID '('! func_def_args ')'! '{'! block '}'!
-                   | 'funkc'! ID '()'! '{'! block '}'!;
+                   | 'funkc'! ID '()'! '{'! block '}'!
+                   | EXPORT'funkc'! ID '('! func_def_args ')'! '{'! block '}'!
+                   | EXPORT'funkc'! ID '()'! '{'! block '}'!;
 
         return_st -> RETURN  exp;
 
