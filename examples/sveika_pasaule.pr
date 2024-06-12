@@ -1,8 +1,3 @@
-eksp sk a : 3
+iekļaut {bb} no "E:/Dev/priede/examples/other_file.pr"
 
-ja 2=2 {
-    sk a : 1
-    izvade(a)
-}
-
-izvade(a)
+izvade(bb)

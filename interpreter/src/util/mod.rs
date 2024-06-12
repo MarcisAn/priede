@@ -74,6 +74,7 @@ pub fn get_closest_scope(
     compilehelper: &mut CompileTimeHelper,
     node: AstNode
 ) -> Option<usize> {
+    println!("{:?}", compilehelper.defined_variables);
     let starting_ast_id = starting_scope.ast_id;
     for var in compilehelper.defined_variables.clone() {
         if var.name == target_name && var.scope.ast_id == starting_ast_id {
