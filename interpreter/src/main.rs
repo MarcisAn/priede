@@ -145,7 +145,6 @@ pub fn run_wasm(code: String) {
 }
 
 pub fn read_file(path: String) -> String {
-    println!("{} {:?}",path, path);
     let file_read = fs::read_to_string(&path);
     if file_read.is_err() {
         println!("{}", file_read.err().unwrap());

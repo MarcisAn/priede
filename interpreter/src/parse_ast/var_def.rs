@@ -51,7 +51,8 @@ pub fn var_def(
                     .child(3 + (is_exported as usize))
                     .children()
                     .len(),
-                block.scope.clone()
+                block.scope.clone(),
+                is_exported
             );
             block.define_array(
                 node

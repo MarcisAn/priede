@@ -91,9 +91,18 @@ pub fn parse_ast(
         let root = ast.get_root();
 
         typestack.change_module(file_content, path.clone());
-        let mut module_main_block = Block::new(Scope{ ast_id: root.id(), module_path: path });
+        let mut module_main_block = Block::new(Scope { ast_id: root.id(), module_path: path.clone() });
         parse_ast(root, &mut module_main_block, is_wasm, typestack);
         typestack.switch_to_prev_module();
+
+        for import in node.child(0).children() {
+            typestack.import(
+                import.get_value().unwrap().to_string(),
+                path.clone(),
+                block.scope.clone().module_path
+            );
+        }
+
         block.add_blocks_bytecode(module_main_block);
     }
 }

@@ -1,3 +1,7 @@
 iekļaut {bb} no "E:/Dev/priede/examples/other_file.pr"
 
-izvade(bb)
+sk a : 0
+kamēr a < 3000{
+    izvade(bb)
+    a++
+}

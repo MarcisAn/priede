@@ -1,4 +1,4 @@
-use celsium::{ compiletime_helper::CompileTimeHelper, Scope, BUILTIN_TYPES };
+use celsium::{ compiletime_helper::{ CompileTimeHelper, CompileTimeImport }, Scope, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
@@ -74,21 +74,54 @@ pub fn get_closest_scope(
     compilehelper: &mut CompileTimeHelper,
     node: AstNode
 ) -> Option<usize> {
-    println!("{:?}", compilehelper.defined_variables);
+
     let starting_ast_id = starting_scope.ast_id;
     for var in compilehelper.defined_variables.clone() {
-        if var.name == target_name && var.scope.ast_id == starting_ast_id {
-            return Some(var.id);
+        let import_to_search_for = CompileTimeImport {
+            name: var.clone().name,
+            origin: var.clone().scope.module_path,
+            imported_into: starting_scope.clone().module_path,
+        };
+        if compilehelper.imports.contains(&import_to_search_for) && var.is_exported{
+            if var.name == target_name {
+                return Some(var.id);
+            }
+        } else {
+            if var.name == target_name && var.scope.ast_id == starting_ast_id {
+                return Some(var.id);
+            }
         }
     }
     for var in compilehelper.defined_arrays.clone() {
-        if var.name == target_name && var.scope.ast_id == starting_ast_id {
-            return Some(var.id);
+        let import_to_search_for = CompileTimeImport {
+            name: var.clone().name,
+            origin: var.clone().scope.module_path,
+            imported_into: starting_scope.clone().module_path,
+        };
+        if compilehelper.imports.contains(&import_to_search_for) {
+            if var.name == target_name {
+                return Some(var.id);
+            }
+        } else {
+            if var.name == target_name && var.scope.ast_id == starting_ast_id {
+                return Some(var.id);
+            }
         }
     }
     for function in &compilehelper.defined_functions {
-        if function.name == target_name && function.scope.ast_id == starting_ast_id {
-            return Some(function.id);
+        let import_to_search_for = CompileTimeImport {
+            name: function.clone().name,
+            origin: function.clone().scope.module_path,
+            imported_into: starting_scope.clone().module_path,
+        };
+        if compilehelper.imports.contains(&import_to_search_for) {
+            if function.name == target_name {
+                return Some(function.id);
+            }
+        } else {
+            if function.name == target_name && function.scope.ast_id == starting_ast_id {
+                return Some(function.id);
+            }
         }
     }
     let node_parrent = node.parent();
