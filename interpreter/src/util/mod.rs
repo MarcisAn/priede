@@ -139,12 +139,13 @@ pub fn get_closest_scope(
 pub fn get_closest_node_location(node: AstNode) -> TextPosition {
     if node.get_position().is_some() {
         return node.get_position().unwrap();
-    } else {
-        for child in node.children() {
-            return get_closest_node_location(child);
-        }
-        panic!();
     }
+    for child in node.children(){
+        if child.get_position().is_some() {
+            return child.get_position().unwrap();
+        }
+    }
+    panic!();
 }
 
 pub fn data_type_from_str(inp: &str) -> BUILTIN_TYPES {

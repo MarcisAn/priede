@@ -1,7 +1,6 @@
-iekļaut {bb} no "E:/Dev/priede/examples/other_file.pr"
+//iekļaut {bb} no "E:/Dev/priede/examples/other_file.pr"
 
 sk a : 0
-kamēr a < 3000{
-    izvade(bb)
-    a++
-}
+sk a : 3
+
+izvade(a)

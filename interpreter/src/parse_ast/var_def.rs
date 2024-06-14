@@ -88,7 +88,7 @@ pub fn var_def(
                         util::str_from_data_type(typ_of_init_value.unwrap())
                     ),
                     typestack,
-                    node
+                    node.child(2 + (is_exported as usize))
                 );
                 exit(0);
             }
