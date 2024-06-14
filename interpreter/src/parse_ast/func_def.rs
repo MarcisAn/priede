@@ -56,7 +56,7 @@ pub fn func_def(
                     arg_type: arg_type.clone(),
                 });
                 let var_id = typestack.def_var(arg_name, arg_type, body.scope.clone(), is_exported);
-                body.define_variable(var_id);
+                body.define_variable(var_id.unwrap());
             }
 
             parse_ast(node.child(2 + (is_exported as usize)), &mut body, is_wasm, typestack);

@@ -97,13 +97,27 @@ pub fn var_def(
                 .get_value()
                 .unwrap()
                 .to_string();
+
             let var_id = typestack.def_var(
-                varname,
+                varname.clone(),
                 data_type_marked.clone(),
                 block.scope.clone(),
                 is_exported
             );
-            block.define_variable(var_id);
+            if var_id.is_err(){
+                if var_id.err().unwrap() == "already_defined"{
+                    errors::incorect_init_value(
+                    format!(
+                        "Mainīgais `{}` jau ir definēts.",
+                        varname
+                    ),
+                    typestack,
+                    node.child(2 + (is_exported as usize))
+                );
+                exit(0);
+                }
+            }
+            block.define_variable(var_id.unwrap());
         }
     }
 }

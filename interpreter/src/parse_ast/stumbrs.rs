@@ -88,7 +88,7 @@ pub fn stumbrs_define(
                     });
                 }
                 let var_id = typestack.def_var(node.child(0).child(counter).get_value().unwrap().to_string(), data_type.clone(), block.scope.clone(), false);
-                block.define_variable(var_id);
+                block.define_variable(var_id.unwrap());
             }
 
             counter += 1;

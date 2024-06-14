@@ -26,6 +26,9 @@ pub fn math_error(compilehelper: &mut CompileTimeHelper, node: AstNode) {
 pub fn incorect_init_value(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
     common_error(&msg, util::get_closest_node_location(node), compilehelper);
 }
+pub fn already_defined(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
+    common_error(&msg, util::get_closest_node_location(node), compilehelper);
+}
 pub fn undefined_var(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
     common_error(&msg, util::get_closest_node_location(node), compilehelper);
 }
