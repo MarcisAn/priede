@@ -98,23 +98,28 @@ pub fn var_def(
                 .unwrap()
                 .to_string();
 
+            let mut typestact_copy = typestack.clone();
+
             let var_id = typestack.def_var(
                 varname.clone(),
                 data_type_marked.clone(),
                 block.scope.clone(),
                 is_exported
             );
-            if var_id.is_err(){
-                if var_id.err().unwrap() == "already_defined"{
+            if var_id.is_err() {
+                if var_id.err().unwrap() == "already_defined" {
                     errors::incorect_init_value(
-                    format!(
-                        "Mainīgais `{}` jau ir definēts.",
-                        varname
-                    ),
-                    typestack,
-                    node.child(2 + (is_exported as usize))
-                );
-                exit(0);
+                        format!("Mainīgais `{}` jau ir definēts.", varname),
+                        &mut typestact_copy,
+                        node.child(2 + (is_exported as usize))
+                    );
+                }
+                if var_id.err().unwrap() == "already_imported" {
+                    errors::incorect_init_value(
+                        format!("Mainīgais `{}` jau ir iekļauts.", varname),
+                        &mut typestact_copy,
+                        node.child(2 + (is_exported as usize))
+                    );
                 }
             }
             block.define_variable(var_id.unwrap());

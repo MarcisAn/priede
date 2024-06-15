@@ -1,6 +1,7 @@
-//iekļaut {bb} no "E:/Dev/priede/examples/other_file.pr"
+iekļaut {bb} no "E:/Dev/priede/examples/other_file.pr"
 
-sk a : 0
-sk a : 3
+sk bb : 0
 
-izvade(a)
+izvade(bb)
+
+sk a : "3"
