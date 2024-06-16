@@ -86,8 +86,10 @@ pub fn func_call(
                 }
                 counter += 1;
             }
-
-            typestack.push(func_return_type);
+            
+            if func_return_type.is_some(){
+                typestack.push(func_return_type.unwrap());
+            }
             block.call_function(func_name);
         }
     }

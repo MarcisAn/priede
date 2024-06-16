@@ -1,7 +1,7 @@
-iekļaut {bb} no "E:/Dev/priede/examples/other_file.pr"
+sk a : 0
 
-sk bb : 0
-
-izvade(bb)
-
-sk a : "3"
+ja 2=2 {
+    ja 2=2 {
+        izvade(a)
+    }
+}

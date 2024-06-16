@@ -28,15 +28,15 @@ pub fn func_def(
             .to_string();
 
         let mut body = Block::new(
-            if node.children_count() > 2 {
-                block.scope.change_ast_id(node.child(2 + (is_exported as usize)).id())
+            if node.children_count() > 3 {
+                block.scope.change_ast_id(node.child(3 + (is_exported as usize)).id())
             } else {
-                block.scope.change_ast_id(node.child(1 + (is_exported as usize)).id())
+                block.scope.change_ast_id(node.child(2 + (is_exported as usize)).id())
             }
         );
         let mut args: Vec<FuncArg> = vec![];
 
-        if node.children_count() == 3 {
+        if node.children_count() == 4 {
             //when the function takes arguments
             let args_tree = node.child(1 + (is_exported as usize)).children();
             for arg in args_tree.iter().rev() {
@@ -59,7 +59,7 @@ pub fn func_def(
                 body.define_variable(var_id.unwrap());
             }
 
-            parse_ast(node.child(2 + (is_exported as usize)), &mut body, is_wasm, typestack);
+            parse_ast(node.child(3 + (is_exported as usize)), &mut body, is_wasm, typestack);
             typestack.def_function(
                 func_name.clone(),
                 args.clone(),
@@ -67,7 +67,7 @@ pub fn func_def(
                 is_exported
             );
         } else {
-            parse_ast(node.child(1 + (is_exported as usize)), &mut body, is_wasm, typestack);
+            parse_ast(node.child(2 + (is_exported as usize)), &mut body, is_wasm, typestack);
             typestack.def_function(
                 func_name.clone(),
                 args.clone(),

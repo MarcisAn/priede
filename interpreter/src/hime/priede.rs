@@ -105,183 +105,187 @@ pub const TERMINALS: &[Symbol] = &[
         name: "EXPORT"
     },
     Symbol {
-        id: 0x004A,
+        id: 0x004B,
         name: "būls"
     },
     Symbol {
-        id: 0x004B,
+        id: 0x004C,
         name: "bl"
     },
     Symbol {
-        id: 0x004C,
+        id: 0x004D,
         name: "teksts"
     },
     Symbol {
-        id: 0x004D,
+        id: 0x004E,
         name: "tk"
     },
     Symbol {
-        id: 0x004E,
+        id: 0x004F,
         name: "sk"
     },
     Symbol {
-        id: 0x004F,
+        id: 0x0050,
         name: "skaitlis"
     },
     Symbol {
-        id: 0x0050,
+        id: 0x0051,
         name: "decim"
     },
     Symbol {
-        id: 0x0051,
+        id: 0x0052,
         name: "PAT"
     },
     Symbol {
-        id: 0x0052,
+        id: 0x0053,
         name: "PATIESS"
     },
     Symbol {
-        id: 0x0053,
+        id: 0x0054,
         name: "NEPAT"
     },
     Symbol {
-        id: 0x0054,
+        id: 0x0055,
         name: "NEPATIESS"
     },
     Symbol {
-        id: 0x0055,
+        id: 0x0056,
         name: "["
     },
     Symbol {
-        id: 0x0056,
+        id: 0x0057,
         name: "]"
     },
     Symbol {
-        id: 0x0057,
+        id: 0x0058,
         name: "{"
     },
     Symbol {
-        id: 0x0059,
+        id: 0x005A,
         name: "}"
     },
     Symbol {
-        id: 0x005A,
+        id: 0x005B,
         name: ":"
     },
     Symbol {
-        id: 0x005B,
+        id: 0x005C,
         name: ";"
     },
     Symbol {
-        id: 0x005D,
+        id: 0x005E,
         name: "+:"
     },
     Symbol {
-        id: 0x005E,
+        id: 0x005F,
         name: "-:"
     },
     Symbol {
-        id: 0x005F,
+        id: 0x0060,
         name: "*:"
     },
     Symbol {
-        id: 0x0060,
+        id: 0x0061,
         name: "/:"
     },
     Symbol {
-        id: 0x0061,
+        id: 0x0062,
         name: "++"
     },
     Symbol {
-        id: 0x0062,
+        id: 0x0063,
         name: "--"
     },
     Symbol {
-        id: 0x0063,
+        id: 0x0064,
         name: "("
     },
     Symbol {
-        id: 0x0064,
+        id: 0x0065,
         name: ")"
     },
     Symbol {
-        id: 0x0065,
+        id: 0x0066,
         name: "()"
     },
     Symbol {
-        id: 0x0067,
+        id: 0x0068,
         name: "="
     },
     Symbol {
-        id: 0x0068,
+        id: 0x0069,
         name: ">"
     },
     Symbol {
-        id: 0x0069,
+        id: 0x006A,
         name: ">="
     },
     Symbol {
-        id: 0x006A,
+        id: 0x006B,
         name: "<"
     },
     Symbol {
-        id: 0x006B,
+        id: 0x006C,
         name: "<="
     },
     Symbol {
-        id: 0x006C,
+        id: 0x006D,
         name: "!="
     },
     Symbol {
-        id: 0x006D,
+        id: 0x006E,
         name: "ja"
     },
     Symbol {
-        id: 0x006E,
+        id: 0x006F,
         name: "atkārtot"
     },
     Symbol {
-        id: 0x006F,
+        id: 0x0070,
         name: "kamēr"
     },
     Symbol {
-        id: 0x0071,
+        id: 0x0072,
         name: "funkc"
     },
     Symbol {
-        id: 0x0072,
-        name: "."
-    },
-    Symbol {
         id: 0x0073,
-        name: "*"
+        name: "->"
     },
     Symbol {
         id: 0x0074,
-        name: "/"
+        name: "."
     },
     Symbol {
         id: 0x0075,
-        name: "%"
+        name: "*"
     },
     Symbol {
         id: 0x0076,
-        name: "+"
+        name: "/"
     },
     Symbol {
         id: 0x0077,
-        name: "-"
+        name: "%"
     },
     Symbol {
         id: 0x0078,
-        name: "xvai"
+        name: "+"
     },
     Symbol {
         id: 0x0079,
-        name: "vai"
+        name: "-"
+    },
+    Symbol {
+        id: 0x007A,
+        name: "xvai"
     },
     Symbol {
         id: 0x007B,
+        name: "vai"
+    },
+    Symbol {
+        id: 0x007D,
         name: "un"
     }
 ];
@@ -356,58 +360,60 @@ pub const ID_VARIABLE_W_LOOP: u32 = 0x002D;
 pub const ID_VARIABLE_ARG: u32 = 0x002E;
 /// The unique identifier for variable `func_def_args`
 pub const ID_VARIABLE_FUNC_DEF_ARGS: u32 = 0x002F;
+/// The unique identifier for variable `func_return_type`
+pub const ID_VARIABLE_FUNC_RETURN_TYPE: u32 = 0x0030;
 /// The unique identifier for variable `func_def`
-pub const ID_VARIABLE_FUNC_DEF: u32 = 0x0030;
+pub const ID_VARIABLE_FUNC_DEF: u32 = 0x0031;
 /// The unique identifier for variable `return_st`
-pub const ID_VARIABLE_RETURN_ST: u32 = 0x0031;
+pub const ID_VARIABLE_RETURN_ST: u32 = 0x0032;
 /// The unique identifier for variable `dotable`
-pub const ID_VARIABLE_DOTABLE: u32 = 0x0032;
+pub const ID_VARIABLE_DOTABLE: u32 = 0x0033;
 /// The unique identifier for variable `exp_atom_no_dot`
-pub const ID_VARIABLE_EXP_ATOM_NO_DOT: u32 = 0x0033;
+pub const ID_VARIABLE_EXP_ATOM_NO_DOT: u32 = 0x0034;
 /// The unique identifier for variable `exp_atom`
-pub const ID_VARIABLE_EXP_ATOM: u32 = 0x0034;
+pub const ID_VARIABLE_EXP_ATOM: u32 = 0x0035;
 /// The unique identifier for variable `dot_call`
-pub const ID_VARIABLE_DOT_CALL: u32 = 0x0035;
+pub const ID_VARIABLE_DOT_CALL: u32 = 0x0036;
 /// The unique identifier for variable `dot_call_fn`
-pub const ID_VARIABLE_DOT_CALL_FN: u32 = 0x0036;
+pub const ID_VARIABLE_DOT_CALL_FN: u32 = 0x0037;
 /// The unique identifier for variable `exp_reizdal`
-pub const ID_VARIABLE_EXP_REIZDAL: u32 = 0x0037;
+pub const ID_VARIABLE_EXP_REIZDAL: u32 = 0x0038;
 /// The unique identifier for variable `reiz_dal_atl`
-pub const ID_VARIABLE_REIZ_DAL_ATL: u32 = 0x0038;
+pub const ID_VARIABLE_REIZ_DAL_ATL: u32 = 0x0039;
 /// The unique identifier for variable `reiz`
-pub const ID_VARIABLE_REIZ: u32 = 0x0039;
+pub const ID_VARIABLE_REIZ: u32 = 0x003A;
 /// The unique identifier for variable `dal`
-pub const ID_VARIABLE_DAL: u32 = 0x003A;
+pub const ID_VARIABLE_DAL: u32 = 0x003B;
 /// The unique identifier for variable `atlik`
-pub const ID_VARIABLE_ATLIK: u32 = 0x003B;
+pub const ID_VARIABLE_ATLIK: u32 = 0x003C;
 /// The unique identifier for variable `exp_plusmin`
-pub const ID_VARIABLE_EXP_PLUSMIN: u32 = 0x003C;
+pub const ID_VARIABLE_EXP_PLUSMIN: u32 = 0x003D;
 /// The unique identifier for variable `plus`
-pub const ID_VARIABLE_PLUS: u32 = 0x003D;
+pub const ID_VARIABLE_PLUS: u32 = 0x003E;
 /// The unique identifier for variable `minus`
-pub const ID_VARIABLE_MINUS: u32 = 0x003E;
+pub const ID_VARIABLE_MINUS: u32 = 0x003F;
 /// The unique identifier for variable `exp_t`
-pub const ID_VARIABLE_EXP_T: u32 = 0x003F;
+pub const ID_VARIABLE_EXP_T: u32 = 0x0040;
 /// The unique identifier for variable `exp_a`
-pub const ID_VARIABLE_EXP_A: u32 = 0x0040;
+pub const ID_VARIABLE_EXP_A: u32 = 0x0041;
 /// The unique identifier for variable `xvai`
-pub const ID_VARIABLE_XVAI: u32 = 0x0041;
+pub const ID_VARIABLE_XVAI: u32 = 0x0042;
 /// The unique identifier for variable `vai`
-pub const ID_VARIABLE_VAI: u32 = 0x0042;
+pub const ID_VARIABLE_VAI: u32 = 0x0043;
 /// The unique identifier for variable `un`
-pub const ID_VARIABLE_UN: u32 = 0x0043;
+pub const ID_VARIABLE_UN: u32 = 0x0044;
 /// The unique identifier for variable `exp`
-pub const ID_VARIABLE_EXP: u32 = 0x0044;
+pub const ID_VARIABLE_EXP: u32 = 0x0045;
 /// The unique identifier for variable `multiple_ids`
-pub const ID_VARIABLE_MULTIPLE_IDS: u32 = 0x0045;
+pub const ID_VARIABLE_MULTIPLE_IDS: u32 = 0x0046;
 /// The unique identifier for variable `multiple_id_define`
-pub const ID_VARIABLE_MULTIPLE_ID_DEFINE: u32 = 0x0046;
+pub const ID_VARIABLE_MULTIPLE_ID_DEFINE: u32 = 0x0047;
 /// The unique identifier for variable `stat`
-pub const ID_VARIABLE_STAT: u32 = 0x0047;
+pub const ID_VARIABLE_STAT: u32 = 0x0048;
 /// The unique identifier for variable `block`
-pub const ID_VARIABLE_BLOCK: u32 = 0x0048;
+pub const ID_VARIABLE_BLOCK: u32 = 0x0049;
 /// The unique identifier for variable `root`
-pub const ID_VARIABLE_ROOT: u32 = 0x0049;
+pub const ID_VARIABLE_ROOT: u32 = 0x004A;
 
 
 /// The collection of variables matched by this parser
@@ -532,135 +538,131 @@ pub const VARIABLES: &[Symbol] = &[
     },
     Symbol {
         id: 0x0030,
-        name: "func_def"
+        name: "func_return_type"
     },
     Symbol {
         id: 0x0031,
-        name: "return_st"
+        name: "func_def"
     },
     Symbol {
         id: 0x0032,
-        name: "dotable"
+        name: "return_st"
     },
     Symbol {
         id: 0x0033,
-        name: "exp_atom_no_dot"
+        name: "dotable"
     },
     Symbol {
         id: 0x0034,
-        name: "exp_atom"
+        name: "exp_atom_no_dot"
     },
     Symbol {
         id: 0x0035,
-        name: "dot_call"
+        name: "exp_atom"
     },
     Symbol {
         id: 0x0036,
-        name: "dot_call_fn"
+        name: "dot_call"
     },
     Symbol {
         id: 0x0037,
-        name: "exp_reizdal"
+        name: "dot_call_fn"
     },
     Symbol {
         id: 0x0038,
-        name: "reiz_dal_atl"
+        name: "exp_reizdal"
     },
     Symbol {
         id: 0x0039,
-        name: "reiz"
+        name: "reiz_dal_atl"
     },
     Symbol {
         id: 0x003A,
-        name: "dal"
+        name: "reiz"
     },
     Symbol {
         id: 0x003B,
-        name: "atlik"
+        name: "dal"
     },
     Symbol {
         id: 0x003C,
-        name: "exp_plusmin"
+        name: "atlik"
     },
     Symbol {
         id: 0x003D,
-        name: "plus"
+        name: "exp_plusmin"
     },
     Symbol {
         id: 0x003E,
-        name: "minus"
+        name: "plus"
     },
     Symbol {
         id: 0x003F,
-        name: "exp_t"
+        name: "minus"
     },
     Symbol {
         id: 0x0040,
-        name: "exp_a"
+        name: "exp_t"
     },
     Symbol {
         id: 0x0041,
-        name: "xvai"
+        name: "exp_a"
     },
     Symbol {
         id: 0x0042,
-        name: "vai"
+        name: "xvai"
     },
     Symbol {
         id: 0x0043,
-        name: "un"
+        name: "vai"
     },
     Symbol {
         id: 0x0044,
-        name: "exp"
+        name: "un"
     },
     Symbol {
         id: 0x0045,
-        name: "multiple_ids"
+        name: "exp"
     },
     Symbol {
         id: 0x0046,
-        name: "multiple_id_define"
+        name: "multiple_ids"
     },
     Symbol {
         id: 0x0047,
-        name: "stat"
+        name: "multiple_id_define"
     },
     Symbol {
         id: 0x0048,
-        name: "block"
+        name: "stat"
     },
     Symbol {
         id: 0x0049,
+        name: "block"
+    },
+    Symbol {
+        id: 0x004A,
         name: "root"
     },
     Symbol {
-        id: 0x0058,
-        name: "__V88"
+        id: 0x0059,
+        name: "__V89"
     },
     Symbol {
-        id: 0x005C,
-        name: "__V92"
+        id: 0x005D,
+        name: "__V93"
     },
     Symbol {
-        id: 0x0066,
-        name: "__V102"
+        id: 0x0067,
+        name: "__V103"
     },
     Symbol {
-        id: 0x0070,
-        name: "__V112"
-    },
-    Symbol {
-        id: 0x007A,
-        name: "__V122"
+        id: 0x0071,
+        name: "__V113"
     },
     Symbol {
         id: 0x007C,
         name: "__V124"
-    },
-    Symbol {
-        id: 0x007D,
-        name: "__V125"
     },
     Symbol {
         id: 0x007E,
@@ -668,6 +670,14 @@ pub const VARIABLES: &[Symbol] = &[
     },
     Symbol {
         id: 0x007F,
+        name: "__V127"
+    },
+    Symbol {
+        id: 0x0080,
+        name: "__V128"
+    },
+    Symbol {
+        id: 0x0081,
         name: "__VAxiom"
     }
 ];
@@ -765,6 +775,7 @@ pub trait Visitor {
     fn on_variable_w_loop(&self, _node: &AstNode) {}
     fn on_variable_arg(&self, _node: &AstNode) {}
     fn on_variable_func_def_args(&self, _node: &AstNode) {}
+    fn on_variable_func_return_type(&self, _node: &AstNode) {}
     fn on_variable_func_def(&self, _node: &AstNode) {}
     fn on_variable_return_st(&self, _node: &AstNode) {}
     fn on_variable_dotable(&self, _node: &AstNode) {}
@@ -847,32 +858,33 @@ pub fn visit_ast_node(node: AstNode, visitor: &dyn Visitor) {
         0x002D => visitor.on_variable_w_loop(&node),
         0x002E => visitor.on_variable_arg(&node),
         0x002F => visitor.on_variable_func_def_args(&node),
-        0x0030 => visitor.on_variable_func_def(&node),
-        0x0031 => visitor.on_variable_return_st(&node),
-        0x0032 => visitor.on_variable_dotable(&node),
-        0x0033 => visitor.on_variable_exp_atom_no_dot(&node),
-        0x0034 => visitor.on_variable_exp_atom(&node),
-        0x0035 => visitor.on_variable_dot_call(&node),
-        0x0036 => visitor.on_variable_dot_call_fn(&node),
-        0x0037 => visitor.on_variable_exp_reizdal(&node),
-        0x0038 => visitor.on_variable_reiz_dal_atl(&node),
-        0x0039 => visitor.on_variable_reiz(&node),
-        0x003A => visitor.on_variable_dal(&node),
-        0x003B => visitor.on_variable_atlik(&node),
-        0x003C => visitor.on_variable_exp_plusmin(&node),
-        0x003D => visitor.on_variable_plus(&node),
-        0x003E => visitor.on_variable_minus(&node),
-        0x003F => visitor.on_variable_exp_t(&node),
-        0x0040 => visitor.on_variable_exp_a(&node),
-        0x0041 => visitor.on_variable_xvai(&node),
-        0x0042 => visitor.on_variable_vai(&node),
-        0x0043 => visitor.on_variable_un(&node),
-        0x0044 => visitor.on_variable_exp(&node),
-        0x0045 => visitor.on_variable_multiple_ids(&node),
-        0x0046 => visitor.on_variable_multiple_id_define(&node),
-        0x0047 => visitor.on_variable_stat(&node),
-        0x0048 => visitor.on_variable_block(&node),
-        0x0049 => visitor.on_variable_root(&node),
+        0x0030 => visitor.on_variable_func_return_type(&node),
+        0x0031 => visitor.on_variable_func_def(&node),
+        0x0032 => visitor.on_variable_return_st(&node),
+        0x0033 => visitor.on_variable_dotable(&node),
+        0x0034 => visitor.on_variable_exp_atom_no_dot(&node),
+        0x0035 => visitor.on_variable_exp_atom(&node),
+        0x0036 => visitor.on_variable_dot_call(&node),
+        0x0037 => visitor.on_variable_dot_call_fn(&node),
+        0x0038 => visitor.on_variable_exp_reizdal(&node),
+        0x0039 => visitor.on_variable_reiz_dal_atl(&node),
+        0x003A => visitor.on_variable_reiz(&node),
+        0x003B => visitor.on_variable_dal(&node),
+        0x003C => visitor.on_variable_atlik(&node),
+        0x003D => visitor.on_variable_exp_plusmin(&node),
+        0x003E => visitor.on_variable_plus(&node),
+        0x003F => visitor.on_variable_minus(&node),
+        0x0040 => visitor.on_variable_exp_t(&node),
+        0x0041 => visitor.on_variable_exp_a(&node),
+        0x0042 => visitor.on_variable_xvai(&node),
+        0x0043 => visitor.on_variable_vai(&node),
+        0x0044 => visitor.on_variable_un(&node),
+        0x0045 => visitor.on_variable_exp(&node),
+        0x0046 => visitor.on_variable_multiple_ids(&node),
+        0x0047 => visitor.on_variable_multiple_id_define(&node),
+        0x0048 => visitor.on_variable_stat(&node),
+        0x0049 => visitor.on_variable_block(&node),
+        0x004A => visitor.on_variable_root(&node),
         _ => ()
     };
 }
