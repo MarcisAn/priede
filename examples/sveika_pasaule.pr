@@ -1,7 +1,2 @@
-sk a : 0
+objekts aa {sk: e tk: r}
 
-ja 2=2 {
-    ja 2=2 {
-        izvade(a)
-    }
-}

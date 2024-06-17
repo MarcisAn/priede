@@ -74,7 +74,6 @@ pub fn get_closest_scope(
     compilehelper: &mut CompileTimeHelper,
     node: AstNode
 ) -> Option<usize> {
-
     let starting_ast_id = starting_scope.ast_id;
     for var in compilehelper.defined_variables.clone() {
         let import_to_search_for = CompileTimeImport {
@@ -82,7 +81,7 @@ pub fn get_closest_scope(
             origin: var.clone().scope.module_path,
             imported_into: starting_scope.clone().module_path,
         };
-        if compilehelper.imports.contains(&import_to_search_for) && var.is_exported{
+        if compilehelper.imports.contains(&import_to_search_for) && var.is_exported {
             if var.name == target_name {
                 return Some(var.id);
             }
@@ -140,7 +139,7 @@ pub fn get_closest_node_location(node: AstNode) -> TextPosition {
     if node.get_position().is_some() {
         return node.get_position().unwrap();
     }
-    for child in node.children(){
+    for child in node.children() {
         if child.get_position().is_some() {
             return child.get_position().unwrap();
         }
@@ -148,14 +147,20 @@ pub fn get_closest_node_location(node: AstNode) -> TextPosition {
     panic!();
 }
 
-pub fn data_type_from_str(inp: &str) -> BUILTIN_TYPES {
-    return match inp {
-        "NUM" => celsium::BUILTIN_TYPES::MAGIC_INT,
-        "BOOL_DEF" => celsium::BUILTIN_TYPES::BOOL,
-        "TEXT" => celsium::BUILTIN_TYPES::STRING,
-        "FLOAT" => celsium::BUILTIN_TYPES::FLOAT,
-        _ => panic!(),
-    };
+pub fn data_type_from_str(inp: &str) -> Option<BUILTIN_TYPES> {
+    println!("{}", inp);
+    return Some(match inp {
+        "sk" => celsium::BUILTIN_TYPES::MAGIC_INT,
+        "skaitlis" => celsium::BUILTIN_TYPES::MAGIC_INT,
+        "būls" => celsium::BUILTIN_TYPES::BOOL,
+        "bl" => celsium::BUILTIN_TYPES::BOOL,
+        "teksts" => celsium::BUILTIN_TYPES::STRING,
+        "tk" => celsium::BUILTIN_TYPES::STRING,
+        "decim" => celsium::BUILTIN_TYPES::FLOAT,
+        _ => {
+            return None;
+        }
+    });
 }
 
 pub fn str_from_data_type(inp: BUILTIN_TYPES) -> String {
@@ -163,7 +168,7 @@ pub fn str_from_data_type(inp: BUILTIN_TYPES) -> String {
         BUILTIN_TYPES::MAGIC_INT => "skaitlis".into(),
         BUILTIN_TYPES::BOOL => "būls".into(),
         BUILTIN_TYPES::STRING => "teksts".into(),
-        BUILTIN_TYPES::OBJECT => "objekts".into(),
+        BUILTIN_TYPES::OBJECT { fields: _, name: _ } => "objekts".into(),
         BUILTIN_TYPES::FLOAT => "decimālskaitlis".into(),
     }
 }

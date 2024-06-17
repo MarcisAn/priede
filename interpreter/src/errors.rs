@@ -45,6 +45,11 @@ pub fn wrong_argument_type(func_name: String, arg_index: usize ,expected: BUILTI
     let msg = format!("Fukcija `{}` kā {}. argumentu sagaida datu tipu `{}`, bet atrasts arguments ar tipu `{}`.", func_name, arg_index, str_from_data_type(expected), str_from_data_type(found));
     common_error(&msg, position, compilehelper);
 }
+pub fn notexistant_type(type_name: String, node: AstNode, compilehelper: &mut CompileTimeHelper){
+    let position = util::get_closest_node_location(node);
+    let msg = format!("Datu tips `{}` neeksistē. Ne kā vienkāršais tips, ne kā objekts.", type_name);
+    common_error(&msg, position, compilehelper);
+}
 pub fn array_element_wrong_type(
     array_name: String,
     element_index: usize,

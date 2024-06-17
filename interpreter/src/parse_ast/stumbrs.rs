@@ -23,6 +23,7 @@ pub fn stumbrs_define(
     typestack: &mut CompileTimeHelper,
     is_wasm: bool
 ) {
+    /*
     if title == "multiple_id_define" {
         if node.child(1).child(0).get_value().unwrap() != "STUMBRS" {
             panic!("Šeit var izmantot tikai 'STUMBRS' funkciju.");
@@ -98,5 +99,5 @@ pub fn stumbrs_define(
 
             counter += 1;
         }
-    }
+        }*/
 }
