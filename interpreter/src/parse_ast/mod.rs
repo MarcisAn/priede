@@ -74,7 +74,7 @@ pub fn parse_ast(
         let object_title = node.child(0).get_value().unwrap().to_string();
         typestack.define_struct(object_title, vec![]);
     }
-
+    
     id(node, &title, block, typestack);
     return_st(node, &title, block, typestack, is_wasm);
     if_stat(node, &title, block, typestack, is_wasm);
@@ -89,5 +89,4 @@ pub fn parse_ast(
     parse_constants(node, &title, typestack, block);
     var_def(node, &title, typestack, is_wasm, block);
     include(node, &title, is_wasm, typestack, block);
-    
 }

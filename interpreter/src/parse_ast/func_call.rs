@@ -92,5 +92,5 @@ pub fn func_call(
             }
             block.call_function(func_name);
         }
-    }
+        }
 }

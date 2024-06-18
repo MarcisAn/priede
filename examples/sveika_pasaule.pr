@@ -2,5 +2,3 @@ funkc sasveicināties() {
     izvade("Sveika pasaule!")
 }
 sasveicināties()
-izvade("Tagad padaram kaut ko citu")
-sasveicināties()
