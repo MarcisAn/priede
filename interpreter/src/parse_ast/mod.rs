@@ -71,7 +71,8 @@ pub fn parse_ast(
     }
 
     if title == "object_def" {
-        typestack.define_struct(node.child(0).get_value().unwrap().to_string(), vec![]);
+        let object_title = node.child(0).get_value().unwrap().to_string();
+        typestack.define_struct(object_title, vec![]);
     }
 
     id(node, &title, block, typestack);

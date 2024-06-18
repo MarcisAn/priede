@@ -21,24 +21,7 @@ pub fn var_def(
             //user marked data type
             let data_type_str = node
                 .child(0 + (is_exported as usize)).get_value().unwrap();
-            let data_type_marked_option = util::data_type_from_str(data_type_str);
-
-            let mut data_type_marked: BUILTIN_TYPES;
-            if data_type_marked_option.is_none() {
-                let struct_exists = typestack.struct_exists(data_type_str);
-                if struct_exists.is_some() {
-                    data_type_marked = BUILTIN_TYPES::OBJECT {
-                        name: struct_exists.clone().unwrap().name,
-                        fields: struct_exists.unwrap().fields,
-                    };
-                } else {
-                    errors::notexistant_type(data_type_str.to_owned(), node, typestack);
-                    panic!();//to get rid of undefined error. not needed, because error exits
-                }
-            }
-            else{
-                data_type_marked = data_type_marked_option.unwrap();
-            }
+            let data_type_marked = util::get_data_type_from_id(typestack, data_type_str, node);
             //parse the init value
             parse_ast(node.child(2 + (is_exported as usize)), block, is_wasm, typestack);
             //get they type of the init value

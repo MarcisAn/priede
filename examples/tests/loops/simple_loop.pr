@@ -1,0 +1,9 @@
+atkārtot 3 {
+    izvade("Teksts tiks izprintēts 3 reizes")
+}
+
+skaitlis atkartojumi : 3
+
+atkārtot atkartojumi {
+    izvade("Teksts tiks izprintēts 3 reizes")
+}

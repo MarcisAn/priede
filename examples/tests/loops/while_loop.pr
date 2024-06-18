@@ -1,0 +1,6 @@
+skaitlis a : 0
+
+kamēr (a < 5) {
+    izvade("Teksts tiks printēts 5 reizes")
+    a++
+}

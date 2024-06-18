@@ -1,6 +1,8 @@
 use celsium::{ compiletime_helper::{ CompileTimeHelper, CompileTimeImport }, Scope, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
+use crate::errors;
+
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
     let mut i = 0;
     if !crossings.is_empty() {
@@ -171,4 +173,25 @@ pub fn str_from_data_type(inp: BUILTIN_TYPES) -> String {
         BUILTIN_TYPES::OBJECT { fields: _, name: _ } => "objekts".into(),
         BUILTIN_TYPES::FLOAT => "decimālskaitlis".into(),
     }
+}
+
+pub fn get_data_type_from_id(compilehelper: &mut CompileTimeHelper, data_type_str: &str, node: AstNode) -> BUILTIN_TYPES {
+    let data_type_marked_option = data_type_from_str(data_type_str);
+
+    let mut data_type_marked: BUILTIN_TYPES;
+    if data_type_marked_option.is_none() {
+        let struct_exists = compilehelper.struct_exists(data_type_str);
+        if struct_exists.is_some() {
+            data_type_marked = BUILTIN_TYPES::OBJECT {
+                name: struct_exists.clone().unwrap().name,
+                fields: struct_exists.unwrap().fields,
+            };
+        } else {
+            errors::notexistant_type(data_type_str.to_owned(), node, compilehelper);
+            panic!(); //to get rid of undefined error. not needed, because error exits
+        }
+    } else {
+        data_type_marked = data_type_marked_option.unwrap();
+    }
+    return data_type_marked;
 }
