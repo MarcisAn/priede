@@ -37,8 +37,12 @@ pub fn func_def(
         );
         let mut args: Vec<FuncArg> = vec![];
 
-        if node.children_count() == 3 + (is_exported as usize) {
+        if node.children_count() >= 3 + (is_exported as usize) {
             //when the function takes arguments
+            let mut return_type: Option<BUILTIN_TYPES> = None;
+
+            let is_returning =
+                node.child(2 + (is_exported as usize)).to_string() == "func_return_type";
             let args_tree = node.child(1 + (is_exported as usize)).children();
             for arg in args_tree.iter().rev() {
                 let arg_name = arg
@@ -47,10 +51,7 @@ pub fn func_def(
                     .unwrap()
                     .to_string();
 
-                let data_type_str = arg
-                    .child(0)
-                    .get_value()
-                    .unwrap();
+                let data_type_str = arg.child(0).get_value().unwrap();
 
                 let data_type_marked = get_data_type_from_id(typestack, data_type_str, node);
 
@@ -67,20 +68,60 @@ pub fn func_def(
                 body.define_variable(var_id.unwrap());
             }
 
-            parse_ast(node.child(2 + (is_exported as usize)), &mut body, is_wasm, typestack);
+            if is_returning {
+                return_type = Some(
+                    util::get_data_type_from_id(
+                        typestack,
+                        node
+                            .child(2 + (is_exported as usize))
+                            .child(0)
+                            .get_value()
+                            .unwrap(),
+                        node
+                    )
+                );
+            }
+            println!("{:?}", args);
+
+            parse_ast(
+                node.child(2 + (is_returning as usize) + (is_exported as usize)),
+                &mut body,
+                is_wasm,
+                typestack
+            );
             typestack.def_function(
                 func_name.clone(),
                 args.clone(),
                 block.scope.clone(),
-                is_exported
+                is_exported,
+                return_type
             );
         } else {
+            let is_returning =
+                node.child(1 + (is_exported as usize)).to_string() == "func_return_type";
+
+            let mut return_type: Option<BUILTIN_TYPES> = None;
+            if is_returning {
+                return_type = Some(
+                    util::get_data_type_from_id(
+                        typestack,
+                        node
+                            .child(1 + (is_exported as usize))
+                            .child(0)
+                            .get_value()
+                            .unwrap(),
+                        node
+                    )
+                );
+            }
+
             parse_ast(node.child(1 + (is_exported as usize)), &mut body, is_wasm, typestack);
             typestack.def_function(
                 func_name.clone(),
                 args.clone(),
                 block.scope.clone(),
-                is_exported
+                is_exported,
+                return_type
             );
         }
 

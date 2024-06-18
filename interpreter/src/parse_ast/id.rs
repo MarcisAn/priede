@@ -11,7 +11,9 @@ use crate::{errors, util::{self, get_closest_block, get_closest_scope}};
 pub fn id(node: AstNode, title: &str, block: &mut Block, typestack: &mut CompileTimeHelper) {
     if title.starts_with("ID") {
         let var_name = node.get_value().unwrap();
+        println!("{}", var_name);
         let var_id = get_closest_scope(var_name.to_string(), block.scope.clone(), typestack, node);
+        println!("{:?}", var_id);
 
         if var_id.is_none() {
             errors::undefined_var(

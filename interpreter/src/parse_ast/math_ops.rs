@@ -1,8 +1,8 @@
 use std::process::exit;
 
-use crate::{errors::math_error, util};
-use celsium::{block::Block, bytecode::BINOP, compiletime_helper::CompileTimeHelper};
-use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
+use crate::{ errors::math_error, util };
+use celsium::{ block::Block, bytecode::BINOP, compiletime_helper::CompileTimeHelper };
+use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use super::parse_ast;
 
@@ -12,13 +12,8 @@ pub fn math_ops(
     block: &mut Block,
     typestack: &mut CompileTimeHelper,
     is_wasm: bool
-){
-    if title == "plus"
-        || title == "minus"
-        || title == "reiz"
-        || title == "dal"
-        || title == "atlik"
-    {
+) {
+    if title == "plus" || title == "minus" || title == "reiz" || title == "dal" || title == "atlik" {
         calculate(
             match title {
                 "plus" => BINOP::ADD,
@@ -31,7 +26,7 @@ pub fn math_ops(
             node,
             block,
             typestack,
-            is_wasm,
+            is_wasm
         );
     }
 }
@@ -40,8 +35,9 @@ fn calculate(
     node: AstNode,
     block: &mut Block,
     typestack: &mut CompileTimeHelper,
-    is_wasm: bool,
+    is_wasm: bool
 ) {
+    println!("{:?}", binop);
     parse_ast(node.child(0), block, is_wasm, typestack);
     parse_ast(node.child(1), block, is_wasm, typestack);
     let res = typestack.binop(binop.clone());
@@ -50,6 +46,4 @@ fn calculate(
         exit(0);
     }
     block.binop(binop);
-
-    
 }

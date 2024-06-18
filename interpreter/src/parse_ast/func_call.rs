@@ -34,7 +34,7 @@ pub fn func_call(
             let mut func_args_found: Vec<BUILTIN_TYPES> = vec![];
             if node.children_count() > 1 {
                 //if funccall has arguments
-                for arg in node.child(1).children().iter().rev() {
+                for arg in node.child(1).children().iter() {
                     parse_ast(arg, block, is_wasm, typestack);
                     let arg_type = typestack.pop().unwrap();
                     func_args_found.push(arg_type.clone());

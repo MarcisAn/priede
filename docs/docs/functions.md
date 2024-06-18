@@ -23,8 +23,10 @@ sasveicināties()
 
 Gadījumu, kad mēs gribam lai funkcija dara pilnīgi to pašu vairākas reizes, ir maz. Biežāk mēs vēlamies funkcijai iedot kādus datus apstrādāšanai. Tādejādi, funkciju var izmantot visā kodā, bet ar nelielām izmaiņām.
 
+Definējot funkciju, iekavās jānorāda tās arugmenti, atdalīti ar semikolu. Argumentam vispirms jānorāda tā datu tips, tad nosaukums. Šo nosaukumu funkcijas ietvaros varēs izmantot kā mainīgo.
+
 ```priede
-funkc piesk5(sk : a) {
+funkc piesk5(sk a) {
     izvade(a + 5)
 }
 
@@ -39,7 +41,7 @@ piesk5(2)
 Funkcijas var saņemt vairākus argumentus, tos atdalot ar semikoliem gan definīcijā, gan izsaucot funkciju.
 
 ```priede
-funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
+funkc piesk_un_reiz(sk saskaitamais; sk reizinatajs) {
     izvade(saskaitamais + 5 * reizinatajs)
 }
 

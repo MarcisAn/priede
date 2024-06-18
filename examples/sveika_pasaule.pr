@@ -1,4 +1,5 @@
-funkc sasveicināties() {
-    izvade("Sveika pasaule!")
+funkc piesk_un_reiz(sk saskaitamais; sk reizinatajs) {
+    izvade(saskaitamais)
 }
-sasveicināties()
+
+piesk_un_reiz(4;5)
