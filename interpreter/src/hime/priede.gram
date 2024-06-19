@@ -141,7 +141,8 @@ grammar priede
                    |  ID^
                    |  func_call^
                    | BOOL^
-                   | array^;
+                   | array^
+                   | object^;
 
         exp_atom_no_dot -> NUMBER^
                    | STRING^
@@ -149,7 +150,8 @@ grammar priede
                    |  ID^
                    |  func_call^
                    | BOOL^
-                   | array^;
+                   | array^
+                   | object^;
 
         exp_atom -> exp_atom_no_dot^
                     | dot_call^;
@@ -201,7 +203,7 @@ grammar priede
 
         multiple_id_define -> '{'! multiple_ids '}'! ':'! exp;
 
-        object_field -> ID ':'! exp ';'!;
+        object_field -> ID ':'! exp;
         object_def_field -> ID ':'! ID;
         
         object -> '{'! object_field* '}'!;

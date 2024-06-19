@@ -170,7 +170,7 @@ pub fn str_from_data_type(inp: BUILTIN_TYPES) -> String {
         BUILTIN_TYPES::MAGIC_INT => "skaitlis".into(),
         BUILTIN_TYPES::BOOL => "būls".into(),
         BUILTIN_TYPES::STRING => "teksts".into(),
-        BUILTIN_TYPES::OBJECT { fields: _, name: _ } => "objekts".into(),
+        BUILTIN_TYPES::OBJECT { fields: _ } => "objekts".into(),
         BUILTIN_TYPES::FLOAT => "decimālskaitlis".into(),
     }
 }
@@ -183,7 +183,6 @@ pub fn get_data_type_from_id(compilehelper: &mut CompileTimeHelper, data_type_st
         let struct_exists = compilehelper.struct_exists(data_type_str);
         if struct_exists.is_some() {
             data_type_marked = BUILTIN_TYPES::OBJECT {
-                name: struct_exists.clone().unwrap().name,
                 fields: struct_exists.unwrap().fields,
             };
         } else {

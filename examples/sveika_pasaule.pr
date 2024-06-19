@@ -1,5 +1,1 @@
-funkc piesk_un_reiz(sk saskaitamais; sk reizinatajs) {
-    izvade(saskaitamais)
-}
-
-piesk_un_reiz(4;5)
+sk a : 2

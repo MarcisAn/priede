@@ -1,6 +1,12 @@
 use std::fs::create_dir;
 
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, Scope };
+use celsium::{
+    block::Block,
+    compiletime_helper::CompileTimeHelper,
+    vm::ObjectField,
+    ObjectFieldType,
+    Scope,
+};
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 mod id_assign;
@@ -33,7 +39,7 @@ mod include;
 use include::include;
 mod array_def;
 
-use crate::{ errors, hime, util };
+use crate::{ errors, hime, util::{self, get_data_type_from_id} };
 
 pub fn parse_ast(
     node: AstNode,
@@ -72,9 +78,31 @@ pub fn parse_ast(
 
     if title == "object_def" {
         let object_title = node.child(0).get_value().unwrap().to_string();
-        typestack.define_struct(object_title, vec![]);
+        let mut field_counter = 1;
+        let mut fields = vec![];
+        while field_counter < node.children_count() {
+            fields.push(ObjectFieldType {
+                name: node.child(field_counter).child(1).get_value().unwrap().to_string(),
+                data_type: get_data_type_from_id(typestack, node.child(field_counter).child(0).get_value().unwrap(), node),
+            });
+            field_counter +=1;
+        }
+        typestack.define_struct(object_title, fields);
     }
-    
+
+    if title == "object" {
+        let mut fields = vec![];
+        for field in node.children() {
+            parse_ast(field.child(1), block, is_wasm, typestack);
+            let field = ObjectFieldType {
+                name: field.child(0).get_value().unwrap().to_string(),
+                data_type: typestack.pop().unwrap(),
+            };
+            fields.push(field);
+        }
+        typestack.push(celsium::BUILTIN_TYPES::OBJECT { fields });
+    }
+
     id(node, &title, block, typestack);
     return_st(node, &title, block, typestack, is_wasm);
     if_stat(node, &title, block, typestack, is_wasm);

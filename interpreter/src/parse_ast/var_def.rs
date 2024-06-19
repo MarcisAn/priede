@@ -22,16 +22,21 @@ pub fn var_def(
             let data_type_str = node
                 .child(0 + (is_exported as usize)).get_value().unwrap();
             let data_type_marked = util::get_data_type_from_id(typestack, data_type_str, node);
+            
             //parse the init value
             parse_ast(node.child(2 + (is_exported as usize)), block, is_wasm, typestack);
+            
             //get they type of the init value
-            let typ_of_init_value = typestack.pop();
-            if typ_of_init_value.clone().unwrap() != data_type_marked {
+            let typ_of_init_value = typestack.pop().unwrap();
+            //println!("type comparison real {:?} marked {:?}", typ_of_init_value, data_type_marked);
+            
+            
+            if typ_of_init_value.clone() != data_type_marked {
                 errors::incorect_init_value(
                     format!(
                         "Mainīgā datu tips ir norādīts kā `{}`, bet piešķirtā sākotnējā vērtība ir `{}`.",
                         data_type_str,
-                        util::str_from_data_type(typ_of_init_value.unwrap())
+                        util::str_from_data_type(typ_of_init_value)
                     ),
                     typestack,
                     node.child(2 + (is_exported as usize))
