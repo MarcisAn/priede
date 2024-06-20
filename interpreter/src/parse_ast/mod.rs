@@ -92,7 +92,7 @@ pub fn parse_ast(
 
     if title == "object" {
         let mut fields = vec![];
-        for field in node.children() {
+        for field in node.children().iter().rev() {
             parse_ast(field.child(1), block, is_wasm, typestack);
             let field = ObjectFieldType {
                 name: field.child(0).get_value().unwrap().to_string(),

@@ -1,4 +1,4 @@
-use std::process::exit;
+use std::{ any::Any, process::exit };
 
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, Scope, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
@@ -20,18 +20,30 @@ pub fn var_def(
         } else {
             //user marked data type
             let data_type_str = node
-                .child(0 + (is_exported as usize)).get_value().unwrap();
+                .child(0 + (is_exported as usize))
+                .get_value()
+                .unwrap();
             let data_type_marked = util::get_data_type_from_id(typestack, data_type_str, node);
-            
+
             //parse the init value
             parse_ast(node.child(2 + (is_exported as usize)), block, is_wasm, typestack);
-            
+
             //get they type of the init value
             let typ_of_init_value = typestack.pop().unwrap();
             //println!("type comparison real {:?} marked {:?}", typ_of_init_value, data_type_marked);
-            
-            
-            if typ_of_init_value.clone() != data_type_marked {
+
+            let mut should_objects_error = false;
+
+            let are_object_types_eq = util::compare_object_types(
+                &typ_of_init_value,
+                &data_type_marked
+            );
+
+            if are_object_types_eq.is_ok() {
+                should_objects_error = !are_object_types_eq.unwrap();
+            }
+
+            if typ_of_init_value.clone() != data_type_marked && should_objects_error  {
                 errors::incorect_init_value(
                     format!(
                         "Mainīgā datu tips ir norādīts kā `{}`, bet piešķirtā sākotnējā vērtība ir `{}`.",
@@ -39,7 +51,7 @@ pub fn var_def(
                         util::str_from_data_type(typ_of_init_value)
                     ),
                     typestack,
-                    node.child(2 + (is_exported as usize))
+                    node.child(0 + (is_exported as usize))
                 );
                 exit(0);
             }

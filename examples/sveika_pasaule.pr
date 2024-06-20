@@ -1,1 +1,3 @@
-sk a : 2
+objekts obj {sk: a sk: b}
+
+obj aa : {a: 2 b: "a"}

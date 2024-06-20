@@ -1,4 +1,6 @@
-use celsium::{ compiletime_helper::{ CompileTimeHelper, CompileTimeImport }, Scope, BUILTIN_TYPES };
+use std::io::BufRead;
+
+use celsium::{ compiletime_helper::{ CompileTimeHelper, CompileTimeImport }, ObjectFieldType, Scope, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
 use crate::errors;
@@ -165,12 +167,22 @@ pub fn data_type_from_str(inp: &str) -> Option<BUILTIN_TYPES> {
     });
 }
 
+fn format_object_fields(fields: Vec<ObjectFieldType>) -> String {
+    let mut formated = "{\n".to_string();
+    for field in fields.iter().rev() {
+        formated += &format!("{}: {}\n",str_from_data_type(field.data_type.clone()), &field.name);
+    }
+    formated += "}";
+    formated
+}
+
 pub fn str_from_data_type(inp: BUILTIN_TYPES) -> String {
     match inp {
         BUILTIN_TYPES::MAGIC_INT => "skaitlis".into(),
         BUILTIN_TYPES::BOOL => "būls".into(),
         BUILTIN_TYPES::STRING => "teksts".into(),
-        BUILTIN_TYPES::OBJECT { fields: _ } => "objekts".into(),
+        //TODO: object print
+        BUILTIN_TYPES::OBJECT { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
         BUILTIN_TYPES::FLOAT => "decimālskaitlis".into(),
     }
 }
@@ -193,4 +205,29 @@ pub fn get_data_type_from_id(compilehelper: &mut CompileTimeHelper, data_type_st
         data_type_marked = data_type_marked_option.unwrap();
     }
     return data_type_marked;
+}
+
+pub fn compare_object_types(a: &BUILTIN_TYPES, b: &BUILTIN_TYPES) -> Result<bool, String> {
+    let mut fields_a: Vec<ObjectFieldType>;
+    let mut fields_b: Vec<ObjectFieldType>;
+
+    match a {
+        BUILTIN_TYPES::OBJECT { fields } => fields_a = fields.to_vec(),
+        _ => return Err("not an object".into())
+    }
+
+    match b {
+        BUILTIN_TYPES::OBJECT { fields } => fields_b = fields.to_vec(),
+        _ => return Err("not an object".into())
+    }
+
+    fields_a.sort();
+    fields_b.sort();
+
+    if fields_a == fields_b{
+        return Ok(true);
+    }
+    else{
+        Ok(false)
+    }
 }
