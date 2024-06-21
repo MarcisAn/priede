@@ -101,15 +101,19 @@ pub fn parse_ast(
 
     if title == "object" {
         let mut fields = vec![];
+        let mut field_names = vec![];
         for field in node.children().iter().rev() {
             parse_ast(field.child(1), block, is_wasm, typestack);
+            let field_name = field.child(0).get_value().unwrap().to_string();
             let field = ObjectFieldType {
-                name: field.child(0).get_value().unwrap().to_string(),
+                name: field_name.clone(),
                 data_type: typestack.pop().unwrap(),
             };
+            field_names.push(field_name);
             fields.push(field);
         }
         typestack.push(celsium::BUILTIN_TYPES::OBJECT { fields });
+        block.create_object(field_names);
     }
 
 

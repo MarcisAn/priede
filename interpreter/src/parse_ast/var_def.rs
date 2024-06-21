@@ -70,12 +70,33 @@ pub fn var_def(
                 let fields = get_object_fields(&typ_of_init_value).unwrap();
                 
                 let object_id = typestack.def_object(
-                    varname,
+                    varname.clone(),
                     data_type_marked,
                     block.scope.clone(),
                     is_exported,
-                    fields,
+                    fields.clone(),
                 );
+                if object_id.is_err() {
+                    if object_id.err().unwrap() == "already_defined" {
+                        errors::incorect_init_value(
+                            format!("Mainīgais `{}` jau ir definēts.", varname),
+                            &mut typestact_copy,
+                            node.child(2 + (is_exported as usize))
+                        );
+                    }
+                    if object_id.err().unwrap() == "already_imported" {
+                        errors::incorect_init_value(
+                            format!("Mainīgais `{}` jau ir iekļauts.", varname),
+                            &mut typestact_copy,
+                            node.child(2 + (is_exported as usize))
+                        );
+                    }
+                }
+                let mut field_names: Vec<String> = vec![];
+                for field in fields.clone(){
+                    field_names.push(field.name);
+                }
+                block.define_object(object_id.unwrap(), field_names);
             } else {
                 let var_id = typestack.def_var(
                     varname.clone(),

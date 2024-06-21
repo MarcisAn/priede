@@ -81,7 +81,6 @@ pub fn func_def(
                     )
                 );
             }
-            println!("{:?}", args);
 
             parse_ast(
                 node.child(2 + (is_returning as usize) + (is_exported as usize)),

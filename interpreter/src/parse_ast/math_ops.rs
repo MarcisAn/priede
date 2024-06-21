@@ -37,7 +37,6 @@ fn calculate(
     typestack: &mut CompileTimeHelper,
     is_wasm: bool
 ) {
-    println!("{:?}", binop);
     parse_ast(node.child(0), block, is_wasm, typestack);
     parse_ast(node.child(1), block, is_wasm, typestack);
     let res = typestack.binop(binop.clone());

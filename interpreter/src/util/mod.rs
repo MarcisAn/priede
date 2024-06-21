@@ -111,6 +111,22 @@ pub fn get_closest_scope(
             }
         }
     }
+    for var in compilehelper.defined_objects.clone() {
+        let import_to_search_for = CompileTimeImport {
+            name: var.clone().name,
+            origin: var.clone().scope.module_path,
+            imported_into: starting_scope.clone().module_path,
+        };
+        if compilehelper.imports.contains(&import_to_search_for) {
+            if var.name == target_name {
+                return Some(var.id);
+            }
+        } else {
+            if var.name == target_name && var.scope.ast_id == starting_ast_id {
+                return Some(var.id);
+            }
+        }
+    }
     for function in &compilehelper.defined_functions {
         let import_to_search_for = CompileTimeImport {
             name: function.clone().name,
@@ -152,7 +168,6 @@ pub fn get_closest_node_location(node: AstNode) -> TextPosition {
 }
 
 pub fn data_type_from_str(inp: &str) -> Option<BUILTIN_TYPES> {
-    println!("{}", inp);
     return Some(match inp {
         "sk" => celsium::BUILTIN_TYPES::MAGIC_INT,
         "skaitlis" => celsium::BUILTIN_TYPES::MAGIC_INT,
