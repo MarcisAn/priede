@@ -181,7 +181,6 @@ pub fn str_from_data_type(inp: BUILTIN_TYPES) -> String {
         BUILTIN_TYPES::MAGIC_INT => "skaitlis".into(),
         BUILTIN_TYPES::BOOL => "būls".into(),
         BUILTIN_TYPES::STRING => "teksts".into(),
-        //TODO: object print
         BUILTIN_TYPES::OBJECT { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
         BUILTIN_TYPES::FLOAT => "decimālskaitlis".into(),
     }
@@ -229,5 +228,19 @@ pub fn compare_object_types(a: &BUILTIN_TYPES, b: &BUILTIN_TYPES) -> Result<bool
     }
     else{
         Ok(false)
+    }
+}
+
+pub fn is_type_object(a: &BUILTIN_TYPES) -> bool{
+    match a {
+       BUILTIN_TYPES::OBJECT { fields: _ } => return true,
+       _ => return false 
+    }
+}
+
+pub fn get_object_fields(a: &BUILTIN_TYPES) -> Option<Vec<ObjectFieldType>> {
+    match a {
+        BUILTIN_TYPES::OBJECT { fields } => return Some(fields.to_vec()),
+        _ => return None
     }
 }

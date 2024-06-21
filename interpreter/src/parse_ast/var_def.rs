@@ -2,7 +2,7 @@ use std::{ any::Any, process::exit };
 
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, Scope, BUILTIN_TYPES };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{ errors, util::{ self, get_closest_block } };
+use crate::{ errors, util::{ self, get_closest_block, get_object_fields } };
 
 use super::{ array_def, parse_ast };
 
@@ -43,7 +43,7 @@ pub fn var_def(
                 should_objects_error = !are_object_types_eq.unwrap();
             }
 
-            if typ_of_init_value.clone() != data_type_marked && should_objects_error  {
+            if typ_of_init_value.clone() != data_type_marked && should_objects_error {
                 errors::incorect_init_value(
                     format!(
                         "Mainīgā datu tips ir norādīts kā `{}`, bet piešķirtā sākotnējā vērtība ir `{}`.",
@@ -63,29 +63,44 @@ pub fn var_def(
 
             let mut typestact_copy = typestack.clone();
 
-            let var_id = typestack.def_var(
-                varname.clone(),
-                data_type_marked.clone(),
-                block.scope.clone(),
-                is_exported
-            );
-            if var_id.is_err() {
-                if var_id.err().unwrap() == "already_defined" {
-                    errors::incorect_init_value(
-                        format!("Mainīgais `{}` jau ir definēts.", varname),
-                        &mut typestact_copy,
-                        node.child(2 + (is_exported as usize))
-                    );
+            let is_object = util::is_type_object(&typ_of_init_value);
+
+            let fields = get_object_fields(&typ_of_init_value).unwrap();
+
+            if is_object {
+                let _ = typestack.def_object(
+                    varname,
+                    data_type_marked,
+                    block.scope.clone(),
+                    is_exported,
+                    fields,
+                    block
+                );
+            } else {
+                let var_id = typestack.def_var(
+                    varname.clone(),
+                    data_type_marked.clone(),
+                    block.scope.clone(),
+                    is_exported
+                );
+                if var_id.is_err() {
+                    if var_id.err().unwrap() == "already_defined" {
+                        errors::incorect_init_value(
+                            format!("Mainīgais `{}` jau ir definēts.", varname),
+                            &mut typestact_copy,
+                            node.child(2 + (is_exported as usize))
+                        );
+                    }
+                    if var_id.err().unwrap() == "already_imported" {
+                        errors::incorect_init_value(
+                            format!("Mainīgais `{}` jau ir iekļauts.", varname),
+                            &mut typestact_copy,
+                            node.child(2 + (is_exported as usize))
+                        );
+                    }
                 }
-                if var_id.err().unwrap() == "already_imported" {
-                    errors::incorect_init_value(
-                        format!("Mainīgais `{}` jau ir iekļauts.", varname),
-                        &mut typestact_copy,
-                        node.child(2 + (is_exported as usize))
-                    );
-                }
+                block.define_variable(var_id.unwrap());
             }
-            block.define_variable(var_id.unwrap());
         }
     }
 }

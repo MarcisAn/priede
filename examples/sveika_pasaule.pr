@@ -1,3 +1,5 @@
-objekts obj {sk: a sk: b}
+objekts obj {sk: a tk: b}
 
 obj aa : {a: 2 b: "a"}
+
+izvade(aa)
