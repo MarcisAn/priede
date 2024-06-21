@@ -62,18 +62,7 @@ pub fn parse_ast(
         let object_if_exists = typestack.get_object_if_exists(base);
 
         if object_if_exists.is_some(){
-            let object = object_if_exists.unwrap();
-            let field_if_exists = object.field_var_ids.get(dotcall);
 
-            if field_if_exists.is_some(){
-                let field_type = typestack.get_var_type(*field_if_exists.unwrap());
-                typestack.push(field_type.unwrap());
-                block.load_variable(*field_if_exists.unwrap());
-            }
-            else{
-                //TODO: field does not exist error
-                todo!();
-            }
         }
 
         if node.child(1).get_value().unwrap() == "garums" {

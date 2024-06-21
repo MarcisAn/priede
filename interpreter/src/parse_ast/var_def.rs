@@ -65,16 +65,16 @@ pub fn var_def(
 
             let is_object = util::is_type_object(&typ_of_init_value);
 
-            let fields = get_object_fields(&typ_of_init_value).unwrap();
-
+            
             if is_object {
-                let _ = typestack.def_object(
+                let fields = get_object_fields(&typ_of_init_value).unwrap();
+                
+                let object_id = typestack.def_object(
                     varname,
                     data_type_marked,
                     block.scope.clone(),
                     is_exported,
                     fields,
-                    block
                 );
             } else {
                 let var_id = typestack.def_var(
