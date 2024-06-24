@@ -6,13 +6,12 @@ edition = "2021"
 
 [lib]
 name = "interpreter"
-path = "src/main.rs"
+path = "src/lib.rs"
 
 [dependencies]
 hime_redist = "4.3.0"
 target-lexicon = "0.12.13"
 celsium = {path= "../../celsium"}
-stumbrs = {path = "../stumbrs"}
 wasm-bindgen = "0.2.92"
 console_error_panic_hook = "0.1.7"
 annotate-snippets = "0.11.2"

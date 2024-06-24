@@ -4,25 +4,19 @@ use celsium::compiletime_helper::CompileTimeHelper;
 use celsium::module;
 use celsium::CelsiumProgram;
 use celsium::Scope;
-use errors::parser_error;
 use hime_redist::ast::AstNode;
 use hime_redist::errors::ParseError;
 use hime_redist::errors::ParseErrorDataTrait;
 use hime_redist::errors::ParseErrorUnexpectedChar;
 use hime_redist::errors::ParseErrorUnexpectedToken;
-use hime_redist::errors::ParseErrors;
 use hime_redist::symbols::SemanticElementTrait;
 use module::Module;
-use util::get_closest_node_location;
 use std::panic;
 use std::process::exit;
 use std::{ fs, process };
 use wasm_bindgen::prelude::*;
-extern crate stumbrs;
 pub mod errors;
-
-fn main() {}
-
+mod data_format;
 mod hime;
 mod parse_ast;
 mod util;
@@ -60,7 +54,7 @@ fn unexpected_char_error(err: ParseErrorUnexpectedChar, compilehelper: &mut Comp
     let mut err_str = err.to_string();
     let expected_start = err.to_string().find("'").unwrap();
     let mut split = err_str.split_off(expected_start);
-    let _ = split.split_off(split.len()-8);
+    let _ = split.split_off(split.len() - 8);
     let unexpected_token = split.split_off(1);
 
     errors::parser_error(unexpected_token, err.get_position(), compilehelper);
@@ -76,11 +70,13 @@ pub fn interpret(path: String, verbose: u8) {
     for parse_err in parse_res.errors.clone().errors {
         match parse_err {
             hime_redist::errors::ParseError::UnexpectedEndOfInput(_) => todo!(),
-            hime_redist::errors::ParseError::UnexpectedChar(err) => unexpected_char_error(err, &mut compile_helper),
-            hime_redist::errors::ParseError::UnexpectedToken(err) => unexpected_token_error(err, &mut compile_helper),
+            hime_redist::errors::ParseError::UnexpectedChar(err) =>
+                unexpected_char_error(err, &mut compile_helper),
+            hime_redist::errors::ParseError::UnexpectedToken(err) =>
+                unexpected_token_error(err, &mut compile_helper),
             hime_redist::errors::ParseError::IncorrectUTF16NoLowSurrogate(_) => todo!(),
             hime_redist::errors::ParseError::IncorrectUTF16NoHighSurrogate(_) => todo!(),
-        };
+        }
     }
     if parse_res.errors.errors.len() > 0 {
         exit(0);
@@ -131,7 +127,7 @@ pub fn run_wasm(code: String) {
 
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
-    let mut main_block = Block::new(Scope{ast_id: root.id(), module_path: "".to_string()});
+    let mut main_block = Block::new(Scope { ast_id: root.id(), module_path: "".to_string() });
     parse_ast::parse_ast(
         root,
         &mut main_block,
@@ -154,19 +150,19 @@ pub fn read_file(path: String) -> String {
     file_read.unwrap()
 }
 
-pub fn parser_errors(errors: Vec<ParseError>, compile_helper: &mut CompileTimeHelper){
+pub fn parser_errors(errors: Vec<ParseError>, compile_helper: &mut CompileTimeHelper) {
     for parse_err in errors.clone() {
-            match parse_err {
-                hime_redist::errors::ParseError::UnexpectedEndOfInput(_) => todo!(),
-                hime_redist::errors::ParseError::UnexpectedChar(err) =>
-                    unexpected_char_error(err, compile_helper),
-                hime_redist::errors::ParseError::UnexpectedToken(err) =>
-                    unexpected_token_error(err, compile_helper),
-                hime_redist::errors::ParseError::IncorrectUTF16NoLowSurrogate(_) => todo!(),
-                hime_redist::errors::ParseError::IncorrectUTF16NoHighSurrogate(_) => todo!(),
-            }
+        match parse_err {
+            hime_redist::errors::ParseError::UnexpectedEndOfInput(_) => todo!(),
+            hime_redist::errors::ParseError::UnexpectedChar(err) =>
+                unexpected_char_error(err, compile_helper),
+            hime_redist::errors::ParseError::UnexpectedToken(err) =>
+                unexpected_token_error(err, compile_helper),
+            hime_redist::errors::ParseError::IncorrectUTF16NoLowSurrogate(_) => todo!(),
+            hime_redist::errors::ParseError::IncorrectUTF16NoHighSurrogate(_) => todo!(),
         }
-        if errors.len() > 0 {
-            exit(0);
-        }
+    }
+    if errors.len() > 0 {
+        exit(0);
+    }
 }

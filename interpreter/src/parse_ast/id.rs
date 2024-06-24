@@ -1,9 +1,9 @@
-use std::{process::exit};
+use std::process::exit;
 
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper};
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{errors, util::{self, get_closest_block, get_closest_scope}};
+use crate::{errors, util::get_closest_scope};
 
 
 

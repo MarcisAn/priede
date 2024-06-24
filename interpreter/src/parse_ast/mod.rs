@@ -1,11 +1,7 @@
-use std::fs::create_dir;
-
 use celsium::{
     block::Block,
     compiletime_helper::CompileTimeHelper,
-    vm::ObjectField,
     ObjectFieldType,
-    Scope,
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
@@ -39,7 +35,7 @@ mod include;
 use include::include;
 mod array_def;
 
-use crate::{ errors, hime, util::{self, get_data_type_from_id} };
+use crate::{ errors, util::{self, get_data_type_from_id} };
 
 pub fn parse_ast(
     node: AstNode,
@@ -57,7 +53,7 @@ pub fn parse_ast(
 
     if title == "dot_call" {
         let base = node.child(0).get_value().unwrap();
-        let dotcall = node.child(1).get_value().unwrap();
+        //let dotcall = node.child(1).get_value().unwrap();
 
         let object_if_exists = typestack.get_object_if_exists(base);
 
@@ -81,7 +77,7 @@ pub fn parse_ast(
                 );
             }
             block.get_array_length(array_id.unwrap());
-            typestack.push(celsium::BUILTIN_TYPES::MAGIC_INT);
+            typestack.push(celsium::BuiltinTypes::MagicInt);
         }
     }
 
@@ -112,7 +108,7 @@ pub fn parse_ast(
             field_names.push(field_name);
             fields.push(field);
         }
-        typestack.push(celsium::BUILTIN_TYPES::OBJECT { fields });
+        typestack.push(celsium::BuiltinTypes::Object { fields });
         block.create_object(field_names);
     }
 

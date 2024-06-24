@@ -1,4 +1,4 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 use crate::util::rem_first_and_last;
 
@@ -11,28 +11,28 @@ pub fn parse_constants(node: AstNode,
         let number_as_str = &node.get_value().unwrap();
         if number_as_str.contains(",") {
             block.load_const(
-                celsium::BUILTIN_TYPES::FLOAT,
+                celsium::BuiltinTypes::Float,
                 &number_as_str.replace(",", "."),
             );
-            typestack.push(BUILTIN_TYPES::FLOAT);
+            typestack.push(BuiltinTypes::Float);
         } else {
-            block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, &number_as_str);
-            typestack.push(BUILTIN_TYPES::MAGIC_INT);
+            block.load_const(celsium::BuiltinTypes::MagicInt, &number_as_str);
+            typestack.push(BuiltinTypes::MagicInt);
         }
-    } else if title == "STRING" {
+    } else if title == "String" {
         block.load_const(
-            celsium::BUILTIN_TYPES::STRING,
+            celsium::BuiltinTypes::String,
             rem_first_and_last(node.get_value().unwrap()),
         );
-        typestack.push(BUILTIN_TYPES::STRING)
-    } else if title == "BOOL" {
+        typestack.push(BuiltinTypes::String)
+    } else if title == "Bool" {
         block.load_const(
-            BUILTIN_TYPES::BOOL,
+            BuiltinTypes::Bool,
             match node.child(0).to_string().as_str() {
                 "TRUE" => "1",
                 "FALSE" => "0",
                 _ => panic!(),
             },
         );
-        typestack.push(BUILTIN_TYPES::BOOL);
+        typestack.push(BuiltinTypes::Bool);
     }}

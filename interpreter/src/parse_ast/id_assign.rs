@@ -29,41 +29,41 @@ pub fn id_assign(
             let data_type = typestack.get_var_type(var_id).unwrap();
             typestack.push(data_type);
             parse_ast(node.child(2), block, is_wasm, typestack);
-            typestack.binop(BINOP::ADD);
-            block.binop(BINOP::ADD);
+            typestack.binop(BINOP::Add);
+            block.binop(BINOP::Add);
         } else if operator == "-:" {
             block.load_variable(var_id);
             let data_type = typestack.get_var_type(var_id).unwrap();
             typestack.push(data_type);
             parse_ast(node.child(2), block, is_wasm, typestack);
-            block.binop(BINOP::SUBTRACT);
-            typestack.binop(BINOP::SUBTRACT);
+            block.binop(BINOP::Subtract);
+            typestack.binop(BINOP::Subtract);
         } else if operator == "*:" {
             block.load_variable(var_id);
             let data_type = typestack.get_var_type(var_id).unwrap();
             typestack.push(data_type);
             parse_ast(node.child(2), block, is_wasm, typestack);
-            block.binop(BINOP::MULTIPLY);
-            typestack.binop(BINOP::MULTIPLY);
+            block.binop(BINOP::Multiply);
+            typestack.binop(BINOP::Multiply);
         } else if operator == "/:" {
             block.load_variable(var_id);
             let data_type = typestack.get_var_type(var_id).unwrap();
             typestack.push(data_type);
             parse_ast(node.child(2), block, is_wasm, typestack);
-            block.binop(BINOP::DIVIDE);
+            block.binop(BINOP::Divide);
         } else if operator == "++" {
             block.load_variable(var_id);
             let data_type = typestack.get_var_type(var_id).unwrap();
             typestack.push(data_type);
-            block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
-            typestack.binop(BINOP::ADD);
-            block.binop(BINOP::ADD);
+            block.load_const(celsium::BuiltinTypes::MagicInt, "1");
+            typestack.binop(BINOP::Add);
+            block.binop(BINOP::Add);
         } else if operator == "--" {
             block.load_variable(var_id);
             let data_type = typestack.get_var_type(var_id).unwrap();
             typestack.push(data_type);
-            block.load_const(celsium::BUILTIN_TYPES::MAGIC_INT, "1");
-            block.binop(BINOP::SUBTRACT);
+            block.load_const(celsium::BuiltinTypes::MagicInt, "1");
+            block.binop(BINOP::Subtract);
         }
         block.assign_variable(var_id);
     } else if title == "array_assign" {

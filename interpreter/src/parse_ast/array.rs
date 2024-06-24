@@ -1,7 +1,7 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{errors, util::{self, get_closest_scope}};
+use crate::{errors, util::{self}};
 
 use super::parse_ast;
 
@@ -25,10 +25,10 @@ pub fn array(
         //parse the index
         parse_ast(node.child(1), block, is_wasm, typestack);
         let index_type = typestack.pop().unwrap();
-        if index_type != BUILTIN_TYPES::MAGIC_INT {
+        if index_type != BuiltinTypes::MagicInt {
             errors::array_element_wrong_type_index(
                 array_name.to_string(),
-                BUILTIN_TYPES::MAGIC_INT,
+                BuiltinTypes::MagicInt,
                 index_type,
                 typestack,
                 node

@@ -1,6 +1,4 @@
-use std::io::BufRead;
-
-use celsium::{ compiletime_helper::{ CompileTimeHelper, CompileTimeImport }, ObjectFieldType, Scope, BUILTIN_TYPES };
+use celsium::{ compiletime_helper::{ CompileTimeHelper, CompileTimeImport }, ObjectFieldType, Scope, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
 use crate::errors;
@@ -167,15 +165,15 @@ pub fn get_closest_node_location(node: AstNode) -> TextPosition {
     panic!();
 }
 
-pub fn data_type_from_str(inp: &str) -> Option<BUILTIN_TYPES> {
+pub fn data_type_from_str(inp: &str) -> Option<BuiltinTypes> {
     return Some(match inp {
-        "sk" => celsium::BUILTIN_TYPES::MAGIC_INT,
-        "skaitlis" => celsium::BUILTIN_TYPES::MAGIC_INT,
-        "būls" => celsium::BUILTIN_TYPES::BOOL,
-        "bl" => celsium::BUILTIN_TYPES::BOOL,
-        "teksts" => celsium::BUILTIN_TYPES::STRING,
-        "tk" => celsium::BUILTIN_TYPES::STRING,
-        "decim" => celsium::BUILTIN_TYPES::FLOAT,
+        "sk" => celsium::BuiltinTypes::MagicInt,
+        "skaitlis" => celsium::BuiltinTypes::MagicInt,
+        "būls" => celsium::BuiltinTypes::Bool,
+        "bl" => celsium::BuiltinTypes::Bool,
+        "teksts" => celsium::BuiltinTypes::String,
+        "tk" => celsium::BuiltinTypes::String,
+        "decim" => celsium::BuiltinTypes::Float,
         _ => {
             return None;
         }
@@ -191,24 +189,24 @@ fn format_object_fields(fields: Vec<ObjectFieldType>) -> String {
     formated
 }
 
-pub fn str_from_data_type(inp: BUILTIN_TYPES) -> String {
+pub fn str_from_data_type(inp: BuiltinTypes) -> String {
     match inp {
-        BUILTIN_TYPES::MAGIC_INT => "skaitlis".into(),
-        BUILTIN_TYPES::BOOL => "būls".into(),
-        BUILTIN_TYPES::STRING => "teksts".into(),
-        BUILTIN_TYPES::OBJECT { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
-        BUILTIN_TYPES::FLOAT => "decimālskaitlis".into(),
+        BuiltinTypes::MagicInt => "skaitlis".into(),
+        BuiltinTypes::Bool => "būls".into(),
+        BuiltinTypes::String => "teksts".into(),
+        BuiltinTypes::Object { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
+        BuiltinTypes::Float => "decimālskaitlis".into(),
     }
 }
 
-pub fn get_data_type_from_id(compilehelper: &mut CompileTimeHelper, data_type_str: &str, node: AstNode) -> BUILTIN_TYPES {
+pub fn get_data_type_from_id(compilehelper: &mut CompileTimeHelper, data_type_str: &str, node: AstNode) -> BuiltinTypes {
     let data_type_marked_option = data_type_from_str(data_type_str);
 
-    let mut data_type_marked: BUILTIN_TYPES;
+    let data_type_marked: BuiltinTypes;
     if data_type_marked_option.is_none() {
         let struct_exists = compilehelper.struct_exists(data_type_str);
         if struct_exists.is_some() {
-            data_type_marked = BUILTIN_TYPES::OBJECT {
+            data_type_marked = BuiltinTypes::Object {
                 fields: struct_exists.unwrap().fields,
             };
         } else {
@@ -221,17 +219,17 @@ pub fn get_data_type_from_id(compilehelper: &mut CompileTimeHelper, data_type_st
     return data_type_marked;
 }
 
-pub fn compare_object_types(a: &BUILTIN_TYPES, b: &BUILTIN_TYPES) -> Result<bool, String> {
+pub fn compare_object_types(a: &BuiltinTypes, b: &BuiltinTypes) -> Result<bool, String> {
     let mut fields_a: Vec<ObjectFieldType>;
     let mut fields_b: Vec<ObjectFieldType>;
 
     match a {
-        BUILTIN_TYPES::OBJECT { fields } => fields_a = fields.to_vec(),
+        BuiltinTypes::Object { fields } => fields_a = fields.to_vec(),
         _ => return Err("not an object".into())
     }
 
     match b {
-        BUILTIN_TYPES::OBJECT { fields } => fields_b = fields.to_vec(),
+        BuiltinTypes::Object { fields } => fields_b = fields.to_vec(),
         _ => return Err("not an object".into())
     }
 
@@ -246,16 +244,16 @@ pub fn compare_object_types(a: &BUILTIN_TYPES, b: &BUILTIN_TYPES) -> Result<bool
     }
 }
 
-pub fn is_type_object(a: &BUILTIN_TYPES) -> bool{
+pub fn is_type_object(a: &BuiltinTypes) -> bool{
     match a {
-       BUILTIN_TYPES::OBJECT { fields: _ } => return true,
+       BuiltinTypes::Object { fields: _ } => return true,
        _ => return false 
     }
 }
 
-pub fn get_object_fields(a: &BUILTIN_TYPES) -> Option<Vec<ObjectFieldType>> {
+pub fn get_object_fields(a: &BuiltinTypes) -> Option<Vec<ObjectFieldType>> {
     match a {
-        BUILTIN_TYPES::OBJECT { fields } => return Some(fields.to_vec()),
+        BuiltinTypes::Object { fields } => return Some(fields.to_vec()),
         _ => return None
     }
 }

@@ -2,7 +2,7 @@ use std::process::exit;
 
 use annotate_snippets::{ Level, Renderer, Snippet };
 use anstream;
-use celsium::{ compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
+use celsium::{ compiletime_helper::CompileTimeHelper, BuiltinTypes };
 use colored::Colorize;
 use hime_redist::{ast::AstNode, text::TextPosition};
 
@@ -40,7 +40,7 @@ pub fn wrong_argument_count(func_name: String, expected: usize, found: usize, no
     let msg = format!("Fukcija {} sagaida {} argumentu{}, bet šeit tiek padot{} {} argument{}", func_name, expected, if expected == 1 {""} else {"s"}, if expected == 1 {"s"} else {"i"}, found, if expected == 1 {"s"} else {"i"});
     common_error(&msg, position, compilehelper);
 }
-pub fn wrong_argument_type(func_name: String, arg_index: usize ,expected: BUILTIN_TYPES, found: BUILTIN_TYPES, node: AstNode, compilehelper: &mut CompileTimeHelper){
+pub fn wrong_argument_type(func_name: String, arg_index: usize ,expected: BuiltinTypes, found: BuiltinTypes, node: AstNode, compilehelper: &mut CompileTimeHelper){
     let position = util::get_closest_node_location(node);
     let msg = format!("Fukcija `{}` kā {}. argumentu sagaida datu tipu `{}`, bet atrasts arguments ar tipu `{}`.", func_name, arg_index, str_from_data_type(expected), str_from_data_type(found));
     common_error(&msg, position, compilehelper);
@@ -53,8 +53,8 @@ pub fn notexistant_type(type_name: String, node: AstNode, compilehelper: &mut Co
 pub fn array_element_wrong_type(
     array_name: String,
     element_index: usize,
-    expected_type: BUILTIN_TYPES,
-    found_type: BUILTIN_TYPES,
+    expected_type: BuiltinTypes,
+    found_type: BuiltinTypes,
     compilehelper: &mut CompileTimeHelper, node: AstNode
 ) {
     let expected = str_from_data_type(expected_type);
@@ -73,8 +73,8 @@ pub fn array_element_wrong_type(
 }
 pub fn array_element_wrong_type_index(
     array_name: String,
-    expected_type: BUILTIN_TYPES,
-    found_type: BUILTIN_TYPES,
+    expected_type: BuiltinTypes,
+    found_type: BuiltinTypes,
     compilehelper: &mut CompileTimeHelper, node: AstNode
 ) {
     let expected = str_from_data_type(expected_type);

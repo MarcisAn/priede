@@ -3,7 +3,7 @@ use std::process::exit;
 use celsium::{ block::Block, bytecode::BINOP, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{errors, util};
+use crate::errors;
 
 use super::parse_ast;
 
@@ -19,7 +19,7 @@ pub fn comparisons(
         parse_ast(node.child(0), block, is_wasm, typestack);
         parse_ast(node.child(2), block, is_wasm, typestack);
         let checked_type = match sign {
-            "=" => typestack.binop(BINOP::EQ),
+            "=" => typestack.binop(BINOP::Eq),
             ">" => typestack.binop(BINOP::LargerThan),
             ">=" => typestack.binop(BINOP::LargerOrEq),
             "<" => typestack.binop(BINOP::LessThan),
@@ -35,7 +35,7 @@ pub fn comparisons(
             exit(0);
         }
         match sign {
-            "=" => block.binop(BINOP::EQ),
+            "=" => block.binop(BINOP::Eq),
             ">" => block.binop(BINOP::LargerThan),
             ">=" => block.binop(BINOP::LargerOrEq),
             "<" => block.binop(BINOP::LessThan),
@@ -47,19 +47,19 @@ pub fn comparisons(
     else if title == "un" {
         parse_ast(node.child(0), block, is_wasm, typestack);
         parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::AND);
-        typestack.binop(BINOP::AND);
+        block.binop(BINOP::And);
+        typestack.binop(BINOP::And);
     } else if title == "vai" {
         parse_ast(node.child(0), block, is_wasm, typestack);
         parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::OR);
-        typestack.binop(BINOP::OR);
+        block.binop(BINOP::Or);
+        typestack.binop(BINOP::Or);
 
     } else if title == "xvai" {
         parse_ast(node.child(0), block, is_wasm, typestack);
         parse_ast(node.child(1), block, is_wasm, typestack);
-        block.binop(BINOP::XOR);
-        typestack.binop(BINOP::XOR);
+        block.binop(BINOP::Xor);
+        typestack.binop(BINOP::Xor);
 
     }
 }

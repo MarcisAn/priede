@@ -1,8 +1,8 @@
 use std::process::exit;
 
-use crate::{ errors::math_error, util };
+use crate::errors::math_error;
 use celsium::{ block::Block, bytecode::BINOP, compiletime_helper::CompileTimeHelper };
-use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
+use hime_redist::ast::AstNode;
 
 use super::parse_ast;
 
@@ -16,11 +16,11 @@ pub fn math_ops(
     if title == "plus" || title == "minus" || title == "reiz" || title == "dal" || title == "atlik" {
         calculate(
             match title {
-                "plus" => BINOP::ADD,
-                "minus" => BINOP::SUBTRACT,
-                "reiz" => BINOP::MULTIPLY,
-                "dal" => BINOP::DIVIDE,
-                "atlik" => BINOP::REMAINDER,
+                "plus" => BINOP::Add,
+                "minus" => BINOP::Subtract,
+                "reiz" => BINOP::Multiply,
+                "dal" => BINOP::Divide,
+                "atlik" => BINOP::Remainder,
                 _ => panic!(),
             },
             node,

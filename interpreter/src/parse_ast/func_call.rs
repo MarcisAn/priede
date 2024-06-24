@@ -1,4 +1,4 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BUILTIN_TYPES };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{ errors, util };
@@ -21,17 +21,17 @@ pub fn func_call(
         }
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "izvade" {
-            block.call_special_function(celsium::SpecialFunctions::PRINT { newline: true });
+            block.call_special_function(celsium::SpecialFunctions::Print { newline: true });
         } else if func_name == "izvadetp" {
-            block.call_special_function(celsium::SpecialFunctions::PRINT { newline: false });
+            block.call_special_function(celsium::SpecialFunctions::Print { newline: false });
         } else if func_name == "ievade" {
-            block.call_special_function(celsium::SpecialFunctions::INPUT);
+            block.call_special_function(celsium::SpecialFunctions::Input);
         } else if func_name == "jukums" {
             //parse_ast(node.child(1).child(0), block, is_wasm, typestack);
             //parse_ast(node.child(1).child(1), block, is_wasm, typestack);
-            block.call_special_function(celsium::SpecialFunctions::RANDOM);
+            block.call_special_function(celsium::SpecialFunctions::Random);
         } else {
-            let mut func_args_found: Vec<BUILTIN_TYPES> = vec![];
+            let mut func_args_found: Vec<BuiltinTypes> = vec![];
             if node.children_count() > 1 {
                 //if funccall has arguments
                 for arg in node.child(1).children().iter() {

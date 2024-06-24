@@ -1,14 +1,12 @@
-use std::thread::scope;
-
 use celsium::{
     block::Block,
     compiletime_helper::CompileTimeHelper,
     module::{ FuncArg, FunctionSignature, VISIBILITY },
-    BUILTIN_TYPES,
+    BuiltinTypes,
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{ errors, util::{ self, get_data_type_from_id } };
+use crate::util::{ self, get_data_type_from_id };
 
 use super::parse_ast;
 
@@ -39,7 +37,7 @@ pub fn func_def(
 
         if node.children_count() >= 3 + (is_exported as usize) {
             //when the function takes arguments
-            let mut return_type: Option<BUILTIN_TYPES> = None;
+            let mut return_type: Option<BuiltinTypes> = None;
 
             let is_returning =
                 node.child(2 + (is_exported as usize)).to_string() == "func_return_type";
@@ -99,7 +97,7 @@ pub fn func_def(
             let is_returning =
                 node.child(1 + (is_exported as usize)).to_string() == "func_return_type";
 
-            let mut return_type: Option<BUILTIN_TYPES> = None;
+            let mut return_type: Option<BuiltinTypes> = None;
             if is_returning {
                 return_type = Some(
                     util::get_data_type_from_id(

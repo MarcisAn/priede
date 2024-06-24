@@ -1,8 +1,8 @@
-use std::{ any::Any, process::exit };
+use std::process::exit;
 
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, Scope, BUILTIN_TYPES };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{ errors, util::{ self, get_closest_block, get_object_fields } };
+use crate::{ errors, util::{ self, get_object_fields } };
 
 use super::{ array_def, parse_ast };
 
@@ -71,7 +71,6 @@ pub fn var_def(
                 
                 let object_id = typestack.def_object(
                     varname.clone(),
-                    data_type_marked,
                     block.scope.clone(),
                     is_exported,
                     fields.clone(),
@@ -96,7 +95,7 @@ pub fn var_def(
                 for field in fields.clone(){
                     field_names.push(field.name);
                 }
-                block.define_object(object_id.unwrap(), field_names);
+                block.define_object(object_id.unwrap());
             } else {
                 let var_id = typestack.def_var(
                     varname.clone(),
