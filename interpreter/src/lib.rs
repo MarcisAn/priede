@@ -16,7 +16,6 @@ use std::process::exit;
 use std::{ fs, process };
 use wasm_bindgen::prelude::*;
 pub mod errors;
-mod data_format;
 mod hime;
 mod parse_ast;
 mod util;
