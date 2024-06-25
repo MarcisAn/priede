@@ -160,6 +160,7 @@ dependencies = [
  "colored",
  "console_error_panic_hook",
  "hime_redist",
+ "stumbrs",
  "target-lexicon",
  "wasm-bindgen",
 ]
@@ -391,6 +392,13 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
+]
+
+[[package]]
+name = "stumbrs"
+version = "0.1.0"
+dependencies = [
+ "hime_redist",
 ]
 
 [[package]]

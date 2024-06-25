@@ -1,1 +1,10 @@
-{vārds; vecums} : STUMBRS("E:/Dev/priede/examples/testdata.st")
+objekts obj {sk: a tk: b}
+
+obj aa : {a: 2 b: "a"}
+
+obj bb : aa
+
+izvade("ee")
+
+tk r : "aaaa"
+izvade(aa)

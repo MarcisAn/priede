@@ -1,4 +1,4 @@
-grammar priede_data
+grammar stumbrs
 {
     options{
         Axiom = "root";
@@ -49,14 +49,22 @@ grammar priede_data
         RETURN -> 'atgriezt';
     }
     rules{
+        BOOL_DEF -> 'būls'! | 'bl'!;
+        TEXT -> 'teksts'! | 'tk'!;
+        NUM -> 'sk'! | 'skaitlis'!;
+        FLOAT -> 'decim'!;
+        
+
+        TYPE -> BOOL_DEF^ | TEXT^ |  NUM^ | FLOAT^;
+
         TRUE -> 'PAT'! | 'PATIESS'!;
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
 
 
 
-
-        array -> exp_atom (';'! exp_atom)*;
+        array -> exp_atom
+                |exp_atom (';'! exp_atom)*;
 
         
         exp_atom -> NUMBER^
@@ -64,8 +72,7 @@ grammar priede_data
                    | BOOL^
                    | STRING^;
 
-        //SCHEM_ITEM -> ID ':'! ID | '['! ID ']'! ':'! ID;
-        SCHEM_ITEM -> ID ':'! ID;
+        SCHEM_ITEM -> TYPE ID| '[]' ID;
 
         SCHEMATIC -> SCHEM_ITEM*;
 
@@ -73,6 +80,6 @@ grammar priede_data
 
         VALUES -> VALUE*;
         
-        root ->  SCHEMATIC;
+        root ->  '{'! SCHEMATIC '}'! '{'! VALUES '}'!;
     }
 }

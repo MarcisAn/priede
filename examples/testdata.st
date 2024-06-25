@@ -1,6 +1,6 @@
 {
-    teksts: vārds
-    a: vecums
+    teksts vārds
+    [] vecums
 }
 {
     "Miķelis"
