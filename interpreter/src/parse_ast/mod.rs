@@ -9,8 +9,6 @@ mod id_assign;
 use id_assign::id_assign;
 mod math_ops;
 use math_ops::math_ops;
-mod stumbrs;
-use stumbrs::stumbrs_define;
 mod var_def;
 use var_def::var_def;
 mod constants;
@@ -116,7 +114,6 @@ pub fn parse_ast(
     id(node, &title, block, typestack);
     return_st(node, &title, block, typestack, is_wasm);
     if_stat(node, &title, block, typestack, is_wasm);
-    stumbrs_define(node, &title, block, typestack, is_wasm);
     loops(node, &title, block, typestack, is_wasm);
     func_def(node, &title, block, typestack, is_wasm);
     func_call(node, &title, block, typestack, is_wasm);
