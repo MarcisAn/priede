@@ -1,6 +1,6 @@
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{ errors, util::get_data_type_from_id };
+use crate::{ errors, util::{ self, get_data_type_from_id } };
 
 use super::parse_ast;
 
@@ -29,7 +29,21 @@ pub fn array_def(
         for i in node.child(3 + (is_exported as usize)).children() {
             parse_ast(i, block, is_wasm, typestack);
             let type_of_init_val = typestack.pop();
-            if type_of_init_val.clone().unwrap() != data_type_marked.clone() {
+
+            let mut should_objects_error = false;
+
+            let are_object_types_eq = util::compare_object_types(
+                &type_of_init_val.clone().unwrap(),
+                &data_type_marked
+            );
+
+            if are_object_types_eq.is_ok() {
+                should_objects_error = !are_object_types_eq.unwrap();
+            }
+            if
+                type_of_init_val.clone().unwrap() != data_type_marked.clone() &&
+                should_objects_error
+            {
                 errors::array_element_wrong_type(
                     array_name.to_owned(),
                     init_value_counter,

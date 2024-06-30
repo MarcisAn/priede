@@ -93,6 +93,7 @@ pub fn get_closest_scope(
             }
         }
     }
+    println!("{:?}", compilehelper.defined_arrays);
     for var in compilehelper.defined_arrays.clone() {
         let import_to_search_for = CompileTimeImport {
             name: var.clone().name,
@@ -196,6 +197,7 @@ pub fn str_from_data_type(inp: BuiltinTypes) -> String {
         BuiltinTypes::String => "teksts".into(),
         BuiltinTypes::Object { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
         BuiltinTypes::Float => "decimālskaitlis".into(),
+        BuiltinTypes::Array { element_type } => todo!(),
     }
 }
 

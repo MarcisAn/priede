@@ -1,8 +1,5 @@
-use celsium::{
-    block::Block,
-    compiletime_helper::CompileTimeHelper,
-    ObjectFieldType,
-};
+use array_def::array_def;
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes, ObjectFieldType };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 mod id_assign;
@@ -33,7 +30,7 @@ mod include;
 use include::include;
 mod array_def;
 
-use crate::{ errors, util::{self, get_data_type_from_id} };
+use crate::{ errors, util::{ self, get_data_type_from_id } };
 
 pub fn parse_ast(
     node: AstNode,
@@ -48,15 +45,16 @@ pub fn parse_ast(
             parse_ast(i, block, is_wasm, typestack);
         }
     }
-
+/* 
     if title == "dot_call" {
-        let base = node.child(0).get_value().unwrap();
-        //let dotcall = node.child(1).get_value().unwrap();
+        parse_ast(node.child(0), block, is_wasm, typestack);
 
-        let object_if_exists = typestack.get_object_if_exists(base);
-
-        if object_if_exists.is_some(){
-
+        match typestack.pop().unwrap() {
+            BuiltinTypes::Object { fields } => block.get_object_field(node.child(1).get_value().unwrap().to_string()),
+            BuiltinTypes::MagicInt => todo!(),
+            BuiltinTypes::Bool => todo!(),
+            BuiltinTypes::String => todo!(),
+            BuiltinTypes::Float => todo!(),
         }
 
         if node.child(1).get_value().unwrap() == "garums" {
@@ -77,7 +75,7 @@ pub fn parse_ast(
             block.get_array_length(array_id.unwrap());
             typestack.push(celsium::BuiltinTypes::MagicInt);
         }
-    }
+    }*/
 
     if title == "object_def" {
         let object_title = node.child(0).get_value().unwrap().to_string();
@@ -86,9 +84,13 @@ pub fn parse_ast(
         while field_counter < node.children_count() {
             fields.push(ObjectFieldType {
                 name: node.child(field_counter).child(1).get_value().unwrap().to_string(),
-                data_type: get_data_type_from_id(typestack, node.child(field_counter).child(0).get_value().unwrap(), node),
+                data_type: get_data_type_from_id(
+                    typestack,
+                    node.child(field_counter).child(0).get_value().unwrap(),
+                    node
+                ),
             });
-            field_counter +=1;
+            field_counter += 1;
         }
         typestack.define_struct(object_title, fields);
     }
@@ -110,6 +112,20 @@ pub fn parse_ast(
         block.create_object(field_names);
     }
 
+    if title == "dot_call" {
+        parse_ast(node.child(0), block, is_wasm, typestack);
+        let origin_type = typestack.pop().unwrap();
+        println!("{:?}", origin_type);
+        match origin_type {
+            BuiltinTypes::MagicInt => todo!(),
+            BuiltinTypes::Bool => todo!(),
+            BuiltinTypes::String => todo!(),
+            BuiltinTypes::Object { fields } =>
+                block.get_object_field(node.child(1).get_value().unwrap().to_string()),
+            BuiltinTypes::Float => todo!(),
+            BuiltinTypes::Array { element_type } => todo!(),
+        }
+    }
 
     id(node, &title, block, typestack);
     return_st(node, &title, block, typestack, is_wasm);

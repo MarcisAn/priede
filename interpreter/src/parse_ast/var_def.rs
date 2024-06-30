@@ -13,9 +13,9 @@ pub fn var_def(
     is_wasm: bool,
     block: &mut Block
 ) {
-    if title == "var_def" {
+    if title == "var_def" || title == "array_def"{
         let is_exported = node.child(0).get_symbol().to_string() == "EXPORT";
-        if node.child(1).get_symbol().to_string() == "ARRAY" {
+        if node.child(1 + is_exported as usize).get_symbol().to_string() == "ARRAY" {
             array_def::array_def(node, title, typestack, is_wasm, block, is_exported);
         } else {
             //user marked data type
@@ -38,6 +38,7 @@ pub fn var_def(
                 &typ_of_init_value,
                 &data_type_marked
             );
+
 
             if are_object_types_eq.is_ok() {
                 should_objects_error = !are_object_types_eq.unwrap();

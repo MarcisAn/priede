@@ -71,7 +71,9 @@ grammar priede
         include -> INCLUDE! include_list FROM STRING;
 
         array_def -> ID ARRAY  ID ':'! '['! array_def_value ']'!
-                | ID ARRAY  ID ':'! '['! ']'!;
+                | ID ARRAY  ID ':'! '['! ']'!
+                | EXPORT ID ARRAY  ID ':'! '['! array_def_value ']'!
+                | EXPORT ID ARRAY  ID ':'! '['! ']'!;
 
         var_def -> ID ID ':'! var_def_value
                 | array_def^

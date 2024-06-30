@@ -1,10 +1,7 @@
 objekts obj {sk: a tk: b}
 
-obj aa : {a: 2 b: "a"}
+obj saraksts aa : [{a: 2 b: "a"}]
 
-obj bb : aa
+obj bb : {a: 2 b: "a"}
 
-izvade("ee")
-
-tk r : "aaaa"
-izvade(aa)
+izvade(aa[0].a)

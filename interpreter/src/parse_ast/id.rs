@@ -5,9 +5,6 @@ use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{errors, util::get_closest_scope};
 
-
-
-
 pub fn id(node: AstNode, title: &str, block: &mut Block, typestack: &mut CompileTimeHelper) {
     if title.starts_with("ID") {
         let var_name = node.get_value().unwrap();
@@ -22,7 +19,8 @@ pub fn id(node: AstNode, title: &str, block: &mut Block, typestack: &mut Compile
             exit(0);
         } else {
             let data_type = typestack.get_var_type(var_id.unwrap()).unwrap();
-            typestack.push(data_type);
+            typestack.push(data_type.clone());
+            println!("{:?}", data_type);
             block.load_variable(var_id.unwrap());
         }
     }
