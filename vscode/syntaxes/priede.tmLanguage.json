@@ -1,0 +1,45 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Priede",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"#include": "#numbers"
+		}
+	],
+	"repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.priede",
+          "match": "\\b(citādi|saraksts|atgriezt|iekļaut|no|eksp|objekts|ja|atkārtot|kamēr|funkc|xvai|vai|un)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.priede",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.priede",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "number.priede",
+          "match": "\\b(divi|viens)\\b"
+        }
+      ]
+    }
+  },
+	"scopeName": "text.priede"
+}

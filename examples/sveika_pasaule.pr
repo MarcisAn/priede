@@ -5,6 +5,6 @@ objekts cilvēks {
 }
 
 
-cilvēks saraksts cilvēki : [{vārds: "Emīls" uzvārds: "Veclēcējs" nodarbošanās: "Terminators"}]
+cilvēks saraksts cilvēki : [{vārds: "Juris" uzvārds: "Veclēcējs" nodarbošanās: "Džeimss Bonds"}; {vārds: "Miķelis" uzvārds: "Jaunlēcējs" nodarbošanās: "Čūsku dresētājs"}]
 
 izvade(cilvēki)
