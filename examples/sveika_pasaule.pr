@@ -1,7 +1,10 @@
-objekts obj {sk: a tk: b}
+objekts cilvēks {
+    tk: vārds
+    tk: uzvārds
+    tk: nodarbošanās
+}
 
-obj saraksts aa : [{a: 2 b: "a"}]
 
-obj bb : {a: 2 b: "a"}
+cilvēks saraksts cilvēki : [{vārds: "Emīls" uzvārds: "Veclēcējs" nodarbošanās: "Terminators"}]
 
-izvade(aa[0].a)
+izvade(cilvēki)
