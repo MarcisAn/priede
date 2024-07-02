@@ -1,18 +1,21 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Priede",
-	"patterns": [
-		{
-			"include": "#keywords"
-		},
-		{
-			"include": "#strings"
-		},
-		{
-			"#include": "#numbers"
-		}
-	],
-	"repository": {
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Priede",
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#array"
+    }
+  ],
+  "repository": {
     "keywords": {
       "patterns": [
         {
@@ -32,14 +35,111 @@
         }
       ]
     },
-    "numbers": {
+    "array": {
+      "begin": "\\[",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.array.begin.priede"
+        }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.array.end.priede"
+        }
+      },
+      "name": "meta.structure.array.priede",
       "patterns": [
         {
-          "name": "number.priede",
-          "match": "\\b(divi|viens)\\b"
+          "include": "#value"
+        },
+        {
+          "match": ";",
+          "name": "punctuation.separator.array.priede"
+        },
+        {
+          "match": "[^\\s\\]]",
+          "name": "invalid.illegal.expected-array-separator.priede"
+        }
+      ]
+    },
+    "comment": {
+      "patterns": [
+        {
+          "begin": "/\\*\\*(?!/)",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.priede"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.priede"
+            }
+          },
+          "name": "comment.block.documentation.priede",
+          "patterns": [
+            {
+              "include": "#docblock"
+            }
+          ]
+        },
+        {
+          "begin": "(/\\*)(?:\\s*((@)internal)(?=\\s|(\\*/)))?",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.comment.priede"
+            },
+            "2": {
+              "name": "storage.type.internaldeclaration.priede"
+            },
+            "3": {
+              "name": "punctuation.decorator.internaldeclaration.priede"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.priede"
+            }
+          },
+          "name": "comment.block.priede"
+        },
+        {
+          "begin": "(^[ \\t]+)?((//)(?:\\s*((@)internal)(?=\\s|$))?)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.priede"
+            },
+            "2": {
+              "name": "comment.line.double-slash.priede"
+            },
+            "3": {
+              "name": "punctuation.definition.comment.priede"
+            },
+            "4": {
+              "name": "storage.type.internaldeclaration.priede"
+            },
+            "5": {
+              "name": "punctuation.decorator.internaldeclaration.priede"
+            }
+          },
+          "contentName": "comment.line.double-slash.priede",
+          "end": "(?=$)"
+        }
+      ]
+    },
+    "value": {
+      "patterns": [
+        {
+          "include": "#string"
+        },
+        {
+          "include": "#array"
         }
       ]
     }
   },
-	"scopeName": "text.priede"
+  "scopeName": "text.priede"
 }
