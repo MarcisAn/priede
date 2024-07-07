@@ -1,1 +1,3 @@
-eksp sk bb : 3
+eksp funkc b() {
+    izvade("a")
+}

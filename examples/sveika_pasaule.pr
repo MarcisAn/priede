@@ -1,10 +1,3 @@
-objekts cilvēks {
-    tk: vārds
-    tk: uzvārds
-    tk: nodarbošanās
-}
+iekļaut {b} no "E:/Dev/priede/examples/other_file.pr"
 
-
-cilvēks saraksts cilvēki : [{vārds: "Juris" uzvārds: "Veclēcējs" nodarbošanās: "Džeimss Bonds"}; {vārds: "Miķelis" uzvārds: "Jaunlēcējs" nodarbošanās: "Čūsku dresētājs"}]
-
-izvade(cilvēki)
+b()

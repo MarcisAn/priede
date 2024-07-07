@@ -60,7 +60,7 @@ izvade(a)
 ```
 
 ```priede
-funkc piesk_un_reiz(sk : saskaitamais; sk : reizinatajs) {
+funkc piesk_un_reiz(sk saskaitamais; sk reizinatajs) {
     atgriezt(saskaitamais + 5 * reizinatajs)
 }
 
