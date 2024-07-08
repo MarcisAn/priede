@@ -68,12 +68,11 @@ grammar priede
 
         include_list -> '{'! ID+ '}'!;
 
-        include -> INCLUDE! include_list FROM STRING;
+        include -> INCLUDE! include_list FROM STRING
+        |INCLUDE! include_list FROM ID;
 
         array_def -> ID ARRAY  ID ':'! '['! array_def_value ']'!
-                | ID ARRAY  ID ':'! '['! ']'!
-                | EXPORT ID ARRAY  ID ':'! '['! array_def_value ']'!
-                | EXPORT ID ARRAY  ID ':'! '['! ']'!;
+                | ID ARRAY  ID ':'! '['! ']'!;
 
         var_def -> ID ID ':'! var_def_value
                 | array_def^
