@@ -1,3 +1,6 @@
-iekļaut {b} no std
+skaitlis a : 0
 
-b()
+kamēr (a < 5) {
+    izvade("Teksts tiks printēts 5 reizes")
+    a++
+}

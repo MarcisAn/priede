@@ -6,16 +6,14 @@ use celsium::{
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::util::{ self, get_data_type_from_id };
+use crate::{util::{ self, get_data_type_from_id }, Compiler};
 
 use super::parse_ast;
 
 pub fn func_def(
     node: AstNode,
     title: &str,
-    block: &mut Block,
-    typestack: &mut CompileTimeHelper,
-    is_wasm: bool
+    compiler: &mut Compiler
 ) {
     if title == "func_def" {
         let is_exported = node.child(0).get_symbol().to_string() == "EXPORT";
@@ -28,9 +26,9 @@ pub fn func_def(
 
         let mut body = Block::new(
             if node.children_count() > 3 {
-                block.scope.change_ast_id(node.child(3 + (is_exported as usize)).id())
+                compiler.block.scope.change_ast_id(node.child(3 + (is_exported as usize)).id())
             } else {
-                block.scope.change_ast_id(node.child(2 + (is_exported as usize)).id())
+                compiler.block.scope.change_ast_id(node.child(2 + (is_exported as usize)).id())
             }
         );
         let mut args: Vec<FuncArg> = vec![];
@@ -51,13 +49,13 @@ pub fn func_def(
 
                 let data_type_str = arg.child(0).get_value().unwrap();
 
-                let data_type_marked = get_data_type_from_id(typestack, data_type_str, node);
+                let data_type_marked = get_data_type_from_id(&mut compiler.helper, data_type_str, node);
 
                 args.push(FuncArg {
                     name: arg_name.clone(),
                     arg_type: data_type_marked.clone(),
                 });
-                let var_id = typestack.def_var(
+                let var_id = compiler.helper.def_var(
                     arg_name,
                     data_type_marked,
                     body.scope.clone(),
@@ -69,7 +67,7 @@ pub fn func_def(
             if is_returning {
                 return_type = Some(
                     util::get_data_type_from_id(
-                        typestack,
+                        &mut compiler.helper,
                         node
                             .child(2 + (is_exported as usize))
                             .child(0)
@@ -82,14 +80,12 @@ pub fn func_def(
 
             parse_ast(
                 node.child(2 + (is_returning as usize) + (is_exported as usize)),
-                &mut body,
-                is_wasm,
-                typestack
+                compiler
             );
-            typestack.def_function(
+            compiler.helper.def_function(
                 func_name.clone(),
                 args.clone(),
-                block.scope.clone(),
+                compiler.block.scope.clone(),
                 is_exported,
                 return_type
             );
@@ -101,7 +97,7 @@ pub fn func_def(
             if is_returning {
                 return_type = Some(
                     util::get_data_type_from_id(
-                        typestack,
+                        &mut compiler.helper,
                         node
                             .child(1 + (is_exported as usize))
                             .child(0)
@@ -112,17 +108,17 @@ pub fn func_def(
                 );
             }
 
-            parse_ast(node.child(1 + (is_exported as usize)), &mut body, is_wasm, typestack);
-            typestack.def_function(
+            parse_ast(node.child(1 + (is_exported as usize)), compiler);
+            compiler.helper.def_function(
                 func_name.clone(),
                 args.clone(),
-                block.scope.clone(),
+                compiler.block.scope.clone(),
                 is_exported,
                 return_type
             );
         }
 
-        block.define_function(body, VISIBILITY::PUBLIC, FunctionSignature {
+        compiler.block.define_function(body, VISIBILITY::PUBLIC, FunctionSignature {
             name: func_name,
             return_type: celsium::module::FunctionReturnType::NONE,
             args: args,

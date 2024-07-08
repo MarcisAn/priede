@@ -1,15 +1,13 @@
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{ errors, util::{ self, get_data_type_from_id } };
+use crate::{ errors, util::{ self, get_data_type_from_id }, Compiler };
 
 use super::parse_ast;
 
 pub fn array_def(
     node: AstNode,
     title: &str,
-    typestack: &mut CompileTimeHelper,
-    is_wasm: bool,
-    block: &mut Block,
+    compiler: &mut Compiler,
     is_exported: bool
 ) {
     if title == "array_def" {
@@ -23,12 +21,12 @@ pub fn array_def(
             .get_value()
             .unwrap();
 
-        let data_type_marked = get_data_type_from_id(typestack, data_type_str, node);
+        let data_type_marked = get_data_type_from_id(&mut compiler.helper, data_type_str, node);
 
         let mut init_value_counter = 0;
         for i in node.child(3 + (is_exported as usize)).children() {
-            parse_ast(i, block, is_wasm, typestack);
-            let type_of_init_val = typestack.pop();
+            parse_ast(i, compiler);
+            let type_of_init_val = compiler.helper.pop();
 
             let mut should_objects_error = false;
 
@@ -49,23 +47,23 @@ pub fn array_def(
                     init_value_counter,
                     data_type_marked.clone(),
                     type_of_init_val.unwrap().clone(),
-                    typestack,
+                    &mut compiler.helper,
                     node
                 );
             }
             init_value_counter += 1;
         }
-        let var_id = typestack.def_array(
+        let var_id = compiler.helper.def_array(
             array_name,
             data_type_marked,
             node
                 .child(3 + (is_exported as usize))
                 .children()
                 .len(),
-            block.scope.clone(),
+            compiler.block.scope.clone(),
             is_exported
         );
-        block.define_array(
+        compiler.block.define_array(
             node
                 .child(3 + (is_exported as usize))
                 .children()

@@ -52,14 +52,7 @@ grammar priede
         EXPORT -> 'eksp';
         OBJECT -> 'objekts';
     }
-    rules{
-        //BOOL_DEF -> 'būls'! | 'bl'!;
-        //TEXT -> 'teksts'! | 'tk'!;
-        //NUM -> 'sk'! | 'skaitlis'!;
-        //FLOAT -> 'decim'!;
-        
-
-
+    rules{ 
         TRUE -> 'PAT'! | 'PATIESS'!;
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;

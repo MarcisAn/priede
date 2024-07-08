@@ -1,35 +1,33 @@
 use std::process::exit;
 
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper };
+use celsium::{ block::{self, Block}, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{ errors, util::{ self, get_object_fields } };
+use crate::{ errors, util::{ self, get_object_fields }, Compiler };
 
 use super::{ array_def, parse_ast };
 
 pub fn var_def(
     node: AstNode,
     title: &str,
-    typestack: &mut CompileTimeHelper,
-    is_wasm: bool,
-    block: &mut Block
+    compiler: &mut Compiler
 ) {
     if title == "var_def" || title == "array_def"{
         let is_exported = node.child(0).get_symbol().to_string() == "EXPORT";
         if node.child(1 + is_exported as usize).get_symbol().to_string() == "ARRAY" {
-            array_def::array_def(node, title, typestack, is_wasm, block, is_exported);
+            array_def::array_def(node, title, compiler, is_exported);
         } else {
             //user marked data type
             let data_type_str = node
                 .child(0 + (is_exported as usize))
                 .get_value()
                 .unwrap();
-            let data_type_marked = util::get_data_type_from_id(typestack, data_type_str, node);
+            let data_type_marked = util::get_data_type_from_id(&mut compiler.helper, data_type_str, node);
 
             //parse the init value
-            parse_ast(node.child(2 + (is_exported as usize)), block, is_wasm, typestack);
+            parse_ast(node.child(2 + (is_exported as usize)), compiler);
 
             //get they type of the init value
-            let typ_of_init_value = typestack.pop().unwrap();
+            let typ_of_init_value = compiler.helper.pop().unwrap();
             //println!("type comparison real {:?} marked {:?}", typ_of_init_value, data_type_marked);
 
             let mut should_objects_error = false;
@@ -51,7 +49,7 @@ pub fn var_def(
                         data_type_str,
                         util::str_from_data_type(typ_of_init_value)
                     ),
-                    typestack,
+                    &mut compiler.helper,
                     node.child(0 + (is_exported as usize))
                 );
                 exit(0);
@@ -62,7 +60,7 @@ pub fn var_def(
                 .unwrap()
                 .to_string();
 
-            let mut typestact_copy = typestack.clone();
+            let mut typestact_copy = compiler.helper.clone();
 
             let is_object = util::is_type_object(&typ_of_init_value);
 
@@ -70,9 +68,9 @@ pub fn var_def(
             if is_object {
                 let fields = get_object_fields(&typ_of_init_value).unwrap();
                 
-                let object_id = typestack.def_object(
+                let object_id = compiler.helper.def_object(
                     varname.clone(),
-                    block.scope.clone(),
+                    compiler.block.scope.clone(),
                     is_exported,
                     fields.clone(),
                 );
@@ -96,12 +94,12 @@ pub fn var_def(
                 for field in fields.clone(){
                     field_names.push(field.name);
                 }
-                block.define_object(object_id.unwrap());
+                compiler.block.define_object(object_id.unwrap());
             } else {
-                let var_id = typestack.def_var(
+                let var_id = compiler.helper.def_var(
                     varname.clone(),
                     data_type_marked.clone(),
-                    block.scope.clone(),
+                    compiler.block.scope.clone(),
                     is_exported
                 );
                 if var_id.is_err() {
@@ -120,7 +118,7 @@ pub fn var_def(
                         );
                     }
                 }
-                block.define_variable(var_id.unwrap());
+                compiler.block.define_variable(var_id.unwrap());
             }
         }
     }

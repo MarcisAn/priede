@@ -59,6 +59,12 @@ fn unexpected_char_error(err: ParseErrorUnexpectedChar, compilehelper: &mut Comp
     errors::parser_error(unexpected_token, err.get_position(), compilehelper);
 }
 
+pub struct Compiler{
+    helper: CompileTimeHelper,
+    block: Block,
+    is_wasm: bool
+}
+
 pub fn interpret(path: String, verbose: u8) {
     let file_content = read_file(path.clone());
 
@@ -94,17 +100,19 @@ pub fn interpret(path: String, verbose: u8) {
     let mut block_ids: Vec<usize> = vec![];
     parse_block_ids(root, &mut block_ids);
 
-    parse_ast::parse_ast(root, &mut main_block, false, &mut compile_helper);
+    let mut compiler = Compiler{block: main_block, helper: compile_helper, is_wasm: false};
+
+    parse_ast::parse_ast(root, &mut compiler);
 
     if verbose > 2 {
         let mut i = 0;
-        while i < main_block.bytecode.len() {
-            println!("{} {:?}", i, main_block.bytecode[i]);
+        while i < compiler.block.bytecode.len() {
+            println!("{} {:?}", i, compiler.block.bytecode[i]);
             i += 1;
         }
     }
 
-    main_module.add_main_block(main_block);
+    main_module.add_main_block(compiler.block);
     celsium.add_module(&main_module);
     celsium.run_program();
 }
@@ -127,13 +135,15 @@ pub fn run_wasm(code: String) {
     let mut celsium = CelsiumProgram::new();
     let mut main_module = Module::new("main", &mut celsium);
     let mut main_block = Block::new(Scope { ast_id: root.id(), module_path: "".to_string() });
+    let mut compile_helper = CompileTimeHelper::new(code.clone(), "".to_string());
+
+    let mut compiler = Compiler{block: main_block, helper: compile_helper, is_wasm: false};
+
     parse_ast::parse_ast(
         root,
-        &mut main_block,
-        true,
-        &mut CompileTimeHelper::new(code, "".to_owned())
+        &mut compiler
     );
-    main_module.add_main_block(main_block.clone());
+    main_module.add_main_block(compiler.block.clone());
     celsium.add_module(&main_module);
 
     celsium.run_program();
