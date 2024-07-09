@@ -132,7 +132,6 @@ pub fn parse_ast(
         }
         parse_ast(node.child(0), compiler);
         let origin_type = compiler.helper.pop().unwrap();
-        println!("{:?}", origin_type);
         match origin_type {
             BuiltinTypes::MagicInt => todo!(),
             BuiltinTypes::Bool => todo!(),

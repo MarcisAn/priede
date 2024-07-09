@@ -31,15 +31,12 @@ fn calculate(
     node: AstNode,
     compiler: &mut Compiler
 ) {
-    println!("calculate called");
     parse_ast(node.child(0), compiler);
     parse_ast(node.child(1), compiler);
-    println!("{:?} sec", compiler.helper.stack);
     let res = compiler.helper.binop(binop.clone());
     if res.is_none() {
         math_error(&mut compiler.helper, node);
         exit(0);
     }
-    println!("{:?}", binop);
     compiler.block.binop(binop);
 }
