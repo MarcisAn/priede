@@ -5,11 +5,7 @@ use crate::{ errors, util, Compiler };
 
 use super::parse_ast;
 
-pub fn func_call(
-    node: AstNode,
-    title: &str,
-    compiler: &mut Compiler
-) {
+pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
     if title == "func_call" {
         if node.children_count() > 1 {
             //if funccall has arguments
@@ -19,9 +15,13 @@ pub fn func_call(
         }
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "izvade" {
-            compiler.block.call_special_function(celsium::SpecialFunctions::Print { newline: true });
+            compiler.block.call_special_function(celsium::SpecialFunctions::Print {
+                newline: true,
+            });
         } else if func_name == "izvadetp" {
-            compiler.block.call_special_function(celsium::SpecialFunctions::Print { newline: false });
+            compiler.block.call_special_function(celsium::SpecialFunctions::Print {
+                newline: false,
+            });
         } else if func_name == "ievade" {
             compiler.block.call_special_function(celsium::SpecialFunctions::Input);
         } else if func_name == "jukums" {
@@ -56,7 +56,6 @@ pub fn func_call(
             let mut func_args = compiler.helper.get_func_args(func_id.unwrap()).unwrap();
             func_args.reverse();
             func_args_found.reverse();
-            
 
             //first check if argument cound is valid
             if func_args.len() != func_args_found.len() {
@@ -84,11 +83,11 @@ pub fn func_call(
                 }
                 counter += 1;
             }
-            
-            if func_return_type.is_some(){
+
+            if func_return_type.is_some() {
                 compiler.helper.push(func_return_type.unwrap());
             }
             compiler.block.call_function(func_name);
         }
-        }
+    }
 }

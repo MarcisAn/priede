@@ -1,6 +1,8 @@
-skaitlis a : 0
+tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
-kamēr (a < 5) {
-    izvade("Teksts tiks printēts 5 reizes")
-    a++
+sk skaitītajs : 0
+
+kamēr skaitītajs < augļi.garums {
+    izvade(augļi[skaitītajs])
+    skaitītajs++
 }

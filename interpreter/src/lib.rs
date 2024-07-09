@@ -60,7 +60,7 @@ fn unexpected_char_error(err: ParseErrorUnexpectedChar, compilehelper: &mut Comp
 }
 
 pub struct Compiler{
-    helper: CompileTimeHelper,
+     helper: CompileTimeHelper,
     block: Block,
     is_wasm: bool
 }

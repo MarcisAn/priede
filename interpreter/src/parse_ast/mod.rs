@@ -111,18 +111,6 @@ pub fn parse_ast(
     }
 
     if title == "dot_call" {
-        parse_ast(node.child(0), compiler);
-        let origin_type = compiler.helper.pop().unwrap();
-        println!("{:?}", origin_type);
-        match origin_type {
-            BuiltinTypes::MagicInt => todo!(),
-            BuiltinTypes::Bool => todo!(),
-            BuiltinTypes::String => todo!(),
-            BuiltinTypes::Object { fields } =>
-                compiler.block.get_object_field(node.child(1).get_value().unwrap().to_string()),
-            BuiltinTypes::Float => todo!(),
-            BuiltinTypes::Array { element_type } => {},
-        }
         if node.child(1).get_value().unwrap() == "garums" {
             let array_name = node.child(0).get_value().unwrap().to_string();
             let array_id = util::get_closest_scope(
@@ -140,7 +128,21 @@ pub fn parse_ast(
             }
             compiler.block.get_array_length(array_id.unwrap());
             compiler.helper.push(celsium::BuiltinTypes::MagicInt);
+            return;
         }
+        parse_ast(node.child(0), compiler);
+        let origin_type = compiler.helper.pop().unwrap();
+        println!("{:?}", origin_type);
+        match origin_type {
+            BuiltinTypes::MagicInt => todo!(),
+            BuiltinTypes::Bool => todo!(),
+            BuiltinTypes::String => todo!(),
+            BuiltinTypes::Object { fields } =>
+                compiler.block.get_object_field(node.child(1).get_value().unwrap().to_string()),
+            BuiltinTypes::Float => todo!(),
+            BuiltinTypes::Array { element_type } => {},
+        }
+        
     }
 
     id(node, &title, compiler);

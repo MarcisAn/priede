@@ -93,7 +93,6 @@ pub fn get_closest_scope(
             }
         }
     }
-    println!("{:?}", compilehelper.defined_arrays);
     for var in compilehelper.defined_arrays.clone() {
         let import_to_search_for = CompileTimeImport {
             name: var.clone().name,
