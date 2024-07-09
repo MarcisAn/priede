@@ -1,25 +1,22 @@
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{errors, util, Compiler};
+use crate::{ errors, util, Compiler };
 
 use super::parse_ast;
 
-pub fn array(
-    node: AstNode,
-    title: &str,
-    compiler: &mut Compiler
-) {
+pub fn array(node: AstNode, title: &str, compiler: &mut Compiler) {
     if title == "array" {
         let array_name = node.child(0).get_value().unwrap();
-        let array = util::get_closest_scope(array_name.to_string(), compiler.block.scope.clone(), &mut compiler.helper, node);
-        if array.is_none() {
-            errors::undefined_var(
-                format!("Saraksts `{}` nav definēts", array_name),
-                &mut compiler.helper,
-                node
-            );
-        }
+        let source_id = util::get_closest_scope(
+            array_name.to_string(),
+            compiler.block.scope.clone(),
+            &mut compiler.helper,
+            node
+        );
+        let data_type = compiler.helper.get_var_type(source_id.unwrap()).unwrap();
+        
+        
         //parse the index
         parse_ast(node.child(1), compiler);
         let index_type = compiler.helper.pop().unwrap();
@@ -32,7 +29,30 @@ pub fn array(
                 node
             );
         }
-        
+
+
+        match data_type {
+            BuiltinTypes::Array { element_type } => get_array_element(node, compiler, array_name),
+            _ => errors::variable_not_indexable(data_type, &mut compiler.helper, node)
+        }
+
+    }
+}
+
+fn get_array_element(node: AstNode, compiler: &mut Compiler, array_name: &str) {
+let array = util::get_closest_scope(
+            array_name.to_string(),
+            compiler.block.scope.clone(),
+            &mut compiler.helper,
+            node
+        );
+        if array.is_none() {
+            errors::undefined_var(
+                format!("Saraksts `{}` nav definēts", array_name),
+                &mut compiler.helper,
+                node
+            );
+        }
         let array_type_anf_len = compiler.helper.get_array_type_and_length(array.unwrap()).unwrap();
         let array_length = array_type_anf_len.1;
         let array_type = array_type_anf_len.0;
@@ -53,5 +73,4 @@ pub fn array(
 
         compiler.helper.push(array_type);
         compiler.block.load_from_array(array.unwrap());
-    }
 }

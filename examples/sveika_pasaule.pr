@@ -1,8 +1,3 @@
-tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+tk a : "abcdefghijklmnoprstuvz"
 
-sk skaitītajs : 0
-
-kamēr skaitītajs < augļi.garums {
-    izvade(augļi[skaitītajs])
-    skaitītajs++
-}
+izvade(a[1])

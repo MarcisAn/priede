@@ -108,6 +108,21 @@ pub fn array_element_index_too_high(
     );
 }
 
+pub fn variable_not_indexable(
+    data_type: BuiltinTypes,
+    compilehelper: &mut CompileTimeHelper, node: AstNode
+) {
+    common_error(
+        &format!(
+            "Datu tips `{}` Nav indeksējams",
+            util::str_from_data_type(data_type)
+        ),
+        get_closest_node_location(node),
+        compilehelper
+    );
+}
+
+
 fn common_error(msg: &str, position: TextPosition, compilehelper: &mut CompileTimeHelper) {
     let path = &compilehelper.source_file_paths[compilehelper.current_file];
     println!("{}\n{}\nFaila \"{}\"\n{}. rindiņā", "Kļūda: ".red(), msg.red(), path, position.line);

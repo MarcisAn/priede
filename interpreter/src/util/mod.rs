@@ -60,15 +60,6 @@ pub fn rem_first_and_last(value: &str) -> &str {
     chars.as_str()
 }
 
-pub fn get_closest_block(node: AstNode) -> usize {
-    if node.get_symbol().to_string() == "block" {
-        return node.id();
-    } else {
-        let parrent = node.parent().unwrap();
-        //should not panic because the root is a block
-        get_closest_block(parrent)
-    }
-}
 
 pub fn get_closest_scope(
     target_name: String,
@@ -212,7 +203,7 @@ pub fn get_data_type_from_id(compilehelper: &mut CompileTimeHelper, data_type_st
             };
         } else {
             errors::notexistant_type(data_type_str.to_owned(), node, compilehelper);
-            panic!(); //to get rid of undefined error. not needed, because error exits
+            panic!(); //to get rid of undefined error. Not needed, because error exits.
         }
     } else {
         data_type_marked = data_type_marked_option.unwrap();
