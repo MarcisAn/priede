@@ -1,3 +1,4 @@
-tk a : "abcdefghijklmnoprstuvz"
-
-izvade(a[1])
+izvade("a")
+izvade(3)
+sk saraksts skaitli : [2;3]
+izvade(skaitli)

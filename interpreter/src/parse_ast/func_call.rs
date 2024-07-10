@@ -15,9 +15,11 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
         }
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "izvade" {
+            compiler.block.push_to_testing_stack(true);
             compiler.block.call_special_function(celsium::SpecialFunctions::Print {
                 newline: true,
             });
+
         } else if func_name == "izvadetp" {
             compiler.block.call_special_function(celsium::SpecialFunctions::Print {
                 newline: false,

@@ -59,13 +59,13 @@ fn unexpected_char_error(err: ParseErrorUnexpectedChar, compilehelper: &mut Comp
     errors::parser_error(unexpected_token, err.get_position(), compilehelper);
 }
 
-pub struct Compiler{
-     helper: CompileTimeHelper,
+pub struct Compiler {
+    helper: CompileTimeHelper,
     block: Block,
-    is_wasm: bool
+    is_wasm: bool,
 }
 
-pub fn interpret(path: String, verbose: u8) {
+pub fn interpret(path: String, verbose: u8) -> Vec<celsium::vm::StackValue> {
     let file_content = read_file(path.clone());
 
     let mut compile_helper = CompileTimeHelper::new(file_content.clone(), path.clone());
@@ -100,7 +100,7 @@ pub fn interpret(path: String, verbose: u8) {
     let mut block_ids: Vec<usize> = vec![];
     parse_block_ids(root, &mut block_ids);
 
-    let mut compiler = Compiler{block: main_block, helper: compile_helper, is_wasm: false};
+    let mut compiler = Compiler { block: main_block, helper: compile_helper, is_wasm: false };
 
     parse_ast::parse_ast(root, &mut compiler);
 
@@ -114,7 +114,21 @@ pub fn interpret(path: String, verbose: u8) {
 
     main_module.add_main_block(compiler.block);
     celsium.add_module(&main_module);
-    celsium.run_program();
+    let testing_stack_results = celsium.run_program();
+    let mut testing_stack_json: String = "[".to_string();
+    let mut counter = 0;
+    for value in testing_stack_results.clone() {
+        testing_stack_json += &stackvalue_to_json(value);
+        counter += 1;
+        if counter != testing_stack_results.len() {
+            testing_stack_json += ",";
+        }
+    }
+    testing_stack_json += "]";
+    println!("{}", testing_stack_json);
+    //return testing_stack_json;
+    //println!("{:?}", testing_stack_results);
+    return testing_stack_results;
 }
 
 fn parse_block_ids(node: AstNode, block_ids: &mut Vec<usize>) {
@@ -126,7 +140,7 @@ fn parse_block_ids(node: AstNode, block_ids: &mut Vec<usize>) {
     }
 }
 
-pub fn run_wasm(code: String) {
+pub fn run_wasm(code: String) -> String{
     let parse_res = hime::priede::parse_string(code.clone());
     println!("{:?}", parse_res.errors.errors);
     let ast = parse_res.get_ast();
@@ -137,18 +151,43 @@ pub fn run_wasm(code: String) {
     let mut main_block = Block::new(Scope { ast_id: root.id(), module_path: "".to_string() });
     let mut compile_helper = CompileTimeHelper::new(code.clone(), "".to_string());
 
-    let mut compiler = Compiler{block: main_block, helper: compile_helper, is_wasm: false};
+    let mut compiler = Compiler { block: main_block, helper: compile_helper, is_wasm: false };
 
-    parse_ast::parse_ast(
-        root,
-        &mut compiler
-    );
+    parse_ast::parse_ast(root, &mut compiler);
     main_module.add_main_block(compiler.block.clone());
     celsium.add_module(&main_module);
 
-    celsium.run_program();
+    let testing_stack_results = celsium.run_program();
+    let mut testing_stack_json: String = "[".to_string();
+    for value in testing_stack_results {
+        testing_stack_json += &stackvalue_to_json(value);
+    }
+    return testing_stack_json;
 }
 
+fn stackvalue_to_json(stackval: celsium::vm::StackValue) -> String {
+    let mut result = String::new();
+    result += &(match stackval {
+        celsium::vm::StackValue::Bool { value } =>
+            format!("{{type: bool, value: {}}}", value.to_string()),
+        celsium::vm::StackValue::BIGINT { value } =>
+            format!("{{type: int, value: {}}}", value.to_string()),
+        celsium::vm::StackValue::Float { value } =>
+            format!("{{type: float, value: {}}}", value.to_string()),
+        celsium::vm::StackValue::String { value } =>
+            format!("{{type: string, value: {}}}", value.to_string()),
+        celsium::vm::StackValue::ARRAY { value } => {
+            let mut arrayres = String::from("[");
+            for element in value {
+                arrayres += &format!("{{type: array, value: {}}}", stackvalue_to_json(element));
+            }
+            arrayres += "]";
+            arrayres
+        }
+        celsium::vm::StackValue::Object { value } => todo!(),
+    });
+    result
+}
 pub fn read_file(path: String) -> String {
     let file_read = fs::read_to_string(&path);
     if file_read.is_err() {
