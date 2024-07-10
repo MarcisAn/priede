@@ -118,7 +118,7 @@ pub fn interpret(path: String, verbose: u8) -> Vec<celsium::vm::StackValue> {
     let mut testing_stack_json: String = "[".to_string();
     let mut counter = 0;
     for value in testing_stack_results.clone() {
-        testing_stack_json += &stackvalue_to_json(value);
+        testing_stack_json += &stackvalue_to_json(&value);
         counter += 1;
         if counter != testing_stack_results.len() {
             testing_stack_json += ",";
@@ -160,12 +160,12 @@ pub fn run_wasm(code: String) -> String{
     let testing_stack_results = celsium.run_program();
     let mut testing_stack_json: String = "[".to_string();
     for value in testing_stack_results {
-        testing_stack_json += &stackvalue_to_json(value);
+        testing_stack_json += &stackvalue_to_json(&value);
     }
     return testing_stack_json;
 }
 
-fn stackvalue_to_json(stackval: celsium::vm::StackValue) -> String {
+fn stackvalue_to_json(stackval: &celsium::vm::StackValue) -> String {
     let mut result = String::new();
     result += &(match stackval {
         celsium::vm::StackValue::Bool { value } =>
@@ -177,11 +177,16 @@ fn stackvalue_to_json(stackval: celsium::vm::StackValue) -> String {
         celsium::vm::StackValue::String { value } =>
             format!("{{type: string, value: {}}}", value.to_string()),
         celsium::vm::StackValue::ARRAY { value } => {
-            let mut arrayres = String::from("[");
+            let mut arrayres = String::from("{type: array, value: [");
+            let mut counter = 0;
             for element in value {
-                arrayres += &format!("{{type: array, value: {}}}", stackvalue_to_json(element));
+                arrayres += &format!("{}", stackvalue_to_json(element));
+                counter += 1;
+                if counter != value.len(){
+                    arrayres += ",";
+                }
             }
-            arrayres += "]";
+            arrayres += "]}";
             arrayres
         }
         celsium::vm::StackValue::Object { value } => todo!(),
