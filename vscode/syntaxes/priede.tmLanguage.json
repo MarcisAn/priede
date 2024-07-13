@@ -3,24 +3,70 @@
   "name": "Priede",
   "patterns": [
     {
-      "include": "#keywords"
+      "include": "#comment"
     },
     {
       "include": "#strings"
     },
     {
-      "include": "#comment"
+      "include": "#funkc_call"
     },
     {
-      "include": "#array"
+      "include": "#keywords"
+    },
+    {
+      "include": "#id"
+    },
+    {
+      "include": "#number"
     }
   ],
   "repository": {
+    "funkc_call": {
+      "patterns": [
+        {
+          "match": "([a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_][a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_1-9]*)\\(",
+          "name": "entity.name.function"
+        }
+      ]
+    },
+    "id": {
+      "patterns": [
+        {
+          "match": "([a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_][a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_1-9]*)",
+          "name": "variable.name"
+        }
+      ]
+    },
+    "number": {
+      "patterns": [
+        {
+          "match": "(-|\\.)?[0-9]+(,[0-9]+)?",
+          "name": "constant.numeric"
+        },
+        {
+          "match": "\\b(PAT|NEPA|PATIESS|NEPATIESS)\\b",
+          "name": "constant.numeric"
+        }
+      ]
+    },
     "keywords": {
       "patterns": [
         {
-          "name": "keyword.control.priede",
+          "name": "keyword.control",
           "match": "\\b(citādi|saraksts|atgriezt|iekļaut|no|eksp|objekts|ja|atkārtot|kamēr|funkc|xvai|vai|un)\\b"
+        },
+        {
+          "name": "keyword.operator",
+          "match": "\\b(xvai|vai|un)\\b"
+        },
+        {
+          "name": "keyword",
+          "match": "(:|\\+:|-:|\\*:|/:|=|!=|>|<|<=|>=|;|\\+\\+)"
+        },
+        {
+          "name": "constant.language",
+          "match": "\\b(tk|sk|bl|decim|skaitlis|teksts|būls)\\b"
         }
       ]
     },
@@ -35,34 +81,7 @@
         }
       ]
     },
-    "array": {
-      "begin": "\\[",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.definition.array.begin.priede"
-        }
-      },
-      "end": "\\]",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.definition.array.end.priede"
-        }
-      },
-      "name": "meta.structure.array.priede",
-      "patterns": [
-        {
-          "include": "#value"
-        },
-        {
-          "match": ";",
-          "name": "punctuation.separator.array.priede"
-        },
-        {
-          "match": "[^\\s\\]]",
-          "name": "invalid.illegal.expected-array-separator.priede"
-        }
-      ]
-    },
+
     "comment": {
       "patterns": [
         {
@@ -127,16 +146,6 @@
           },
           "contentName": "comment.line.double-slash.priede",
           "end": "(?=$)"
-        }
-      ]
-    },
-    "value": {
-      "patterns": [
-        {
-          "include": "#string"
-        },
-        {
-          "include": "#array"
         }
       ]
     }
