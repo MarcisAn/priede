@@ -24,7 +24,7 @@ tk vārds2: "Veclēcējs"
 tk nodarbošanās2: "Slepenais aģents"
 ```
 
-tad nepieciešams kāds smalkāks veids, kā datus uzglabāt. Priede to piedāvā darīt ar objektiem.
+tad šādi neies krastā. Nepieciešams kāds smalkāks veids, kā uzglabāt vairākus datu punktus par vienu vienību(šajā gadījumā cilvēku). Priede to piedāvā darīt ar objektiem.
 
 ## Objekta sagataves definēšana
 

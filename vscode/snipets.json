@@ -1,0 +1,62 @@
+{
+  "skaitlamainigais": {
+    "scope": "priede",
+    "description": "Skaitļa mainīgā definēšana",
+    "prefix": ["sk"],
+    "body": "skaitlis ${1:nosaukums} : $0"
+  },
+  "tekstamainigais": {
+    "scope": "priede",
+    "description": "Teksta mainīgā definēšana",
+    "prefix": ["tk", "teksts"],
+    "body": "teksts ${1:nosaukums} : $0"
+  },
+  "bulamainigais": {
+    "scope": "priede",
+    "description": "Būla mainīgā definēšana",
+    "prefix": ["bl", "būls"],
+    "body": "būls ${1:nosaukums} : $0"
+  },
+  "decimalmainigais": {
+    "scope": "priede",
+    "description": "Decimālskaitļa mainīgā definēšana",
+    "prefix": ["decim"],
+    "body": "decim ${1:nosaukums} : $0"
+  },
+  "ja": {
+    "scope": "priede",
+    "description": "Koda sazarojuma izveide",
+    "prefix": ["ja"],
+    "body": "ja ${1} {\n$0\n}"
+  },
+  "kamēr": {
+    "scope": "priede",
+    "description": "Kamēr cikla izveide",
+    "prefix": ["kamēr"],
+    "body": "kamēr ${1} {\n$0\n}"
+  },
+  "atkārtot": {
+    "scope": "priede",
+    "description": "Vienkāršā cikla izveide",
+    "prefix": ["atkārtot"],
+    "body": "atkārtot ${1:cikreizes} {\n$0\n}"
+  },
+  "ekspfunkcija": {
+    "scope": "priede",
+    "description": "Eksportētas funkcijas izveide",
+    "prefix": ["eksp"],
+    "body": "eksp funkc ${1:nosaukums} {\n$0\n}"
+  },
+  "funkcija": {
+    "scope": "priede",
+    "description": "Funkcijas izveide",
+    "prefix": ["funkc"],
+    "body": "funkc ${1:nosaukums} {\n$0\n}"
+  },
+  "saraksts": {
+    "scope": "priede",
+    "description": "Saraksta izveide",
+    "prefix": ["saraksts"],
+    "body": "${2:datutips} saraksts ${1:nosaukums} : [$0]"
+  }
+}

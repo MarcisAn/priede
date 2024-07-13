@@ -1,26 +1,52 @@
 {
-  "name": "priede-langsupport",
-  "displayName": "priede-langsupport",
-  "description": "Priedes programmēšanas valodas atbalsts",
-  "version": "0.0.1",
+  "name": "priede",
+  "displayName": "Priede",
+  "description": "Priedes koda iekrāsošana un sagataves",
+  "version": "0.0.2",
+  "icon": "priede-large.png",
+  "publisher": "marcis",
+  "repository": {
+    "url": "https://github.com/MarcisAn/priede"
+  },
+  "homepage": "https://priede.andersons-m.lv",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Programming Languages"
+    "Programming Languages",
+    "Education"
   ],
   "contributes": {
-    "languages": [{
-      "id": "priede",
-      "aliases": ["Priede", "priede"],
-      "extensions": [".pr"],
-      "configuration": "./language-configuration.json",
-      "icon": {"light": "priede-dark.png", "dark": "priede-light.png"}
-    }],
-    "grammars": [{
-      "language": "priede",
-      "scopeName": "text.priede",
-      "path": "./syntaxes/priede.tmLanguage.json"
-    }]
+    "languages": [
+      {
+        "id": "priede",
+        "aliases": [
+          "Priede",
+          "priede"
+        ],
+        "extensions": [
+          ".pr"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "priede-dark.png",
+          "dark": "priede-light.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "priede",
+        "scopeName": "text.priede",
+        "path": "./syntaxes/priede.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "priede",
+        "path": "./snipets.json"
+      }
+    ]
   }
 }
