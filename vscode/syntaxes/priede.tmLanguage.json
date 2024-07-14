@@ -65,7 +65,7 @@
           "match": "(:|\\+:|-:|\\*:|/:|=|!=|>|<|<=|>=|;|\\+\\+)"
         },
         {
-          "name": "constant.language",
+          "name": "entity.name.type",
           "match": "\\b(tk|sk|bl|decim|skaitlis|teksts|būls)\\b"
         }
       ]

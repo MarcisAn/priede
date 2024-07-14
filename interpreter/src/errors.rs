@@ -1,7 +1,5 @@
 use std::process::exit;
 
-use annotate_snippets::{ Level, Renderer, Snippet };
-use anstream;
 use celsium::{ compiletime_helper::CompileTimeHelper, BuiltinTypes };
 use colored::Colorize;
 use hime_redist::{ast::AstNode, text::TextPosition};

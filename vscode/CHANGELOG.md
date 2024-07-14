@@ -10,4 +10,4 @@
 
 ## [0.0.3]
 
-- Update icon, changelog, README
+- Update icon, changelog, README, types in sepperate color

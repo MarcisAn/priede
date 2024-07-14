@@ -25,11 +25,11 @@ fn print<'a>(node: AstNode, crossings: Vec<bool>) {
 pub fn print_ast(node: AstNode) {
     print(node, Vec::<bool>::new());
 }
-pub fn get_ast_formated(node: AstNode) -> String {
+pub fn _get_ast_formated(node: AstNode) -> String {
     let input = String::new();
-    format_ast(node, Vec::<bool>::new(), input)
+    _format_ast(node, Vec::<bool>::new(), input)
 }
-pub fn format_ast<'a>(node: AstNode, crossings: Vec<bool>, string: String) -> String {
+pub fn _format_ast<'a>(node: AstNode, crossings: Vec<bool>, string: String) -> String {
     let mut string_ = string.clone();
     let mut i = 0;
     if !crossings.is_empty() {
@@ -48,7 +48,7 @@ pub fn format_ast<'a>(node: AstNode, crossings: Vec<bool>, string: String) -> St
     while i < children.len() {
         let mut child_crossings = crossings.clone();
         child_crossings.push(i < children.len() - 1);
-        format_ast(children.at(i), child_crossings, string.clone());
+        _format_ast(children.at(i), child_crossings, string.clone());
         i += 1;
     }
     return string_;
@@ -187,7 +187,7 @@ pub fn str_from_data_type(inp: BuiltinTypes) -> String {
         BuiltinTypes::String => "teksts".into(),
         BuiltinTypes::Object { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
         BuiltinTypes::Float => "decimālskaitlis".into(),
-        BuiltinTypes::Array { element_type } => todo!(),
+        BuiltinTypes::Array { element_type } => format!("Masīvs ar `{}` elementiem", str_from_data_type(*element_type)),
     }
 }
 
@@ -248,4 +248,33 @@ pub fn get_object_fields(a: &BuiltinTypes) -> Option<Vec<ObjectFieldType>> {
         BuiltinTypes::Object { fields } => return Some(fields.to_vec()),
         _ => return None
     }
+}
+
+pub fn stackvalue_to_json(stackval: &celsium::vm::StackValue) -> String {
+    let mut result = String::new();
+    result += &(match stackval {
+        celsium::vm::StackValue::Bool { value } =>
+            format!("{{type: bool, value: {}}}", value.to_string()),
+        celsium::vm::StackValue::BIGINT { value } =>
+            format!("{{type: int, value: {}}}", value.to_string()),
+        celsium::vm::StackValue::Float { value } =>
+            format!("{{type: float, value: {}}}", value.to_string()),
+        celsium::vm::StackValue::String { value } =>
+            format!("{{type: string, value: {}}}", value.to_string()),
+        celsium::vm::StackValue::ARRAY { value } => {
+            let mut arrayres = String::from("{type: array, value: [");
+            let mut counter = 0;
+            for element in value {
+                arrayres += &format!("{}", stackvalue_to_json(element));
+                counter += 1;
+                if counter != value.len(){
+                    arrayres += ",";
+                }
+            }
+            arrayres += "]}";
+            arrayres
+        }
+        celsium::vm::StackValue::Object { value:_ } => todo!(),
+    });
+    result
 }
