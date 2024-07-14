@@ -6,7 +6,8 @@ pub fn main() {
     let arguments = arguments::parse(arguments).unwrap();
     let mut halt = false;
     if arguments.orphans.len() == 0 {
-        interpreter::interpret(String::from("../examples/sveika_pasaule.pr"), 3);
+        let res = interpreter::interpret(String::from("../examples/sveika_pasaule.pr"), 3, false);
+        //println!("res: {:?}", res);
     } else {
         let mut verbose: u8 = 0;
         if arguments.orphans.len() >= 2 {
@@ -21,7 +22,7 @@ pub fn main() {
                 }
             }
         }
-        interpreter::interpret(String::from(arguments.orphans[0].clone()), verbose);
+        interpreter::interpret(String::from(arguments.orphans[0].clone()), verbose, false);
         if halt {
             let mut stdin = io::stdin();
             let mut stdout = io::stdout();

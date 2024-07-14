@@ -8,3 +8,4 @@ edition = "2021"
 interpreter = {path = "../interpreter"}
 arguments = "*"
 colored = "2.1.0"
+clap = "4.5.9"

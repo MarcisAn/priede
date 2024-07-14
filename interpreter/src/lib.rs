@@ -4,6 +4,7 @@ use celsium::compiletime_helper::CompileTimeHelper;
 use celsium::module;
 use celsium::CelsiumProgram;
 use celsium::Scope;
+use compiler::CompileError;
 use hime_redist::ast::AstNode;
 use hime_redist::symbols::SemanticElementTrait;
 use module::Module;
@@ -20,7 +21,6 @@ mod compiler;
 mod parser;
 use compiler::Compiler;
 
-
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
@@ -36,19 +36,22 @@ pub fn get_stumbrs_data_wasm() -> String {
     //#[cfg(target_family = "wasm")]
     get_stumbrs_data()
 }
+#[derive(Debug, Clone)]
+pub struct InterpreterReturns {
+    testing_stack: Vec<celsium::vm::StackValue>,
+    errors: Vec<CompileError>,
+}
 
-
-
-pub fn interpret(path: String, verbose: u8) -> Vec<celsium::vm::StackValue> {
+pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterReturns {
     let file_content = read_file(path.clone());
-
+    let mut compile_helper = CompileTimeHelper::new(file_content.clone(), path.clone());
 
     //send code to hime and get ast root
     let parse_res = hime::priede::parse_string(file_content.clone());
-    let parser_errors = parser::parser_errors(parse_res.errors.clone().errors);
-    
+    let parser_errors = parser::parser_errors(parse_res.errors.clone().errors, &mut compile_helper);
+
     if parser_errors.len() > 0 {
-        exit(0);
+        return InterpreterReturns{errors: parser_errors, testing_stack: vec![]};
     }
 
     let ast = parse_res.get_ast();
@@ -63,9 +66,13 @@ pub fn interpret(path: String, verbose: u8) -> Vec<celsium::vm::StackValue> {
 
     let mut block_ids: Vec<usize> = vec![];
     parse_block_ids(root, &mut block_ids);
-    let compile_helper = CompileTimeHelper::new(file_content.clone(), path.clone());
 
-    let mut compiler = Compiler { block: main_block, helper: compile_helper, is_wasm: false, errors: vec![] };
+    let mut compiler = Compiler {
+        block: main_block,
+        helper: compile_helper,
+        is_wasm: false,
+        errors: vec![],
+    };
 
     parse_ast::parse_ast(root, &mut compiler);
 
@@ -79,6 +86,9 @@ pub fn interpret(path: String, verbose: u8) -> Vec<celsium::vm::StackValue> {
 
     main_module.add_main_block(compiler.block);
     celsium.add_module(&main_module);
+    if static_only {
+        return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
+    }
     let testing_stack_results = celsium.run_program();
     let mut testing_stack_json: String = "[".to_string();
     let mut counter = 0;
@@ -93,7 +103,7 @@ pub fn interpret(path: String, verbose: u8) -> Vec<celsium::vm::StackValue> {
     println!("{}", testing_stack_json);
     //return testing_stack_json;
     //println!("{:?}", testing_stack_results);
-    return testing_stack_results;
+    return InterpreterReturns { errors: compiler.errors, testing_stack: testing_stack_results };
 }
 
 fn parse_block_ids(node: AstNode, block_ids: &mut Vec<usize>) {
@@ -105,7 +115,7 @@ fn parse_block_ids(node: AstNode, block_ids: &mut Vec<usize>) {
     }
 }
 
-pub fn run_wasm(code: String) -> String{
+pub fn run_wasm(code: String) -> String {
     let parse_res = hime::priede::parse_string(code.clone());
     println!("{:?}", parse_res.errors.errors);
     let ast = parse_res.get_ast();
@@ -116,7 +126,12 @@ pub fn run_wasm(code: String) -> String{
     let main_block = Block::new(Scope { ast_id: root.id(), module_path: "".to_string() });
     let compile_helper = CompileTimeHelper::new(code.clone(), "".to_string());
 
-    let mut compiler = Compiler { block: main_block, helper: compile_helper, is_wasm: false, errors: vec![] };
+    let mut compiler = Compiler {
+        block: main_block,
+        helper: compile_helper,
+        is_wasm: false,
+        errors: vec![],
+    };
 
     parse_ast::parse_ast(root, &mut compiler);
     main_module.add_main_block(compiler.block.clone());
@@ -130,7 +145,6 @@ pub fn run_wasm(code: String) -> String{
     return testing_stack_json;
 }
 
-
 pub fn read_file(path: String) -> String {
     let file_read = fs::read_to_string(&path);
     if file_read.is_err() {
@@ -140,4 +154,3 @@ pub fn read_file(path: String) -> String {
     }
     file_read.unwrap()
 }
-
