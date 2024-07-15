@@ -1,28 +1,29 @@
 use std::io;
 use std::io::prelude::*;
 
+
 pub fn main() {
     let arguments = std::env::args();
     let arguments = arguments::parse(arguments).unwrap();
     let mut halt = false;
     if arguments.orphans.len() == 0 {
+        //quick debuging way
         let res = interpreter::interpret(String::from("../examples/sveika_pasaule.pr"), 3, false);
         //println!("res: {:?}", res);
     } else {
         let mut verbose: u8 = 0;
-        if arguments.orphans.len() >= 2 {
-            if arguments.orphans[1] == "ast" {
-                verbose = 2;
-            } else if arguments.orphans[1] == "v3" {
-                verbose = 3;
-            }
-            if arguments.orphans.len() >= 3 {
-                if arguments.orphans[2] == "halt" {
-                    halt = true;
-                }
-            }
+        let mut static_analysis = false;
+        if arguments.get::<u8>("verbose").is_some() {
+            verbose = arguments.get::<u8>("verbose").unwrap();
         }
-        interpreter::interpret(String::from(arguments.orphans[0].clone()), verbose, false);
+        if arguments.get::<bool>("static").is_some() {
+            static_analysis = arguments.get::<bool>("static").unwrap();
+        }
+        if arguments.get::<bool>("help").is_some() {
+            println!("Priedes dokumentācija: https://priede.andersons-m.lv");
+            return;
+        }
+        interpreter::interpret(String::from(arguments.orphans[0].clone()), verbose, static_analysis);
         if halt {
             let mut stdin = io::stdin();
             let mut stdout = io::stdout();

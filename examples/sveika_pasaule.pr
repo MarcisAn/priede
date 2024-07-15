@@ -1,1 +1,4 @@
-ja kamēr @
+sk aa : 2
+ja aa = 2 {
+    izvade("sveiki")
+}
