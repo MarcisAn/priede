@@ -1,4 +1,6 @@
 sk aa : 2
-ja aa = 2 {
-    izvade("sveiki")
+
+kamēr aa < 7 {
+    izvade(aa)
+    aa++
 }

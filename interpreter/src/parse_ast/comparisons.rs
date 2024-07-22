@@ -22,7 +22,12 @@ pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler) {
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         };
         if checked_type.is_none() {
-            errors::math_error(&mut compiler.helper, node);
+            compiler.add_error(
+                crate::compiler::CompileErrorType::MathTypes,
+                node.child(1).get_position().unwrap().line,
+                node.child(1).get_position().unwrap().column,
+                node.child(1).get_span().unwrap().length
+            );
             exit(0);
         }
         match sign {

@@ -11,8 +11,11 @@ pub struct CompileError {
 
 #[derive(Debug, Clone)]
 pub enum CompileErrorType{
-    Parser{unexpected_string: String}
-
+    Parser{unexpected_string: String},
+    MathTypes,
+    IncorrectVariableInitValue{expected: celsium::BuiltinTypes, found: celsium::BuiltinTypes},
+    VariableAlreadyDefined{name: String},
+    VariableAlreadyImported{name: String}
 }
 
 #[derive(Debug)]
@@ -24,4 +27,7 @@ pub struct Compiler {
 }
 
 impl Compiler {
+    pub fn add_error(&mut self, error: CompileErrorType, line: usize, column: usize, length: usize) {
+        self.errors.push(CompileError { line, char_start: column, length, error_type: error});
+    }
 }

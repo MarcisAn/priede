@@ -14,13 +14,6 @@ pub fn parser_error(unexpected: String, position: TextPosition, compilehelper: &
     };
     common_error(&error_title, position, compilehelper);
 }
-pub fn math_error(compilehelper: &mut CompileTimeHelper, node: AstNode) {
-    common_error(
-        "Ar šiem datu tipiem nevar veikt šo matemātisko darbību",
-        util::get_closest_node_location(node),
-        compilehelper
-    );
-}
 pub fn incorect_init_value(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
     common_error(&msg, util::get_closest_node_location(node), compilehelper);
 }

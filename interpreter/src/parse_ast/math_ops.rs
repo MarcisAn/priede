@@ -1,8 +1,8 @@
 use std::process::exit;
 
-use crate::{errors::math_error, Compiler};
-use celsium::{ block::Block, bytecode::BINOP, compiletime_helper::CompileTimeHelper };
-use hime_redist::ast::AstNode;
+use crate::Compiler;
+use celsium::bytecode::BINOP;
+use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
 
 use super::parse_ast;
 
@@ -32,10 +32,15 @@ fn calculate(
     compiler: &mut Compiler
 ) {
     parse_ast(node.child(0), compiler);
-    parse_ast(node.child(1), compiler);
+    parse_ast(node.child(2), compiler);
     let res = compiler.helper.binop(binop.clone());
     if res.is_none() {
-        math_error(&mut compiler.helper, node);
+        compiler.add_error(
+                crate::compiler::CompileErrorType::MathTypes,
+                node.child(1).get_position().unwrap().line,
+                node.child(1).get_position().unwrap().column,
+                node.child(1).get_span().unwrap().length
+            );
         exit(0);
     }
     compiler.block.binop(binop);
