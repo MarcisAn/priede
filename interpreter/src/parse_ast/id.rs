@@ -1,6 +1,4 @@
 use std::process::exit;
-
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper};
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{errors, util::get_closest_scope, Compiler};
@@ -19,8 +17,9 @@ pub fn id(node: AstNode, title: &str, compiler: &mut Compiler) {
             exit(0);
         } else {
             let data_type = compiler.helper.get_var_type(var_id.unwrap()).unwrap();
-            compiler.helper.push(data_type.clone());
-            compiler.block.load_variable(var_id.unwrap());
+            compiler.helper.push(data_type.clone(), compiler.register_counter);
+            compiler.block.load_variable(var_id.unwrap(), compiler.register_counter);
+            compiler.register_counter += 1;
         }
     }
 }

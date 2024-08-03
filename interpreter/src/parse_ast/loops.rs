@@ -1,4 +1,4 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, Scope };
+use celsium::{ block::Block, Scope };
 use hime_redist::ast::AstNode;
 
 use crate::Compiler;
@@ -13,13 +13,14 @@ pub fn loops(
     if title == "s_loop" {
         let current_module_path = compiler.helper.source_file_paths[compiler.helper.current_file].clone();
         parse_ast(node.child(0), compiler);
+        let exp_reg = compiler.helper.get_top().unwrap().register_id;
         let loop_block = Block::new(Scope{ast_id: node.child(1).id(), module_path: current_module_path.clone()});
         let main_block = compiler.block.clone();
         compiler.block = loop_block.clone();
         parse_ast(node.child(1), compiler);
         let loop_block_populated = compiler.block.clone();
         compiler.block = main_block;
-        compiler.block.define_simple_loop(loop_block_populated);
+        compiler.block.define_simple_loop(loop_block_populated, exp_reg);
     } else if title == "w_loop" {
         let current_module_path = compiler.helper.source_file_paths[compiler.helper.current_file].clone();
         let loop_block = Block::new(Scope{ast_id: node.child(1).id(), module_path: current_module_path.clone()});
@@ -27,11 +28,13 @@ pub fn loops(
         let main_block = compiler.block.clone();
         compiler.block = conditional_block;
         parse_ast(node.child(0), compiler);
+        let exp_reg = compiler.helper.get_top().unwrap().register_id;
+
         let conditional_block_populated = compiler.block.clone();
         compiler.block = loop_block.clone();
         parse_ast(node.child(1), compiler);
         let loop_block_populated = compiler.block.clone();
         compiler.block = main_block;
-        compiler.block.define_while_loop(loop_block_populated, conditional_block_populated);
+        compiler.block.define_while_loop(loop_block_populated, conditional_block_populated, exp_reg);
     }
 }

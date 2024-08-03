@@ -1,7 +1,6 @@
 use std::io;
 use std::io::prelude::*;
 
-
 pub fn main() {
     let arguments = std::env::args();
     let arguments = arguments::parse(arguments).unwrap();
@@ -23,7 +22,6 @@ pub fn main() {
         let res = interpreter::interpret(String::from("../examples/sveika_pasaule.pr"), 3, false);
         //println!("res: {:?}", res);
     } else {
-        
         interpreter::interpret(String::from(arguments.orphans[0].clone()), verbose, static_analysis);
         if halt {
             let mut stdin = io::stdin();

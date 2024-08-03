@@ -1,6 +1,3 @@
-use std::process::exit;
-
-use celsium::{ block::{ self, Block }, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 use crate::{ errors, util::{ self, get_object_fields }, Compiler };
 
@@ -38,7 +35,7 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
             let mut should_objects_error = false;
 
             let are_object_types_eq = util::compare_object_types(
-                &typ_of_init_value,
+                &typ_of_init_value.data_type,
                 &data_type_marked
             );
 
@@ -47,11 +44,11 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
             }
 
             let erroring_node = node.child(0 + (is_exported as usize));
-            if typ_of_init_value.clone() != data_type_marked && should_objects_error {
+            if typ_of_init_value.clone().data_type != data_type_marked && should_objects_error {
                 compiler.add_error(
                     crate::compiler::CompileErrorType::IncorrectVariableInitValue {
                         expected: data_type_marked.clone(),
-                        found: typ_of_init_value.clone(),
+                        found: typ_of_init_value.clone().data_type,
                     },
                     erroring_node.get_position().unwrap().line,
                     erroring_node.get_position().unwrap().column,
@@ -76,10 +73,10 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
 
             let mut typestact_copy = compiler.helper.clone();
 
-            let is_object = util::is_type_object(&typ_of_init_value);
+            let is_object = util::is_type_object(&typ_of_init_value.data_type);
 
             if is_object {
-                let fields = get_object_fields(&typ_of_init_value).unwrap();
+                let fields = get_object_fields(&typ_of_init_value.data_type).unwrap();
 
                 let object_id = compiler.helper.def_object(
                     varname.clone(),
@@ -89,15 +86,6 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
                 );
                 if object_id.is_err() {
                     if object_id.err().unwrap() == "already_defined" {
-                        /*compiler.add_error(
-                    crate::compiler::CompileErrorType::IncorrectVariableInitValue {
-                        expected: data_type_marked.clone(),
-                        found: typ_of_init_value.clone(),
-                    },
-                    erroring_node.get_position().unwrap().line,
-                    erroring_node.get_position().unwrap().column,
-                    erroring_node.get_span().unwrap().length
-                );*/
                         errors::incorect_init_value(
                             format!("Mainīgais `{}` jau ir definēts.", varname),
                             &mut typestact_copy,
@@ -116,7 +104,8 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
                 for field in fields.clone() {
                     field_names.push(field.name);
                 }
-                compiler.block.define_object(object_id.unwrap());
+                compiler.block.define_object(object_id.unwrap(), compiler.register_counter);
+                compiler.register_counter += 1;
             } else {
                 let var_id = compiler.helper.def_var(
                     varname.clone(),
@@ -140,7 +129,8 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
                         );
                     }
                 }
-                compiler.block.define_variable(var_id.unwrap());
+                compiler.block.define_variable(var_id.unwrap(), typ_of_init_value.register_id);
+                //compiler.register_counter += 1;
             }
         }
     }

@@ -1,4 +1,4 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
+use celsium::BuiltinTypes;
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{ errors, util, Compiler };
@@ -14,22 +14,27 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
             }
         }
         let func_name = node.child(0).get_value().unwrap();
+        let reg = compiler.helper.get_top().unwrap().register_id;
         if func_name == "izvade" {
-            compiler.block.push_to_testing_stack(true);
+            compiler.block.push_to_testing_stack(true, reg);
             compiler.block.call_special_function(celsium::SpecialFunctions::Print {
                 newline: true,
-            });
+            }, reg);
 
         } else if func_name == "izvadetp" {
             compiler.block.call_special_function(celsium::SpecialFunctions::Print {
                 newline: false,
-            });
+            }, reg);
         } else if func_name == "ievade" {
-            compiler.block.call_special_function(celsium::SpecialFunctions::Input);
+            compiler.block.call_special_function(celsium::SpecialFunctions::Input, compiler.register_counter);
+            compiler.register_counter += 1;
         } else if func_name == "jukums" {
-            //parse_ast(node.child(1).child(0), block, is_wasm, typestack);
-            //parse_ast(node.child(1).child(1), block, is_wasm, typestack);
-            compiler.block.call_special_function(celsium::SpecialFunctions::Random);
+            parse_ast(node.child(1).child(0), compiler);
+            let reg_a = compiler.helper.get_top().unwrap().register_id;
+            parse_ast(node.child(1).child(1), compiler);
+            let reg_b = compiler.helper.get_top().unwrap().register_id;
+            //TODO: test min and max
+            compiler.block.call_special_function(celsium::SpecialFunctions::Random{min: reg_b, max: reg_a}, compiler.register_counter);
         } else {
             let mut func_args_found: Vec<BuiltinTypes> = vec![];
             if node.children_count() > 1 {
@@ -37,8 +42,9 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
                 for arg in node.child(1).children().iter() {
                     parse_ast(arg, compiler);
                     let arg_type = compiler.helper.pop().unwrap();
-                    func_args_found.push(arg_type.clone());
-                    compiler.helper.push(arg_type);
+                    func_args_found.push(arg_type.clone().data_type);
+                    compiler.helper.push(arg_type.data_type, compiler.register_counter);
+                    compiler.register_counter += 1;
                 }
             }
             let func_id = util::get_closest_scope(
@@ -87,7 +93,8 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
             }
 
             if func_return_type.is_some() {
-                compiler.helper.push(func_return_type.unwrap());
+                compiler.helper.push(func_return_type.unwrap(), compiler.register_counter);
+                compiler.register_counter += 1;
             }
             compiler.block.call_function(func_name);
         }

@@ -72,6 +72,7 @@ pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterRet
         helper: compile_helper,
         is_wasm: false,
         errors: vec![],
+        register_counter: 0
     };
 
     parse_ast::parse_ast(root, &mut compiler);
@@ -89,7 +90,7 @@ pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterRet
     if static_only {
         return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
     }
-    let testing_stack_results = celsium.run_program();
+    let testing_stack_results = celsium.run_program(compiler.register_counter);
     let mut testing_stack_json: String = "[".to_string();
     let mut counter = 0;
     for value in testing_stack_results.clone() {
@@ -131,13 +132,14 @@ pub fn run_wasm(code: String) -> String {
         helper: compile_helper,
         is_wasm: false,
         errors: vec![],
+        register_counter: 0
     };
 
     parse_ast::parse_ast(root, &mut compiler);
     main_module.add_main_block(compiler.block.clone());
     celsium.add_module(&main_module);
 
-    let testing_stack_results = celsium.run_program();
+    let testing_stack_results = celsium.run_program(compiler.register_counter);
     let mut testing_stack_json: String = "[".to_string();
     for value in testing_stack_results {
         testing_stack_json += &stackvalue_to_json(&value);

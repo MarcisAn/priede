@@ -1,6 +1,6 @@
-sk aa : 2
+sk a : 2
 
-kamēr aa < 7 {
-    izvade(aa)
-    aa++
+kamēr a < 200 {
+    izvade(a)
+    a +: 1
 }

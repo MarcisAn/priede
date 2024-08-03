@@ -1,6 +1,5 @@
 use celsium::{
     block::Block,
-    compiletime_helper::CompileTimeHelper,
     module::{ FuncArg, FunctionSignature, VISIBILITY },
     BuiltinTypes,
 };
@@ -61,7 +60,8 @@ pub fn func_def(
                     body.scope.clone(),
                     is_exported
                 );
-                body.define_variable(var_id.unwrap());
+                body.define_variable(var_id.unwrap(), compiler.register_counter);
+                compiler.register_counter += 1;
             }
 
             if is_returning {

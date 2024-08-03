@@ -1,5 +1,5 @@
 use array_def::array_def;
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes, ObjectFieldType };
+use celsium::{BuiltinTypes, ObjectFieldType };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 mod id_assign;
@@ -38,42 +38,12 @@ pub fn parse_ast(
 ) {
     let title = node.get_symbol().to_string();
 
+
     if title == "block" {
         for i in node.children() {
             parse_ast(i, compiler);
         }
     }
-/* 
-    if title == "dot_call" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-
-        match typestack.pop().unwrap() {
-            BuiltinTypes::Object { fields } => block.get_object_field(node.child(1).get_value().unwrap().to_string()),
-            BuiltinTypes::MagicInt => todo!(),
-            BuiltinTypes::Bool => todo!(),
-            BuiltinTypes::String => todo!(),
-            BuiltinTypes::Float => todo!(),
-        }
-
-        if node.child(1).get_value().unwrap() == "garums" {
-            let array_name = node.child(0).get_value().unwrap().to_string();
-            let array_id = util::get_closest_scope(
-                array_name.clone(),
-                block.scope.clone(),
-                typestack,
-                node
-            );
-            if array_id.is_none() {
-                errors::undefined_var(
-                    format!("Saraksts `{}` nav definēts", array_name),
-                    typestack,
-                    node
-                );
-            }
-            block.get_array_length(array_id.unwrap());
-            typestack.push(celsium::BuiltinTypes::MagicInt);
-        }
-    }*/
 
     if title == "object_def" {
         let object_title = node.child(0).get_value().unwrap().to_string();
@@ -96,18 +66,21 @@ pub fn parse_ast(
     if title == "object" {
         let mut fields = vec![];
         let mut field_names = vec![];
+        let mut field_registers: Vec<usize> = vec![];
         for field in node.children().iter().rev() {
             parse_ast(field.child(1), compiler);
+            field_registers.push(compiler.helper.get_top().unwrap().register_id);
             let field_name = field.child(0).get_value().unwrap().to_string();
             let field = ObjectFieldType {
                 name: field_name.clone(),
-                data_type: compiler.helper.pop().unwrap(),
+                data_type: compiler.helper.pop().unwrap().data_type,
             };
             field_names.push(field_name);
             fields.push(field);
         }
-        compiler.helper.push(celsium::BuiltinTypes::Object { fields });
-        compiler.block.create_object(field_names);
+        compiler.helper.push(celsium::BuiltinTypes::Object { fields }, compiler.register_counter);
+        compiler.block.create_object(field_names, field_registers, compiler.register_counter);
+        compiler.register_counter += 1;
     }
 
     if title == "dot_call" {
@@ -126,21 +99,23 @@ pub fn parse_ast(
                     node
                 );
             }
-            compiler.block.get_array_length(array_id.unwrap());
-            compiler.helper.push(celsium::BuiltinTypes::MagicInt);
-            return;
+            compiler.block.get_array_length(array_id.unwrap(), compiler.register_counter);
+            compiler.helper.push(celsium::BuiltinTypes::MagicInt, compiler.register_counter);
+            compiler.register_counter += 1;
+            return
         }
         parse_ast(node.child(0), compiler);
         let origin_type = compiler.helper.pop().unwrap();
-        match origin_type {
+        match origin_type.data_type {
             BuiltinTypes::MagicInt => todo!(),
             BuiltinTypes::Bool => todo!(),
             BuiltinTypes::String => todo!(),
             BuiltinTypes::Object { fields } =>
-                compiler.block.get_object_field(node.child(1).get_value().unwrap().to_string()),
+                compiler.block.get_object_field(node.child(1).get_value().unwrap().to_string(), compiler.register_counter),
             BuiltinTypes::Float => todo!(),
             BuiltinTypes::Array { element_type } => {},
         }
+        compiler.register_counter += 1;
         
     }
 
