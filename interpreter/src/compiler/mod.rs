@@ -23,8 +23,7 @@ pub struct Compiler {
     pub helper: CompileTimeHelper,
     pub block: Block,
     pub is_wasm: bool,
-    pub errors: Vec<CompileError>,
-    pub register_counter: usize
+    pub errors: Vec<CompileError>
 }
 
 impl Compiler {

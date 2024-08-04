@@ -1,4 +1,4 @@
-use celsium::{ block::Block, Scope };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, Scope };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{ hime, util, Compiler };

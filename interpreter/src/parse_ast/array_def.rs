@@ -1,4 +1,4 @@
-use std::vec;
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 use crate::{ errors, util::{ self, get_data_type_from_id }, Compiler };
 
@@ -23,7 +23,7 @@ pub fn array_def(
 
         let data_type_marked = get_data_type_from_id(&mut compiler.helper, data_type_str, node);
 
-        let mut init_value_regs: Vec<usize> = vec![];
+        let mut init_value_counter = 0;
         for i in node.child(3 + (is_exported as usize)).children() {
             parse_ast(i, compiler);
             let type_of_init_val = compiler.helper.pop();
@@ -31,7 +31,7 @@ pub fn array_def(
             let mut should_objects_error = false;
 
             let are_object_types_eq = util::compare_object_types(
-                &type_of_init_val.clone().unwrap().data_type,
+                &type_of_init_val.clone().unwrap(),
                 &data_type_marked
             );
 
@@ -39,19 +39,19 @@ pub fn array_def(
                 should_objects_error = !are_object_types_eq.unwrap();
             }
             if
-                type_of_init_val.clone().unwrap().data_type != data_type_marked.clone() &&
+                type_of_init_val.clone().unwrap() != data_type_marked.clone() &&
                 should_objects_error
             {
                 errors::array_element_wrong_type(
                     array_name.to_owned(),
-                    init_value_regs.len(),
+                    init_value_counter,
                     data_type_marked.clone(),
-                    type_of_init_val.clone().unwrap().data_type,
+                    type_of_init_val.unwrap().clone(),
                     &mut compiler.helper,
                     node
                 );
             }
-            init_value_regs.push(type_of_init_val.unwrap().register_id);
+            init_value_counter += 1;
         }
         let var_id = compiler.helper.def_array(
             array_name,
@@ -64,7 +64,10 @@ pub fn array_def(
             is_exported
         );
         compiler.block.define_array(
-            init_value_regs,
+            node
+                .child(3 + (is_exported as usize))
+                .children()
+                .len(),
             var_id
         )
     }
