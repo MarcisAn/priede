@@ -57,33 +57,30 @@ grammar priede
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
 
-        array -> ID '['! exp ']'!;
+        indexable -> ID ('['! exp ']'!)+;
+
+        array -> '['! exp (';' exp)* ']'!;
 
         include_list -> '{'! ID+ '}'!;
 
         include -> INCLUDE! include_list FROM STRING
         |INCLUDE! include_list FROM ID;
 
-        array_def -> ID ARRAY  ID ':'! '['! array_def_value ']'!
-                | ID ARRAY  ID ':'! '['! ']'!;
+        array_def -> ID ARRAY  ID ':'! exp
+                | ID ARRAY  ID ':'! exp;
 
-        var_def -> ID ID ':'! var_def_value
+        var_def -> ID ID ':'! exp
                 | array_def^
-                | EXPORT ID ID ':'! var_def_value
+                | EXPORT ID ID ':'! exp
                 | EXPORT array_def^;
 
-        array_def_value -> var_def_value
-                |var_def_value (';'! var_def_value)*;
 
-        var_def_value -> exp^ ;
-
-        asignable_exp -> exp^;
         assign_op -> ':'^ | '+:'^ | '-:'^ | '*:'^ | '/:'^;
 
-        id_assign -> ID assign_op asignable_exp
+        id_assign -> ID assign_op exp^
                     |   ID '++' | ID '--' ;
 
-        array_assign -> array ':'! asignable_exp;
+        array_assign -> indexable ':'! exp;
 
         func_name -> ID^;
 
@@ -145,7 +142,7 @@ grammar priede
                    |  func_call^
                    | BOOL^
                    | array^
-                   | object^;
+                   | object^; 
 
         exp_atom -> exp_atom_no_dot^
                     | dot_call^;
@@ -166,16 +163,16 @@ grammar priede
         reiz_dal_atl -> 
                     reiz^|dal^|atlik^;
 
-        reiz -> exp_reizdal '*'! exp_atom;
-        dal -> exp_reizdal '/'! exp_atom;
-        atlik -> exp_reizdal '%'! exp_atom;
+        reiz -> exp_reizdal '*' exp_atom;
+        dal -> exp_reizdal '/' exp_atom;
+        atlik -> exp_reizdal '%' exp_atom;
 
         exp_plusmin -> exp_reizdal^
                    |  plus^
                    |  minus^;
 
-        plus -> exp_plusmin '+'! exp_reizdal;
-        minus -> exp_plusmin '-'! exp_reizdal;
+        plus -> exp_plusmin '+' exp_reizdal;
+        minus -> exp_plusmin '-' exp_reizdal;
 
         exp_t ->      
                 exp_plusmin^;
