@@ -33,7 +33,7 @@ fn calculate(
 ) {
     parse_ast(node.child(0), compiler);
     parse_ast(node.child(2), compiler);
-    let res = compiler.helper.binop(binop.clone());
+    let res = compiler.typestack.binop(binop.clone());
     if res.is_none() {
         compiler.add_error(
                 crate::compiler::CompileErrorType::MathTypes,

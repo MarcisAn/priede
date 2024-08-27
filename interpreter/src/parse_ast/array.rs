@@ -19,11 +19,11 @@ pub fn array(node: AstNode, title: &str, compiler: &mut Compiler) {
         
         //parse the index
         parse_ast(node.child(1), compiler);
-        let index_type = compiler.helper.pop().unwrap();
-        if index_type != BuiltinTypes::MagicInt {
+        let index_type = compiler.typestack.pop().unwrap();
+        if index_type != BuiltinTypes::Int {
             errors::array_element_wrong_type_index(
                 array_name.to_string(),
-                BuiltinTypes::MagicInt,
+                BuiltinTypes::Int,
                 index_type,
                 &mut compiler.helper,
                 node
@@ -71,6 +71,6 @@ let array = util::get_closest_scope(
             }
         }
 
-        compiler.helper.push(array_type);
+        compiler.typestack.push(array_type);
         compiler.block.load_from_array(array.unwrap());
 }

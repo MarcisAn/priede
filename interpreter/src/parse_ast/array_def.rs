@@ -26,7 +26,7 @@ pub fn array_def(
         let mut init_value_counter = 0;
         for i in node.child(3 + (is_exported as usize)).children() {
             parse_ast(i, compiler);
-            let type_of_init_val = compiler.helper.pop();
+            let type_of_init_val = compiler.typestack.pop();
 
             let mut should_objects_error = false;
 

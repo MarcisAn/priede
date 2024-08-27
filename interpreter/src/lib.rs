@@ -2,12 +2,13 @@ use block::Block;
 use celsium::block;
 use celsium::compiletime_helper::CompileTimeHelper;
 use celsium::module;
+use celsium::typestack;
+use celsium::typestack::TypeStack;
 use celsium::CelsiumProgram;
 use celsium::Scope;
 use compiler::CompileError;
 use hime_redist::ast::AstNode;
 use hime_redist::symbols::SemanticElementTrait;
-use module::Module;
 use util::stackvalue_to_json;
 use std::panic;
 use std::process::exit;
@@ -45,13 +46,14 @@ pub struct InterpreterReturns {
 pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterReturns {
     let file_content = read_file(path.clone());
     let mut compile_helper = CompileTimeHelper::new(file_content.clone(), path.clone());
+    let mut typestack: TypeStack = TypeStack::new();
 
     //send code to hime and get ast root
     let parse_res = hime::priede::parse_string(file_content.clone());
     let parser_errors = parser::parser_errors(parse_res.errors.clone().errors, &mut compile_helper);
 
     if parser_errors.len() > 0 {
-        return InterpreterReturns{errors: parser_errors, testing_stack: vec![]};
+        return InterpreterReturns { errors: parser_errors, testing_stack: vec![] };
     }
 
     let ast = parse_res.get_ast();
@@ -60,9 +62,7 @@ pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterRet
         util::print_ast(root);
     }
 
-    let mut celsium = CelsiumProgram::new();
-    let mut main_module = Module::new("main", &mut celsium);
-    let main_block = Block::new(Scope { ast_id: root.id(), module_path: path.clone() });
+    let mut main_block = Block::new(Scope { ast_id: root.id(), module_path: path.clone() });
 
     let mut block_ids: Vec<usize> = vec![];
     parse_block_ids(root, &mut block_ids);
@@ -72,6 +72,8 @@ pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterRet
         helper: compile_helper,
         is_wasm: false,
         errors: vec![],
+        typestack: typestack,
+        functions: vec![],
     };
 
     parse_ast::parse_ast(root, &mut compiler);
@@ -84,11 +86,10 @@ pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterRet
         }
     }
 
-    main_module.add_main_block(compiler.block);
-    celsium.add_module(&main_module);
     if static_only {
         return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
     }
+    let mut celsium = CelsiumProgram::new(compiler.block, compiler.functions);
     let testing_stack_results = celsium.run_program();
     let mut testing_stack_json: String = "[".to_string();
     let mut counter = 0;
@@ -121,22 +122,22 @@ pub fn run_wasm(code: String) -> String {
     let ast = parse_res.get_ast();
     let root = ast.get_root();
 
-    let mut celsium = CelsiumProgram::new();
-    let mut main_module = Module::new("main", &mut celsium);
-    let main_block = Block::new(Scope { ast_id: root.id(), module_path: "".to_string() });
+    let mut main_block = Block::new(Scope { ast_id: root.id(), module_path: "".to_string() });
     let compile_helper = CompileTimeHelper::new(code.clone(), "".to_string());
+    let mut typestack: TypeStack = TypeStack::new();
 
     let mut compiler = Compiler {
         block: main_block,
         helper: compile_helper,
         is_wasm: false,
         errors: vec![],
+        functions: vec![],
+        typestack: typestack,
     };
 
     parse_ast::parse_ast(root, &mut compiler);
-    main_module.add_main_block(compiler.block.clone());
-    celsium.add_module(&main_module);
 
+    let mut celsium = CelsiumProgram::new(compiler.block, compiler.functions);
     let testing_stack_results = celsium.run_program();
     let mut testing_stack_json: String = "[".to_string();
     for value in testing_stack_results {

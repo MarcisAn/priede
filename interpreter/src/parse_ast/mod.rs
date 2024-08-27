@@ -49,7 +49,7 @@ pub fn parse_ast(
 
         match typestack.pop().unwrap() {
             BuiltinTypes::Object { fields } => block.get_object_field(node.child(1).get_value().unwrap().to_string()),
-            BuiltinTypes::MagicInt => todo!(),
+            BuiltinTypes::Int => todo!(),
             BuiltinTypes::Bool => todo!(),
             BuiltinTypes::String => todo!(),
             BuiltinTypes::Float => todo!(),
@@ -71,7 +71,7 @@ pub fn parse_ast(
                 );
             }
             block.get_array_length(array_id.unwrap());
-            typestack.push(celsium::BuiltinTypes::MagicInt);
+            typestack.push(celsium::BuiltinTypes::Int);
         }
     }*/
 
@@ -101,12 +101,12 @@ pub fn parse_ast(
             let field_name = field.child(0).get_value().unwrap().to_string();
             let field = ObjectFieldType {
                 name: field_name.clone(),
-                data_type: compiler.helper.pop().unwrap(),
+                data_type: compiler.typestack.pop().unwrap(),
             };
             field_names.push(field_name);
             fields.push(field);
         }
-        compiler.helper.push(celsium::BuiltinTypes::Object { fields });
+        compiler.typestack.push(celsium::BuiltinTypes::Object { fields });
         compiler.block.create_object(field_names);
     }
 
@@ -127,13 +127,13 @@ pub fn parse_ast(
                 );
             }
             compiler.block.get_array_length(array_id.unwrap());
-            compiler.helper.push(celsium::BuiltinTypes::MagicInt);
+            compiler.typestack.push(celsium::BuiltinTypes::Int);
             return;
         }
         parse_ast(node.child(0), compiler);
-        let origin_type = compiler.helper.pop().unwrap();
+        let origin_type = compiler.typestack.pop().unwrap();
         match origin_type {
-            BuiltinTypes::MagicInt => todo!(),
+            BuiltinTypes::Int => todo!(),
             BuiltinTypes::Bool => todo!(),
             BuiltinTypes::String => todo!(),
             BuiltinTypes::Object { fields } =>

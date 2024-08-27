@@ -158,8 +158,8 @@ pub fn get_closest_node_location(node: AstNode) -> TextPosition {
 
 pub fn data_type_from_str(inp: &str) -> Option<BuiltinTypes> {
     return Some(match inp {
-        "sk" => celsium::BuiltinTypes::MagicInt,
-        "skaitlis" => celsium::BuiltinTypes::MagicInt,
+        "sk" => celsium::BuiltinTypes::Int,
+        "skaitlis" => celsium::BuiltinTypes::Int,
         "būls" => celsium::BuiltinTypes::Bool,
         "bl" => celsium::BuiltinTypes::Bool,
         "teksts" => celsium::BuiltinTypes::String,
@@ -182,7 +182,7 @@ fn format_object_fields(fields: Vec<ObjectFieldType>) -> String {
 
 pub fn str_from_data_type(inp: BuiltinTypes) -> String {
     match inp {
-        BuiltinTypes::MagicInt => "skaitlis".into(),
+        BuiltinTypes::Int => "skaitlis".into(),
         BuiltinTypes::Bool => "būls".into(),
         BuiltinTypes::String => "teksts".into(),
         BuiltinTypes::Object { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
@@ -255,7 +255,7 @@ pub fn stackvalue_to_json(stackval: &celsium::vm::StackValue) -> String {
     result += &(match stackval {
         celsium::vm::StackValue::Bool { value } =>
             format!("{{type: bool, value: {}}}", value.to_string()),
-        celsium::vm::StackValue::BIGINT { value } =>
+        celsium::vm::StackValue::Int { value } =>
             format!("{{type: int, value: {}}}", value.to_string()),
         celsium::vm::StackValue::Float { value } =>
             format!("{{type: float, value: {}}}", value.to_string()),

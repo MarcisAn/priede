@@ -1,20 +1,16 @@
 use celsium::{
     block::Block,
     compiletime_helper::CompileTimeHelper,
-    module::{ FuncArg, FunctionSignature, VISIBILITY },
+    module::{ FuncArg, Function, FunctionSignature, VISIBILITY },
     BuiltinTypes,
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{util::{ self, get_data_type_from_id }, Compiler};
+use crate::{ util::{ self, get_data_type_from_id }, Compiler };
 
 use super::parse_ast;
 
-pub fn func_def(
-    node: AstNode,
-    title: &str,
-    compiler: &mut Compiler
-) {
+pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler) {
     if title == "func_def" {
         let is_exported = node.child(0).get_symbol().to_string() == "EXPORT";
 
@@ -49,7 +45,11 @@ pub fn func_def(
 
                 let data_type_str = arg.child(0).get_value().unwrap();
 
-                let data_type_marked = get_data_type_from_id(&mut compiler.helper, data_type_str, node);
+                let data_type_marked = get_data_type_from_id(
+                    &mut compiler.helper,
+                    data_type_str,
+                    node
+                );
 
                 args.push(FuncArg {
                     name: arg_name.clone(),
@@ -78,10 +78,7 @@ pub fn func_def(
                 );
             }
 
-            parse_ast(
-                node.child(2 + (is_returning as usize) + (is_exported as usize)),
-                compiler
-            );
+            parse_ast(node.child(2 + (is_returning as usize) + (is_exported as usize)), compiler);
             compiler.helper.def_function(
                 func_name.clone(),
                 args.clone(),
@@ -118,10 +115,13 @@ pub fn func_def(
             );
         }
 
-        compiler.block.define_function(body, VISIBILITY::PUBLIC, FunctionSignature {
-            name: func_name,
-            return_type: celsium::module::FunctionReturnType::NONE,
-            args: args,
+        compiler.functions.push(Function {
+            signature: FunctionSignature {
+                name: func_name,
+                return_type: celsium::module::FunctionReturnType::NONE,
+                args: args,
+            },
+            body: body,
         });
     }
 }

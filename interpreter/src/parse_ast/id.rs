@@ -19,7 +19,7 @@ pub fn id(node: AstNode, title: &str, compiler: &mut Compiler) {
             exit(0);
         } else {
             let data_type = compiler.helper.get_var_type(var_id.unwrap()).unwrap();
-            compiler.helper.push(data_type.clone());
+            compiler.typestack.push(data_type.clone());
             compiler.block.load_variable(var_id.unwrap());
         }
     }

@@ -36,9 +36,9 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
                 //if funccall has arguments
                 for arg in node.child(1).children().iter() {
                     parse_ast(arg, compiler);
-                    let arg_type = compiler.helper.pop().unwrap();
+                    let arg_type = compiler.typestack.pop().unwrap();
                     func_args_found.push(arg_type.clone());
-                    compiler.helper.push(arg_type);
+                    compiler.typestack.push(arg_type);
                 }
             }
             let func_id = util::get_closest_scope(
@@ -87,7 +87,7 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
             }
 
             if func_return_type.is_some() {
-                compiler.helper.push(func_return_type.unwrap());
+                compiler.typestack.push(func_return_type.unwrap());
             }
             compiler.block.call_function(func_name);
         }

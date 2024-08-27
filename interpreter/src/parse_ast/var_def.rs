@@ -32,7 +32,7 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
             parse_ast(node.child(2 + (is_exported as usize)), compiler);
 
             //get they type of the init value
-            let typ_of_init_value = compiler.helper.pop().unwrap();
+            let typ_of_init_value = compiler.typestack.pop().unwrap();
             //println!("type comparison real {:?} marked {:?}", typ_of_init_value, data_type_marked);
 
             let mut should_objects_error = false;

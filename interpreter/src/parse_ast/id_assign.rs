@@ -25,42 +25,42 @@ pub fn id_assign(
         } else if operator == "+:" {
             compiler.block.load_variable(var_id);
             let data_type = compiler.helper.get_var_type(var_id).unwrap();
-            compiler.helper.push(data_type);
+            compiler.typestack.push(data_type);
             parse_ast(node.child(2), compiler);
-            compiler.helper.binop(BINOP::Add);
+            compiler.typestack.binop(BINOP::Add);
             compiler.block.binop(BINOP::Add);
         } else if operator == "-:" {
             compiler.block.load_variable(var_id);
             let data_type = compiler.helper.get_var_type(var_id).unwrap();
-            compiler.helper.push(data_type);
+            compiler.typestack.push(data_type);
             parse_ast(node.child(2), compiler);
             compiler.block.binop(BINOP::Subtract);
-            compiler.helper.binop(BINOP::Subtract);
+            compiler.typestack.binop(BINOP::Subtract);
         } else if operator == "*:" {
             compiler.block.load_variable(var_id);
             let data_type = compiler.helper.get_var_type(var_id).unwrap();
-            compiler.helper.push(data_type);
+            compiler.typestack.push(data_type);
             parse_ast(node.child(2), compiler);
             compiler.block.binop(BINOP::Multiply);
-            compiler.helper.binop(BINOP::Multiply);
+            compiler.typestack.binop(BINOP::Multiply);
         } else if operator == "/:" {
             compiler.block.load_variable(var_id);
             let data_type = compiler.helper.get_var_type(var_id).unwrap();
-            compiler.helper.push(data_type);
+            compiler.typestack.push(data_type);
             parse_ast(node.child(2), compiler);
             compiler.block.binop(BINOP::Divide);
         } else if operator == "++" {
             compiler.block.load_variable(var_id);
             let data_type = compiler.helper.get_var_type(var_id).unwrap();
-            compiler.helper.push(data_type);
-            compiler.block.load_const(celsium::BuiltinTypes::MagicInt, "1");
-            compiler.helper.binop(BINOP::Add);
+            compiler.typestack.push(data_type);
+            compiler.block.load_int(1);
+            compiler.typestack.binop(BINOP::Add);
             compiler.block.binop(BINOP::Add);
         } else if operator == "--" {
             compiler.block.load_variable(var_id);
             let data_type = compiler.helper.get_var_type(var_id).unwrap();
-            compiler.helper.push(data_type);
-            compiler.block.load_const(celsium::BuiltinTypes::MagicInt, "1");
+            compiler.typestack.push(data_type);
+            compiler.block.load_int(1);
             compiler.block.binop(BINOP::Subtract);
         }
         compiler.block.assign_variable(var_id);
