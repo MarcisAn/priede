@@ -1,6 +1,6 @@
 ![PRIEDE](./banner.png)
 
-https://priede.vercel.app/
+https://priede.andersons-m.lv/
 
 Viegli lasāma un rakstāma programmēšanas valoda ar sintaksi latviski
 
