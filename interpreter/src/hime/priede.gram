@@ -77,7 +77,7 @@ grammar priede
 
         assign_op -> ':'^ | '+:'^ | '-:'^ | '*:'^ | '/:'^;
 
-        id_assign -> ID assign_op exp^
+        id_assign -> ID assign_op exp
                     |   ID '++' | ID '--' ;
 
         array_assign -> indexable ':'! exp;

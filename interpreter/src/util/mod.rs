@@ -149,12 +149,21 @@ pub fn get_closest_node_location(node: AstNode) -> TextPosition {
         return node.get_position().unwrap();
     }
     for child in node.children() {
-        if child.get_position().is_some() {
-            return child.get_position().unwrap();
-        }
+        return get_closest_node_location(child);
     }
     panic!();
-}
+}   
+
+pub fn get_furthest_node_location(node: AstNode) -> TextPosition {
+    if node.get_position().is_some() {
+        return node.get_position().unwrap();
+    }
+    for child in node.children().iter().rev() {
+        return get_closest_node_location(child);
+    }
+    panic!();
+}   
+
 
 pub fn data_type_from_str(inp: &str) -> Option<BuiltinTypes> {
     return Some(match inp {

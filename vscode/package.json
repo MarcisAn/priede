@@ -15,8 +15,10 @@
   },
   "categories": [
     "Programming Languages",
-    "Education"
+    "Education",
+    "Formatters"
   ],
+  "main": "./src/extension.ts",
   "contributes": {
     "languages": [
       {
@@ -47,6 +49,15 @@
         "language": "priede",
         "path": "./snipets.json"
       }
+    ],
+    "commands": [
+      {
+        "command": "extension.helloWorld",
+        "title": "Hello World"
+      }
     ]
+  },
+  "dependencies": {
+    "vscode": "^1.1.37"
   }
 }

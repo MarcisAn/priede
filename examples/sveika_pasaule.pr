@@ -1,6 +1,1 @@
-sk aa : 2
-
-kamēr aa < 7 {
-    izvade(aa)
-    aa++
-}
+sk a : aa(2)
