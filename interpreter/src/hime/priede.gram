@@ -127,15 +127,10 @@ grammar priede
 
         return_st -> RETURN  exp;
 
-        dotable ->  NUMBER^
-                   | STRING^
-                   |  ID^
-                   |  func_call^
-                   | BOOL^
-                   | array^
-                   | object^;
+  
 
-        exp_atom_no_dot -> NUMBER^
+
+        exp_atom -> NUMBER^
                    | STRING^
                    | '('! exp^ ')'! 
                    |  ID^
@@ -143,19 +138,6 @@ grammar priede
                    | BOOL^
                    | array^
                    | object^; 
-
-        exp_atom -> exp_atom_no_dot^
-                    | dot_call^;
-
-        dot_call -> dotable '.'! ID
-                | dot_call '.'! ID
-                | dot_call_fn^;
-
-        dot_call_fn -> 
-                  dotable '.'! ID '()'!
-                | dotable '.'! ID '('! funcargs ')'!
-                | dot_call '.'! ID '()'!
-                | dot_call '.'! ID '('! funcargs ')'!;
 
         exp_reizdal -> exp_atom^
                    | reiz_dal_atl^;
@@ -211,7 +193,6 @@ grammar priede
         | w_loop^ 
         | func_def^ 
         | return_st^
-        | dot_call^
         | include^
         | object_def^;
 
