@@ -34,46 +34,16 @@ use crate::{ errors, util::{ self, get_data_type_from_id }, Compiler };
 
 pub fn parse_ast(
     node: AstNode,
-    compiler: &mut Compiler
+    compiler: &mut Compiler,
+    block: &mut Block
 ) {
     let title = node.get_symbol().to_string();
 
     if title == "block" {
         for i in node.children() {
-            parse_ast(i, compiler);
+            parse_ast(i, compiler, block);
         }
     }
-/* 
-    if title == "dot_call" {
-        parse_ast(node.child(0), block, is_wasm, typestack);
-
-        match typestack.pop().unwrap() {
-            BuiltinTypes::Object { fields } => block.get_object_field(node.child(1).get_value().unwrap().to_string()),
-            BuiltinTypes::Int => todo!(),
-            BuiltinTypes::Bool => todo!(),
-            BuiltinTypes::String => todo!(),
-            BuiltinTypes::Float => todo!(),
-        }
-
-        if node.child(1).get_value().unwrap() == "garums" {
-            let array_name = node.child(0).get_value().unwrap().to_string();
-            let array_id = util::get_closest_scope(
-                array_name.clone(),
-                block.scope.clone(),
-                typestack,
-                node
-            );
-            if array_id.is_none() {
-                errors::undefined_var(
-                    format!("Saraksts `{}` nav definēts", array_name),
-                    typestack,
-                    node
-                );
-            }
-            block.get_array_length(array_id.unwrap());
-            typestack.push(celsium::BuiltinTypes::Int);
-        }
-    }*/
 
     if title == "object_def" {
         let object_title = node.child(0).get_value().unwrap().to_string();
@@ -97,7 +67,7 @@ pub fn parse_ast(
         let mut fields = vec![];
         let mut field_names = vec![];
         for field in node.children().iter().rev() {
-            parse_ast(field.child(1), compiler);
+            parse_ast(field.child(1), compiler, block);
             let field_name = field.child(0).get_value().unwrap().to_string();
             let field = ObjectFieldType {
                 name: field_name.clone(),
@@ -107,54 +77,22 @@ pub fn parse_ast(
             fields.push(field);
         }
         compiler.typestack.push(celsium::BuiltinTypes::Object { fields });
-        compiler.block.create_object(field_names);
+        block.create_object(field_names);
     }
 
-    if title == "dot_call" {
-        if node.child(1).get_value().unwrap() == "garums" {
-            let array_name = node.child(0).get_value().unwrap().to_string();
-            let array_id = util::get_closest_scope(
-                array_name.clone(),
-                compiler.block.scope.clone(),
-                &mut compiler.helper,
-                node
-            );
-            if array_id.is_none() {
-                errors::undefined_var(
-                    format!("Saraksts `{}` nav definēts", array_name),
-                    &mut compiler.helper,
-                    node
-                );
-            }
-            compiler.block.get_array_length(array_id.unwrap());
-            compiler.typestack.push(celsium::BuiltinTypes::Int);
-            return;
-        }
-        parse_ast(node.child(0), compiler);
-        let origin_type = compiler.typestack.pop().unwrap();
-        match origin_type {
-            BuiltinTypes::Int => todo!(),
-            BuiltinTypes::Bool => todo!(),
-            BuiltinTypes::String => todo!(),
-            BuiltinTypes::Object { fields } =>
-                compiler.block.get_object_field(node.child(1).get_value().unwrap().to_string()),
-            BuiltinTypes::Float => todo!(),
-            BuiltinTypes::Array { element_type } => {},
-        }
-        
-    }
+    
 
-    id(node, &title, compiler);
-    return_st(node, &title, compiler);
-    if_stat(node, &title, compiler);
-    loops(node, &title, compiler);
-    func_def(node, &title, compiler);
-    func_call(node, &title, compiler);
-    array(node, &title, compiler);
-    math_ops(node, &title, compiler);
-    comparisons(node, &title, compiler);
-    id_assign(node, &title, compiler);
-    parse_constants(node, &title, compiler);
-    var_def(node, &title, compiler);
-    include(node, &title, compiler);
+    id(node, &title, compiler, block);
+    return_st(node, &title, compiler, block);
+    if_stat(node, &title, compiler, block);
+    loops(node, &title, compiler, block);
+    func_def(node, &title, compiler, block);
+    func_call(node, &title, compiler, block);
+    array(node, &title, compiler, block);
+    math_ops(node, &title, compiler, block);
+    comparisons(node, &title, compiler, block);
+    id_assign(node, &title, compiler, block);
+    parse_constants(node, &title, compiler, block);
+    var_def(node, &title, compiler, block);
+    include(node, &title, compiler, block);
 }

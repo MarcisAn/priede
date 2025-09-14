@@ -6,7 +6,7 @@ use crate::{ errors, util::{ self, get_object_fields }, Compiler };
 
 use super::{ array_def, parse_ast };
 
-pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
+pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "var_def" || title == "array_def" {
         let is_exported = node.child(0).get_symbol().to_string() == "EXPORT";
         if
@@ -15,7 +15,7 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
                 .get_symbol()
                 .to_string() == "ARRAY"
         {
-            array_def::array_def(node, title, compiler, is_exported);
+            array_def::array_def(node, title, compiler, is_exported, block);
         } else {
             //user marked data type
             let data_type_str = node
@@ -29,7 +29,7 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
             );
 
             //parse the init value
-            parse_ast(node.child(2 + (is_exported as usize)), compiler);
+            parse_ast(node.child(2 + (is_exported as usize)), compiler, block);
 
             //get they type of the init value
             let typ_of_init_value = compiler.typestack.pop().unwrap();
@@ -56,7 +56,7 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
                     erroring_node.get_position().unwrap().line,
                     erroring_node.get_position().unwrap().column,
                     erroring_node.get_span().unwrap().length
-                );/*
+                ); /*
                 errors::incorect_init_value(
                     format!(
                         "Mainīgā datu tips ir norādīts kā `{}`, bet piešķirtā sākotnējā vērtība ir `{}`.",
@@ -83,7 +83,7 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
 
                 let object_id = compiler.helper.def_object(
                     varname.clone(),
-                    compiler.block.scope.clone(),
+                    block.scope.clone(),
                     is_exported,
                     fields.clone()
                 );
@@ -116,12 +116,12 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
                 for field in fields.clone() {
                     field_names.push(field.name);
                 }
-                compiler.block.define_object(object_id.unwrap());
+                block.define_object(object_id.unwrap());
             } else {
                 let var_id = compiler.helper.def_var(
                     varname.clone(),
                     data_type_marked.clone(),
-                    compiler.block.scope.clone(),
+                    block.scope.clone(),
                     is_exported
                 );
                 if var_id.is_err() {
@@ -140,7 +140,7 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler) {
                         );
                     }
                 }
-                compiler.block.define_variable(var_id.unwrap());
+                block.define_variable(var_id.unwrap());
             }
         }
     }

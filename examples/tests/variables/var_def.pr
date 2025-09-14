@@ -2,33 +2,33 @@ skaitlis a : 2
 
 izvade(a)
 
-teksts a : "Sveika, pasaule!"
+teksts b : "Sveika, pasaule!"
 
-izvade(a)
-
-būls a : PAT
-būls b : NEPAT
-
-
-izvade(a)
 izvade(b)
 
-būls a : PAT
+būls c : PAT
+būls d : NEPAT
 
-ja a {
+
+izvade(c)
+izvade(d)
+
+būls e : PAT
+
+ja e {
     izvade("Būla mainīgais a ir patiess")
 }
 
-sk a : 3
+sk f : 3
 
-izvade(a)
+izvade(f)
 
-a : 4
+f : 4
 
-izvade(a)
+izvade(f)
 
-a : a + 3
+f : f + 3
 
-a +: 3
+f +: 3
 
-a++
+f++

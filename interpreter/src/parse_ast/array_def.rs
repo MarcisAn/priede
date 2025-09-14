@@ -8,7 +8,8 @@ pub fn array_def(
     node: AstNode,
     title: &str,
     compiler: &mut Compiler,
-    is_exported: bool
+    is_exported: bool,
+    block: &mut Block
 ) {
     if title == "array_def" {
         let array_name = node
@@ -25,7 +26,7 @@ pub fn array_def(
 
         let mut init_value_counter = 0;
         for i in node.child(3 + (is_exported as usize)).children() {
-            parse_ast(i, compiler);
+            parse_ast(i, compiler, block);
             let type_of_init_val = compiler.typestack.pop();
 
             let mut should_objects_error = false;
@@ -60,10 +61,10 @@ pub fn array_def(
                 .child(3 + (is_exported as usize))
                 .children()
                 .len(),
-            compiler.block.scope.clone(),
+            block.scope.clone(),
             is_exported
         );
-        compiler.block.define_array(
+        block.define_array(
             node
                 .child(3 + (is_exported as usize))
                 .children()

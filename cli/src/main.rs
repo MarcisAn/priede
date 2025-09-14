@@ -20,8 +20,8 @@ pub fn main() {
         }
     if arguments.orphans.len() == 0 {
         //quick debuging way
-        // let res = interpreter::interpret(String::from("../examples/sveika_pasaule.pr"), 3, false);
-        println!("{}", interpreter::format(fs::read_to_string("../examples/sveika_pasaule.pr").unwrap()));
+        let res = interpreter::interpret(String::from("../examples/sveika_pasaule.pr"), 3, false);
+        // println!("{}", interpreter::format(fs::read_to_string("../examples/sveika_pasaule.pr").unwrap()));
     } else {
         
         interpreter::interpret(String::from(arguments.orphans[0].clone()), verbose, static_analysis);

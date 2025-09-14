@@ -8,10 +8,10 @@ use super::parse_ast;
 pub fn return_st(
     node: AstNode,
     title: &str,
-    compiler: &mut Compiler
+    compiler: &mut Compiler, block: &mut Block
 ) {
     if title == "return_st" {
-        parse_ast(node.child(1), compiler);
-        compiler.block.return_from_function();
+        parse_ast(node.child(1), compiler, block);
+        block.return_from_function();
     }
 }

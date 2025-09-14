@@ -1,41 +1,41 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
+use celsium::{ block::{self, Block}, compiletime_helper::CompileTimeHelper, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{ errors, util, Compiler };
 
 use super::parse_ast;
 
-pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
+pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "func_call" {
         if node.children_count() > 1 {
             //if funccall has arguments
             for arg in node.child(1).children().iter().rev() {
-                parse_ast(arg, compiler);
+                parse_ast(arg, compiler, block);
             }
         }
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "izvade" {
-            compiler.block.push_to_testing_stack(true);
-            compiler.block.call_special_function(celsium::SpecialFunctions::Print {
+            block.push_to_testing_stack(true);
+            block.call_special_function(celsium::SpecialFunctions::Print {
                 newline: true,
             });
 
         } else if func_name == "izvadetp" {
-            compiler.block.call_special_function(celsium::SpecialFunctions::Print {
+            block.call_special_function(celsium::SpecialFunctions::Print {
                 newline: false,
             });
         } else if func_name == "ievade" {
-            compiler.block.call_special_function(celsium::SpecialFunctions::Input);
+            block.call_special_function(celsium::SpecialFunctions::Input);
         } else if func_name == "jukums" {
             //parse_ast(node.child(1).child(0), block, is_wasm, typestack);
             //parse_ast(node.child(1).child(1), block, is_wasm, typestack);
-            compiler.block.call_special_function(celsium::SpecialFunctions::Random);
+            block.call_special_function(celsium::SpecialFunctions::Random);
         } else {
             let mut func_args_found: Vec<BuiltinTypes> = vec![];
             if node.children_count() > 1 {
                 //if funccall has arguments
                 for arg in node.child(1).children().iter() {
-                    parse_ast(arg, compiler);
+                    parse_ast(arg, compiler, block);
                     let arg_type = compiler.typestack.pop().unwrap();
                     func_args_found.push(arg_type.clone());
                     compiler.typestack.push(arg_type);
@@ -43,7 +43,7 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
             }
             let func_id = util::get_closest_scope(
                 func_name.to_string(),
-                compiler.block.scope.clone(),
+                block.scope.clone(),
                 &mut compiler.helper,
                 node
             );
@@ -89,7 +89,7 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler) {
             if func_return_type.is_some() {
                 compiler.typestack.push(func_return_type.unwrap());
             }
-            compiler.block.call_function(func_name);
+            block.call_function(func_name);
         }
     }
 }

@@ -1,5 +1,5 @@
 use celsium::{
-    block::Block,
+    block::{self, Block},
     compiletime_helper::CompileTimeHelper,
     module::{ FuncArg, Function, FunctionSignature, VISIBILITY },
     BuiltinTypes,
@@ -10,7 +10,7 @@ use crate::{ util::{ self, get_data_type_from_id }, Compiler };
 
 use super::parse_ast;
 
-pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler) {
+pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "func_def" {
         let is_exported = node.child(0).get_symbol().to_string() == "EXPORT";
 
@@ -22,9 +22,9 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler) {
 
         let mut body = Block::new(
             if node.children_count() > 3 {
-                compiler.block.scope.change_ast_id(node.child(3 + (is_exported as usize)).id())
+                block.scope.change_ast_id(node.child(3 + (is_exported as usize)).id())
             } else {
-                compiler.block.scope.change_ast_id(node.child(2 + (is_exported as usize)).id())
+                block.scope.change_ast_id(node.child(2 + (is_exported as usize)).id())
             }
         );
         let mut args: Vec<FuncArg> = vec![];
@@ -78,11 +78,11 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler) {
                 );
             }
 
-            parse_ast(node.child(2 + (is_returning as usize) + (is_exported as usize)), compiler);
+            parse_ast(node.child(2 + (is_returning as usize) + (is_exported as usize)), compiler, &mut body);
             compiler.helper.def_function(
                 func_name.clone(),
                 args.clone(),
-                compiler.block.scope.clone(),
+                block.scope.clone(),
                 is_exported,
                 return_type
             );
@@ -105,11 +105,11 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler) {
                 );
             }
 
-            parse_ast(node.child(1 + (is_exported as usize)), compiler);
+            parse_ast(node.child(1 + (is_exported as usize)), compiler, &mut body);
             compiler.helper.def_function(
                 func_name.clone(),
                 args.clone(),
-                compiler.block.scope.clone(),
+                block.scope.clone(),
                 is_exported,
                 return_type
             );

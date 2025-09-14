@@ -117,5 +117,5 @@ pub fn variable_not_indexable(
 fn common_error(msg: &str, position: TextPosition, compilehelper: &mut CompileTimeHelper) {
     let path = &compilehelper.source_file_paths[compilehelper.current_file];
     println!("{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā", "-----Kļūda: ".red(), msg.red(), path, position.line);
-    //exit(0);
+    exit(0);
 }

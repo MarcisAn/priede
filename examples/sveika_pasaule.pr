@@ -1,3 +1,5 @@
-ja 1 {
-    izvade(1)
+funkc piesk_un_reiz(sk saskaitamais; sk reizinatajs) {
+    atgriezt(saskaitamais + 5 * reizinatajs)
 }
+
+izvade(piesk_un_reiz(4;5))

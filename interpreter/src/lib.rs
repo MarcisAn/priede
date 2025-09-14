@@ -282,7 +282,6 @@ pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterRet
     parse_block_ids(root, &mut block_ids);
 
     let mut compiler = Compiler {
-        block: main_block,
         helper: compile_helper,
         is_wasm: false,
         errors: vec![],
@@ -290,12 +289,12 @@ pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterRet
         functions: vec![],
     };
 
-    parse_ast::parse_ast(root, &mut compiler);
+    parse_ast::parse_ast(root, &mut compiler, &mut main_block);
 
     if verbose > 2 {
         let mut i = 0;
-        while i < compiler.block.bytecode.len() {
-            println!("{} {:?}", i, compiler.block.bytecode[i]);
+        while i < main_block.bytecode.len() {
+            println!("{} {:?}", i, main_block.bytecode[i]);
             i += 1;
         }
     }
@@ -303,7 +302,8 @@ pub fn interpret(path: String, verbose: u8, static_only: bool) -> InterpreterRet
     if static_only {
         return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
     }
-    let mut celsium = CelsiumProgram::new(compiler.block, compiler.functions);
+    println!("{:?}", compiler.functions);
+    let mut celsium = CelsiumProgram::new(main_block, compiler.functions);
     let testing_stack_results = celsium.run_program();
     let mut testing_stack_json: String = "[".to_string();
     let mut counter = 0;
@@ -341,7 +341,6 @@ pub fn run_wasm(code: String) -> String {
     let mut typestack: TypeStack = TypeStack::new();
 
     let mut compiler = Compiler {
-        block: main_block,
         helper: compile_helper,
         is_wasm: false,
         errors: vec![],
@@ -349,9 +348,9 @@ pub fn run_wasm(code: String) -> String {
         typestack: typestack,
     };
 
-    parse_ast::parse_ast(root, &mut compiler);
+    parse_ast::parse_ast(root, &mut compiler, &mut main_block);
 
-    let mut celsium = CelsiumProgram::new(compiler.block, compiler.functions);
+    let mut celsium = CelsiumProgram::new(main_block, compiler.functions);
     let testing_stack_results = celsium.run_program();
     let mut testing_stack_json: String = "[".to_string();
     for value in testing_stack_results {

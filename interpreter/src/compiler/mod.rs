@@ -21,7 +21,6 @@ pub enum CompileErrorType{
 pub struct Compiler {
     pub helper: CompileTimeHelper,
     pub typestack: TypeStack,
-    pub block: Block,
     pub is_wasm: bool,
     pub errors: Vec<CompileError>,
     pub functions: Vec<Function>
