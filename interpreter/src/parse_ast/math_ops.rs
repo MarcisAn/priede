@@ -33,9 +33,9 @@ fn calculate(
     compiler: &mut Compiler, block: &mut Block
 ) {
     parse_ast(node.child(0), compiler, block);
-    println!("span {:?}", node.child(0).get_total_position_and_span());
+    // println!("span {:?}", node.child(0).get_total_position_and_span());
     parse_ast(node.child(2), compiler, block);
-    println!("span {:?}", node.child(2).get_total_position_and_span());
+    // println!("span {:?}", node.child(2).get_total_position_and_span());
 
     let res = compiler.typestack.binop(binop.clone());
     if res.is_none() {

@@ -1,6 +1,5 @@
 {
   "rust-analyzer.linkedProjects": [
-    ".\\linter\\Cargo.toml",
     ".\\cli\\Cargo.toml",
     ".\\interpreter\\Cargo.toml",
     ".\\launcher\\src-tauri\\Cargo.toml"
