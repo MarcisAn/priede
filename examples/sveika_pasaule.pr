@@ -1,1 +1,34 @@
-izvade("r"[1])
+skaitlis a : 2
+
+izvade(a)
+
+teksts b : "Sveika, pasaule!"
+
+izvade(b)
+
+būls c : PAT
+būls d : NEPAT
+
+
+izvade(c)
+izvade(d)
+
+būls e : PAT
+
+ja e {
+    izvade("Būla mainīgais a ir patiess")
+}
+
+sk f : 3
+
+izvade(f)
+
+f : 4
+
+izvade(f)
+
+f : f + 3
+
+f +: 3
+
+f++

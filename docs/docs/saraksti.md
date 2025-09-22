@@ -53,7 +53,7 @@ izvade(augļi[0])
 ```priede
 tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
-izvade(augļi.garums)
+izvade(garums(augļi))
 ```
 
 ## Visu elementu izdruka
@@ -63,7 +63,7 @@ tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
 sk skaitītajs : 0
 
-kamēr skaitītajs < augļi.garums {
+kamēr skaitītajs < garums(augļi) {
     izvade(augļi[skaitītajs])
     skaitītajs++
 }

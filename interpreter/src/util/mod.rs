@@ -196,7 +196,7 @@ pub fn str_from_data_type(inp: &BuiltinTypes) -> String {
         BuiltinTypes::String => "teksts".into(),
         BuiltinTypes::Object { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
         BuiltinTypes::Float => "decimālskaitlis".into(),
-        BuiltinTypes::Array { element_type, length } => format!("Masīvs ar `{}` elementiem", str_from_data_type(element_type)),
+        BuiltinTypes::Array { element_type, length } => format!("Masīvs[`{}`]", str_from_data_type(element_type)),
     }
 }
 

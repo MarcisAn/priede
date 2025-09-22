@@ -26,7 +26,8 @@ pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler, block: &
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         };
         if checked_type.is_none() {
-            errors::binop_not_possible(side_1_type, side_2_type, &mut compiler.helper, node);
+            println!("not possible");
+            // errors::binop_not_possible(side_1_type, side_2_type, &mut compiler.helper, node);
         }
         match sign {
             "=" => block.binop(BINOP::Eq),

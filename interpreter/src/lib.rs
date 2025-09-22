@@ -40,8 +40,8 @@ extern "C" {
 
 #[derive(Debug, Clone)]
 pub struct InterpreterReturns {
-    testing_stack: Vec<celsium::vm::StackValue>,
-    errors: Vec<CompileError>,
+    pub testing_stack: Vec<celsium::vm::StackValue>,
+    pub errors: Vec<CompileError>,
 }
 
 
@@ -49,7 +49,7 @@ pub struct InterpreterReturns {
 pub fn interpret(path: String, print_ast: bool, print_bytecode: bool, static_only: bool, testing_stack: bool) -> InterpreterReturns {
     let file_content = read_file(path.clone());
     let mut compile_helper = CompileTimeHelper::new(file_content.clone(), path.clone());
-    let mut typestack: TypeStack = TypeStack::new();
+    let typestack: TypeStack = TypeStack::new();
 
     //send code to hime and get ast root
     let parse_res = hime::priede::parse_string(file_content.clone());

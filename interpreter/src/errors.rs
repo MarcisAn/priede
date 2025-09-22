@@ -8,9 +8,9 @@ use crate::util::{self, get_closest_node_location, str_from_data_type};
 
 pub fn parser_error(unexpected: String, position: TextPosition, compilehelper: &mut CompileTimeHelper) {
     let error_title = if unexpected == "saraksts" {
-        format!("NEATPAZĪTS SIMBOLS `{}`\nIespējams aizmirsi norādīt saraksta elementu datu tipu", unexpected)
+        format!("Šajā vietā nepieļaujams simbols `{}`\nIespējams aizmirsi norādīt saraksta elementu datu tipu", unexpected)
     } else {
-        format!("NEATPAZĪTS SIMBOLS `{}`", unexpected)
+        format!("Šajā vietā nepieļaujams simbols `{}`", unexpected)
     };
     common_error(&error_title, position, compilehelper);
 }

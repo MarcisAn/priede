@@ -7,12 +7,15 @@ use super::parse_ast;
 
 pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "func_call" {
-        if node.children_count() > 1 {
-            //if funccall has arguments
-            for arg in node.child(1).children().iter().rev() {
-                parse_ast(arg, compiler, block);
+        let mut func_args_found: Vec<BuiltinTypes> = vec![];
+            if node.children_count() > 1 {
+                //if funccall has arguments
+                for arg in node.child(1).children().iter() {
+                    parse_ast(arg, compiler, block);
+                    let arg_type = compiler.typestack.pop().unwrap();
+                    func_args_found.push(arg_type.clone());
+                }
             }
-        }
         let func_name = node.child(0).get_value().unwrap();
         if func_name == "izvade" {
             block.push_to_testing_stack(true);
@@ -26,21 +29,17 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             });
         } else if func_name == "ievade" {
             block.call_special_function(celsium::SpecialFunctions::Input);
+            compiler.typestack.push(BuiltinTypes::String);
         } else if func_name == "jukums" {
             //parse_ast(node.child(1).child(0), block, is_wasm, typestack);
             //parse_ast(node.child(1).child(1), block, is_wasm, typestack);
             block.call_special_function(celsium::SpecialFunctions::Random);
+            compiler.typestack.push(BuiltinTypes::Int);
+        }else if func_name == "garums" {
+            block.call_special_function(celsium::SpecialFunctions::Length);
+            compiler.typestack.push(BuiltinTypes::Int);
         } else {
-            let mut func_args_found: Vec<BuiltinTypes> = vec![];
-            if node.children_count() > 1 {
-                //if funccall has arguments
-                for arg in node.child(1).children().iter() {
-                    parse_ast(arg, compiler, block);
-                    let arg_type = compiler.typestack.pop().unwrap();
-                    func_args_found.push(arg_type.clone());
-                    compiler.typestack.push(arg_type);
-                }
-            }
+            
             let func_id = util::get_closest_scope(
                 func_name.to_string(),
                 block.scope.clone(),

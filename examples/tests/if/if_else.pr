@@ -2,5 +2,14 @@ ja 2 = 2 {
     izvade("Divi ir vienāds ar divi")
 }
 citādi{
-    izvade("Matemātika sabruka")
+    izvade("Divi nav vienāds ar divi")
+}
+
+ja 3 > 5 {
+    izvade("Trīs ir lielāks par 5")
+
+}
+citādi {
+    izvade("Trīs nav lielāks par 5")
+
 }
