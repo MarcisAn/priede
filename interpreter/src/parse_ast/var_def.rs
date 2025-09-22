@@ -2,7 +2,7 @@ use std::process::exit;
 
 use celsium::{ block::{ self, Block }, compiletime_helper::CompileTimeHelper };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{ errors, util::{ self, get_object_fields }, Compiler };
+use crate::{ errors, util::{ self, get_closest_node_location, get_object_fields }, Compiler };
 
 use super::{ array_def, parse_ast };
 
@@ -47,26 +47,8 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
             }
 
             let erroring_node = node.child(0 + (is_exported as usize));
-            if typ_of_init_value.clone() != data_type_marked && should_objects_error {
-                compiler.add_error(
-                    crate::compiler::CompileErrorType::IncorrectVariableInitValue {
-                        expected: data_type_marked.clone(),
-                        found: typ_of_init_value.clone(),
-                    },
-                    erroring_node.get_position().unwrap().line,
-                    erroring_node.get_position().unwrap().column,
-                    erroring_node.get_span().unwrap().length
-                ); /*
-                errors::incorect_init_value(
-                    format!(
-                        "Mainīgā datu tips ir norādīts kā `{}`, bet piešķirtā sākotnējā vērtība ir `{}`.",
-                        data_type_str,
-                        util::str_from_data_type(typ_of_init_value)
-                    ),
-                    &mut compiler.helper
-                );
-                exit(0);
-                 */
+            if typ_of_init_value.clone() != data_type_marked || should_objects_error {
+                errors::incorrect_variable_init_value(&data_type_marked, &typ_of_init_value, &mut compiler.helper, node);
             }
             let varname = node
                 .child(1 + (is_exported as usize))
@@ -89,15 +71,6 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
                 );
                 if object_id.is_err() {
                     if object_id.err().unwrap() == "already_defined" {
-                        /*compiler.add_error(
-                    crate::compiler::CompileErrorType::IncorrectVariableInitValue {
-                        expected: data_type_marked.clone(),
-                        found: typ_of_init_value.clone(),
-                    },
-                    erroring_node.get_position().unwrap().line,
-                    erroring_node.get_position().unwrap().column,
-                    erroring_node.get_span().unwrap().length
-                );*/
                         errors::incorect_init_value(
                             format!("Mainīgais `{}` jau ir definēts.", varname),
                             &mut typestact_copy,

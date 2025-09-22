@@ -3,7 +3,7 @@ use std::process::exit;
 use celsium::{block::Block, bytecode::BINOP};
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{ errors, Compiler };
+use crate::{ errors, util::get_closest_node_location, Compiler };
 
 use super::parse_ast;
 
@@ -12,6 +12,10 @@ pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler, block: &
         let sign = node.child(1).get_value().unwrap();
         parse_ast(node.child(0), compiler, block);
         parse_ast(node.child(2), compiler, block);
+        let mut cloned_compiler = compiler.typestack.clone();
+        let side_2_type = &cloned_compiler.pop().unwrap();
+        let side_1_type = &cloned_compiler.pop().unwrap();
+
         let checked_type = match sign {
             "=" => compiler.typestack.binop(BINOP::Eq),
             ">" => compiler.typestack.binop(BINOP::LargerThan),
@@ -22,13 +26,7 @@ pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler, block: &
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         };
         if checked_type.is_none() {
-            compiler.add_error(
-                crate::compiler::CompileErrorType::MathTypes,
-                node.child(1).get_position().unwrap().line,
-                node.child(1).get_position().unwrap().column,
-                node.child(1).get_span().unwrap().length
-            );
-            exit(0);
+            errors::binop_not_possible(side_1_type, side_2_type, &mut compiler.helper, node);
         }
         match sign {
             "=" => block.binop(BINOP::Eq),

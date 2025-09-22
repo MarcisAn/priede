@@ -1,3 +1,5 @@
+use std::process::exit;
+
 use array_def::array_def;
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes, ObjectFieldType };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
@@ -30,13 +32,13 @@ mod include;
 use include::include;
 mod array_def;
 
-use crate::{ errors, util::{ self, get_data_type_from_id }, Compiler };
+use crate::{
+    errors::{self, variable_not_indexable},
+    util::{ self, get_closest_node_location, get_closest_scope, get_data_type_from_id },
+    Compiler,
+};
 
-pub fn parse_ast(
-    node: AstNode,
-    compiler: &mut Compiler,
-    block: &mut Block
-) {
+pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
     let title = node.get_symbol().to_string();
 
     if title == "block" {
@@ -80,7 +82,37 @@ pub fn parse_ast(
         block.create_object(field_names);
     }
 
-    
+    if title == "indexable" {
+        let var_name = node.child(0).get_value().unwrap();
+        let var_id = get_closest_scope(
+            var_name.to_string(),
+            block.scope.clone(),
+            &mut compiler.helper,
+            node
+        );
+
+        if var_id.is_none() {
+            errors::undefined_var(
+                format!(
+                    "Masīvs ar nosaukumu '{}' nav definēts šajā blokā.",
+                    node.get_value().unwrap()
+                ),
+                &mut compiler.helper,
+                node
+            );
+            exit(0);
+        } else {
+            parse_ast(node.child(1), compiler, block);
+            let type_of_index_attempt = compiler.helper.get_var_type(var_id.unwrap()).unwrap();
+            match type_of_index_attempt {
+                BuiltinTypes::Array { element_type: _, length: _ } => (),
+                _ => {
+                    variable_not_indexable(&type_of_index_attempt, &mut compiler.helper, node);
+                }
+            }
+            block.load_from_array(var_id.unwrap());
+        }
+    }
 
     id(node, &title, compiler, block);
     return_st(node, &title, compiler, block);

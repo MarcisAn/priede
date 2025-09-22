@@ -1,38 +1,34 @@
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{ errors, util, Compiler };
+use crate::{
+    errors::{ self, array_element_wrong_type, common_error },
+    util::{ self, get_closest_node_location },
+    Compiler,
+};
 
 use super::parse_ast;
 
 pub fn array(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "array" {
-        let array_name = node.child(0).get_value().unwrap();
-        let source_id = util::get_closest_scope(
-            array_name.to_string(),
-            block.scope.clone(),
-            &mut compiler.helper,
-            node
-        );
-        let data_type = compiler.helper.get_var_type(source_id.unwrap()).unwrap();
-
-        //parse the index
-        parse_ast(node.child(1), compiler, block);
-        let index_type = compiler.typestack.pop().unwrap();
-        if index_type != BuiltinTypes::Int {
-            errors::array_element_wrong_type_index(
-                array_name.to_string(),
-                BuiltinTypes::Int,
-                index_type,
-                &mut compiler.helper,
-                node
-            );
+        let mut element_types: Vec<BuiltinTypes> = vec![];
+        for element in node.children() {
+            parse_ast(element, compiler, block);
+            let element_type = compiler.typestack.pop().unwrap();
+            element_types.push(element_type);
         }
-
-        match data_type {
-            BuiltinTypes::Array { element_type } => get_array_element(node, compiler, array_name, block),
-            _ => errors::variable_not_indexable(data_type, &mut compiler.helper, node),
+        let first_elem = &element_types.clone()[0];
+        for element_type in element_types {
+            if element_type != *first_elem {
+                common_error(
+                    "Visiem masīva elementiem jābūt ar vienādiem datu tipiem.",
+                    get_closest_node_location(node),
+                    &mut compiler.helper
+                );
+            }
         }
+        compiler.typestack.push(BuiltinTypes::Array { element_type: Box::new(first_elem.clone()), length: Some(node.children_count()) });
+        block.create_array(node.children_count());
     }
 }
 

@@ -1,6 +1,6 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper };
+use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{ errors, util::{ self, get_data_type_from_id }, Compiler };
+use crate::{ errors::{self, incorrect_variable_init_value}, util::{ self, get_closest_node_location, get_data_type_from_id }, Compiler };
 
 use super::parse_ast;
 
@@ -11,65 +11,48 @@ pub fn array_def(
     is_exported: bool,
     block: &mut Block
 ) {
-    if title == "array_def" {
-        let array_name = node
-            .child(2 + (is_exported as usize))
-            .get_value()
-            .unwrap();
-        //user marked data type
-        let data_type_str = node
-            .child(0 + (is_exported as usize))
-            .get_value()
-            .unwrap();
+    let data_type_str = node
+        .child(0 + (is_exported as usize))
+        .get_value()
+        .unwrap();
+    let data_type_marked = BuiltinTypes::Array {
+        element_type: Box::new(
+            util::get_data_type_from_id(&mut compiler.helper, data_type_str, node)
+        ),
+        length: None,
+    };
 
-        let data_type_marked = get_data_type_from_id(&mut compiler.helper, data_type_str, node);
+    let varname = node
+        .child(2 + (is_exported as usize))
+        .get_value()
+        .unwrap()
+        .to_string();
 
-        let mut init_value_counter = 0;
-        for i in node.child(3 + (is_exported as usize)).children() {
-            parse_ast(i, compiler, block);
-            let type_of_init_val = compiler.typestack.pop();
+    //parse the init value
+    parse_ast(node.child(3 + (is_exported as usize)), compiler, block);
+    let typ_of_init_value = compiler.typestack.pop().unwrap();
 
-            let mut should_objects_error = false;
+    let init_value_to_compare = match typ_of_init_value.clone() {
+        BuiltinTypes::Array { element_type, length } =>
+            BuiltinTypes::Array { element_type: element_type, length: None },
+        _ => panic!(),
+    };
 
-            let are_object_types_eq = util::compare_object_types(
-                &type_of_init_val.clone().unwrap(),
-                &data_type_marked
-            );
-
-            if are_object_types_eq.is_ok() {
-                should_objects_error = !are_object_types_eq.unwrap();
-            }
-            if
-                type_of_init_val.clone().unwrap() != data_type_marked.clone() &&
-                should_objects_error
-            {
-                errors::array_element_wrong_type(
-                    array_name.to_owned(),
-                    init_value_counter,
-                    data_type_marked.clone(),
-                    type_of_init_val.unwrap().clone(),
-                    &mut compiler.helper,
-                    node
-                );
-            }
-            init_value_counter += 1;
-        }
-        let var_id = compiler.helper.def_array(
-            array_name,
-            data_type_marked,
-            node
-                .child(3 + (is_exported as usize))
-                .children()
-                .len(),
-            block.scope.clone(),
-            is_exported
-        );
-        block.define_array(
-            node
-                .child(3 + (is_exported as usize))
-                .children()
-                .len(),
-            var_id
-        )
+    if init_value_to_compare.clone() != data_type_marked {
+        let erroring_node = node.child(0 + (is_exported as usize));
+        incorrect_variable_init_value(&data_type_marked, &typ_of_init_value, &mut compiler.helper, node);
+        return;
     }
+
+    let number_of_elements = match typ_of_init_value {
+        BuiltinTypes::Array { element_type: _, length } => { length }
+        _ => todo!(),
+    };
+    let var_id = compiler.helper.def_var(
+        varname.clone(),
+        data_type_marked.clone(),
+        block.scope.clone(),
+        is_exported
+    );
+    block.define_variable(var_id.unwrap());
 }

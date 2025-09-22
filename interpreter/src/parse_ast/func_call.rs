@@ -77,8 +77,8 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
                     errors::wrong_argument_type(
                         func_name.to_string(),
                         counter + 1,
-                        expected_arg.arg_type,
-                        found_arg.clone(),
+                        &expected_arg.arg_type,
+                        found_arg,
                         node,
                         &mut compiler.helper
                     );

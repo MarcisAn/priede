@@ -180,23 +180,23 @@ pub fn data_type_from_str(inp: &str) -> Option<BuiltinTypes> {
     });
 }
 
-fn format_object_fields(fields: Vec<ObjectFieldType>) -> String {
+fn format_object_fields(fields: &Vec<ObjectFieldType>) -> String {
     let mut formated = "{\n".to_string();
     for field in fields.iter().rev() {
-        formated += &format!("{}: {}\n",str_from_data_type(field.data_type.clone()), &field.name);
+        formated += &format!("{}: {}\n",str_from_data_type(&field.data_type.clone()), &field.name);
     }
     formated += "}";
     formated
 }
 
-pub fn str_from_data_type(inp: BuiltinTypes) -> String {
+pub fn str_from_data_type(inp: &BuiltinTypes) -> String {
     match inp {
         BuiltinTypes::Int => "skaitlis".into(),
         BuiltinTypes::Bool => "būls".into(),
         BuiltinTypes::String => "teksts".into(),
         BuiltinTypes::Object { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
         BuiltinTypes::Float => "decimālskaitlis".into(),
-        BuiltinTypes::Array { element_type } => format!("Masīvs ar `{}` elementiem", str_from_data_type(*element_type)),
+        BuiltinTypes::Array { element_type, length } => format!("Masīvs ar `{}` elementiem", str_from_data_type(element_type)),
     }
 }
 
@@ -270,7 +270,7 @@ pub fn stackvalue_to_json(stackval: &celsium::vm::StackValue) -> String {
             format!("{{type: float, value: {}}}", value.to_string()),
         celsium::vm::StackValue::String { value } =>
             format!("{{type: string, value: {}}}", value.to_string()),
-        celsium::vm::StackValue::ARRAY { value } => {
+        celsium::vm::StackValue::Array { value } => {
             let mut arrayres = String::from("{type: array, value: [");
             let mut counter = 0;
             for element in value {

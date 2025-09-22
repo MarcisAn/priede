@@ -92,6 +92,11 @@ pub fn interpret(path: String, print_ast: bool, print_bytecode: bool, static_onl
         println!("Programmā nav kompilācijas laika kļūdu.");
         return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
     }
+    if compiler.errors.len() > 0{
+        println!("{:?}", compiler.errors);
+        return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
+
+    }
     let mut celsium = CelsiumProgram::new(main_block, compiler.functions);
     let testing_stack_results = celsium.run_program();
     if testing_stack {

@@ -59,7 +59,7 @@ grammar priede
 
         indexable -> ID ('['! exp ']'!)+;
 
-        array -> '['! exp (';' exp)* ']'!;
+        array -> '['! exp (';'! exp)* ']'!;
 
         include_list -> '{'! ID+ '}'!;
 
@@ -137,6 +137,7 @@ grammar priede
                    |  func_call^
                    | BOOL^
                    | array^
+                   | indexable^
                    | object^; 
 
         exp_reizdal -> exp_atom^

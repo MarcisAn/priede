@@ -1,16 +1,12 @@
 use std::process::exit;
 
-use crate::Compiler;
-use celsium::{block::Block, bytecode::BINOP};
-use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
+use crate::{ errors, util::get_closest_node_location, Compiler };
+use celsium::{ block::Block, bytecode::BINOP };
+use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use super::parse_ast;
 
-pub fn math_ops(
-    node: AstNode,
-    title: &str,
-    compiler: &mut Compiler, block: &mut Block
-) {
+pub fn math_ops(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "plus" || title == "minus" || title == "reiz" || title == "dal" || title == "atlik" {
         calculate(
             match title {
@@ -27,25 +23,18 @@ pub fn math_ops(
         );
     }
 }
-fn calculate(
-    binop: BINOP,
-    node: AstNode,
-    compiler: &mut Compiler, block: &mut Block
-) {
+fn calculate(binop: BINOP, node: AstNode, compiler: &mut Compiler, block: &mut Block) {
     parse_ast(node.child(0), compiler, block);
     // println!("span {:?}", node.child(0).get_total_position_and_span());
     parse_ast(node.child(2), compiler, block);
     // println!("span {:?}", node.child(2).get_total_position_and_span());
+    let mut cloned_compiler = compiler.typestack.clone();
+    let side_2_type = &cloned_compiler.pop().unwrap();
+    let side_1_type = &cloned_compiler.pop().unwrap();
 
     let res = compiler.typestack.binop(binop.clone());
     if res.is_none() {
-        compiler.add_error(
-                crate::compiler::CompileErrorType::MathTypes,
-                node.child(1).get_position().unwrap().line,
-                node.child(1).get_position().unwrap().column,
-                node.child(1).get_span().unwrap().length
-            );
-        exit(0);
+        errors::binop_not_possible(side_1_type, side_2_type, &mut compiler.helper, node);
     }
     block.binop(binop);
 }
