@@ -1,4 +1,4 @@
-use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
+use hime_redist::{ ast::AstNode, result, symbols::SemanticElementTrait };
 
 use crate::{ hime, util };
 
@@ -6,6 +6,12 @@ use crate::{ hime, util };
 pub struct FormatingContext<'a> {
     indentation_level: usize,
     indentation: &'a str,
+}
+
+struct LineComment {
+    line: usize,
+    start_col: usize,
+    text: String,
 }
 
 pub fn format(code: String, print_ast: bool) -> String {
@@ -21,9 +27,34 @@ pub fn format(code: String, print_ast: bool) -> String {
         util::print_ast(root);
     }
 
-    let mut context = FormatingContext { indentation: "\t", indentation_level: 0 };
+    let mut line_comments: Vec<LineComment> = vec![];
 
-    return code_from_ast(root, &mut context).0.into();
+    for (i, line) in code.lines().into_iter().enumerate() {
+        let comment_start = line.find("//");
+        if comment_start.is_some() {
+            line_comments.push(LineComment {
+                line: i,
+                start_col: comment_start.unwrap(),
+                text: line.split_at(comment_start.unwrap()).1.to_string(),
+            });
+        }
+    }
+
+    let mut context = FormatingContext { indentation: "\t", indentation_level: 0 };
+    let formated_from_ast = code_from_ast(root, &mut context).0;
+    let mut result: String = "".to_string();
+    for (i, line) in formated_from_ast.lines().into_iter().enumerate(){
+        for comment in &line_comments{
+            if comment.line == i {
+                let needed_whitespace = comment.start_col - line.len();
+                result += &format!("{}{}{}\n", line," ".repeat(needed_whitespace), comment.text);
+                continue;
+            }
+        }
+        result += line;
+        result += "\n";
+    }
+    return result;
 }
 
 fn code_from_ast<'a>(node: AstNode, context: &mut FormatingContext) -> (String, usize) {
@@ -52,7 +83,8 @@ fn code_from_ast<'a>(node: AstNode, context: &mut FormatingContext) -> (String, 
             return (node.get_value().unwrap().to_string(), 0);
         }
     } else if title == "BOOL" {
-        return (node.get_value().unwrap().to_string(), 0);
+        let value = if node.child(0).get_symbol().name == "TRUE" { "PATIESS" } else { "NEPATIESS" };
+        return (value.to_string(), 0);
     } else if title == "STRING" {
         return (node.get_value().unwrap().to_string(), 0);
     } else if title == "return_st" {
