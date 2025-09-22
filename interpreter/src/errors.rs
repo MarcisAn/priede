@@ -1,6 +1,6 @@
 use std::process::exit;
 
-use celsium::{ compiletime_helper::CompileTimeHelper, BuiltinTypes };
+use celsium::{ compiletime_helper::{CompileTimeHelper, CompilerError}, BuiltinTypes };
 use colored::Colorize;
 use hime_redist::{ast::AstNode, text::TextPosition};
 
@@ -12,7 +12,7 @@ pub fn parser_error(unexpected: String, position: TextPosition, compilehelper: &
     } else {
         format!("Šajā vietā nepieļaujams simbols `{}`", unexpected)
     };
-    common_error(&error_title, position, compilehelper);
+    common_error(&error_title, Some(position), compilehelper);
 }
 pub fn incorect_init_value(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
     common_error(&msg, util::get_closest_node_location(node), compilehelper);
@@ -147,8 +147,9 @@ pub fn binop_not_possible(
     );
 }
 
-pub fn common_error(msg: &str, position: TextPosition, compilehelper: &mut CompileTimeHelper) {
+pub fn common_error(msg: &str, position: Option<TextPosition>, compilehelper: &mut CompileTimeHelper) {
     let path = &compilehelper.source_file_paths[compilehelper.current_file];
-    println!("{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā", "-----Kļūda: ".red(), msg.red(), path, position.line);
-    exit(0);
+    compilehelper.compile_time_errors.push(CompilerError{ message: msg.to_string(), line: if position.is_some() {Some(position.unwrap().line)} else {None}, file:path.to_string() });
+    println!("{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā", "-----Kļūda: ".red(), msg.red(), path, if (position.is_some()) {position.unwrap().line.to_string()} else {"".to_string()});
+    // exit(0);
 }

@@ -41,19 +41,5 @@ pub struct Compiler {
     pub helper: CompileTimeHelper,
     pub typestack: TypeStack,
     pub is_wasm: bool,
-    pub errors: Vec<CompileError>,
     pub functions: Vec<Function>,
-}
-
-impl Compiler {
-    pub fn add_error(
-        &mut self,
-        error: CompileErrorType,
-        position: TextPosition,
-        path: String
-    ) {
-        let line = position.line;
-        let column = position.column;
-        self.errors.push(CompileError { line, char_start: column, length: 1, error_type: error, path: path.to_string() });
-    }
 }

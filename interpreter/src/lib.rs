@@ -1,6 +1,7 @@
 use block::Block;
 use celsium::block;
 use celsium::compiletime_helper::CompileTimeHelper;
+use celsium::compiletime_helper::CompilerError;
 use celsium::module;
 use celsium::typestack;
 use celsium::typestack::TypeStack;
@@ -41,7 +42,7 @@ extern "C" {
 #[derive(Debug, Clone)]
 pub struct InterpreterReturns {
     pub testing_stack: Vec<celsium::vm::StackValue>,
-    pub errors: Vec<CompileError>,
+    pub errors: Vec<CompilerError>,
 }
 
 
@@ -73,7 +74,6 @@ pub fn interpret(path: String, print_ast: bool, print_bytecode: bool, static_onl
     let mut compiler = Compiler {
         helper: compile_helper,
         is_wasm: false,
-        errors: vec![],
         typestack: typestack,
         functions: vec![],
     };
@@ -89,12 +89,10 @@ pub fn interpret(path: String, print_ast: bool, print_bytecode: bool, static_onl
     }
 
     if static_only {
-        println!("Programmā nav kompilācijas laika kļūdu.");
-        return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
+        return InterpreterReturns { errors: compiler.helper.compile_time_errors, testing_stack: vec![] };
     }
-    if compiler.errors.len() > 0{
-        println!("{:?}", compiler.errors);
-        return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
+    if compiler.helper.compile_time_errors.len() > 0{
+        return InterpreterReturns { errors: compiler.helper.compile_time_errors, testing_stack: vec![] };
 
     }
     let mut celsium = CelsiumProgram::new(main_block, compiler.functions);
@@ -112,7 +110,7 @@ pub fn interpret(path: String, print_ast: bool, print_bytecode: bool, static_onl
         }
     }
     testing_stack_json += "]";
-    return InterpreterReturns { errors: compiler.errors, testing_stack: testing_stack_results };
+    return InterpreterReturns { errors: compiler.helper.compile_time_errors, testing_stack: testing_stack_results };
 }
 
 fn parse_block_ids(node: AstNode, block_ids: &mut Vec<usize>) {
@@ -137,7 +135,6 @@ pub fn run_wasm(code: String) -> String {
     let mut compiler = Compiler {
         helper: compile_helper,
         is_wasm: false,
-        errors: vec![],
         functions: vec![],
         typestack: typestack,
     };

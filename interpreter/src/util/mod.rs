@@ -144,19 +144,19 @@ pub fn get_closest_scope(
     )
 }
 
-pub fn get_closest_node_location(node: AstNode) -> TextPosition {
+pub fn get_closest_node_location(node: AstNode) -> Option<TextPosition> {
     if node.get_position().is_some() {
-        return node.get_position().unwrap();
+        return Some(node.get_position().unwrap())
     }
     for child in node.children() {
         return get_closest_node_location(child);
     }
-    panic!();
+    None
 }   
 
-pub fn get_furthest_node_location(node: AstNode) -> TextPosition {
+pub fn get_furthest_node_location(node: AstNode) -> Option<TextPosition> {
     if node.get_position().is_some() {
-        return node.get_position().unwrap();
+        return Some(node.get_position().unwrap());
     }
     for child in node.children().iter().rev() {
         return get_closest_node_location(child);

@@ -48,7 +48,12 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
 
             let erroring_node = node.child(0 + (is_exported as usize));
             if typ_of_init_value.clone() != data_type_marked || should_objects_error {
-                errors::incorrect_variable_init_value(&data_type_marked, &typ_of_init_value, &mut compiler.helper, node);
+                errors::incorrect_variable_init_value(
+                    &data_type_marked,
+                    &typ_of_init_value,
+                    &mut compiler.helper,
+                    node
+                );
             }
             let varname = node
                 .child(1 + (is_exported as usize))
@@ -102,18 +107,19 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
                         errors::incorect_init_value(
                             format!("Mainīgais `{}` jau ir definēts.", varname),
                             &mut typestact_copy,
-                            node.child(2 + (is_exported as usize))
+                            node.child(1 + (is_exported as usize))
                         );
                     }
                     if var_id.err().unwrap() == "already_imported" {
                         errors::incorect_init_value(
                             format!("Mainīgais `{}` jau ir iekļauts.", varname),
                             &mut typestact_copy,
-                            node.child(2 + (is_exported as usize))
+                            node.child(1 + (is_exported as usize))
                         );
                     }
+                } else {
+                    block.define_variable(var_id.unwrap());
                 }
-                block.define_variable(var_id.unwrap());
             }
         }
     }

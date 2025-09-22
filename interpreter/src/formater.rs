@@ -179,13 +179,13 @@ fn code_from_ast<'a>(node: AstNode, context: &mut FormatingContext) -> (String, 
         let mut block: String = "".into();
         let mut last_ending = 1;
         let mut is_first_child_node = true;
-        let start = util::get_closest_node_location(node.child(0)).line;
+        let start = util::get_closest_node_location(node.child(0)).unwrap().line;
         let mut end = 0;
         if node.parent().is_some() {
             context.indentation_level += 1;
         }
         for statement in node.children() {
-            let statement_start = util::get_closest_node_location(statement).line;
+            let statement_start = util::get_closest_node_location(statement).unwrap().line;
             let parsed_statement = code_from_ast(statement, context);
             end = statement_start + parsed_statement.1 - 1;
             let mut empty_lines = statement_start - last_ending;
