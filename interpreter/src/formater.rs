@@ -10,8 +10,9 @@ pub struct FormatingContext<'a> {
 
 struct LineComment {
     line: usize,
-    start_col: usize,
+    whitespace: usize,
     text: String,
+    
 }
 
 pub fn format(code: String, print_ast: bool) -> String {
@@ -31,11 +32,13 @@ pub fn format(code: String, print_ast: bool) -> String {
 
     for (i, line) in code.lines().into_iter().enumerate() {
         let comment_start = line.find("//");
+        let comment_text = line.split_at(comment_start.unwrap()).1.to_string();
         if comment_start.is_some() {
+            let whitespace = comment_start.unwrap() - line[..comment_start.unwrap()].trim_end().len();
             line_comments.push(LineComment {
                 line: i,
-                start_col: comment_start.unwrap(),
-                text: line.split_at(comment_start.unwrap()).1.to_string(),
+                whitespace: whitespace,
+                text: comment_text,
             });
         }
     }
@@ -46,8 +49,7 @@ pub fn format(code: String, print_ast: bool) -> String {
     for (i, line) in formated_from_ast.lines().into_iter().enumerate(){
         for comment in &line_comments{
             if comment.line == i {
-                let needed_whitespace = comment.start_col - line.len();
-                result += &format!("{}{}{}\n", line," ".repeat(needed_whitespace), comment.text);
+                result += &format!("{}{}{}\n", line," ".repeat(comment.whitespace), comment.text);
                 continue;
             }
         }

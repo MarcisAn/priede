@@ -46,7 +46,6 @@ const config = {
         disableSwitch: false,
         respectPrefersColorScheme: false,
       },
-      // TODO: Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
       navbar: {
         title: "PRIEDE",

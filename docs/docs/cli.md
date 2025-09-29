@@ -19,6 +19,7 @@ priede fails.pr
 - `--ast` izdrukā abstraktās sintakses koku.
 - `--bytecode` izdrukā programmas baitkodu.
 - `--format` neizpilda programmu, bet formatē kodu un to izdrukā. Iespējams papildus pievienot `--ast`.
+(formatētājs šobrīd ir agrīnā stadijā un neatbalsta vairāku rindiņu komentārus)
 - `--static-only` nepalaiž programmu, bet izdrukā kompilācijas laika kļūdas, ja tādas ir.
 - `--testing-stack` programmas beigās izdrukā testēšanas steku.
 
