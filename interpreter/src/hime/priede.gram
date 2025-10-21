@@ -58,6 +58,8 @@ grammar priede
         BOOL -> TRUE | FALSE;
 
         indexable -> ID ('['! exp ']'!)+;
+        ARRAY_TYPE -> ID ('['! exp ']'!)+;
+
 
         array -> '['! exp (';'! exp)* ']'!;
 
@@ -66,8 +68,8 @@ grammar priede
         include -> INCLUDE! include_list FROM STRING
         |INCLUDE! include_list FROM ID;
 
-        array_def -> ID ARRAY  ID ':'! exp
-                | ID ARRAY  ID ':'! exp;
+        array_def -> ARRAY_TYPE  ID ':'! exp
+                | ARRAY_TYPE  ID ':'! exp;
 
         var_def -> ID ID ':'! exp
                 | array_def^
@@ -104,8 +106,8 @@ grammar priede
                    | exp_t '!=' exp_t;
 
 
-        if -> 'ja'! exp '{'! block '}'!
-            | 'ja'! exp '{'! block '}'! CITADI '{'! block '}'!;
+        if -> 'ja'! exp '{'! block '}'
+            | 'ja'! exp '{'! block '}' CITADI '{'! block '}';
 
         s_loop -> 'atkārtot'! exp '{'! block '}'!;
 
@@ -132,7 +134,7 @@ grammar priede
 
         exp_atom -> NUMBER^
                    | STRING^
-                   | '('! exp^ ')'! 
+                   | '(' exp^ ')'
                    |  ID^
                    |  func_call^
                    | BOOL^

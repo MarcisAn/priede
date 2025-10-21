@@ -1,7 +1,7 @@
 use std::process::exit;
 
 use crate::{ errors, util::get_closest_node_location, Compiler };
-use celsium::{ block::Block, bytecode::BINOP };
+use celsium::{ block::{ Block, TextSpan }, bytecode::BINOP };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use super::parse_ast;
@@ -24,10 +24,13 @@ pub fn math_ops(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
     }
 }
 fn calculate(binop: BINOP, node: AstNode, compiler: &mut Compiler, block: &mut Block) {
-    parse_ast(node.child(0), compiler, block);
-    // println!("span {:?}", node.child(0).get_total_position_and_span());
-    parse_ast(node.child(2), compiler, block);
-    // println!("span {:?}", node.child(2).get_total_position_and_span());
+    if node.child(0).get_symbol().name == "(" {
+        parse_ast(node.child(1), compiler, block);
+        parse_ast(node.child(3), compiler, block);
+    } else {
+        parse_ast(node.child(0), compiler, block);
+        parse_ast(node.child(2), compiler, block);
+    }
     let mut cloned_compiler = compiler.typestack.clone();
     let side_2_type = &cloned_compiler.pop().unwrap();
     let side_1_type = &cloned_compiler.pop().unwrap();
@@ -36,5 +39,10 @@ fn calculate(binop: BINOP, node: AstNode, compiler: &mut Compiler, block: &mut B
     if res.is_none() {
         errors::binop_not_possible(side_1_type, side_2_type, &mut compiler.helper, node);
     }
-    block.binop(binop);
+    let node_span = node.get_total_position_and_span().unwrap();
+    block.binop(binop, TextSpan {
+        line: node_span.0.line,
+        col_start: node_span.0.column,
+        length: node_span.1.length,
+    });
 }

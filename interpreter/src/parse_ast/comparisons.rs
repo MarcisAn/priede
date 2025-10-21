@@ -1,6 +1,6 @@
 use std::process::exit;
 
-use celsium::{block::Block, bytecode::BINOP};
+use celsium::{ block::{ Block, TextSpan }, bytecode::BINOP };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{ errors, util::get_closest_node_location, Compiler };
@@ -9,12 +9,16 @@ use super::parse_ast;
 
 pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "comp_s" {
-        let sign = node.child(1).get_value().unwrap();
-        parse_ast(node.child(0), compiler, block);
-        parse_ast(node.child(2), compiler, block);
-        let mut cloned_compiler = compiler.typestack.clone();
-        let side_2_type = &cloned_compiler.pop().unwrap();
-        let side_1_type = &cloned_compiler.pop().unwrap();
+        let node_span = node.get_total_position_and_span().unwrap();
+        let sign = if node.child(0).get_symbol().name == "(" {
+            parse_ast(node.child(1), compiler, block);
+            parse_ast(node.child(3), compiler, block);
+            node.child(2).get_value().unwrap()
+        } else {
+            parse_ast(node.child(0), compiler, block);
+            parse_ast(node.child(2), compiler, block);
+            node.child(1).get_value().unwrap()
+        };
 
         let checked_type = match sign {
             "=" => compiler.typestack.binop(BINOP::Eq),
@@ -30,28 +34,91 @@ pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler, block: &
             // errors::binop_not_possible(side_1_type, side_2_type, &mut compiler.helper, node);
         }
         match sign {
-            "=" => block.binop(BINOP::Eq),
-            ">" => block.binop(BINOP::LargerThan),
-            ">=" => block.binop(BINOP::LargerOrEq),
-            "<" => block.binop(BINOP::LessThan),
-            "<=" => block.binop(BINOP::LessOrEq),
-            "!=" => block.binop(BINOP::NotEq),
+            "=" =>
+                block.binop(BINOP::Eq, TextSpan {
+                    line: node_span.0.line,
+                    col_start: node_span.1.index,
+                    length: node_span.1.length,
+                }),
+            ">" =>
+                block.binop(BINOP::LargerThan, TextSpan {
+                    line: node_span.0.line,
+                    col_start: node_span.1.index,
+                    length: node_span.1.length,
+                }),
+            ">=" =>
+                block.binop(BINOP::LargerOrEq, TextSpan {
+                    line: node_span.0.line,
+                    col_start: node_span.1.index,
+                    length: node_span.1.length,
+                }),
+            "<" =>
+                block.binop(BINOP::LessThan, TextSpan {
+                    line: node_span.0.line,
+                    col_start: node_span.1.index,
+                    length: node_span.1.length,
+                }),
+            "<=" =>
+                block.binop(BINOP::LessOrEq, TextSpan {
+                    line: node_span.0.line,
+                    col_start: node_span.1.index,
+                    length: node_span.1.length,
+                }),
+            "!=" =>
+                block.binop(BINOP::NotEq, TextSpan {
+                    line: node_span.0.line,
+                    col_start: node_span.1.index,
+                    length: node_span.1.length,
+                }),
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         }
     } else if title == "un" {
-        parse_ast(node.child(0), compiler, block);
-        parse_ast(node.child(1), compiler, block);
-        block.binop(BINOP::And);
+        let node_span = node.get_total_position_and_span().unwrap();
+
+        if node.child(0).get_symbol().name == "(" {
+            parse_ast(node.child(1), compiler, block);
+            parse_ast(node.child(3), compiler, block);
+        } else {
+            parse_ast(node.child(0), compiler, block);
+            parse_ast(node.child(1), compiler, block);
+        }
+        block.binop(BINOP::And, TextSpan {
+            line: node_span.0.line,
+            col_start: node_span.1.index,
+            length: node_span.1.length,
+        });
         compiler.typestack.binop(BINOP::And);
     } else if title == "vai" {
-        parse_ast(node.child(0), compiler, block);
-        parse_ast(node.child(1), compiler, block);
-        block.binop(BINOP::Or);
+        let node_span = node.get_total_position_and_span().unwrap();
+
+        if node.child(0).get_symbol().name == "(" {
+            parse_ast(node.child(1), compiler, block);
+            parse_ast(node.child(3), compiler, block);
+        } else {
+            parse_ast(node.child(0), compiler, block);
+            parse_ast(node.child(1), compiler, block);
+        }
+        block.binop(BINOP::Or, TextSpan {
+            line: node_span.0.line,
+            col_start: node_span.1.index,
+            length: node_span.1.length,
+        });
         compiler.typestack.binop(BINOP::Or);
     } else if title == "xvai" {
-        parse_ast(node.child(0), compiler, block);
-        parse_ast(node.child(1), compiler, block);
-        block.binop(BINOP::Xor);
+        let node_span = node.get_total_position_and_span().unwrap();
+
+        if node.child(0).get_symbol().name == "(" {
+            parse_ast(node.child(1), compiler, block);
+            parse_ast(node.child(3), compiler, block);
+        } else {
+            parse_ast(node.child(0), compiler, block);
+            parse_ast(node.child(1), compiler, block);
+        }
+        block.binop(BINOP::Xor, TextSpan {
+            line: node_span.0.line,
+            col_start: node_span.1.index,
+            length: node_span.1.length,
+        });
         compiler.typestack.binop(BINOP::Xor);
     }
 }

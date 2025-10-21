@@ -1,27 +1,35 @@
-use celsium::{ block::{self, Block}, compiletime_helper::CompileTimeHelper, Scope };
+use celsium::{ block::{ self, Block }, compiletime_helper::CompileTimeHelper, Scope };
 use hime_redist::ast::AstNode;
 
-use crate::Compiler;
+use crate::{ util::get_furthest_node_location, Compiler };
 
 use super::parse_ast;
 
-pub fn loops(
-    node: AstNode,
-    title: &str,
-    compiler: &mut Compiler, block: &mut Block
-) {
+pub fn loops(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "s_loop" {
-        let current_module_path = compiler.helper.source_file_paths[compiler.helper.current_file].clone();
+        let current_module_path =
+            compiler.helper.source_file_paths[compiler.helper.current_file].clone();
         parse_ast(node.child(0), compiler, block);
-        let mut loop_block = Block::new(Scope{ast_id: node.child(1).id(), module_path: current_module_path.clone()});
+        let mut loop_block = Block::new(Scope {
+            ast_id: node.child(1).id(),
+            module_path: current_module_path.clone(),
+        });
         parse_ast(node.child(1), compiler, &mut loop_block);
         block.define_simple_loop(loop_block);
     } else if title == "w_loop" {
-        let current_module_path = compiler.helper.source_file_paths[compiler.helper.current_file].clone();
-        let mut loop_block = Block::new(Scope{ast_id: node.child(1).id(), module_path: current_module_path.clone()});
-        let mut conditional_block = Block::new(Scope{ast_id: node.child(0).id(), module_path: current_module_path});
+        let current_module_path =
+            compiler.helper.source_file_paths[compiler.helper.current_file].clone();
+        let mut loop_block = Block::new(Scope {
+            ast_id: node.child(1).id(),
+            module_path: current_module_path.clone(),
+        });
+        let mut conditional_block = Block::new(Scope {
+            ast_id: node.child(0).id(),
+            module_path: current_module_path,
+        });
         parse_ast(node.child(0), compiler, &mut conditional_block);
         parse_ast(node.child(1), compiler, &mut loop_block);
-        block.define_while_loop(loop_block, conditional_block);
+        let end_of_block = get_furthest_node_location(node).unwrap();
+        block.define_while_loop(loop_block, conditional_block, end_of_block.line, end_of_block.column);
     }
 }
