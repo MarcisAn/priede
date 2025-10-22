@@ -12,6 +12,19 @@ export function wasm_print(a) {
 		return [{ typ: 'out', text: a }, ...currentData];
 	});
 }
+/**
+ * @param {any} a
+ * @param {any} line
+ * @param {any} col
+ * @param {any} span
+ */
+export function code_replace(a, line, col, span) {
+	console.log(a, line, col, span);
+	// @ts-ignore
+	// messages.update((currentData) => {
+	// 	return [{ typ: 'out', text: a }, ...currentData];
+	// });
+}
 export function clear() {
 	messages.set([]);
 }
