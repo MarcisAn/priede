@@ -50,7 +50,7 @@ Un tālāk varam definēt mainīgos, kur šis objekts, ar nosaukumu `cilvēks` i
 cilvēks cilvēks1 : {vārds: "Juris" uzvārds: "Veclēcējs" nodarbošanās: "Džeimss Bonds"}
 ```
 
-Varam ielikt objektus masīvos.
+Varam ielikt objektus sarakstos.
 
 `cilvēks saraksts cilvēki` ir tāds dulls vārdu savirpinājums, bet tas norāda uz sarakstu, kura elementi ir ar datu tipu `cilvēks` un saraksta mainīgā nosaukums ir `cilvēki`.
 

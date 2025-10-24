@@ -57,8 +57,8 @@ grammar priede
         FALSE -> 'NEPAT'! | 'NEPATIESS'!;
         BOOL -> TRUE | FALSE;
 
-        indexable -> ID ('['! exp ']'!)+;
-        ARRAY_TYPE -> ID ('['! exp ']'!)+;
+        indexable -> ID ('['! exp ']'!)
+                    | indexable ('['! exp ']'!);
 
 
         array -> '['! exp (';'! exp)* ']'!;
@@ -68,8 +68,10 @@ grammar priede
         include -> INCLUDE! include_list FROM STRING
         |INCLUDE! include_list FROM ID;
 
-        array_def -> ARRAY_TYPE  ID ':'! exp
-                | ARRAY_TYPE  ID ':'! exp;
+        array_type -> '['! ID ']'!
+                    | '['! array_type ']'!;
+
+        array_def ->  'saraksts'! array_type ID ':'! exp;
 
         var_def -> ID ID ':'! exp
                 | array_def^

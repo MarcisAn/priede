@@ -20,15 +20,16 @@ Tā vietā var izmantot sarakstus.
 ## Sarakstu definēšana
 
 ```priede
-tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+saraksts [teksts] augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 ```
 
-Sarakstu definējot, vispirms jānorāda datu tips vērtībām sarakstā, tad vārds `saraksts`, kam seko saraksta nosaukums. Tad, kvadrātiekavās saraksta sākotnējās vērtības atdalītas ar semikoliem.
+Sarakstu definējot, vispirms jānorāda vārds `saraksts`, tad datu tips vērtībām sarakstā, kam seko saraksta nosaukums. Tad, kvadrātiekavās saraksta sākotnējās vērtības atdalītas ar semikoliem.
 
 ## Datu nolasīšana no saraksta
 
 ```priede
-tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+saraksts [teksts] augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+
 
 izvade(augļi[0])
 ```
@@ -38,7 +39,8 @@ Lai nolasītu saraksta konkrētu pozīciju izmanto saraksta nosaukumu, kuram sek
 ## Elementa pārdefinēšana
 
 ```priede
-tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+saraksts [teksts] augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+
 
 izvade(augļi[0])
 
@@ -51,7 +53,7 @@ izvade(augļi[0])
 ## Saraksta garuma atrašana
 
 ```priede
-tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+saraksts [teksts] augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
 izvade(garums(augļi))
 ```
@@ -59,7 +61,8 @@ izvade(garums(augļi))
 ## Visu elementu izdruka
 
 ```priede
-tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+saraksts [teksts] augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+
 
 sk skaitītajs : 0
 

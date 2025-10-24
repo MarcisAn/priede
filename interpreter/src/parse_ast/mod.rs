@@ -1,6 +1,5 @@
 use std::process::exit;
 
-use array_def::array_def;
 use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes, ObjectFieldType };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
@@ -31,9 +30,10 @@ use id::id;
 mod include;
 use include::include;
 mod array_def;
+use array_def::array_def;
 
 use crate::{
-    errors::{self, variable_not_indexable},
+    errors::{ self, variable_not_indexable },
     util::{ self, get_closest_node_location, get_closest_scope, get_data_type_from_id },
     Compiler,
 };
@@ -83,35 +83,19 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
     }
 
     if title == "indexable" {
-        let var_name = node.child(0).get_value().unwrap();
-        let var_id = get_closest_scope(
-            var_name.to_string(),
-            block.scope.clone(),
-            &mut compiler.helper,
-            node
-        );
-
-        if var_id.is_none() {
-            errors::undefined_var(
-                format!(
-                    "Masīvs ar nosaukumu '{}' nav definēts šajā blokā.",
-                    node.get_value().unwrap()
-                ),
-                &mut compiler.helper,
-                node
-            );
-            exit(0);
-        } else {
-            parse_ast(node.child(1), compiler, block);
-            let type_of_index_attempt = compiler.helper.get_var_type(var_id.unwrap()).unwrap();
-            match type_of_index_attempt {
-                BuiltinTypes::Array { element_type: _, length: _ } => (),
-                _ => {
-                    variable_not_indexable(&type_of_index_attempt, &mut compiler.helper, node);
-                }
+        parse_ast(node.child(0), compiler, block);
+        let type_of_index_attempt = compiler.typestack.pop().unwrap();
+        let returnable_type = match type_of_index_attempt {
+            BuiltinTypes::Array { element_type, length: _ } => element_type,
+            _ => {
+                variable_not_indexable(&type_of_index_attempt, &mut compiler.helper, node);
+                exit(1);
             }
-            block.load_from_array(var_id.unwrap());
-        }
+        };
+        parse_ast(node.child(1), compiler, block);
+
+        compiler.helper.push(*returnable_type);
+        block.load_from_array();
     }
 
     id(node, &title, compiler, block);
@@ -121,6 +105,7 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
     func_def(node, &title, compiler, block);
     func_call(node, &title, compiler, block);
     array(node, &title, compiler, block);
+    array_def(node, &title, compiler, block);
     math_ops(node, &title, compiler, block);
     comparisons(node, &title, compiler, block);
     id_assign(node, &title, compiler, block);

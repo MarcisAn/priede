@@ -21,7 +21,7 @@ pub fn array(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Bl
         for element_type in element_types {
             if element_type != *first_elem {
                 common_error(
-                    "Visiem masīva elementiem jābūt ar vienādiem datu tipiem.",
+                    "Visiem saraksta elementiem jābūt ar vienādiem datu tipiem.",
                     get_closest_node_location(node),
                     &mut compiler.helper
                 );
@@ -32,38 +32,38 @@ pub fn array(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Bl
     }
 }
 
-fn get_array_element(node: AstNode, compiler: &mut Compiler, array_name: &str, block: &mut Block) {
-    let array = util::get_closest_scope(
-        array_name.to_string(),
-        block.scope.clone(),
-        &mut compiler.helper,
-        node
-    );
-    if array.is_none() {
-        errors::undefined_var(
-            format!("Saraksts `{}` nav definēts", array_name),
-            &mut compiler.helper,
-            node
-        );
-    }
-    let array_type_anf_len = compiler.helper.get_array_type_and_length(array.unwrap()).unwrap();
-    let array_length = array_type_anf_len.1;
-    let array_type = array_type_anf_len.0;
+// fn get_array_element(node: AstNode, compiler: &mut Compiler, array_name: &str, block: &mut Block) {
+//     let array = util::get_closest_scope(
+//         array_name.to_string(),
+//         block.scope.clone(),
+//         &mut compiler.helper,
+//         node
+//     );
+//     if array.is_none() {
+//         errors::undefined_var(
+//             format!("Saraksts `{}` nav definēts", array_name),
+//             &mut compiler.helper,
+//             node
+//         );
+//     }
+//     let array_type_anf_len = compiler.helper.get_array_type_and_length(array.unwrap()).unwrap();
+//     let array_length = array_type_anf_len.1;
+//     let array_type = array_type_anf_len.0;
 
-    //extra check if the index is number
-    if node.child(1).get_symbol().to_string() == "NUMBER" {
-        let index_number: usize = node.child(1).get_value().unwrap().parse().unwrap();
-        if array_length - 1 < index_number {
-            errors::array_element_index_too_high(
-                array_name.to_string(),
-                array_length,
-                index_number,
-                &mut compiler.helper,
-                node
-            );
-        }
-    }
+//     //extra check if the index is number
+//     if node.child(1).get_symbol().to_string() == "NUMBER" {
+//         let index_number: usize = node.child(1).get_value().unwrap().parse().unwrap();
+//         if array_length - 1 < index_number {
+//             errors::array_element_index_too_high(
+//                 array_name.to_string(),
+//                 array_length,
+//                 index_number,
+//                 &mut compiler.helper,
+//                 node
+//             );
+//         }
+//     }
 
-    compiler.typestack.push(array_type);
-    block.load_from_array(array.unwrap());
-}
+//     compiler.typestack.push(array_type);
+//     block.load_from_array(array.unwrap());
+// }

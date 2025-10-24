@@ -190,8 +190,6 @@ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 [[package]]
 name = "hime_redist"
 version = "4.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2e33211f713c3eaef78825bb7c94a2588250fc723a1b4e4b4fb755bb1b57ea15"
 dependencies = [
  "serde",
 ]

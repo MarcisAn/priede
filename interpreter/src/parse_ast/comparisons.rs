@@ -3,13 +3,14 @@ use std::process::exit;
 use celsium::{ block::{ Block, TextSpan }, bytecode::BINOP };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{ errors, util::get_closest_node_location, Compiler };
+use crate::{ errors, util::{ self, get_closest_node_location }, Compiler };
 
 use super::parse_ast;
 
 pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "comp_s" {
-        let node_span = node.get_total_position_and_span().unwrap();
+        let (line, col_start, length) = util::get_node_position_and_span_unicode(node);
+
         let sign = if node.child(0).get_symbol().name == "(" {
             parse_ast(node.child(1), compiler, block);
             parse_ast(node.child(3), compiler, block);
@@ -34,42 +35,12 @@ pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler, block: &
             // errors::binop_not_possible(side_1_type, side_2_type, &mut compiler.helper, node);
         }
         match sign {
-            "=" =>
-                block.binop(BINOP::Eq, TextSpan {
-                    line: node_span.0.line,
-                    col_start: node_span.1.index,
-                    length: node_span.1.length,
-                }),
-            ">" =>
-                block.binop(BINOP::LargerThan, TextSpan {
-                    line: node_span.0.line,
-                    col_start: node_span.1.index,
-                    length: node_span.1.length,
-                }),
-            ">=" =>
-                block.binop(BINOP::LargerOrEq, TextSpan {
-                    line: node_span.0.line,
-                    col_start: node_span.1.index,
-                    length: node_span.1.length,
-                }),
-            "<" =>
-                block.binop(BINOP::LessThan, TextSpan {
-                    line: node_span.0.line,
-                    col_start: node_span.1.index,
-                    length: node_span.1.length,
-                }),
-            "<=" =>
-                block.binop(BINOP::LessOrEq, TextSpan {
-                    line: node_span.0.line,
-                    col_start: node_span.1.index,
-                    length: node_span.1.length,
-                }),
-            "!=" =>
-                block.binop(BINOP::NotEq, TextSpan {
-                    line: node_span.0.line,
-                    col_start: node_span.1.index,
-                    length: node_span.1.length,
-                }),
+            "=" => block.binop(BINOP::Eq, TextSpan { line, col_start, length }),
+            ">" => block.binop(BINOP::LargerThan, TextSpan { line, col_start, length }),
+            ">=" => block.binop(BINOP::LargerOrEq, TextSpan { line, col_start, length }),
+            "<" => block.binop(BINOP::LessThan, TextSpan { line, col_start, length }),
+            "<=" => block.binop(BINOP::LessOrEq, TextSpan { line, col_start, length }),
+            "!=" => block.binop(BINOP::NotEq, TextSpan { line, col_start, length }),
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         }
     } else if title == "un" {

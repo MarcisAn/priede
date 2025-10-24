@@ -1,4 +1,9 @@
-use celsium::{ compiletime_helper::{ CompileTimeHelper, CompileTimeImport }, ObjectFieldType, Scope, BuiltinTypes };
+use celsium::{
+    compiletime_helper::{ CompileTimeHelper, CompileTimeImport },
+    BuiltinTypes,
+    ObjectFieldType,
+    Scope,
+};
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
 use crate::errors;
@@ -25,41 +30,63 @@ fn print<'a>(node: AstNode, crossings: Vec<bool>) {
 pub fn print_ast(node: AstNode) {
     print(node, Vec::<bool>::new());
 }
-pub fn _get_ast_formated(node: AstNode) -> String {
-    let input = String::new();
-    _format_ast(node, Vec::<bool>::new(), input)
+pub fn get_unicode_chars(node: AstNode) -> usize {
+    let ast = format_ast(node);
+    println!("ast: {}", ast);
+    let mut unicode_chars = 0;
+    for character in ast.chars() {
+        let is_unicode = character.is_ascii();
+        if !is_unicode {
+            unicode_chars += 1;
+        }
+    }
+    unicode_chars
 }
-pub fn _format_ast<'a>(node: AstNode, crossings: Vec<bool>, string: String) -> String {
-    let mut string_ = string.clone();
+pub fn get_node_position_and_span_unicode(node: AstNode) -> (usize, usize, usize) {
+    let init = node.get_total_position_and_span().unwrap();
+    let uniode_char_count = get_unicode_chars(node);
+    let span = init.1.length - uniode_char_count;
+    return (init.0.line, init.0.column, span);
+}
+fn format_tree(node: AstNode, crossings: Vec<bool>, output: &mut String) {
     let mut i = 0;
     if !crossings.is_empty() {
         while i < crossings.len() - 1 {
-            let old = string.to_owned();
-            string_ += &(old.clone() + &format!("{:}", "  "));
+            if crossings[i] {
+                output.push_str("|   ");
+            } else {
+                output.push_str("    ");
+            }
             i += 1;
         }
-        print!(" ");
+        output.push_str("+-> ");
     }
 
-    let old = string.to_owned();
-    string_ += &(old.clone() + &format!("{:}", node.to_string()));
-    i = 0;
+    output.push_str(&node.to_string());
+    output.push('\n');
+
     let children = node.children();
+    i = 0;
     while i < children.len() {
         let mut child_crossings = crossings.clone();
         child_crossings.push(i < children.len() - 1);
-        _format_ast(children.at(i), child_crossings, string.clone());
+        format_tree(children.at(i), child_crossings, output);
         i += 1;
     }
-    return string_;
 }
+
+pub fn format_ast(node: AstNode) -> String {
+    let mut output = String::new();
+    format_tree(node, Vec::new(), &mut output);
+    output
+}
+
 pub fn rem_first_and_last(value: &str) -> &str {
     let mut chars = value.chars();
     chars.next();
     chars.next_back();
     chars.as_str()
 }
-
 
 pub fn get_closest_scope(
     target_name: String,
@@ -146,13 +173,13 @@ pub fn get_closest_scope(
 
 pub fn get_closest_node_location(node: AstNode) -> Option<TextPosition> {
     if node.get_position().is_some() {
-        return Some(node.get_position().unwrap())
+        return Some(node.get_position().unwrap());
     }
     for child in node.children() {
         return get_closest_node_location(child);
     }
     None
-}   
+}
 
 pub fn get_furthest_node_location(node: AstNode) -> Option<TextPosition> {
     if node.get_position().is_some() {
@@ -162,8 +189,7 @@ pub fn get_furthest_node_location(node: AstNode) -> Option<TextPosition> {
         return get_closest_node_location(child);
     }
     panic!();
-}   
-
+}
 
 pub fn data_type_from_str(inp: &str) -> Option<BuiltinTypes> {
     return Some(match inp {
@@ -183,7 +209,7 @@ pub fn data_type_from_str(inp: &str) -> Option<BuiltinTypes> {
 fn format_object_fields(fields: &Vec<ObjectFieldType>) -> String {
     let mut formated = "{\n".to_string();
     for field in fields.iter().rev() {
-        formated += &format!("{}: {}\n",str_from_data_type(&field.data_type.clone()), &field.name);
+        formated += &format!("{}: {}\n", str_from_data_type(&field.data_type.clone()), &field.name);
     }
     formated += "}";
     formated
@@ -196,11 +222,16 @@ pub fn str_from_data_type(inp: &BuiltinTypes) -> String {
         BuiltinTypes::String => "teksts".into(),
         BuiltinTypes::Object { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
         BuiltinTypes::Float => "decimālskaitlis".into(),
-        BuiltinTypes::Array { element_type, length } => format!("Masīvs[`{}`]", str_from_data_type(element_type)),
+        BuiltinTypes::Array { element_type, length } =>
+            format!("Saraksts[`{}`]", str_from_data_type(element_type)),
     }
 }
 
-pub fn get_data_type_from_id(compilehelper: &mut CompileTimeHelper, data_type_str: &str, node: AstNode) -> BuiltinTypes {
+pub fn get_data_type_from_id(
+    compilehelper: &mut CompileTimeHelper,
+    data_type_str: &str,
+    node: AstNode
+) -> BuiltinTypes {
     let data_type_marked_option = data_type_from_str(data_type_str);
 
     let data_type_marked: BuiltinTypes;
@@ -225,37 +256,52 @@ pub fn compare_object_types(a: &BuiltinTypes, b: &BuiltinTypes) -> Result<bool, 
     let mut fields_b: Vec<ObjectFieldType>;
 
     match a {
-        BuiltinTypes::Object { fields } => fields_a = fields.to_vec(),
-        _ => return Err("not an object".into())
+        BuiltinTypes::Object { fields } => {
+            fields_a = fields.to_vec();
+        }
+        _ => {
+            return Err("not an object".into());
+        }
     }
 
     match b {
-        BuiltinTypes::Object { fields } => fields_b = fields.to_vec(),
-        _ => return Err("not an object".into())
+        BuiltinTypes::Object { fields } => {
+            fields_b = fields.to_vec();
+        }
+        _ => {
+            return Err("not an object".into());
+        }
     }
 
     fields_a.sort();
     fields_b.sort();
 
-    if fields_a == fields_b{
+    if fields_a == fields_b {
         return Ok(true);
-    }
-    else{
+    } else {
         Ok(false)
     }
 }
 
-pub fn is_type_object(a: &BuiltinTypes) -> bool{
+pub fn is_type_object(a: &BuiltinTypes) -> bool {
     match a {
-       BuiltinTypes::Object { fields: _ } => return true,
-       _ => return false 
+        BuiltinTypes::Object { fields: _ } => {
+            return true;
+        }
+        _ => {
+            return false;
+        }
     }
 }
 
 pub fn get_object_fields(a: &BuiltinTypes) -> Option<Vec<ObjectFieldType>> {
     match a {
-        BuiltinTypes::Object { fields } => return Some(fields.to_vec()),
-        _ => return None
+        BuiltinTypes::Object { fields } => {
+            return Some(fields.to_vec());
+        }
+        _ => {
+            return None;
+        }
     }
 }
 
@@ -276,14 +322,14 @@ pub fn stackvalue_to_json(stackval: &celsium::vm::StackValue) -> String {
             for element in value {
                 arrayres += &format!("{}", stackvalue_to_json(element));
                 counter += 1;
-                if counter != value.len(){
+                if counter != value.len() {
                     arrayres += ",";
                 }
             }
             arrayres += "]}";
             arrayres
         }
-        celsium::vm::StackValue::Object { value:_ } => todo!(),
+        celsium::vm::StackValue::Object { value: _ } => todo!(),
     });
     result
 }

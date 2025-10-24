@@ -13,7 +13,7 @@ fn unexpected_token_error(
     compilehelper: &mut CompileTimeHelper
 ) -> CompilerError {
     let mut err_str = err.to_string();
-    let expected_start = err.to_string().find("'").unwrap();
+    let expected_start = err.to_string().find("\"").unwrap();
     let mut split = err_str.split_off(expected_start);
     let _ = split.split_off(split.len() - 8);
     let unexpected_token = split.split_off(1);

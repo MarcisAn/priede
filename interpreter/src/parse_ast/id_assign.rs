@@ -11,7 +11,6 @@ use super::parse_ast;
 
 pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "id_assign" {
-
         let operator = node.child(1).get_value().unwrap();
         let var_name = node.child(0).get_value().unwrap();
         let var_id_test = get_closest_scope(
@@ -35,7 +34,6 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             var_id_test.unwrap()
         };
 
-
         let data_type = compiler.helper.get_var_type(var_id).unwrap();
         compiler.typestack.push(data_type.clone());
 
@@ -43,7 +41,8 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
 
         if operator == ":" {
             parse_ast(node.child(2), compiler, block);
-        } else {
+        }
+        {
             block.load_variable(var_id, block::TextSpan {
                 line: node_span.0.line,
                 col_start: node_span.0.column,
@@ -52,7 +51,9 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
 
             let data_type = compiler.helper.get_var_type(var_id).unwrap();
             compiler.typestack.push(data_type);
-            parse_ast(node.child(2), compiler, block);
+            if operator != "--" && operator != "++" {
+                parse_ast(node.child(2), compiler, block);
+            }
         }
         if operator == "+:" {
             compiler.typestack.binop(BINOP::Add);
@@ -83,6 +84,7 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
                 length: node_span.1.length,
             });
         } else if operator == "++" {
+            block.load_int(1);
             compiler.typestack.binop(BINOP::Add);
             block.binop(BINOP::Add, TextSpan {
                 line: node_span.0.line,

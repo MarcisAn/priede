@@ -1,1 +1,9 @@
-izvade(2+2)
+saraksts [teksts] augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+
+
+sk skaitītajs : 0
+
+kamēr skaitītajs < garums(augļi) {
+    izvade(augļi[skaitītajs])
+    skaitītajs++
+}
