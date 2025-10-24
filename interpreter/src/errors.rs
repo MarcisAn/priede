@@ -1,153 +1,181 @@
-use celsium::{ compiletime_helper::{CompileTimeHelper, CompilerError}, BuiltinTypes };
+use celsium::{ compiletime_helper::{ CompileTimeHelper, CompilerError }, BuiltinTypes };
 use colored::Colorize;
-use hime_redist::{ast::AstNode, text::TextPosition};
+use hime_redist::text::TextPosition;
 
-use crate::util::{self, get_closest_node_location, str_from_data_type};
+use crate::{ compiler::CompileTimeError, util::{ self, str_from_data_type } };
 
-pub fn parser_error(unexpected: String, position: TextPosition, compilehelper: &mut CompileTimeHelper) {
-    let error_title = if unexpected == "saraksts" {
-        format!("Šajā vietā nepieļaujams simbols `{}`\nIespējams aizmirsi norādīt saraksta elementu datu tipu", unexpected)
-    } else {
-        format!("Šajā vietā nepieļaujams simbols `{}`", unexpected)
-    };
-    common_error(&error_title, Some(position), compilehelper);
+#[derive(Clone, Debug)]
+pub enum CompileTimeErrorType {
+    VariableAlreadyDefined {
+        varname: String,
+    },
+    VariableAlreadyIncluded {
+        varname: String,
+    },
+    VariableNotDefined {
+        varname: String,
+    },
+    FunctionNotDefined {
+        funcname: String,
+    },
+    WrongFunctionArgumentCount {
+        function_name: String,
+        expected_count: usize,
+        found_count: usize,
+    },
+    WrongFunctionArgumentType {
+        function_name: String,
+        arg_index: usize,
+        expected_type: BuiltinTypes,
+        found_type: BuiltinTypes,
+    },
+    NonExistantDataType {
+        type_name: String,
+    },
+    WrongTypeOnArrayDefinition {
+        array_name: String,
+        element_index: usize,
+        expected_type: BuiltinTypes,
+        found_type: BuiltinTypes,
+    },
+    ArrayIndexedWithWrongType {
+        found_type: BuiltinTypes,
+    },
+    ValueNotIndexable {
+        found_type: BuiltinTypes,
+    },
+    WrongVariableInitValue {
+        varname: String,
+        expected_type: BuiltinTypes,
+        found_type: BuiltinTypes,
+    },
+    BinopNotPossible {
+        left: BuiltinTypes,
+        right: BuiltinTypes,
+    },
+    ParserError {
+        unexpected: String,
+    },
 }
-pub fn incorect_init_value(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
-    common_error(&msg, util::get_closest_node_location(node), compilehelper);
-}
-pub fn already_defined(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
-    common_error(&msg, util::get_closest_node_location(node), compilehelper);
-}
-pub fn undefined_var(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
-    common_error(&msg, util::get_closest_node_location(node), compilehelper);
-}
-pub fn undefined_func(msg: String, compilehelper: &mut CompileTimeHelper, node: AstNode) {
-    common_error(&msg, util::get_closest_node_location(node), compilehelper);
-}
-pub fn wrong_argument_count(func_name: String, expected: usize, found: usize, node: AstNode, compilehelper: &mut CompileTimeHelper){
-    let position = util::get_closest_node_location(node);
-    let msg = format!("Fukcija {} sagaida {} argumentu{}, bet šeit tiek padot{} {} argument{}", func_name, expected, if expected == 1 {""} else {"s"}, if expected == 1 {"s"} else {"i"}, found, if expected == 1 {"s"} else {"i"});
-    common_error(&msg, position, compilehelper);
-}
-pub fn wrong_argument_type(func_name: String, arg_index: usize ,expected: &BuiltinTypes, found: &BuiltinTypes, node: AstNode, compilehelper: &mut CompileTimeHelper){
-    let position = util::get_closest_node_location(node);
-    let msg = format!("Fukcija `{}` kā {}. argumentu sagaida datu tipu `{}`, bet atrasts arguments ar tipu `{}`.", func_name, arg_index, str_from_data_type(expected), str_from_data_type(found));
-    common_error(&msg, position, compilehelper);
-}
-pub fn notexistant_type(type_name: String, node: AstNode, compilehelper: &mut CompileTimeHelper){
-    let position = util::get_closest_node_location(node);
-    let msg = format!("Datu tips `{}` neeksistē. Ne kā vienkāršais tips, ne kā objekts.", type_name);
-    common_error(&msg, position, compilehelper);
-}
-pub fn array_element_wrong_type(
-    array_name: String,
-    element_index: usize,
-    expected_type: &BuiltinTypes,
-    found_type: &BuiltinTypes,
-    compilehelper: &mut CompileTimeHelper, node: AstNode
-) {
-    let expected = str_from_data_type(expected_type);
-    let found = util::str_from_data_type(found_type);
-    common_error(
-        &format!(
-            "Definējot sarakstu `{}`, tā sākotnējā vērtība pozīcijā {} ir ar nepareizu datu tipu. Nepieciešams {}, bet atrasts {}.",
+
+pub fn get_message(error: CompileTimeErrorType) -> String {
+    match error {
+        CompileTimeErrorType::ParserError { unexpected } =>
+            format!("Neparedzēts simbols {}", unexpected),
+        CompileTimeErrorType::VariableAlreadyDefined { varname } =>
+            format!("Mainīgais `{}` jau ir definēts.", varname),
+        CompileTimeErrorType::VariableAlreadyIncluded { varname } =>
+            format!("Mainīgais `{}` jau ir iekļauts.", varname),
+        CompileTimeErrorType::VariableNotDefined { varname } =>
+            format!("Mainīgais ar nosaukumu `{}` nav definēts šajā blokā.", varname),
+        CompileTimeErrorType::FunctionNotDefined { funcname } =>
+            format!("Funkcija ar nosaukumu `{}` nav definēts šajā blokā.", funcname),
+        CompileTimeErrorType::WrongFunctionArgumentCount {
+            function_name,
+            expected_count,
+            found_count,
+        } =>
+            format!(
+                "Funkcija {} sagaida {} argumentu{}, bet šeit tiek padot{} {} argument{}",
+                function_name,
+                expected_count,
+                if expected_count == 1 {
+                    ""
+                } else {
+                    "s"
+                },
+                if found_count == 1 {
+                    "s"
+                } else {
+                    "i"
+                },
+                found_count,
+                if found_count == 1 {
+                    "s"
+                } else {
+                    "i"
+                }
+            ),
+        CompileTimeErrorType::WrongFunctionArgumentType {
+            function_name,
+            arg_index,
+            expected_type,
+            found_type,
+        } =>
+            format!(
+                "Funkcija `{}` kā {}. argumentu sagaida datu tipu `{}`, bet atrasts arguments ar tipu `{}`.",
+                function_name,
+                arg_index,
+                str_from_data_type(&expected_type),
+                str_from_data_type(&found_type)
+            ),
+        CompileTimeErrorType::NonExistantDataType { type_name } =>
+            format!("Datu tips `{}` neeksistē. Ne kā vienkāršais tips, ne kā objekts.", type_name),
+        CompileTimeErrorType::WrongTypeOnArrayDefinition {
             array_name,
             element_index,
-            expected,
-            found
-        ),
-        util::get_closest_node_location(node),
-        compilehelper
-    );
+            expected_type,
+            found_type,
+        } =>
+            format!(
+                "Definējot sarakstu `{}`, tā sākotnējā vērtība pozīcijā `{}` ir ar nepareizu datu tipu. Nepieciešams `{}`, bet atrasts `{}`.",
+                array_name,
+                element_index,
+                str_from_data_type(&expected_type),
+                str_from_data_type(&found_type)
+            ),
+        CompileTimeErrorType::ArrayIndexedWithWrongType { found_type } =>
+            format!(
+                "Nav iespējams indeksēt sarakstu ar `{}` datu tipu.",
+                str_from_data_type(&found_type)
+            ),
+        CompileTimeErrorType::WrongVariableInitValue { varname, expected_type, found_type } =>
+            format!(
+                "Nepareizs datu tips mainīgā `{}` sākotnējai vērtībai. Sagaidītais tips ir: `{}`, bet tika mēģināts piešķirt vērtību ar tipu: `{}`",
+                varname,
+                util::str_from_data_type(&expected_type),
+                util::str_from_data_type(&found_type)
+            ),
+        CompileTimeErrorType::BinopNotPossible { left, right } =>
+            format!(
+                "Nav iespējams veikt šo darbību starp datu tipiem `{}` un `{}`",
+                util::str_from_data_type(&left),
+                util::str_from_data_type(&right)
+            ),
+        CompileTimeErrorType::ValueNotIndexable { found_type } =>
+            format!("Datu tips `{}` Nav indeksējams", util::str_from_data_type(&found_type)),
+    }
 }
-pub fn array_element_wrong_type_index(
-    array_name: String,
-    expected_type: &BuiltinTypes,
-    found_type: &BuiltinTypes,
-    compilehelper: &mut CompileTimeHelper, node: AstNode
+
+pub fn print_error(error: CompileTimeError, compilehelper: &mut CompileTimeHelper) {
+    common_error(&get_message(error.error_type), error.position, compilehelper);
+}
+
+pub fn common_error(
+    msg: &str,
+    position: Option<TextPosition>,
+    compilehelper: &mut CompileTimeHelper
 ) {
-    let expected = str_from_data_type(expected_type);
-    let found = util::str_from_data_type(found_type);
-    common_error(
-        &format!(
-            "Nepareizs indeksa datu tips, indeksējot sarakstu `{}`. Nepieciešams {}, bet atrasts {}.",
-            array_name,
-            expected,
-            found
-        ),
-        get_closest_node_location(node),
-        compilehelper
-    );
-}
-pub fn array_element_index_too_high(
-    array_name: String,
-    expected_index: usize,
-    found_index: usize,
-    compilehelper: &mut CompileTimeHelper, node: AstNode
-) {
-    common_error(
-        &format!(
-            "Sarakstu `{}` garums ir {}, bet ir mēģinājums to indeksēt ar indeksu {}.\nSarakstu indeksi tiek skaitīti no nulles.",
-            array_name,
-            expected_index,
-            found_index
-        ),
-        get_closest_node_location(node),
-        compilehelper
-    );
-}
-
-pub fn variable_not_indexable(
-    data_type: &BuiltinTypes,
-    compilehelper: &mut CompileTimeHelper, node: AstNode
-) {
-    common_error(
-        &format!(
-            "Datu tips `{}` Nav indeksējams",
-            util::str_from_data_type(data_type)
-        ),
-        get_closest_node_location(node),
-        compilehelper
-    );
-}
-
-pub fn incorrect_variable_init_value(
-    expected: &BuiltinTypes,
-    found: &BuiltinTypes,
-    compilehelper: &mut CompileTimeHelper, node: AstNode
-) {
-    common_error(
-        &format!(
-            "Nepareizs datu tips mainīgā sākotnējai vērtībai. Sagaidītais tips ir:\n`{}`\n\nbet tika mēģināts piešķirt vērtību ar tipu:\n`{}`",
-            util::str_from_data_type(expected),
-            util::str_from_data_type(found)
-
-        ),
-        get_closest_node_location(node),
-        compilehelper
-    );
-}
-
-pub fn binop_not_possible(
-    side1: &BuiltinTypes,
-    side2: &BuiltinTypes,
-    compilehelper: &mut CompileTimeHelper, node: AstNode
-) {
-    common_error(
-        &format!(
-            "Nav iespējams veikt šo darbību starp datu tipiem `{}` un `{}`",
-            util::str_from_data_type(side1),
-            util::str_from_data_type(side2)
-
-        ),
-        get_closest_node_location(node),
-        compilehelper
-    );
-}
-
-pub fn common_error(msg: &str, position: Option<TextPosition>, compilehelper: &mut CompileTimeHelper) {
     let path = &compilehelper.source_file_paths[compilehelper.current_file];
-    compilehelper.compile_time_errors.push(CompilerError{ message: msg.to_string(), line: if position.is_some() {Some(position.unwrap().line)} else {None}, file:path.to_string() });
-    println!("{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā", "-----Kļūda: ".red(), msg.red(), path, if position.is_some() {position.unwrap().line.to_string()} else {"".to_string()});
+    compilehelper.compile_time_errors.push(CompilerError {
+        message: msg.to_string(),
+        line: if position.is_some() {
+            Some(position.unwrap().line)
+        } else {
+            None
+        },
+        file: path.to_string(),
+    });
+    println!(
+        "{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā",
+        "-----Kļūda: ".red(),
+        msg.red(),
+        path,
+        if position.is_some() {
+            position.unwrap().line.to_string()
+        } else {
+            "".to_string()
+        }
+    );
     // exit(0);
 }

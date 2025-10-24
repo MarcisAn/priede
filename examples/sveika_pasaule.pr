@@ -1,11 +1,3 @@
-objekts cilvēks {
-    tk: nodarbošanās
-    tk: vārds
-    tk: uzvārds
-}
+sk a : "a"
 
-cilvēks aa : {
-    vārds: "a" uzvārds:"bb" nodarbošanās: "cc"
-}
-
-izvade(aa["vārds"])
+izvade(a)

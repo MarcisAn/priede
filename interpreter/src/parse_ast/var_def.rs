@@ -13,11 +13,8 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
             .child(0 + (is_exported as usize))
             .get_value()
             .unwrap();
-        let data_type_marked = util::get_data_type_from_id(
-            &mut compiler.helper,
-            data_type_str,
-            node
-        );
+
+        let data_type_marked = util::get_data_type_from_id(compiler, data_type_str, node);
 
         //parse the init value
         parse_ast(node.child(2 + (is_exported as usize)), compiler, block);
@@ -27,29 +24,28 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
 
         let is_object = util::is_type_object(&typ_of_init_value);
 
-        let are_types_correct = if is_object{
+        let are_types_correct = if is_object {
             util::compare_object_types(&typ_of_init_value, &data_type_marked).unwrap()
-        }
-        else{
-            typ_of_init_value.clone() != data_type_marked
+        } else {
+            typ_of_init_value.clone() == data_type_marked
         };
 
-        if !are_types_correct{
-            errors::incorrect_variable_init_value(
-                &data_type_marked,
-                &typ_of_init_value,
-                &mut compiler.helper,
-                node
-            );
-        }
         let varname = node
             .child(1 + (is_exported as usize))
             .get_value()
             .unwrap()
             .to_string();
 
-        let mut typestact_copy = compiler.helper.clone();
-
+        if !are_types_correct {
+            compiler.add_error(
+                errors::CompileTimeErrorType::WrongVariableInitValue {
+                    varname: varname.clone(),
+                    expected_type: data_type_marked.clone(),
+                    found_type: typ_of_init_value.clone(),
+                },
+                node
+            );
+        }
 
         if is_object {
             let fields = get_object_fields(&typ_of_init_value).unwrap();
@@ -60,21 +56,14 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
                 is_exported,
                 fields.clone()
             );
-            if object_id.is_err() {
-                if object_id.err().unwrap() == "already_defined" {
-                    errors::incorect_init_value(
-                        format!("Mainīgais `{}` jau ir definēts.", varname),
-                        &mut typestact_copy,
-                        node.child(2 + (is_exported as usize))
-                    );
-                }
-                if &object_id.err().unwrap().to_string() == "already_imported" {
-                    errors::incorect_init_value(
-                        format!("Mainīgais `{}` jau ir iekļauts.", varname),
-                        &mut typestact_copy,
-                        node.child(2 + (is_exported as usize))
-                    );
-                }
+
+            if object_id.is_none() {
+                compiler.add_error(
+                    errors::CompileTimeErrorType::VariableAlreadyDefined {
+                        varname: varname.clone(),
+                    },
+                    node
+                );
             }
             let mut field_names: Vec<String> = vec![];
             for field in fields.clone() {
@@ -88,21 +77,13 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
                 block.scope.clone(),
                 is_exported
             );
-            if var_id.is_err() {
-                if var_id.err().unwrap() == "already_defined" {
-                    errors::incorect_init_value(
-                        format!("Mainīgais `{}` jau ir definēts.", varname),
-                        &mut typestact_copy,
-                        node.child(1 + (is_exported as usize))
-                    );
-                }
-                if var_id.err().unwrap() == "already_imported" {
-                    errors::incorect_init_value(
-                        format!("Mainīgais `{}` jau ir iekļauts.", varname),
-                        &mut typestact_copy,
-                        node.child(1 + (is_exported as usize))
-                    );
-                }
+            if var_id.is_none() {
+                compiler.add_error(
+                    errors::CompileTimeErrorType::VariableAlreadyDefined {
+                        varname: varname.clone(),
+                    },
+                    node
+                );
             } else {
                 block.define_variable(var_id.unwrap());
             }

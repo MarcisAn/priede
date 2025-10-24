@@ -1,9 +1,9 @@
-use std::{any::Any, process::exit};
+use std::process::exit;
 
-use celsium::{ block::Block, BuiltinTypes, ObjectFieldType, Scope };
+use celsium::{ block::Block, BuiltinTypes, ObjectFieldType };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{ errors::variable_not_indexable, hime, util, Compiler };
+use crate::Compiler;
 
 use super::parse_ast;
 
@@ -39,7 +39,12 @@ pub fn index(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Bl
             }
             BuiltinTypes::Object { fields } => get_object_field_type(node, block, fields),
             _ => {
-                variable_not_indexable(&type_of_index_attempt, &mut compiler.helper, node);
+                compiler.add_error(
+                    crate::errors::CompileTimeErrorType::ValueNotIndexable {
+                        found_type: type_of_index_attempt,
+                    },
+                    node
+                );
                 exit(1);
             }
         };

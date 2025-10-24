@@ -6,7 +6,7 @@ use celsium::{
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
-use crate::errors;
+use crate::{ compiler::Compiler, errors };
 
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
     let mut i = 0;
@@ -227,7 +227,7 @@ pub fn str_from_data_type(inp: &BuiltinTypes) -> String {
 }
 
 pub fn get_data_type_from_id(
-    compilehelper: &mut CompileTimeHelper,
+    compiler: &mut Compiler,
     data_type_str: &str,
     node: AstNode
 ) -> BuiltinTypes {
@@ -235,13 +235,16 @@ pub fn get_data_type_from_id(
 
     let data_type_marked: BuiltinTypes;
     if data_type_marked_option.is_none() {
-        let struct_exists = compilehelper.struct_exists(data_type_str);
+        let struct_exists = compiler.helper.struct_exists(data_type_str);
         if struct_exists.is_some() {
             data_type_marked = BuiltinTypes::Object {
                 fields: struct_exists.unwrap().fields,
             };
         } else {
-            errors::notexistant_type(data_type_str.to_owned(), node, compilehelper);
+            compiler.add_error(
+                errors::CompileTimeErrorType::NonExistantDataType { type_name: data_type_str.to_string() },
+                node
+            );
             panic!(); //to get rid of undefined error. Not needed, because error exits.
         }
     } else {
@@ -274,7 +277,6 @@ pub fn compare_object_types(a: &BuiltinTypes, b: &BuiltinTypes) -> Result<bool, 
 
     fields_a.sort();
     fields_b.sort();
-
 
     if fields_a == fields_b {
         return Ok(true);

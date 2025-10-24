@@ -1,5 +1,3 @@
-use std::process::exit;
-
 use celsium::{ block::{self, Block}};
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
@@ -11,12 +9,12 @@ pub fn id(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block
         let var_id = get_closest_scope(var_name.to_string(), block.scope.clone(), &mut compiler.helper, node);
         let (line, col_start, length) = util::get_node_position_and_span_unicode(node);
         if var_id.is_none() {
-            errors::undefined_var(
-                format!("Mainīgais ar nosaukumu '{}' nav definēts šajā blokā.", node.get_value().unwrap()),
-                &mut compiler.helper,
+           compiler.add_error(
+                errors::CompileTimeErrorType::VariableNotDefined {
+                    varname: node.child(0).get_value().unwrap().to_string(),
+                },
                 node
             );
-            exit(1);
         } else {
             let data_type = compiler.helper.get_var_type(var_id.unwrap()).unwrap();
             compiler.typestack.push(data_type.clone());

@@ -18,7 +18,7 @@ pub fn include(
             let path = util::rem_first_and_last(include_source).to_string();
             let file_content = crate::read_file(path.clone());
             let parse_res = hime::priede::parse_string(file_content.clone());
-            crate::parser::parser_errors(parse_res.errors.clone().errors, &mut compiler.helper);
+            crate::parser::parser_errors(parse_res.errors.clone().errors, compiler);
 
             let ast = parse_res.get_ast();
             let root = ast.get_root();

@@ -1,6 +1,4 @@
-use std::process::exit;
-
-use celsium::{ block::Block, BuiltinTypes, ObjectFieldType };
+use celsium::{ block::Block, ObjectFieldType };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 mod id_assign;
@@ -35,7 +33,6 @@ mod index;
 use index::index;
 
 use crate::{
-    errors::variable_not_indexable,
     util::get_data_type_from_id,
     Compiler,
 };
@@ -57,7 +54,7 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
             fields.push(ObjectFieldType {
                 name: node.child(field_counter).child(1).get_value().unwrap().to_string(),
                 data_type: get_data_type_from_id(
-                    &mut compiler.helper,
+                    compiler,
                     node.child(field_counter).child(0).get_value().unwrap(),
                     node
                 ),

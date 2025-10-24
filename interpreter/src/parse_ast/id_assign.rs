@@ -1,7 +1,4 @@
-use celsium::{
-    block::{ self, Block, TextSpan },
-    bytecode::BINOP,
-};
+use celsium::{ block::{ self, Block, TextSpan }, bytecode::BINOP };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{ errors, util::get_closest_scope, Compiler };
@@ -20,12 +17,10 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         );
 
         let var_id: usize = if var_id_test.is_none() {
-            errors::undefined_var(
-                format!(
-                    "Mainīgais ar nosaukumu '{}' nav definēts šajā blokā.",
-                    node.child(0).get_value().unwrap()
-                ),
-                &mut compiler.helper,
+            compiler.add_error(
+                errors::CompileTimeErrorType::VariableNotDefined {
+                    varname: node.child(0).get_value().unwrap().to_string(),
+                },
                 node
             );
             return;

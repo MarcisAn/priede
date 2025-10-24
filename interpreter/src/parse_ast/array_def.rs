@@ -1,13 +1,13 @@
 use celsium::{ block::Block, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{ errors::incorrect_variable_init_value, util, Compiler };
+use crate::{ errors, util, Compiler };
 
 use super::parse_ast;
 
 fn get_nested_array_type(node: AstNode, compiler: &mut Compiler) -> BuiltinTypes {
     if node.get_symbol().name == "ID" {
         let data_type_str = node.get_value().unwrap();
-        return util::get_data_type_from_id(&mut compiler.helper, data_type_str, node);
+        return util::get_data_type_from_id(compiler, data_type_str, node);
     } else {
         return BuiltinTypes::Array {
             element_type: Box::new(get_nested_array_type(node.child(0), compiler)),
@@ -48,11 +48,13 @@ pub fn array_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         };
 
         if init_value_to_compare != marked_value_to_compare {
-            incorrect_variable_init_value(
-                &data_type_marked,
-                &typ_of_init_value,
-                &mut compiler.helper,
-                node
+            compiler.add_error(
+                errors::CompileTimeErrorType::WrongVariableInitValue {
+                    varname,
+                    expected_type: data_type_marked,
+                    found_type: typ_of_init_value,
+                },
+                node,
             );
             return;
         }

@@ -30,12 +30,12 @@ fn calculate(binop: BINOP, node: AstNode, compiler: &mut Compiler, block: &mut B
         parse_ast(node.child(2), compiler, block);
     }
     let mut cloned_compiler = compiler.typestack.clone();
-    let side_2_type = &cloned_compiler.pop().unwrap();
-    let side_1_type = &cloned_compiler.pop().unwrap();
+    let left_type = cloned_compiler.pop().unwrap();
+    let right_type = cloned_compiler.pop().unwrap();
 
     let res = compiler.typestack.binop(binop.clone());
     if res.is_none() {
-        errors::binop_not_possible(side_1_type, side_2_type, &mut compiler.helper, node);
+        compiler.add_error(errors::CompileTimeErrorType::BinopNotPossible { left: left_type, right: right_type }, node);
     }
     let (line, col_start, length) = util::get_node_position_and_span_unicode(node);
     block.binop(binop, TextSpan {

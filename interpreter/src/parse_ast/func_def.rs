@@ -45,7 +45,7 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
                 let data_type_str = arg.child(0).get_value().unwrap();
 
                 let data_type_marked = get_data_type_from_id(
-                    &mut compiler.helper,
+                    compiler,
                     data_type_str,
                     node
                 );
@@ -66,7 +66,7 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
             if is_returning {
                 return_type = Some(
                     util::get_data_type_from_id(
-                        &mut compiler.helper,
+                        compiler,
                         node
                             .child(2 + (is_exported as usize))
                             .child(0)
@@ -93,7 +93,7 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
             if is_returning {
                 return_type = Some(
                     util::get_data_type_from_id(
-                        &mut compiler.helper,
+                        compiler,
                         node
                             .child(1 + (is_exported as usize))
                             .child(0)
