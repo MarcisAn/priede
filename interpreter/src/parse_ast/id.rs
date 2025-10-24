@@ -16,7 +16,7 @@ pub fn id(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block
                 &mut compiler.helper,
                 node
             );
-            exit(0);
+            exit(1);
         } else {
             let data_type = compiler.helper.get_var_type(var_id.unwrap()).unwrap();
             compiler.typestack.push(data_type.clone());
