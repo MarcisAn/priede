@@ -10,9 +10,11 @@ path = "src/lib.rs"
 
 [dependencies]
 # hime_redist = "4.3.0"
-hime_redist = {path = "../../runtime-rust"}
+hime_redist = {git = "https://github.com/MarcisAn/hime-rust-runtime"}
 target-lexicon = "0.12.13"
-celsium = {path= "../../celsium/lib"}
+celsium = {git = "https://github.com/MarcisAn/celsium"}
+
+# celsium = {path= "../../celsium/lib"}
 wasm-bindgen = "0.2.92"
 console_error_panic_hook = "0.1.7"
 annotate-snippets = "0.11.2"
