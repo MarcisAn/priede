@@ -32,7 +32,6 @@ pub fn print_ast(node: AstNode) {
 }
 pub fn get_unicode_chars(node: AstNode) -> usize {
     let ast = format_ast(node);
-    println!("ast: {}", ast);
     let mut unicode_chars = 0;
     for character in ast.chars() {
         let is_unicode = character.is_ascii();
