@@ -1,7 +1,6 @@
 use celsium::{
     block::{ self, Block, TextSpan },
     bytecode::BINOP,
-    compiletime_helper::CompileTimeHelper,
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 

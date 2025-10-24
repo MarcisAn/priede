@@ -1,6 +1,4 @@
-use std::process::exit;
-
-use crate::{ errors, util::{ self, get_closest_node_location }, Compiler };
+use crate::{ errors, util, Compiler };
 use celsium::{ block::{ Block, TextSpan }, bytecode::BINOP };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 

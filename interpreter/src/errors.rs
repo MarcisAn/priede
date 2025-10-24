@@ -1,5 +1,3 @@
-use std::process::exit;
-
 use celsium::{ compiletime_helper::{CompileTimeHelper, CompilerError}, BuiltinTypes };
 use colored::Colorize;
 use hime_redist::{ast::AstNode, text::TextPosition};
@@ -150,6 +148,6 @@ pub fn binop_not_possible(
 pub fn common_error(msg: &str, position: Option<TextPosition>, compilehelper: &mut CompileTimeHelper) {
     let path = &compilehelper.source_file_paths[compilehelper.current_file];
     compilehelper.compile_time_errors.push(CompilerError{ message: msg.to_string(), line: if position.is_some() {Some(position.unwrap().line)} else {None}, file:path.to_string() });
-    println!("{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā", "-----Kļūda: ".red(), msg.red(), path, if (position.is_some()) {position.unwrap().line.to_string()} else {"".to_string()});
+    println!("{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā", "-----Kļūda: ".red(), msg.red(), path, if position.is_some() {position.unwrap().line.to_string()} else {"".to_string()});
     // exit(0);
 }

@@ -6,7 +6,6 @@ use hime_redist::errors::{
     ParseErrorUnexpectedToken,
 };
 
-use crate::{ compiler::CompileError, errors, util::rem_first_and_last };
 
 fn unexpected_token_error(
     err: ParseErrorUnexpectedToken,

@@ -1,4 +1,4 @@
-use celsium::{ block::{ self, Block }, compiletime_helper::CompileTimeHelper, Scope };
+use celsium::{ block::Block, Scope };
 use hime_redist::ast::AstNode;
 
 use crate::{util::get_furthest_node_location, Compiler};

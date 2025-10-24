@@ -2,20 +2,13 @@ use block::Block;
 use celsium::block;
 use celsium::compiletime_helper::CompileTimeHelper;
 use celsium::compiletime_helper::CompilerError;
-use celsium::module;
-use celsium::typestack;
 use celsium::typestack::TypeStack;
 use celsium::CelsiumProgram;
 use celsium::Scope;
-use compiler::CompileError;
 use hime_redist::ast::AstNode;
 use hime_redist::symbols::SemanticElementTrait;
-use hime_redist::utils;
-use util::get_closest_node_location;
-use util::get_furthest_node_location;
 use util::stackvalue_to_json;
 use std::panic;
-use std::process::exit;
 use std::{ fs, process };
 use wasm_bindgen::prelude::*;
 pub mod errors;
@@ -130,7 +123,7 @@ pub fn run_wasm(code: String) -> String {
 
     let mut main_block = Block::new(Scope { ast_id: root.id(), module_path: "".to_string() });
     let compile_helper = CompileTimeHelper::new(code.clone(), "".to_string());
-    let mut typestack: TypeStack = TypeStack::new();
+    let typestack: TypeStack = TypeStack::new();
 
     let mut compiler = Compiler {
         helper: compile_helper,

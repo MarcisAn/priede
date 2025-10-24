@@ -1,7 +1,7 @@
 use std::process::exit;
 
-use celsium::{ block::{self, Block}, compiletime_helper::CompileTimeHelper};
-use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, utils };
+use celsium::{ block::{self, Block}};
+use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{errors, util::get_closest_scope, util, Compiler};
 

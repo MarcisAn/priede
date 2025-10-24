@@ -1,10 +1,6 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
+use celsium::{ block::Block, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{
-    errors::{ self, incorrect_variable_init_value },
-    util::{ self, get_closest_node_location, get_data_type_from_id },
-    Compiler,
-};
+use crate::{ errors::incorrect_variable_init_value, util, Compiler };
 
 use super::parse_ast;
 
@@ -14,9 +10,7 @@ fn get_nested_array_type(node: AstNode, compiler: &mut Compiler) -> BuiltinTypes
         return util::get_data_type_from_id(&mut compiler.helper, data_type_str, node);
     } else {
         return BuiltinTypes::Array {
-            element_type: Box::new(
-                get_nested_array_type(node.child(0), compiler)
-            ),
+            element_type: Box::new(get_nested_array_type(node.child(0), compiler)),
             length: None,
         };
     }
@@ -42,21 +36,18 @@ pub fn array_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         let typ_of_init_value = compiler.typestack.pop().unwrap();
 
         let init_value_to_compare = match typ_of_init_value.clone() {
-            BuiltinTypes::Array { element_type, length } =>
+            BuiltinTypes::Array { element_type, length: _ } =>
                 BuiltinTypes::Array { element_type: element_type, length: None },
             _ => panic!(),
         };
 
         let marked_value_to_compare = match data_type_marked.clone() {
-            BuiltinTypes::Array { element_type, length } =>
+            BuiltinTypes::Array { element_type, length: _ } =>
                 BuiltinTypes::Array { element_type: element_type, length: None },
             _ => panic!(),
         };
 
-
-
         if init_value_to_compare != marked_value_to_compare {
-            let erroring_node = node.child(0 + (is_exported as usize));
             incorrect_variable_init_value(
                 &data_type_marked,
                 &typ_of_init_value,

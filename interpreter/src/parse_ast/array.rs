@@ -1,9 +1,9 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes };
-use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
+use celsium::{ block::Block, BuiltinTypes };
+use hime_redist::ast::AstNode;
 
 use crate::{
-    errors::{ self, array_element_wrong_type, common_error },
-    util::{ self, get_closest_node_location },
+    errors::common_error,
+    util::get_closest_node_location,
     Compiler,
 };
 

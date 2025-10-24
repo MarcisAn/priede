@@ -1,4 +1,4 @@
-use hime_redist::{ ast::AstNode, result, symbols::SemanticElementTrait };
+use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{ hime, util };
 

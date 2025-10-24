@@ -1,6 +1,6 @@
 use std::process::exit;
 
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, BuiltinTypes, ObjectFieldType };
+use celsium::{ block::Block, BuiltinTypes, ObjectFieldType };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 mod id_assign;
@@ -33,8 +33,8 @@ mod array_def;
 use array_def::array_def;
 
 use crate::{
-    errors::{ self, variable_not_indexable },
-    util::{ self, get_closest_node_location, get_closest_scope, get_data_type_from_id },
+    errors::variable_not_indexable,
+    util::get_data_type_from_id,
     Compiler,
 };
 

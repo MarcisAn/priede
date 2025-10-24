@@ -1,4 +1,4 @@
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, Scope };
+use celsium::{ block::Block, Scope };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{ hime, util, Compiler };
@@ -28,7 +28,6 @@ pub fn include(
                 ast_id: root.id(),
                 module_path: path.clone(),
             });
-            let mut main_block = block.clone();
             parse_ast(root, compiler, &mut module_main_block);
             compiler.helper.switch_to_prev_module();
 

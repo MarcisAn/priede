@@ -1,8 +1,6 @@
-use std::process::exit;
-
-use celsium::{ block::{ self, Block }, compiletime_helper::CompileTimeHelper };
+use celsium::{ block::Block };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
-use crate::{ errors, util::{ self, get_closest_node_location, get_object_fields }, Compiler };
+use crate::{ errors, util::{ self, get_object_fields }, Compiler };
 
 use super::parse_ast;
 
@@ -36,7 +34,6 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
             should_objects_error = !are_object_types_eq.unwrap();
         }
 
-        let erroring_node = node.child(0 + (is_exported as usize));
         if typ_of_init_value.clone() != data_type_marked || should_objects_error {
             errors::incorrect_variable_init_value(
                 &data_type_marked,

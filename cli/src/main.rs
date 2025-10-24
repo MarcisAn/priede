@@ -1,5 +1,3 @@
-use std::{ fs, io };
-use std::io::prelude::*;
 use clap::Parser;
 
 /// Simple program to greet a person
