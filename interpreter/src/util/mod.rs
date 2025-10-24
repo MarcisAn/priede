@@ -219,7 +219,7 @@ pub fn str_from_data_type(inp: &BuiltinTypes) -> String {
         BuiltinTypes::Int => "skaitlis".into(),
         BuiltinTypes::Bool => "būls".into(),
         BuiltinTypes::String => "teksts".into(),
-        BuiltinTypes::Object { fields } => format!("\n\nobjekts\n{}", format_object_fields(fields)),
+        BuiltinTypes::Object { fields } => format!("objekts\n{}", format_object_fields(fields)),
         BuiltinTypes::Float => "decimālskaitlis".into(),
         BuiltinTypes::Array { element_type, length: _ } =>
             format!("Saraksts[`{}`]", str_from_data_type(element_type)),
@@ -274,6 +274,7 @@ pub fn compare_object_types(a: &BuiltinTypes, b: &BuiltinTypes) -> Result<bool, 
 
     fields_a.sort();
     fields_b.sort();
+
 
     if fields_a == fields_b {
         return Ok(true);

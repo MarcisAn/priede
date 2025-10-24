@@ -22,19 +22,19 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
         //parse the init value
         parse_ast(node.child(2 + (is_exported as usize)), compiler, block);
 
-        //get they type of the init value
+        //get the type of the init value
         let typ_of_init_value = compiler.typestack.pop().unwrap();
-        //println!("type comparison real {:?} marked {:?}", typ_of_init_value, data_type_marked);
 
-        let mut should_objects_error = false;
+        let is_object = util::is_type_object(&typ_of_init_value);
 
-        let are_object_types_eq = util::compare_object_types(&typ_of_init_value, &data_type_marked);
-
-        if are_object_types_eq.is_ok() {
-            should_objects_error = !are_object_types_eq.unwrap();
+        let are_types_correct = if is_object{
+            util::compare_object_types(&typ_of_init_value, &data_type_marked).unwrap()
         }
+        else{
+            typ_of_init_value.clone() != data_type_marked
+        };
 
-        if typ_of_init_value.clone() != data_type_marked || should_objects_error {
+        if !are_types_correct{
             errors::incorrect_variable_init_value(
                 &data_type_marked,
                 &typ_of_init_value,
@@ -50,7 +50,6 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
 
         let mut typestact_copy = compiler.helper.clone();
 
-        let is_object = util::is_type_object(&typ_of_init_value);
 
         if is_object {
             let fields = get_object_fields(&typ_of_init_value).unwrap();

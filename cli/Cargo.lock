@@ -84,8 +84,7 @@ checksum = "79296716171880943b8470b5f8d03aa55eb2e645a4874bdbb28adb49162e012c"
 
 [[package]]
 name = "celsium"
-version = "0.1.6"
-source = "git+https://github.com/MarcisAn/celsium#3bbce9fcaa636625bbebf0efd4d138557c2ec988"
+version = "0.1.7"
 dependencies = [
  "getrandom",
  "js-sys",

@@ -118,7 +118,7 @@ pub fn incorrect_variable_init_value(
 ) {
     common_error(
         &format!(
-            "Nepareizs datu tips mainīgā sākotnējai vērtībai. Sagaidītais tips ir: `{}`, bet tika mēģināts piešķirt vērtību ar tipu: `{}`",
+            "Nepareizs datu tips mainīgā sākotnējai vērtībai. Sagaidītais tips ir:\n`{}`\n\nbet tika mēģināts piešķirt vērtību ar tipu:\n`{}`",
             util::str_from_data_type(expected),
             util::str_from_data_type(found)
 

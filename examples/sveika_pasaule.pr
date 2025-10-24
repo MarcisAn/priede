@@ -1,1 +1,11 @@
-izvade("sveika pasaule")
+objekts cilvēks {
+    tk: nodarbošanās
+    tk: vārds
+    tk: uzvārds
+}
+
+cilvēks aa : {
+    vārds: "a" uzvārds:"bb" nodarbošanās: "cc"
+}
+
+izvade(aa["vārds"])

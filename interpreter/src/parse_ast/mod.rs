@@ -31,6 +31,8 @@ mod include;
 use include::include;
 mod array_def;
 use array_def::array_def;
+mod index;
+use index::index;
 
 use crate::{
     errors::variable_not_indexable,
@@ -82,22 +84,8 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
         block.create_object(field_names);
     }
 
-    if title == "indexable" {
-        parse_ast(node.child(0), compiler, block);
-        let type_of_index_attempt = compiler.typestack.pop().unwrap();
-        let returnable_type = match type_of_index_attempt {
-            BuiltinTypes::Array { element_type, length: _ } => element_type,
-            _ => {
-                variable_not_indexable(&type_of_index_attempt, &mut compiler.helper, node);
-                exit(1);
-            }
-        };
-        parse_ast(node.child(1), compiler, block);
-
-        compiler.helper.push(*returnable_type);
-        block.load_from_array();
-    }
-
+    
+    index(node, &title, compiler, block);
     id(node, &title, compiler, block);
     return_st(node, &title, compiler, block);
     if_stat(node, &title, compiler, block);

@@ -32,8 +32,8 @@ pub fn format(code: String, print_ast: bool) -> String {
 
     for (i, line) in code.lines().into_iter().enumerate() {
         let comment_start = line.find("//");
-        let comment_text = line.split_at(comment_start.unwrap()).1.to_string();
         if comment_start.is_some() {
+            let comment_text = line.split_at(comment_start.unwrap()).1.to_string();
             let whitespace = comment_start.unwrap() - line[..comment_start.unwrap()].trim_end().len();
             line_comments.push(LineComment {
                 line: i,
