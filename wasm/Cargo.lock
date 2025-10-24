@@ -135,8 +135,6 @@ dependencies = [
 [[package]]
 name = "hime_redist"
 version = "4.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2e33211f713c3eaef78825bb7c94a2588250fc723a1b4e4b4fb755bb1b57ea15"
 dependencies = [
  "serde",
 ]
