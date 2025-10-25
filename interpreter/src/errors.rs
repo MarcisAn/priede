@@ -1,4 +1,4 @@
-use celsium::{ compiletime_helper::{ CompileTimeHelper, CompilerError }, BuiltinTypes };
+use celsium::{ compiletime_helper::{ CompileTimeHelper }, BuiltinTypes };
 use colored::Colorize;
 use hime_redist::text::TextPosition;
 
@@ -157,15 +157,6 @@ pub fn common_error(
     compilehelper: &mut CompileTimeHelper
 ) {
     let path = &compilehelper.source_file_paths[compilehelper.current_file];
-    compilehelper.compile_time_errors.push(CompilerError {
-        message: msg.to_string(),
-        line: if position.is_some() {
-            Some(position.unwrap().line)
-        } else {
-            None
-        },
-        file: path.to_string(),
-    });
     println!(
         "{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā",
         "-----Kļūda: ".red(),

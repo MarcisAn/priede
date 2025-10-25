@@ -1,7 +1,6 @@
 use block::Block;
 use celsium::block;
 use celsium::compiletime_helper::CompileTimeHelper;
-use celsium::compiletime_helper::CompilerError;
 use celsium::typestack::TypeStack;
 use celsium::CelsiumProgram;
 use celsium::Scope;

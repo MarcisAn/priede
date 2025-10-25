@@ -1,3 +1,1 @@
-sk a : "a"
-
-izvade(a)
+izvade("sveika pasaule!")

@@ -26,7 +26,7 @@ impl Compiler {
     pub fn add_error(&mut self, error_type: CompileTimeErrorType, node: AstNode) {
         let path = &self.helper.source_file_paths[self.helper.current_file];
         let position = util::get_closest_node_location(node);
-        print_error(CompileTimeError { error_type, file_name: path.to_string(), position }, &mut self.helper); ;
+        print_error(CompileTimeError { error_type, file_name: path.to_string(), position }, &mut self.helper);
         exit(1);
     }
     pub fn add_parser_error(
