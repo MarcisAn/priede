@@ -1,0 +1,18 @@
+objekts koks {
+    tk suga
+    sk augstums
+    sk diametrs
+}
+
+sk a : 4
+
+koks koks1 : {suga: "priede" augstums: a diametrs: 4}
+
+izvade(koks1)
+
+
+saraksts [koks] koki : [koks1; {suga: "egle" augstums: 6 diametrs: 5}]
+
+
+izvade(koki)
+izvade(koki[0])

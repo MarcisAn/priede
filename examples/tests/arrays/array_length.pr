@@ -1,3 +1,3 @@
-tk saraksts augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
+saraksts [teksts] augļi : ["ābols";"bumbieris";"banāns";"apelsīns"]
 
 izvade(garums(augļi))
