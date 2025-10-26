@@ -71,3 +71,14 @@ kamēr skaitītajs < garums(augļi) {
     skaitītajs++
 }
 ```
+
+## Vairāku dimensiju masīvi
+
+Masīvu, kura elementi ir citi masīvi var definēt ar iekļaujošām kvadrātiekavām.
+
+```priede
+saraksts [[sk]] a : [[2;3;4];[2;3;4]]
+
+izvade(a)
+```
+

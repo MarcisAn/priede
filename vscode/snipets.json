@@ -57,6 +57,6 @@
     "scope": "priede",
     "description": "Saraksta izveide",
     "prefix": ["saraksts"],
-    "body": "${2:datutips} saraksts ${1:nosaukums} : [$0]"
+    "body": "saraksts [${2:datutips}] ${1:nosaukums} : [$0]"
   }
 }

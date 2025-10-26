@@ -311,15 +311,15 @@ pub fn stackvalue_to_json(stackval: &celsium::vm::StackValue) -> String {
     let mut result = String::new();
     result += &(match stackval {
         celsium::vm::StackValue::Bool { value } =>
-            format!("{{type: bool, value: {}}}", value.to_string()),
+            format!("{{\"type\": \"bool\", \"value\": \"{}\"}}", value.to_string()),
         celsium::vm::StackValue::Int { value } =>
-            format!("{{type: int, value: {}}}", value.to_string()),
+            format!("{{\"type\": \"int\", \"value\": {}}}", value.to_string()),
         celsium::vm::StackValue::Float { value } =>
-            format!("{{type: float, value: {}}}", value.to_string()),
+            format!("{{\"type\": \"float\", \"value\": \"{}\"}}", value.to_string()),
         celsium::vm::StackValue::String { value } =>
-            format!("{{type: string, value: {}}}", value.to_string()),
+            format!("{{\"type\": \"string\", \"value\": \"{}\"}}", value.to_string()),
         celsium::vm::StackValue::Array { value } => {
-            let mut arrayres = String::from("{type: array, value: [");
+            let mut arrayres = String::from("{\"type\": \"array\", \"value\": [");
             let mut counter = 0;
             for element in value {
                 arrayres += &format!("{}", stackvalue_to_json(element));
@@ -331,7 +331,58 @@ pub fn stackvalue_to_json(stackval: &celsium::vm::StackValue) -> String {
             arrayres += "]}";
             arrayres
         }
-        celsium::vm::StackValue::Object { value: _ } => todo!(),
+        celsium::vm::StackValue::Object { value } => {
+            let mut objectres = String::from("{\"type\": \"object\", \"value\": [");
+            let mut counter = 0;
+            for field in value {
+                objectres += &format!("{{\"{}\": {}}}", field.name, stackvalue_to_json(&field.value));
+                counter += 1;
+                if counter != value.len() {
+                    objectres += ",";
+                }
+            }
+            objectres += "]}";
+            objectres
+
+        },
     });
     result
+}
+
+fn create_type_signature_for_comparisons(a: &BuiltinTypes, output: &mut String)  {
+    match a {
+        BuiltinTypes::Int => {
+            output.push_str("int");
+        }
+        BuiltinTypes::Bool => {
+            output.push_str("bool");
+        }
+        BuiltinTypes::String => {
+            output.push_str("string");
+        }
+        BuiltinTypes::Float => {
+            output.push_str("float");
+        }
+        BuiltinTypes::Object { fields } => {
+            let mut field_sorted = fields.clone();
+            field_sorted.sort();
+            for field in field_sorted {
+                output.push_str(&format!("field {}", field.name));
+                create_type_signature_for_comparisons(&field.data_type, output);
+            }
+        },
+        BuiltinTypes::Array { element_type, length } => {
+            output.push_str("array");
+            create_type_signature_for_comparisons(&element_type, output);
+        },
+    }
+}
+
+pub fn are_types_equal(a: &BuiltinTypes, b: &BuiltinTypes) -> bool {
+    let mut a_signature = String::new();
+    let mut b_signature = String::new();
+    create_type_signature_for_comparisons(a, &mut a_signature);
+    create_type_signature_for_comparisons(b, &mut b_signature);
+    return a_signature == b_signature;
+
 }

@@ -35,19 +35,9 @@ pub fn array_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         parse_ast(node.child(2 + (is_exported as usize)), compiler, block);
         let typ_of_init_value = compiler.typestack.pop().unwrap();
 
-        let init_value_to_compare = match typ_of_init_value.clone() {
-            BuiltinTypes::Array { element_type, length: _ } =>
-                BuiltinTypes::Array { element_type: element_type, length: None },
-            _ => panic!(),
-        };
+        let are_types_correct = util::are_types_equal(&data_type_marked, &typ_of_init_value);
 
-        let marked_value_to_compare = match data_type_marked.clone() {
-            BuiltinTypes::Array { element_type, length: _ } =>
-                BuiltinTypes::Array { element_type: element_type, length: None },
-            _ => panic!(),
-        };
-
-        if init_value_to_compare != marked_value_to_compare {
+        if !are_types_correct {
             compiler.add_error(
                 errors::CompileTimeErrorType::WrongVariableInitValue {
                     varname,

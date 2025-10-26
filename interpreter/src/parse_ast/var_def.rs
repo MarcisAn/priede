@@ -1,8 +1,10 @@
-use celsium::{ block::Block };
+use celsium::{ block::Block, BuiltinTypes };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 use crate::{ errors, util::{ self, get_object_fields }, Compiler };
 
 use super::parse_ast;
+
+
 
 pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "var_def" {
@@ -24,11 +26,14 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
 
         let is_object = util::is_type_object(&typ_of_init_value);
 
-        let are_types_correct = if is_object {
-            util::compare_object_types(&typ_of_init_value, &data_type_marked).unwrap()
-        } else {
-            typ_of_init_value.clone() == data_type_marked
-        };
+        // let are_types_correct = if is_object {
+        //     util::compare_object_types(&typ_of_init_value, &data_type_marked).unwrap()
+        // } else {
+        //     typ_of_init_value.clone() == data_type_marked
+        // };
+
+        let are_types_correct = util::are_types_equal(&data_type_marked, &typ_of_init_value);
+
 
         let varname = node
             .child(1 + (is_exported as usize))
