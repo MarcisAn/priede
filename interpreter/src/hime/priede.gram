@@ -58,6 +58,7 @@ grammar priede
         BOOL -> TRUE | FALSE;
 
         indexable -> ID ('['! exp ']'!)
+                    | STRING ('['! exp ']'!)
                     | indexable ('['! exp ']'!);
 
 

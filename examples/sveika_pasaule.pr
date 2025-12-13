@@ -1,1 +1,1 @@
-izvade("sveika pasaule!")
+izvade("sveika pasaule!"[10])

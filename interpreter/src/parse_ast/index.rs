@@ -34,8 +34,13 @@ pub fn index(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Bl
         let returnable_type = match type_of_index_attempt {
             BuiltinTypes::Array { element_type, length: _ } => {
                 parse_ast(node.child(1), compiler, block);
-                block.load_from_array();
+                block.index();
                 *element_type
+            },
+            BuiltinTypes::String => {
+                parse_ast(node.child(1), compiler, block);
+                block.index();
+                BuiltinTypes::String
             }
             BuiltinTypes::Object { fields } => get_object_field_type(node, block, fields),
             _ => {
