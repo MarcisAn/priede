@@ -1,0 +1,21 @@
+sk input : 7231493
+sk sum : 0
+sk last_subsection : 0
+sk subsection : 0
+sk n : 10
+
+būls vai_jāpilda : PAT
+
+kamēr vai_jāpilda {
+    subsection : input % n
+    ja subsection = last_subsection {
+        vai_jāpilda : NEPAT
+    }
+    citādi {
+        last_subsection: subsection
+        sum +: subsection
+        n*:10
+    }
+}
+izvade(sum)
+
