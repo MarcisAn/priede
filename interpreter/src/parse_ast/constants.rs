@@ -21,8 +21,8 @@ pub fn parse_constants(node: AstNode, title: &str, compiler: &mut Compiler, bloc
         block.load_bool(match node.child(0).get_value().unwrap() {
             "PAT" => true,
             "PATIESS" => true,
-            "NEPAT" => true,
-            "NEPATIESS" => true,
+            "NEPAT" => false,
+            "NEPATIESS" => false,
             _ => panic!(),
         });
         compiler.typestack.push(BuiltinTypes::Bool);
