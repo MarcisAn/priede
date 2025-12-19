@@ -53,8 +53,8 @@ grammar priede
         OBJECT -> 'objekts';
     }
     rules{ 
-        TRUE -> 'PAT'! | 'PATIESS'!;
-        FALSE -> 'NEPAT'! | 'NEPATIESS'!;
+        TRUE -> 'PAT'^ | 'PATIESS'^;
+        FALSE -> 'NEPAT'^ | 'NEPATIESS'^;
         BOOL -> TRUE | FALSE;
 
         indexable -> ID ('['! exp ']'!)
