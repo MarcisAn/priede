@@ -31,8 +31,11 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         let data_type = compiler.helper.get_var_type(var_id).unwrap();
         compiler.typestack.push(data_type.clone());
 
-        let node_span = node.child(2).get_total_position_and_span().unwrap();
-
+        let node_span = if operator == "++" || operator == "--" {
+            node.child(1).get_total_position_and_span().unwrap()
+        } else {
+            node.child(2).get_total_position_and_span().unwrap()
+        };
         if operator == ":" {
             parse_ast(node.child(2), compiler, block);
         }
