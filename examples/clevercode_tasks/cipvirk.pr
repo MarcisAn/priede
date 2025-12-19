@@ -1,0 +1,14 @@
+sk a1 : 1
+sk a2 : 7
+sk target_n : 12
+
+sk n:3
+sk next_digit:0
+
+kamēr n <= target_n {
+    next_digit : (a1 + a2) % 10
+    a1 : a2
+    a2 : next_digit
+    n++
+}
+izvade(next_digit)
