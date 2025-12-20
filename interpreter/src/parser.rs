@@ -16,7 +16,6 @@ fn unexpected_token_error(err: ParseErrorUnexpectedToken, compiler: &mut Compile
 
 pub fn parser_errors(errors: Vec<ParseError>, compiler: &mut Compiler) {
     for parse_err in errors.clone() {
-        println!("errored");
         match parse_err {
             hime_redist::errors::ParseError::UnexpectedToken(err) =>
                 unexpected_token_error(err, compiler),

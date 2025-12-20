@@ -61,8 +61,12 @@ pub fn interpret(
     //Add parser errors to the compiler struct
     parser::parser_errors(parse_res.errors.clone().errors, &mut compiler);
 
+
     //If there are compiler errors return at this moment.
     if compiler.errors.len() > 0 {
+        for error in &compiler.errors{
+            errors::print_error(error,  &mut compiler.helper);
+        }
         return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
     }
 

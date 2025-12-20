@@ -58,10 +58,10 @@ pub enum CompileTimeErrorType {
     },
 }
 
-pub fn get_message(error: CompileTimeErrorType) -> String {
+pub fn get_message(error: &CompileTimeErrorType) -> String {
     match error {
         CompileTimeErrorType::ParserError { unexpected } =>
-            format!("Neparedzēts simbols {}", unexpected),
+            format!("Neparedzēts simbols `{}`", unexpected),
         CompileTimeErrorType::VariableAlreadyDefined { varname } =>
             format!("Mainīgais `{}` jau ir definēts.", varname),
         CompileTimeErrorType::VariableAlreadyIncluded { varname } =>
@@ -79,18 +79,18 @@ pub fn get_message(error: CompileTimeErrorType) -> String {
                 "Funkcija {} sagaida {} argumentu{}, bet šeit tiek padot{} {} argument{}",
                 function_name,
                 expected_count,
-                if expected_count == 1 {
+                if *expected_count == 1 {
                     ""
                 } else {
                     "s"
                 },
-                if found_count == 1 {
+                if *found_count == 1 {
                     "s"
                 } else {
                     "i"
                 },
                 found_count,
-                if found_count == 1 {
+                if *found_count == 1 {
                     "s"
                 } else {
                     "i"
@@ -147,8 +147,8 @@ pub fn get_message(error: CompileTimeErrorType) -> String {
     }
 }
 
-pub fn print_error(error: CompileTimeError, compilehelper: &mut CompileTimeHelper) {
-    common_error(&get_message(error.error_type), error.position, compilehelper);
+pub fn print_error(error: &CompileTimeError, compilehelper: &mut CompileTimeHelper) {
+    common_error(&get_message(&error.error_type), error.position, compilehelper);
 }
 
 pub fn common_error(
