@@ -7,8 +7,8 @@
 	import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
 	import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 	import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
-	import { clear, messages, stumbrsData } from '../lib/priede';
-	import init, { run } from '../pkg/priede_wasm.js';
+	import { clear, messages, stumbrsData } from './lib/priede.js';
+	import init, { run } from './lib/pkg/priede_wasm.js';
 
 	let answer = '';
 

@@ -18,7 +18,7 @@ body {
     height: 100%;
 }
 
-.editor{
+.editor {
     flex: 1;
     width: 700px;
     overflow: hidden;
@@ -38,6 +38,7 @@ h1 {
     background-color: rgb(218, 218, 218);
     height: 100%;
 }
+
 .consoleMessage {
     background-color: rgb(184, 184, 184);
     margin: 5px;
@@ -45,6 +46,7 @@ h1 {
     border-radius: 4px;
     font-size: larger;
 }
+
 .runBtn {
     margin: 2vh;
     background-color: rgb(78, 248, 78);
@@ -61,15 +63,15 @@ h1 {
     cursor: pointer;
 }
 
-.switchBtn{
+.switchBtn {
     padding: 1rem;
     background-color: aliceblue;
 }
 
-#stumbrsEditor{
+#stumbrsEditor {
     height: 100%;
 }
 
-#examplePicker{
+#examplePicker {
     margin: 0.5rem;
 }

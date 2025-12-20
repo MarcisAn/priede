@@ -9,7 +9,7 @@ export function wasm_print(a) {
 	console.log(a);
 	// @ts-ignore
 	messages.update((currentData) => {
-		return [{ typ: 'out', text: a }, ...currentData];
+		return [...currentData, { typ: 'out', text: a } ];
 	});
 }
 /**
