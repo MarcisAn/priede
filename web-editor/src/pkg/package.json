@@ -1,13 +1,12 @@
 {
   "name": "priede_wasm",
-  "type": "module",
   "version": "0.1.0",
   "files": [
     "priede_wasm_bg.wasm",
     "priede_wasm.js",
     "priede_wasm.d.ts"
   ],
-  "main": "priede_wasm.js",
+  "module": "priede_wasm.js",
   "types": "priede_wasm.d.ts",
   "sideEffects": [
     "./snippets/*"

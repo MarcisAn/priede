@@ -163,10 +163,10 @@ async function __wbg_load(module, imports) {
 function __wbg_get_imports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbg_codereplace_ff4361dca70913b6 = function(arg0, arg1, arg2, arg3, arg4) {
+    imports.wbg.__wbg_codereplace_77879e6bc40a46ee = function(arg0, arg1, arg2, arg3, arg4) {
         code_replace(getStringFromWasm0(arg0, arg1), arg2 >>> 0, arg3 >>> 0, arg4 >>> 0);
     };
-    imports.wbg.__wbg_wasmprint_b6c4fd6e9403da92 = function(arg0, arg1) {
+    imports.wbg.__wbg_wasmprint_3dbe251b058c848d = function(arg0, arg1) {
         wasm_print(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbg_crypto_d05b68a3572bb8ca = function(arg0) {

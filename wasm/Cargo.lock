@@ -75,7 +75,7 @@ checksum = "7ff69b9dd49fd426c69a0db9fc04dd934cdb6645ff000864d98f7e2af8830eaa"
 
 [[package]]
 name = "celsium"
-version = "0.1.6"
+version = "0.1.7"
 dependencies = [
  "getrandom",
  "js-sys",
@@ -135,6 +135,7 @@ dependencies = [
 [[package]]
 name = "hime_redist"
 version = "4.3.0"
+source = "git+https://github.com/MarcisAn/hime-rust-runtime#7318f04dd3d821860e07204bc43236b6555f8bb9"
 dependencies = [
  "serde",
 ]
