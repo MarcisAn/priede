@@ -9,7 +9,7 @@ būls vai_jāpilda : Jā
 kamēr vai_jāpilda {
     subsection : input % n
     ja subsection = last_subsection {
-        vai_jāpilda : nē
+        vai_jāpilda : Nē
     }
     citādi {
         last_subsection: subsection

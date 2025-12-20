@@ -55,8 +55,7 @@ pub enum CompileTimeErrorType {
     },
     ParserError {
         unexpected: String,
-    }
-
+    },
 }
 
 pub fn get_message(error: &CompileTimeErrorType) -> String {
@@ -67,8 +66,13 @@ pub fn get_message(error: &CompileTimeErrorType) -> String {
             format!("Mainīgais `{}` jau ir definēts.", varname),
         CompileTimeErrorType::VariableAlreadyIncluded { varname } =>
             format!("Mainīgais `{}` jau ir iekļauts.", varname),
-        CompileTimeErrorType::VariableNotDefined { varname } =>
-            format!("Mainīgais ar nosaukumu `{}` nav definēts šajā blokā.", varname),
+        CompileTimeErrorType::VariableNotDefined { varname } => {
+            if varname == "jā" || varname == "nē" {
+                format!("Mainīgais ar nosaukumu `{}` nav definēts šajā blokā. Iespējams tu domāji būla vērtību, bet tā ir jāraksta ar lielu burtu `Jā` vai `Nē`.", varname)
+            } else {
+                format!("Mainīgais ar nosaukumu `{}` nav definēts šajā blokā.", varname)
+            }
+        }
         CompileTimeErrorType::FunctionNotDefined { funcname } =>
             format!("Funkcija ar nosaukumu `{}` nav definēts šajā blokā.", funcname),
         CompileTimeErrorType::WrongFunctionArgumentCount {
@@ -145,7 +149,6 @@ pub fn get_message(error: &CompileTimeErrorType) -> String {
             ),
         CompileTimeErrorType::ValueNotIndexable { found_type } =>
             format!("Datu tips `{}` Nav indeksējams", util::str_from_data_type(&found_type)),
-
     }
 }
 
