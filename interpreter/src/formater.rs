@@ -85,7 +85,7 @@ fn code_from_ast<'a>(node: AstNode, context: &mut FormatingContext) -> (String, 
             return (node.get_value().unwrap().to_string(), 0);
         }
     } else if title == "BOOL" {
-        let value = if node.child(0).get_symbol().name == "TRUE" { "PATIESS" } else { "NEPATIESS" };
+        let value = if node.child(0).get_symbol().name == "TRUE" { "jā" } else { "nē" };
         return (value.to_string(), 0);
     } else if title == "STRING" {
         return (node.get_value().unwrap().to_string(), 0);

@@ -27,13 +27,13 @@ teksts a : "Sveika, pasaule!"
 izvade(a)
 ```
 
-Būla vērtības ir `1` vai `2` vai arī `PATIESS` un `NEPATIESS`, vai arī saīsinātā versija `PAT` un `NEPAT`.
+Būla vērtības ir `0` vai `1`, vai `jā` vai `nē`.
 
 Būli ir veids kā samazināt nepieciešamo datora atmiņas daudzumu programmas izpildei.
 
 ```priede
-būls a : PAT
-būls b : NEPAT
+būls a : jā
+būls b : nē
 
 
 izvade(a)
@@ -41,7 +41,7 @@ izvade(b)
 ```
 
 ```priede
-būls a : PAT
+būls a : jā
 
 ja a {
     izvade("Būla mainīgais a ir patiess")

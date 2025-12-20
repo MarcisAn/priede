@@ -107,158 +107,150 @@ pub const TERMINALS: &[Symbol] = &[
     },
     Symbol {
         id: 0x0046,
-        name: "PAT"
+        name: "jā"
     },
     Symbol {
         id: 0x0047,
-        name: "PATIESS"
+        name: "nē"
     },
     Symbol {
         id: 0x0048,
-        name: "NEPAT"
-    },
-    Symbol {
-        id: 0x0049,
-        name: "NEPATIESS"
-    },
-    Symbol {
-        id: 0x004A,
         name: "["
     },
     Symbol {
-        id: 0x004B,
+        id: 0x0049,
         name: "]"
     },
     Symbol {
-        id: 0x004C,
+        id: 0x004A,
         name: ";"
     },
     Symbol {
-        id: 0x004E,
+        id: 0x004C,
         name: "{"
     },
     Symbol {
-        id: 0x0050,
+        id: 0x004E,
         name: "}"
     },
     Symbol {
-        id: 0x0051,
+        id: 0x004F,
         name: "saraksts"
     },
     Symbol {
-        id: 0x0052,
+        id: 0x0050,
         name: ":"
     },
     Symbol {
-        id: 0x0053,
+        id: 0x0051,
         name: "+:"
     },
     Symbol {
-        id: 0x0054,
+        id: 0x0052,
         name: "-:"
     },
     Symbol {
-        id: 0x0055,
+        id: 0x0053,
         name: "*:"
     },
     Symbol {
-        id: 0x0056,
+        id: 0x0054,
         name: "/:"
     },
     Symbol {
-        id: 0x0057,
+        id: 0x0055,
         name: "++"
     },
     Symbol {
-        id: 0x0058,
+        id: 0x0056,
         name: "--"
     },
     Symbol {
-        id: 0x0059,
+        id: 0x0057,
         name: "("
     },
     Symbol {
-        id: 0x005A,
+        id: 0x0058,
         name: ")"
     },
     Symbol {
-        id: 0x005B,
+        id: 0x0059,
         name: "()"
     },
     Symbol {
-        id: 0x005D,
+        id: 0x005B,
         name: "="
     },
     Symbol {
-        id: 0x005E,
+        id: 0x005C,
         name: ">"
     },
     Symbol {
-        id: 0x005F,
+        id: 0x005D,
         name: ">="
     },
     Symbol {
-        id: 0x0060,
+        id: 0x005E,
         name: "<"
     },
     Symbol {
-        id: 0x0061,
+        id: 0x005F,
         name: "<="
     },
     Symbol {
-        id: 0x0062,
+        id: 0x0060,
         name: "!="
     },
     Symbol {
-        id: 0x0063,
+        id: 0x0061,
         name: "ja"
     },
     Symbol {
-        id: 0x0064,
+        id: 0x0062,
         name: "atkārtot"
     },
     Symbol {
-        id: 0x0065,
+        id: 0x0063,
         name: "kamēr"
     },
     Symbol {
-        id: 0x0067,
+        id: 0x0065,
         name: "funkc"
     },
     Symbol {
-        id: 0x0068,
+        id: 0x0066,
         name: "->"
     },
     Symbol {
-        id: 0x0069,
+        id: 0x0067,
         name: "*"
     },
     Symbol {
-        id: 0x006A,
+        id: 0x0068,
         name: "/"
     },
     Symbol {
-        id: 0x006B,
+        id: 0x0069,
         name: "%"
     },
     Symbol {
-        id: 0x006C,
+        id: 0x006A,
         name: "+"
     },
     Symbol {
-        id: 0x006D,
+        id: 0x006B,
         name: "-"
     },
     Symbol {
-        id: 0x006E,
+        id: 0x006C,
         name: "xvai"
     },
     Symbol {
-        id: 0x006F,
+        id: 0x006D,
         name: "vai"
     },
     Symbol {
-        id: 0x0071,
+        id: 0x006F,
         name: "un"
     }
 ];
@@ -582,24 +574,32 @@ pub const VARIABLES: &[Symbol] = &[
         name: "root"
     },
     Symbol {
+        id: 0x004B,
+        name: "__V75"
+    },
+    Symbol {
         id: 0x004D,
         name: "__V77"
     },
     Symbol {
-        id: 0x004F,
-        name: "__V79"
+        id: 0x005A,
+        name: "__V90"
     },
     Symbol {
-        id: 0x005C,
-        name: "__V92"
+        id: 0x0064,
+        name: "__V100"
     },
     Symbol {
-        id: 0x0066,
-        name: "__V102"
+        id: 0x006E,
+        name: "__V110"
     },
     Symbol {
         id: 0x0070,
         name: "__V112"
+    },
+    Symbol {
+        id: 0x0071,
+        name: "__V113"
     },
     Symbol {
         id: 0x0072,
@@ -615,14 +615,6 @@ pub const VARIABLES: &[Symbol] = &[
     },
     Symbol {
         id: 0x0075,
-        name: "__V117"
-    },
-    Symbol {
-        id: 0x0076,
-        name: "__V118"
-    },
-    Symbol {
-        id: 0x0077,
         name: "__VAxiom"
     }
 ];

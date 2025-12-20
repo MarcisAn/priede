@@ -38,7 +38,7 @@ Prism.languages.priede = {
   //  alias: "selector",
   //},
 
-  constant: /\b(?:PAT|PATIESS|NEPAT|NEPATIESS)\b/i,
+  constant: /\b(?:jā|nē)\b/i,
 
   builtin: /\b(?:skaitlis|sk|būls|bl|teksts|tx)\b/i,
 

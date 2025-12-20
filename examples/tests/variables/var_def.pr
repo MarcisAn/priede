@@ -6,14 +6,14 @@ teksts b : "Sveika, pasaule!"
 
 izvade(b)
 
-būls c : PAT
-būls d : NEPAT
+būls c : jā
+būls d : nē
 
 
 izvade(c)
 izvade(d)
 
-būls e : PAT
+būls e : jā
 
 ja e {
     izvade("Būla mainīgais a ir patiess")

@@ -45,7 +45,7 @@
           "name": "constant.numeric"
         },
         {
-          "match": "\\b(PAT|NEPA|PATIESS|NEPATIESS)\\b",
+          "match": "\\b(jā|nē)\\b",
           "name": "constant.numeric"
         }
       ]
@@ -65,7 +65,7 @@
           "match": "(:|\\+:|-:|\\*:|/:|=|!=|>|<|<=|>=|;|\\+\\+)"
         },
         {
-          "name": "entity.name.type",
+          "name": "storage.type",
           "match": "\\b(tk|sk|bl|decim|skaitlis|teksts|būls)\\b"
         }
       ]
