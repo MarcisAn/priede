@@ -17,6 +17,7 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         );
 
         let var_id: usize = if var_id_test.is_none() {
+            // println!("erored here");
             compiler.add_error(
                 errors::CompileTimeErrorType::VariableNotDefined {
                     varname: node.child(0).get_value().unwrap().to_string(),
@@ -38,8 +39,7 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         };
         if operator == ":" {
             parse_ast(node.child(2), compiler, block);
-        }
-        {
+        } else {
             block.load_variable(var_id, block::TextSpan {
                 line: node_span.0.line,
                 col_start: node_span.0.column,
@@ -48,9 +48,9 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
 
             let data_type = compiler.helper.get_var_type(var_id).unwrap();
             compiler.typestack.push(data_type);
-            if operator != "--" && operator != "++" {
-                parse_ast(node.child(2), compiler, block);
-            }
+        }
+        if operator != "--" && operator != "++" {
+            parse_ast(node.child(2), compiler, block);
         }
         if operator == "+:" {
             compiler.typestack.binop(BINOP::Add);
