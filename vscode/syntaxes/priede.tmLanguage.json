@@ -54,7 +54,7 @@
       "patterns": [
         {
           "name": "keyword.control",
-          "match": "\\b(citādi|saraksts|atgriezt|iekļaut|no|eksp|objekts|ja|atkārtot|kamēr|funkc|xvai|vai|un)\\b"
+          "match": "\\b(citādi|saraksts|atgriezt|iekļaut|no|eksp|objekts|ja|atkārtot|kamēr|funkc|xvai|vai|un|pārtraukt|izlaist)\\b"
         },
         {
           "name": "keyword.operator",

@@ -1,0 +1,19 @@
+skaitlis a : 0
+kamēr a < 8 {
+    izvade(a)
+    ja a = 2 {
+        pārtraukt
+    }
+    a++
+}
+izvade("Beigas")
+
+a : 0
+kamēr a < 5 {
+    a++
+    ja a = 2 {
+        izlaist
+    }
+    izvade(a)
+}
+izvade("Beigas")

@@ -55,7 +55,8 @@ pub enum CompileTimeErrorType {
     },
     ParserError {
         unexpected: String,
-    },
+    }
+
 }
 
 pub fn get_message(error: &CompileTimeErrorType) -> String {
@@ -144,6 +145,7 @@ pub fn get_message(error: &CompileTimeErrorType) -> String {
             ),
         CompileTimeErrorType::ValueNotIndexable { found_type } =>
             format!("Datu tips `{}` Nav indeksējams", util::str_from_data_type(&found_type)),
+
     }
 }
 

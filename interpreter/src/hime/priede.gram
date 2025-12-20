@@ -51,6 +51,9 @@ grammar priede
         FROM -> 'no';
         EXPORT -> 'eksp';
         OBJECT -> 'objekts';
+        BREAK -> 'pārtraukt';
+        CONTINUE -> 'izlaist';
+
     }
     rules{ 
         TRUE -> 'Jā'^;
@@ -203,7 +206,9 @@ grammar priede
         | func_def^ 
         | return_st^
         | include^
-        | object_def^;
+        | object_def^
+        | BREAK^
+        | CONTINUE^;
 
         block -> stat*;
         root ->  block^;

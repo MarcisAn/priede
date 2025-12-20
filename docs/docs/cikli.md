@@ -54,3 +54,33 @@ kamēr (a < 5) {
 Šis cikls darbosies tikai `5` reizes, jo katru reizi mainīgais `a` tiek palielināts par vienu, kamēr tas vairs nav mazāks par `5` un tad cikls apstājās.
 
 Izteiksmes var būt, vai nebūt apaļajās iekavās.
+
+### Ciklu pārtraukšana un vienas izpildes izlaišana
+
+Cikla iekšienē var izmantot `pārtraukt` atslēgvārdu, lai pārtrauktu cikla izpildi. 
+
+```priede
+skaitlis a : 0
+kamēr a < 8 {
+    izvade(a)
+    ja a = 2 {
+        pārtraukt
+    }
+    a++
+}
+izvade("Beigas")
+```
+
+Var izmantot `izlaist` atslēgvārdu, lai izlaistu pašreizējo cikla izpildes reizi.
+
+```priede
+sk a : 0
+kamēr a < 5 {
+    a++
+    ja a = 2 {
+        izlaist
+    }
+    izvade(a)
+}
+izvade("Beigas")
+```

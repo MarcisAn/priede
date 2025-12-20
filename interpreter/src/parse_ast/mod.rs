@@ -88,7 +88,14 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
             length,
         });
     }
-
+    if title == "BREAK" {
+        let (line, col_start, length) = util::get_node_position_and_span_unicode(node);
+        block.break_loop(TextSpan { line, col_start, length } );
+    }
+    if title == "CONTINUE" {
+        let (line, col_start, length) = util::get_node_position_and_span_unicode(node);
+        block.continue_loop(TextSpan { line, col_start, length });
+    }
     index(node, &title, compiler, block);
     id(node, &title, compiler, block);
     return_st(node, &title, compiler, block);
