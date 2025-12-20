@@ -1,5 +1,1 @@
-bl a : Nē
-
-ja !   a {
-    izvade("aaaa")
-}
+izvade("Sveika pasaule!")
