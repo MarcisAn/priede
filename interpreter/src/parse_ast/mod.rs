@@ -1,4 +1,4 @@
-use celsium::{ block::Block, ObjectFieldType };
+use celsium::{ ObjectFieldType, block::{Block, TextSpan} };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 mod id_assign;
@@ -32,10 +32,7 @@ use array_def::array_def;
 mod index;
 use index::index;
 
-use crate::{
-    util::get_data_type_from_id,
-    Compiler,
-};
+use crate::{ Compiler, util::{self, get_data_type_from_id} };
 
 pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
     let title = node.get_symbol().to_string();
@@ -81,7 +78,17 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
         block.create_object(field_names);
     }
 
-    
+    if title == "exp_atom" {
+        parse_ast(node.child(1), compiler, block);
+        let (line, col_start, length) = util::get_node_position_and_span_unicode(node);
+
+        block.binop(celsium::bytecode::BINOP::Not, TextSpan {
+            line,
+            col_start,
+            length,
+        });
+    }
+
     index(node, &title, compiler, block);
     id(node, &title, compiler, block);
     return_st(node, &title, compiler, block);

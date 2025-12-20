@@ -27,13 +27,13 @@ teksts a : "Sveika, pasaule!"
 izvade(a)
 ```
 
-Būla vērtības ir `0` vai `1`, vai `jā` vai `nē`.
+Būla vērtības ir `0` vai `1`, vai `Jā` vai `Nē`.
 
 Būli ir veids kā samazināt nepieciešamo datora atmiņas daudzumu programmas izpildei.
 
 ```priede
-būls a : jā
-būls b : nē
+būls a : Jā
+būls b : Nē
 
 
 izvade(a)
@@ -41,7 +41,7 @@ izvade(b)
 ```
 
 ```priede
-būls a : jā
+būls a : Jā
 
 ja a {
     izvade("Būla mainīgais a ir patiess")
@@ -95,3 +95,4 @@ a++
 - `--` Atņem no mainīgā `1`
 - `*:` Reizina ar mainīgo
 - `/:` Dala ar mainīgo
+- `!` Apgriež būla vērtību

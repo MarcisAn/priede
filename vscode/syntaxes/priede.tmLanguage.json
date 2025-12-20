@@ -45,7 +45,7 @@
           "name": "constant.numeric"
         },
         {
-          "match": "\\b(jā|nē)\\b",
+          "match": "\\b(Jā|Nē)\\b",
           "name": "constant.numeric"
         }
       ]

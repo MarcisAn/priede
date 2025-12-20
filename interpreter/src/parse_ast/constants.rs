@@ -19,8 +19,8 @@ pub fn parse_constants(node: AstNode, title: &str, compiler: &mut Compiler, bloc
         compiler.typestack.push(BuiltinTypes::String)
     } else if title == "BOOL" {
         block.load_bool(match node.child(0).get_value().unwrap() {
-            "jā" => true,
-            "nē" => false,
+            "Jā" => true,
+            "Nē" => false,
             _ => panic!(),
         });
         compiler.typestack.push(BuiltinTypes::Bool);

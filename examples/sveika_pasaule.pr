@@ -1,1 +1,5 @@
-izvade("sveika pasaule!"[10])
+bl a : Nē
+
+ja !   a {
+    izvade("aaaa")
+}

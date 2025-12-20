@@ -53,8 +53,8 @@ grammar priede
         OBJECT -> 'objekts';
     }
     rules{ 
-        TRUE -> 'jā'^;
-        FALSE -> 'nē'^;
+        TRUE -> 'Jā'^;
+        FALSE -> 'Nē'^;
         BOOL -> TRUE | FALSE;
 
         indexable -> ID ('['! exp ']'!)
@@ -135,15 +135,18 @@ grammar priede
   
 
 
-        exp_atom -> NUMBER^
+        exp_atom_simple -> NUMBER^
                    | STRING^
                    | '(' exp^ ')'
+                   | BOOL^
                    |  ID^
                    |  func_call^
-                   | BOOL^
                    | array^
                    | indexable^
                    | object^; 
+
+        exp_atom -> exp_atom_simple^
+                | '!' exp_atom_simple;
 
         exp_reizdal -> exp_atom^
                    | reiz_dal_atl^;

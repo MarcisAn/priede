@@ -4,7 +4,7 @@ sk last_subsection : 0
 sk subsection : 0
 sk n : 10
 
-būls vai_jāpilda : jā
+būls vai_jāpilda : Jā
 
 kamēr vai_jāpilda {
     subsection : input % n
