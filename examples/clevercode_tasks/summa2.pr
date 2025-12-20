@@ -4,12 +4,11 @@ sk last_subsection : 0
 sk subsection : 0
 sk n : 10
 
-būls vai_jāpilda : Jā
 
-kamēr vai_jāpilda {
+kamēr 1 {
     subsection : input % n
     ja subsection = last_subsection {
-        vai_jāpilda : Nē
+        pārtraukt
     }
     citādi {
         last_subsection: subsection
