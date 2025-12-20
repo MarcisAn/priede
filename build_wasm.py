@@ -16,7 +16,7 @@ def build_wasm():
 
     if os.name == 'nt':   
         os. remove("./pkg/.gitignore")
-        os.system('cmd /c  "robocopy  ./pkg ../web-editor/src/pkg" /E /MOVE /NFL /NDL /NJH /NJS /nc /ns /np')
+        os.system('cmd /c  "robocopy  ./pkg ../web-editor-new/src/pkg" /E /MOVE /NFL /NDL /NJH /NJS /nc /ns /np')
     else:
         print("wasm package moving to web-editor not implemented on other platforms")
         
