@@ -1,12 +1,9 @@
 use block::Block;
 use celsium::block;
-use celsium::block::TextSpan;
 use celsium::compiletime_helper::CompileTimeHelper;
 use celsium::typestack::TypeStack;
 use celsium::CelsiumProgram;
 use celsium::Scope;
-use hime_redist::ast::AstNode;
-use hime_redist::symbols::SemanticElementTrait;
 use hime_redist::text::TextPosition;
 use util::stackvalue_to_json;
 use std::panic;

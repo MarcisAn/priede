@@ -77,7 +77,6 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
                 );
             }
 
-            parse_ast(node.child(2 + (is_returning as usize) + (is_exported as usize)), compiler, &mut body);
             compiler.helper.def_function(
                 func_name.clone(),
                 args.clone(),
@@ -85,6 +84,7 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
                 is_exported,
                 return_type
             );
+            parse_ast(node.child(2 + (is_returning as usize) + (is_exported as usize)), compiler, &mut body);
         } else {
             let is_returning =
                 node.child(1 + (is_exported as usize)).to_string() == "func_return_type";
@@ -104,7 +104,6 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
                 );
             }
 
-            parse_ast(node.child(1 + (is_exported as usize)), compiler, &mut body);
             compiler.helper.def_function(
                 func_name.clone(),
                 args.clone(),
@@ -112,6 +111,7 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
                 is_exported,
                 return_type
             );
+            parse_ast(node.child(1 + (is_exported as usize)), compiler, &mut body);
         }
 
         compiler.functions.push(Function {

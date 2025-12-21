@@ -1,0 +1,13 @@
+sk sk1 : 5
+sk sk2 : 6
+
+ja sk1 > sk2 {
+    atkārtot sk1 {
+        izvade(sk2)
+    }
+}
+citādi {
+    atkārtot sk2 {
+        izvade(sk1)
+    }    
+}
