@@ -17,7 +17,7 @@ grammar priede
 		CommentBlock	-> '/*' (.* - (.* '*/' .*)) '*/' ;
         SEPARATOR   -> (WHITE_SPACE | CommentLine | CommentBlock | LineTerminator)+;
 
-        ID -> [a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_]+ | [a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_]+[1-9] | [a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_]+[1-9]*;
+        ID -> [a-zA-ZēūīāšģķļžčņĒĪĀŠĢĶĻŽČŅ_@]+[1-9]*;
         
         QUOTE -> '"';
         INTEGER -> [1-9] [0-9]* | '0' ;
@@ -138,7 +138,7 @@ grammar priede
   
 
 
-        exp_atom_simple -> NUMBER^
+        exp_atom_no_dot -> NUMBER^
                    | STRING^
                    | '(' exp^ ')'
                    | BOOL^
@@ -147,6 +147,28 @@ grammar priede
                    | array^
                    | indexable^
                    | object^; 
+        
+        exp_atom_simple -> exp_atom_no_dot^
+                    | dot_call^;
+
+        dot_call -> dotable '.'! ID
+                | dot_call '.'! ID
+                | dot_call_fn^;
+
+        dot_call_fn -> 
+                  dotable '.'! func_call
+                | dot_call '.'! func_call;
+
+        dotable ->  NUMBER^
+                   | STRING^
+                   |  ID^
+                   |  func_call^
+                   | BOOL^
+                   | indexable^
+                   | object^;
+
+
+
 
         exp_atom -> exp_atom_simple^
                 | '!' exp_atom_simple;
@@ -195,20 +217,21 @@ grammar priede
         object_def -> OBJECT! ID '{'! object_def_field* '}'!;
 
 
-        stat -> var_def^ 
-        | multiple_id_define^ 
-        | func_call^ 
-        | if^ 
-        | id_assign^ 
-        | array_assign^ 
-        | s_loop^ 
-        | w_loop^ 
-        | func_def^ 
-        | return_st^
-        | include^
-        | object_def^
-        | BREAK^
-        | CONTINUE^;
+        stat ->   var_def^ 
+                | multiple_id_define^ 
+                | func_call^ 
+                | if^ 
+                | id_assign^ 
+                | array_assign^ 
+                | s_loop^ 
+                | w_loop^ 
+                | func_def^ 
+                | return_st^
+                | include^
+                | object_def^
+                | BREAK^
+                | CONTINUE^
+                | dot_call_fn^;
 
         block -> stat*;
         root ->  block^;
