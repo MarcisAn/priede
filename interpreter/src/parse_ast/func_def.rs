@@ -117,7 +117,7 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
         compiler.functions.push(Function {
             signature: FunctionSignature {
                 name: func_name,
-                return_type: celsium::module::FunctionReturnType::NONE,
+                return_type: None,
                 args: args,
             },
             body: body,

@@ -129,17 +129,20 @@ pub fn interpret(
         i += 1;
     }
 
-    if print_bytecode {
-        let mut i = 0;
-        while i < main_block.bytecode.len() {
-            println!("{} {:?}", i, main_block.bytecode[i]);
-            i += 1;
-        }
-    }
+    
     if static_only {
         return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
     }
     let mut celsium = CelsiumProgram::new(main_block, compiler.functions);
+    let bytecode = celsium.get_bytecode();
+    if print_bytecode {
+        let mut i = 0;
+        while i < bytecode.len() {
+            println!("{} {:?}", i, bytecode[i]);
+            i += 1;
+        }
+    }
+
     let testing_stack_results = celsium.run_program();
     if testing_stack {
         println!("{:?}", testing_stack);

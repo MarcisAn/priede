@@ -12,8 +12,10 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             //if funccall has arguments
             for arg in node.child(1).children().iter() {
                 parse_ast(arg, compiler, block);
-                let arg_type = compiler.typestack.pop().unwrap();
-                func_args_found.push(arg_type.clone());
+                let arg_type = compiler.typestack.pop();
+                if arg_type.is_some() {
+                    func_args_found.push(arg_type.unwrap());
+                }
             }
         }
         let func_name = node.child(0).get_value().unwrap();
@@ -22,6 +24,11 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             block.call_special_function(celsium::SpecialFunctions::Print {
                 newline: true,
             });
+        } else if func_name == "atgriezt" {
+            block.return_from_function();
+            if func_args_found.len() > 0 {
+                compiler.typestack.push(func_args_found[0].clone());
+            }
         } else if func_name == "izvadetp" {
             block.call_special_function(celsium::SpecialFunctions::Print {
                 newline: false,

@@ -1,1 +1,12 @@
-izvade("Sveika pasaule!")
+funkc aa() {
+    izvade("aa")
+    atgriezt()
+}
+funkc bb() {
+    izvade("bb")
+    atgriezt()
+}
+aa()
+izvade("aa")
+bb()
+

@@ -46,7 +46,6 @@ grammar priede
 		
         CITADI -> 'citādi';
         ARRAY -> 'saraksts';
-        RETURN -> 'atgriezt';
         INCLUDE -> 'iekļaut';
         FROM -> 'no';
         EXPORT -> 'eksp';
@@ -133,7 +132,6 @@ grammar priede
                    | EXPORT'funkc'! ID '('! func_def_args ')'! '{'! block '}'!
                    | EXPORT'funkc'! ID '()'! '{'! block '}'!;
 
-        return_st -> RETURN  exp;
 
   
 
@@ -226,7 +224,6 @@ grammar priede
                 | s_loop^ 
                 | w_loop^ 
                 | func_def^ 
-                | return_st^
                 | include^
                 | object_def^
                 | BREAK^

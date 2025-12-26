@@ -21,8 +21,6 @@ mod loops;
 use loops::loops;
 mod if_stat;
 use if_stat::if_stat;
-mod return_st;
-use return_st::return_st;
 mod id;
 use id::id;
 mod include;
@@ -98,7 +96,6 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
     }
     index(node, &title, compiler, block);
     id(node, &title, compiler, block);
-    return_st(node, &title, compiler, block);
     if_stat(node, &title, compiler, block);
     loops(node, &title, compiler, block);
     func_def(node, &title, compiler, block);
