@@ -79,57 +79,8 @@ pub fn interpret(
     let mut main_block = Block::new(Scope { ast_id: root.id(), module_path: path.clone() });
 
     parse_ast::parse_ast(root, &mut compiler, &mut main_block);
+    compiler::proces_break_and_continue(&mut main_block, &mut compiler);
 
-    let mut i = 0;
-    let mut jump_target_if_break_called = 0;
-    while i < main_block.bytecode.len() {
-        match &main_block.bytecode[i] {
-            celsium::bytecode::OPTCODE::JumpIfFalse {
-                steps,
-                jump_target_line: _,
-                jump_target_column: _,
-                is_skipable,
-            } => {
-                if *is_skipable {
-                    jump_target_if_break_called = i + steps;
-                }
-            }
-            celsium::bytecode::OPTCODE::Break { span } => {
-                if i > jump_target_if_break_called {
-                    let span_c = span.clone();
-                    common_error(
-                        "Pārtraukums izmantots ārpus cikla",
-                        Some(TextPosition { column: span_c.col_start, line: span_c.line }),
-                        &mut compiler.helper
-                    );
-                    exit(1);
-                }
-                main_block.bytecode[i] = celsium::bytecode::OPTCODE::Jump {
-                    steps: jump_target_if_break_called - i,
-                };
-            }
-            celsium::bytecode::OPTCODE::Continue { span } => {
-                if i > jump_target_if_break_called {
-                    let span_c = span.clone();
-
-                    common_error(
-                        "Izlaišana izmantota ārpus cikla",
-                        Some(TextPosition { column: span_c.col_start, line: span_c.line }),
-                        &mut compiler.helper
-                    );
-                    exit(1);
-                }
-                main_block.bytecode[i] = celsium::bytecode::OPTCODE::Jump {
-                    steps: jump_target_if_break_called - i - 1,
-                };
-            }
-            _ => print!(""),
-        }
-        // println!("{} {:?}", i, main_block.bytecode[i]);
-        i += 1;
-    }
-
-    
     if static_only {
         return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
     }
@@ -182,7 +133,8 @@ pub fn run_wasm(code: String) -> String {
     };
 
     parse_ast::parse_ast(root, &mut compiler, &mut main_block);
-
+    compiler::proces_break_and_continue(&mut main_block, &mut compiler);
+    
     let mut celsium = CelsiumProgram::new(main_block, compiler.functions);
     let testing_stack_results = celsium.run_program();
     let mut testing_stack_json: String = "[".to_string();
