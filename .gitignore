@@ -10,3 +10,4 @@ interpreter/Cargo.lock
 todo.txt
 __pycache__
 test.py
+/web-editor/.svelte-kit
