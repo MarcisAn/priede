@@ -68,7 +68,9 @@ fn objects() {
             ],
         },
         StackValue::String { value: "priede".to_string() },
-        StackValue::String { value: "priede".to_string() }
+        StackValue::String { value: "priede".to_string() },
+        StackValue::String { value: "priede".to_string() },
+        StackValue::String { value: "egle".to_string() }
     ];
     assert_eq!(expected, returns.testing_stack);
 }

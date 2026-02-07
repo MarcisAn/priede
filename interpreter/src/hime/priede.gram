@@ -84,8 +84,12 @@ grammar priede
 
         assign_op -> ':'^ | '+:'^ | '-:'^ | '*:'^ | '/:'^;
 
-        id_assign -> ID assign_op exp
-                    |   ID '++' | ID '--' ;
+        assignable -> ID^ 
+                    | dot_call^;
+
+        id_assign -> assignable assign_op exp
+                    | assignable '++' 
+                    | assignable '--' ;
 
         array_assign -> indexable ':'! exp;
 

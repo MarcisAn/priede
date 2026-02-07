@@ -87,3 +87,12 @@ izvade(koks1["suga"])
 izvade(koks1.suga)
 
 ```
+
+## Objekta lauku pārdefinēšana
+
+```priede
+koks koks1 : {suga: "priede" augstums: a diametrs: 4}
+
+
+koks1.suga : "egle"
+```

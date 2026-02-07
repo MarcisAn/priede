@@ -32,3 +32,8 @@ f : f + 3
 f +: 3
 
 f++
+
+sk q : 4
+izvade(q)
+q -: 1
+izvade(q)

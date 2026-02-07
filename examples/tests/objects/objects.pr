@@ -18,3 +18,8 @@ izvade(koki)
 izvade(koki[0])
 izvade(koki[0].suga)
 izvade(koki[0]["suga"])
+
+izvade(koks1.suga)
+koks1.suga : "egle"
+izvade(koks1.suga)
+
