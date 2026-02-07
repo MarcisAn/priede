@@ -84,6 +84,6 @@ koks koks1 : {suga: "priede" augstums: a diametrs: 4}
 
 izvade("Koka suga ir šāda:")
 izvade(koks1["suga"])
-izvade(koks1.suga.)
+izvade(koks1.suga)
 
 ```
