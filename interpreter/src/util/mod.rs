@@ -1,8 +1,5 @@
 use celsium::{
-    compiletime_helper::{ CompileTimeHelper, CompileTimeImport },
-    BuiltinTypes,
-    ObjectFieldType,
-    Scope,
+    BuiltinTypes, ObjectFieldType, Scope, block::Block, compiletime_helper::{ CompileTimeHelper, CompileTimeImport }
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
@@ -358,3 +355,4 @@ pub fn are_types_equal(a: &BuiltinTypes, b: &BuiltinTypes) -> bool {
     create_type_signature_for_comparisons(b, &mut b_signature);
     return a_signature == b_signature;
 }
+

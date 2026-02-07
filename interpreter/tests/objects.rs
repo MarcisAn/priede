@@ -66,7 +66,9 @@ fn objects() {
                 ObjectField { name: "augstums".to_string(), value: StackValue::Int { value: 4 } },
                 ObjectField { name: "diametrs".to_string(), value: StackValue::Int { value: 4 } }
             ],
-        }
+        },
+        StackValue::String { value: "priede".to_string() },
+        StackValue::String { value: "priede".to_string() }
     ];
     assert_eq!(expected, returns.testing_stack);
 }

@@ -68,9 +68,13 @@ izvade(koki)
 
 ## Objekta lauku izmantošana
 
-Nolasīt lauku no objekta, varam ar kvadrātiekavām, kurās jāieraksta lauka nosaukums pēdiņās.
+Nolasīt lauku no objekta, varam ar kvadrātiekavām, kurās jāieraksta lauka nosaukums pēdiņās vai ar punktu un lauka nosaukumu.
 
 `objekts["lauka nosaukums"]`
+
+vai
+
+`objekts.lauka_nosaukums`
 
 Lauka nosaukums būs tāds, kāds tas ir definēts objekta sagatavē.
 
@@ -80,4 +84,6 @@ koks koks1 : {suga: "priede" augstums: a diametrs: 4}
 
 izvade("Koka suga ir šāda:")
 izvade(koks1["suga"])
+izvade(koks1.suga.)
+
 ```

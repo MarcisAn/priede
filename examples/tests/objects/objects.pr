@@ -16,3 +16,5 @@ saraksts [koks] koki : [koks1; {suga: "egle" augstums: 6 diametrs: 5}]
 
 izvade(koki)
 izvade(koki[0])
+izvade(koki[0].suga)
+izvade(koki[0]["suga"])

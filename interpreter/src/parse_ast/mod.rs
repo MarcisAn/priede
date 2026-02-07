@@ -1,4 +1,4 @@
-use celsium::{ ObjectFieldType, block::{Block, TextSpan} };
+use celsium::block::{Block, TextSpan};
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 mod id_assign;
@@ -29,8 +29,12 @@ mod array_def;
 use array_def::array_def;
 mod index;
 use index::index;
+mod objects;
+use objects::objects;
+mod dot_syntax;
+use dot_syntax::dot_syntax;
 
-use crate::{ Compiler, util::{self, get_data_type_from_id} };
+use crate::{ Compiler, util };
 
 pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
     let title = node.get_symbol().to_string();
@@ -41,40 +45,7 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
         }
     }
 
-    if title == "object_def" {
-        let object_title = node.child(0).get_value().unwrap().to_string();
-        let mut field_counter = 1;
-        let mut fields = vec![];
-        while field_counter < node.children_count() {
-            fields.push(ObjectFieldType {
-                name: node.child(field_counter).child(1).get_value().unwrap().to_string(),
-                data_type: get_data_type_from_id(
-                    compiler,
-                    node.child(field_counter).child(0).get_value().unwrap(),
-                    node
-                ),
-            });
-            field_counter += 1;
-        }
-        compiler.helper.define_struct(object_title, fields);
-    }
-
-    if title == "object" {
-        let mut fields = vec![];
-        let mut field_names = vec![];
-        for field in node.children().iter().rev() {
-            parse_ast(field.child(1), compiler, block);
-            let field_name = field.child(0).get_value().unwrap().to_string();
-            let field = ObjectFieldType {
-                name: field_name.clone(),
-                data_type: compiler.typestack.pop().unwrap(),
-            };
-            field_names.push(field_name);
-            fields.push(field);
-        }
-        compiler.typestack.push(celsium::BuiltinTypes::Object { fields });
-        block.create_object(field_names);
-    }
+    
 
     if title == "exp_atom" {
         parse_ast(node.child(1), compiler, block);
@@ -108,4 +79,8 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
     parse_constants(node, &title, compiler, block);
     var_def(node, &title, compiler, block);
     include(node, &title, compiler, block);
+    objects(node, &title, compiler, block);
+    dot_syntax(node, &title, compiler, block);
+
+
 }

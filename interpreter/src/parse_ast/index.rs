@@ -1,6 +1,6 @@
 use std::process::exit;
 
-use celsium::{ block::Block, BuiltinTypes, ObjectFieldType };
+use celsium::{ BuiltinTypes, ObjectFieldType, block::Block };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::Compiler;
@@ -21,9 +21,9 @@ pub fn get_object_field_type(
                 return defined_field.data_type;
             }
         }
-        panic!("Tāds fields neeksistē");
+        panic!("Tāds objekta lauks neeksistē");
     } else {
-        panic!("Objektu var indeksēt tikai ar stirngu");
+        panic!("Objektu var indeksēt tikai ar string datu tipu");
     }
 }
 
