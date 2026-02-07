@@ -1,12 +1,1 @@
-funkc aa() {
-    izvade("aa")
-    atgriezt()
-}
-funkc bb() {
-    izvade("bb")
-    atgriezt()
-}
-aa()
-izvade("aa")
-bb()
-
+izvade(5 + -1)

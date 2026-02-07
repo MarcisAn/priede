@@ -4,10 +4,8 @@ use celsium::compiletime_helper::CompileTimeHelper;
 use celsium::typestack::TypeStack;
 use celsium::CelsiumProgram;
 use celsium::Scope;
-use hime_redist::text::TextPosition;
 use util::stackvalue_to_json;
 use std::panic;
-use std::process::exit;
 use std::{ fs, process };
 use wasm_bindgen::prelude::*;
 pub mod errors;
@@ -19,8 +17,6 @@ mod parser;
 pub mod formater;
 use compiler::Compiler;
 use compiler::CompileTimeError;
-
-use crate::errors::common_error;
 
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]

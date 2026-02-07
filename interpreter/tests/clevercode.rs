@@ -1,5 +1,4 @@
 use interpreter;
-use celsium::vm::StackValue;
 
 #[test]
 fn cikls6() {

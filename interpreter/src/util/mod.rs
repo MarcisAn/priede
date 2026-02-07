@@ -242,7 +242,9 @@ pub fn get_data_type_from_id(
             };
         } else {
             compiler.add_error(
-                errors::CompileTimeErrorType::NonExistantDataType { type_name: data_type_str.to_string() },
+                errors::CompileTimeErrorType::NonExistantDataType {
+                    type_name: data_type_str.to_string(),
+                },
                 node
             );
             panic!(); //to get rid of undefined error. Not needed, because error exits.
@@ -251,38 +253,6 @@ pub fn get_data_type_from_id(
         data_type_marked = data_type_marked_option.unwrap();
     }
     return data_type_marked;
-}
-
-pub fn compare_object_types(a: &BuiltinTypes, b: &BuiltinTypes) -> Result<bool, String> {
-    let mut fields_a: Vec<ObjectFieldType>;
-    let mut fields_b: Vec<ObjectFieldType>;
-
-    match a {
-        BuiltinTypes::Object { fields } => {
-            fields_a = fields.to_vec();
-        }
-        _ => {
-            return Err("not an object".into());
-        }
-    }
-
-    match b {
-        BuiltinTypes::Object { fields } => {
-            fields_b = fields.to_vec();
-        }
-        _ => {
-            return Err("not an object".into());
-        }
-    }
-
-    fields_a.sort();
-    fields_b.sort();
-
-    if fields_a == fields_b {
-        return Ok(true);
-    } else {
-        Ok(false)
-    }
 }
 
 pub fn is_type_object(a: &BuiltinTypes) -> bool {
@@ -335,7 +305,11 @@ pub fn stackvalue_to_json(stackval: &celsium::vm::StackValue) -> String {
             let mut objectres = String::from("{\"type\": \"object\", \"value\": [");
             let mut counter = 0;
             for field in value {
-                objectres += &format!("{{\"{}\": {}}}", field.name, stackvalue_to_json(&field.value));
+                objectres += &format!(
+                    "{{\"{}\": {}}}",
+                    field.name,
+                    stackvalue_to_json(&field.value)
+                );
                 counter += 1;
                 if counter != value.len() {
                     objectres += ",";
@@ -343,13 +317,12 @@ pub fn stackvalue_to_json(stackval: &celsium::vm::StackValue) -> String {
             }
             objectres += "]}";
             objectres
-
-        },
+        }
     });
     result
 }
 
-fn create_type_signature_for_comparisons(a: &BuiltinTypes, output: &mut String)  {
+fn create_type_signature_for_comparisons(a: &BuiltinTypes, output: &mut String) {
     match a {
         BuiltinTypes::Int => {
             output.push_str("int");
@@ -370,11 +343,11 @@ fn create_type_signature_for_comparisons(a: &BuiltinTypes, output: &mut String) 
                 output.push_str(&format!("field {}", field.name));
                 create_type_signature_for_comparisons(&field.data_type, output);
             }
-        },
-        BuiltinTypes::Array { element_type, length } => {
+        }
+        BuiltinTypes::Array { element_type, length: _ } => {
             output.push_str("array");
             create_type_signature_for_comparisons(&element_type, output);
-        },
+        }
     }
 }
 
@@ -384,5 +357,4 @@ pub fn are_types_equal(a: &BuiltinTypes, b: &BuiltinTypes) -> bool {
     create_type_signature_for_comparisons(a, &mut a_signature);
     create_type_signature_for_comparisons(b, &mut b_signature);
     return a_signature == b_signature;
-
 }
