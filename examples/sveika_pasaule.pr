@@ -1,11 +1,4 @@
-objekts koks {
-    tk suga
-    sk augstums
-    sk diametrs
-}
-
-
-koks koks1 : {suga: "priede" augstums: 1 diametrs: 4}
-
-
-izvade(koks1.suga)
+sk a : 4
+a : 5
+// a++
+// izvade(a)

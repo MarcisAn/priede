@@ -49,7 +49,7 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             let data_type = compiler.helper.get_var_type(var_id).unwrap();
             compiler.typestack.push(data_type);
         }
-        if operator != "--" && operator != "++" {
+        if operator != "--" && operator != "++" && operator != ":" {
             parse_ast(node.child(2), compiler, block);
         }
         if operator == "+:" {
