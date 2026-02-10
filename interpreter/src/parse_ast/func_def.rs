@@ -20,11 +20,7 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
             .to_string();
 
         let mut body = Block::new(
-            if node.children_count() > 3 {
-                block.scope.change_ast_id(node.child(3 + (is_exported as usize)).id())
-            } else {
-                block.scope.change_ast_id(node.child(2 + (is_exported as usize)).id())
-            }
+                block.scope.change_ast_id(node.child(node.children_count()-1).id())
         );
         let mut args: Vec<FuncArg> = vec![];
 

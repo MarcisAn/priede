@@ -1,16 +1,14 @@
 use celsium::{ block::{self, Block}};
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{errors, util::get_closest_scope, util, Compiler};
+use crate::{errors, util::lookup_variable, util, Compiler};
 
 pub fn id(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title.starts_with("ID") {
         let var_name = node.get_value().unwrap();
-        let var_id = get_closest_scope(var_name.to_string(), block.scope.clone(), &mut compiler.helper, node);
+        let var_id = lookup_variable(var_name.to_string(), block.scope.clone(), &mut compiler.helper, node);
         let (line, col_start, length) = util::get_node_position_and_span_unicode(node);
         if var_id.is_none() {
-            println!("erored here, {:?}", node.to_string());
-
            compiler.add_error(
                 errors::CompileTimeErrorType::VariableNotDefined {
                     varname: node.get_value().unwrap().to_string(),

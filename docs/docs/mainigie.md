@@ -96,3 +96,43 @@ a++
 - `*:` Reizina ar mainīgo
 - `/:` Dala ar mainīgo
 - `!` Apgriež būla vērtību
+
+## Mainīgo darbības zonas
+
+Mainīgais pastāv tajā blokā, kurā tas ir definēts un šī bloka apakšblokos
+
+
+```priede
+sk a : 4
+
+izvade(a) // Ir iespējams piekļūt mainīgajam a
+```
+
+```priede
+sk a : 4
+
+ja 1 {
+    izvade(a) // Ir iespējams piekļūt mainīgajam a
+}
+```
+
+Nav iespējams piekļūt mainīgajiem, kas definēti apakšblokos
+
+```priede
+
+ja 1 {
+    sk a : 4
+}
+izvade(a) // Nav iespējams piekļūt mainīgajam a
+```
+
+Apakšblokos tiek pārdefinēti mainīgie no augstākiem blokiem
+
+```priede
+sk c : 6
+ja 1 {
+    sk c : 7
+    izvade(c) // Tiek izvadīts 7
+}
+izvade(c) // Tiek izvadīts 6
+```

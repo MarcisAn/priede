@@ -45,7 +45,7 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             block.call_special_function(celsium::SpecialFunctions::Length);
             compiler.typestack.push(BuiltinTypes::Int);
         } else {
-            let func_id = util::get_closest_scope(
+            let func_id = util::lookup_function(
                 func_name.to_string(),
                 block.scope.clone(),
                 &mut compiler.helper,

@@ -1,5 +1,9 @@
 use celsium::{
-    BuiltinTypes, ObjectFieldType, Scope, block::Block, compiletime_helper::{ CompileTimeHelper, CompileTimeImport }
+    BuiltinTypes,
+    ObjectFieldType,
+    Scope,
+    block::Block,
+    compiletime_helper::{ CompileTimeHelper, CompileTimeImport },
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
@@ -14,7 +18,7 @@ fn print<'a>(node: AstNode, crossings: Vec<bool>) {
         }
         print!("+-> ");
     }
-    println!("{:}", node);
+    println!("{:} ({})", node, node.id());
     i = 0;
     let children = node.children();
     while i < children.len() {
@@ -83,8 +87,7 @@ pub fn rem_first_and_last(value: &str) -> &str {
     chars.next_back();
     chars.as_str()
 }
-
-pub fn get_closest_scope(
+pub fn lookup_variable(
     target_name: String,
     starting_scope: Scope,
     compilehelper: &mut CompileTimeHelper,
@@ -107,38 +110,24 @@ pub fn get_closest_scope(
             }
         }
     }
-    for var in compilehelper.defined_arrays.clone() {
-        let import_to_search_for = CompileTimeImport {
-            name: var.clone().name,
-            origin: var.clone().scope.module_path,
-            imported_into: starting_scope.clone().module_path,
-        };
-        if compilehelper.imports.contains(&import_to_search_for) {
-            if var.name == target_name {
-                return Some(var.id);
-            }
-        } else {
-            if var.name == target_name && var.scope.ast_id == starting_ast_id {
-                return Some(var.id);
-            }
-        }
+    let node_parrent = node.parent();
+    if node_parrent.is_none() {
+        return None;
     }
-    for var in compilehelper.defined_objects.clone() {
-        let import_to_search_for = CompileTimeImport {
-            name: var.clone().name,
-            origin: var.clone().scope.module_path,
-            imported_into: starting_scope.clone().module_path,
-        };
-        if compilehelper.imports.contains(&import_to_search_for) {
-            if var.name == target_name {
-                return Some(var.id);
-            }
-        } else {
-            if var.name == target_name && var.scope.ast_id == starting_ast_id {
-                return Some(var.id);
-            }
-        }
-    }
+    lookup_variable(
+        target_name,
+        Scope { ast_id: node_parrent.unwrap().id(), module_path: starting_scope.module_path },
+        compilehelper,
+        node_parrent.unwrap()
+    )
+}
+pub fn lookup_function(
+    target_name: String,
+    starting_scope: Scope,
+    compilehelper: &mut CompileTimeHelper,
+    node: AstNode
+) -> Option<usize> {
+    let starting_ast_id = starting_scope.ast_id;
     for function in &compilehelper.defined_functions {
         let import_to_search_for = CompileTimeImport {
             name: function.clone().name,
@@ -159,7 +148,7 @@ pub fn get_closest_scope(
     if node_parrent.is_none() {
         return None;
     }
-    get_closest_scope(
+    lookup_function(
         target_name,
         Scope { ast_id: node_parrent.unwrap().id(), module_path: starting_scope.module_path },
         compilehelper,
@@ -355,4 +344,3 @@ pub fn are_types_equal(a: &BuiltinTypes, b: &BuiltinTypes) -> bool {
     create_type_signature_for_comparisons(b, &mut b_signature);
     return a_signature == b_signature;
 }
-

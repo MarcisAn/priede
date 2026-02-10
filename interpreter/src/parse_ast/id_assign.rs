@@ -1,33 +1,13 @@
 use celsium::{ block::{ self, Block, TextSpan }, bytecode::BINOP };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{ errors, util::get_closest_scope, Compiler };
+use crate::{ errors, util::lookup_variable, Compiler };
 
 use super::parse_ast;
 
 pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
     if title == "id_assign" {
         let operator = node.child(1).get_value().unwrap();
-        // let var_name = node.child(0).get_value().unwrap();
-        // let var_id_test = get_closest_scope(
-        //     var_name.to_string(),
-        //     block.scope.clone(),
-        //     &mut compiler.helper,
-        //     node
-        // );
-
-        // let var_id: usize = if var_id_test.is_none() {
-        //     // println!("erored here");
-        //     compiler.add_error(
-        //         errors::CompileTimeErrorType::VariableNotDefined {
-        //             varname: node.child(0).get_value().unwrap().to_string(),
-        //         },
-        //         node
-        //     );
-        //     return;
-        // } else {
-        //     var_id_test.unwrap()
-        // };
 
         let node_span = if operator == "++" || operator == "--" {
             node.child(1).get_total_position_and_span().unwrap()
@@ -91,7 +71,7 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         let assignable = node.child(0).get_symbol().name;
         if assignable == "ID" {
             let var_name = node.child(0).get_value().unwrap();
-            let var_id_test = get_closest_scope(
+            let var_id_test = lookup_variable(
                 var_name.to_string(),
                 block.scope.clone(),
                 &mut compiler.helper,
@@ -113,7 +93,7 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             block.assign_variable(var_id);
         } else if assignable == "dot_call"{
             let object_var_name = node.child(0).child(0).get_value().unwrap();
-            let var_id_test = get_closest_scope(
+            let var_id_test = lookup_variable(
                 object_var_name.to_string(),
                 block.scope.clone(),
                 &mut compiler.helper,
@@ -136,7 +116,7 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         }
     } else if title == "array_assign" {
         let var_name = node.child(0).child(0).get_value().unwrap();
-        let var_id = get_closest_scope(
+        let var_id = lookup_variable(
             var_name.to_string(),
             block.scope.clone(),
             &mut compiler.helper,
