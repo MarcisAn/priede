@@ -1,3 +1,4 @@
-ja 2 > "a" {
-    izvade(2)
+ja 2 > 1 {
+    izvade(nejaušs_robežās(1;5))
+
 }

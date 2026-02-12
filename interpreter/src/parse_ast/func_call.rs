@@ -1,4 +1,4 @@
-use celsium::{ block::Block, BuiltinTypes };
+use celsium::{ BuiltinTypes, block::Block, module::FuncArg };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
 use crate::{ errors, util, Compiler };
@@ -18,33 +18,31 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
                 }
             }
         }
+        func_args_found.reverse();
         let func_name = node.child(0).get_value().unwrap();
-        if func_name == "izvade" {
+        if func_name == "izvade" || func_name == "izvadetp" {
             block.push_to_testing_stack(true);
-            block.call_special_function(celsium::SpecialFunctions::Print {
-                newline: true,
-            });
-        } else if func_name == "atgriezt" {
+        }
+        if func_name == "atgriezt" {
             block.return_from_function();
             if func_args_found.len() > 0 {
                 compiler.typestack.push(func_args_found[0].clone());
             }
-        } else if func_name == "izvadetp" {
-            block.call_special_function(celsium::SpecialFunctions::Print {
-                newline: false,
-            });
-        } else if func_name == "ievade" {
-            block.call_special_function(celsium::SpecialFunctions::Input);
-            compiler.typestack.push(BuiltinTypes::String);
-        } else if func_name == "jukums" {
-            //parse_ast(node.child(1).child(0), block, is_wasm, typestack);
-            //parse_ast(node.child(1).child(1), block, is_wasm, typestack);
-            block.call_special_function(celsium::SpecialFunctions::Random);
-            compiler.typestack.push(BuiltinTypes::Int);
-        } else if func_name == "garums" {
-            block.call_special_function(celsium::SpecialFunctions::Length);
-            compiler.typestack.push(BuiltinTypes::Int);
         } else {
+            for std_function in celsium::std::get_std_functions() {
+                if func_name == std_function.name {
+                    check_function_signature(
+                        compiler,
+                        std_function.return_type,
+                        std_function.args,
+                        func_args_found.clone(),
+                        node,
+                        func_name.to_string()
+                    );
+                    block.call_special_function(func_name.to_string());
+                    return;
+                }
+            }
             let func_id = util::lookup_function(
                 func_name.to_string(),
                 block.scope.clone(),
@@ -62,41 +60,65 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             let func_return_type = compiler.helper.get_func_return_type(func_id.unwrap()).unwrap();
             let mut func_args = compiler.helper.get_func_args(func_id.unwrap()).unwrap();
             func_args.reverse();
-            func_args_found.reverse();
 
-            //first check if argument cound is valid
-            if func_args.len() != func_args_found.len() {
-                compiler.add_error(
-                    errors::CompileTimeErrorType::WrongFunctionArgumentCount {
-                        function_name: func_name.to_string(),
-                        expected_count: func_args.len(),
-                        found_count: func_args_found.len(),
-                    },
-                    node
-                );
-            }
-            //then check if arguement types are valid
-            let mut counter = 0;
-            for expected_arg in func_args {
-                let found_arg = func_args_found[counter].clone();
-                if expected_arg.arg_type != found_arg {
-                    compiler.add_error(
-                        errors::CompileTimeErrorType::WrongFunctionArgumentType {
-                            function_name: func_name.to_string(),
-                            arg_index: counter + 1,
-                            expected_type: expected_arg.arg_type,
-                            found_type: found_arg,
-                        },
-                        node
-                    );
-                }
-                counter += 1;
-            }
+            check_function_signature(
+                compiler,
+                func_return_type,
+                func_args,
+                func_args_found,
+                node,
+                func_name.to_string()
+            );
 
-            if func_return_type.is_some() {
-                compiler.typestack.push(func_return_type.unwrap());
-            }
             block.call_function(func_name);
         }
+    }
+}
+
+fn check_function_signature(
+    compiler: &mut Compiler,
+    return_type: Option<BuiltinTypes>,
+    args: Vec<FuncArg>,
+    args_found: Vec<BuiltinTypes>,
+    node: AstNode,
+    name: String
+) {
+    if return_type.is_some() {
+        compiler.typestack.push(return_type.unwrap());
+    }
+
+    let arg_count_error = errors::CompileTimeErrorType::WrongFunctionArgumentCount {
+        function_name: name.to_string(),
+        expected_count: args.len(),
+        found_count: args_found.len(),
+    };
+
+    if name == "izvade" || name == "izvadetp" || name == "garums" {
+        if args_found.len() != 1 {
+            compiler.add_error(arg_count_error.clone(), node);
+        } else {
+            return;
+        }
+    }
+    //first check if argument cound is valid
+    if args.len() != args_found.len() {
+        compiler.add_error(arg_count_error, node);
+    }
+    //then check if arguement types are valid
+    let mut counter = 0;
+    for expected_arg in args {
+        let found_arg = args_found[counter].clone();
+        if expected_arg.arg_type != found_arg {
+            compiler.add_error(
+                errors::CompileTimeErrorType::WrongFunctionArgumentType {
+                    function_name: name.to_string(),
+                    arg_index: counter + 1,
+                    expected_type: expected_arg.arg_type,
+                    found_type: found_arg,
+                },
+                node
+            );
+        }
+        counter += 1;
     }
 }
