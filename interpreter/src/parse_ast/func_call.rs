@@ -5,9 +5,12 @@ use crate::{ errors, util, Compiler };
 
 use super::parse_ast;
 
-pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block) {
+pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block, self_type: Option<BuiltinTypes>) {
     if title == "func_call" {
         let mut func_args_found: Vec<BuiltinTypes> = vec![];
+        if self_type.is_some() {
+            func_args_found.push(self_type.unwrap());
+        }
         if node.children_count() > 1 {
             //if funccall has arguments
             for arg in node.child(1).children().iter() {
@@ -31,8 +34,7 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         } else {
             for std_function in celsium::std::get_std_functions() {
                 if func_name == std_function.name {
-                    check_function_signature(
-                        compiler,
+                    compiler.check_function_signature(
                         std_function.return_type,
                         std_function.args,
                         func_args_found.clone(),
@@ -61,8 +63,7 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             let mut func_args = compiler.helper.get_func_args(func_id.unwrap()).unwrap();
             func_args.reverse();
 
-            check_function_signature(
-                compiler,
+            compiler.check_function_signature(
                 func_return_type,
                 func_args,
                 func_args_found,
@@ -75,50 +76,3 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
     }
 }
 
-fn check_function_signature(
-    compiler: &mut Compiler,
-    return_type: Option<BuiltinTypes>,
-    args: Vec<FuncArg>,
-    args_found: Vec<BuiltinTypes>,
-    node: AstNode,
-    name: String
-) {
-    if return_type.is_some() {
-        compiler.typestack.push(return_type.unwrap());
-    }
-
-    let arg_count_error = errors::CompileTimeErrorType::WrongFunctionArgumentCount {
-        function_name: name.to_string(),
-        expected_count: args.len(),
-        found_count: args_found.len(),
-    };
-
-    if name == "izvade" || name == "izvadetp" || name == "garums" {
-        if args_found.len() != 1 {
-            compiler.add_error(arg_count_error.clone(), node);
-        } else {
-            return;
-        }
-    }
-    //first check if argument cound is valid
-    if args.len() != args_found.len() {
-        compiler.add_error(arg_count_error, node);
-    }
-    //then check if arguement types are valid
-    let mut counter = 0;
-    for expected_arg in args {
-        let found_arg = args_found[counter].clone();
-        if expected_arg.arg_type != found_arg {
-            compiler.add_error(
-                errors::CompileTimeErrorType::WrongFunctionArgumentType {
-                    function_name: name.to_string(),
-                    arg_index: counter + 1,
-                    expected_type: expected_arg.arg_type,
-                    found_type: found_arg,
-                },
-                node
-            );
-        }
-        counter += 1;
-    }
-}

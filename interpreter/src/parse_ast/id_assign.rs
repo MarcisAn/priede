@@ -10,7 +10,7 @@ fn span_of(node: AstNode) -> TextSpan {
     TextSpan { line, col_start, length }
 }
 
-fn lookup_var_id_or_error(
+pub fn lookup_var_id_or_error(
     varname: String,
     err_node: AstNode,
     compiler: &mut Compiler,

@@ -1,8 +1,9 @@
 ---
-sidebar_position: 7
+sidebar_position: 100
 ---
 
-# Iebūvētās funkcijas
+# Standartbibliotēkas funkcijas
+
 
 Funkcijas Priedē var definēt lietotājs, bet daļa funkciju jau ir iekļautas Priedē.
 

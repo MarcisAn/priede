@@ -70,7 +70,7 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
     if_stat(node, &title, compiler, block);
     loops(node, &title, compiler, block);
     func_def(node, &title, compiler, block);
-    func_call(node, &title, compiler, block);
+    func_call(node, &title, compiler, block, None);
     array(node, &title, compiler, block);
     array_def(node, &title, compiler, block);
     math_ops(node, &title, compiler, block);

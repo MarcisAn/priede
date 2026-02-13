@@ -1,7 +1,7 @@
 use celsium::{ BuiltinTypes, ObjectFieldType, block::Block };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{ Compiler, parse_ast::parse_ast };
+use crate::{ Compiler, parse_ast::{ func_call::func_call, id_assign::lookup_var_id_or_error, parse_ast } };
 
 pub fn get_object_field_type(
     node: AstNode,
@@ -32,5 +32,20 @@ pub fn dot_syntax(node: AstNode, title: &str, compiler: &mut Compiler, block: &m
             celsium::BuiltinTypes::Float => todo!(),
         };
         compiler.typestack.push(returnable_type);
+    }
+    if title == "dot_call_fn" {
+        parse_ast(node.child(0), compiler, block);
+        let self_type = Some(compiler.typestack.pop().unwrap());
+        func_call(node.child(1), "func_call", compiler, block, self_type);
+        let return_type = compiler.typestack.pop();
+        if return_type.is_some() {
+            if node.child(0).get_symbol().name == "ID" {
+                let var_name = node.child(0).get_value().unwrap().to_string();
+                let Some(var_id) = lookup_var_id_or_error(var_name, node, compiler, block) else {
+                    return;
+                };
+                block.assign_variable(var_id);
+            }
+        }
     }
 }
