@@ -60,6 +60,7 @@ pub enum CompileTimeErrorType {
     ParserError {
         unexpected: String,
     },
+    ArrayTypesMismatched,
 }
 
 pub fn get_message(error: &CompileTimeErrorType) -> String {
@@ -159,6 +160,8 @@ pub fn get_message(error: &CompileTimeErrorType) -> String {
                 util::str_from_data_type(&array_type),
                 util::str_from_data_type(&assigned_type)
             ),
+        CompileTimeErrorType::ArrayTypesMismatched =>
+            format!("Visiem saraksta elementiem jābūt ar vienādiem datu tipiem."),
     }
 }
 

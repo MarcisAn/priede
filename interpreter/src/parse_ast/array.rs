@@ -1,11 +1,7 @@
 use celsium::{ block::Block, BuiltinTypes };
 use hime_redist::ast::AstNode;
 
-use crate::{
-    errors::common_error,
-    util::get_closest_node_location,
-    Compiler,
-};
+use crate::Compiler;
 
 use super::parse_ast;
 
@@ -18,13 +14,11 @@ pub fn array(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Bl
             element_types.push(element_type);
         }
         let first_elem = &element_types.clone()[0];
+        let mut already_errored = false;
         for element_type in element_types {
-            if element_type != *first_elem {
-                common_error(
-                    "Visiem saraksta elementiem jābūt ar vienādiem datu tipiem.",
-                    get_closest_node_location(node),
-                    &mut compiler.helper
-                );
+            if element_type != *first_elem && !already_errored {
+                compiler.add_error(crate::errors::CompileTimeErrorType::ArrayTypesMismatched, node);
+                already_errored = true;
             }
         }
         compiler.typestack.push(BuiltinTypes::Array { element_type: Box::new(first_elem.clone()), length: Some(node.children_count()) });
