@@ -49,6 +49,10 @@ pub enum CompileTimeErrorType {
         expected_type: BuiltinTypes,
         found_type: BuiltinTypes,
     },
+    WrongArrayAssignValue {
+        array_type: BuiltinTypes,
+        assigned_type: BuiltinTypes,
+    },
     BinopNotPossible {
         left: BuiltinTypes,
         right: BuiltinTypes,
@@ -149,6 +153,12 @@ pub fn get_message(error: &CompileTimeErrorType) -> String {
             ),
         CompileTimeErrorType::ValueNotIndexable { found_type } =>
             format!("Datu tips `{}` Nav indeksējams", util::str_from_data_type(&found_type)),
+        CompileTimeErrorType::WrongArrayAssignValue { array_type, assigned_type } =>
+            format!(
+                "Saraksta datu tips ir `{}`, bet tiek mēģināts piešķirt vērtību ar datu tipu `{}`.",
+                util::str_from_data_type(&array_type),
+                util::str_from_data_type(&assigned_type)
+            ),
     }
 }
 

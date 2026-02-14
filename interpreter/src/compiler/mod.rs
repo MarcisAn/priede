@@ -1,12 +1,18 @@
 use std::process::exit;
 
 use celsium::BuiltinTypes;
+use celsium::compiletime_helper::CompileTimeImport;
 use celsium::module::FuncArg;
-use celsium::{ block::Block, compiletime_helper::CompileTimeHelper, module::Function, typestack::TypeStack };
+use celsium::{
+    block::Block,
+    compiletime_helper::CompileTimeHelper,
+    module::Function,
+    typestack::TypeStack,
+};
 use hime_redist::{ ast::AstNode, text::TextPosition };
-use crate::errors::{self, common_error};
+use crate::errors::{ self, common_error };
 
-use crate::{errors::print_error, util};
+use crate::{ errors::print_error, util };
 
 use super::errors::CompileTimeErrorType;
 #[derive(Clone, Debug)]
@@ -29,7 +35,10 @@ impl Compiler {
     pub fn add_error(&mut self, error_type: CompileTimeErrorType, node: AstNode) {
         let path = &self.helper.source_file_paths[self.helper.current_file];
         let position = util::get_closest_node_location(node);
-        print_error(&CompileTimeError { error_type, file_name: path.to_string(), position }, &mut self.helper);
+        print_error(
+            &(CompileTimeError { error_type, file_name: path.to_string(), position }),
+            &mut self.helper
+        );
         exit(1);
     }
     pub fn add_parser_error(
@@ -38,7 +47,6 @@ impl Compiler {
         position: TextPosition,
         path: String
     ) {
-
         self.errors.push(CompileTimeError {
             error_type: CompileTimeErrorType::ParserError { unexpected: unexpected_token },
             file_name: path.to_string(),
@@ -46,56 +54,63 @@ impl Compiler {
         });
     }
     pub fn check_function_signature(
-    &mut self,
-    return_type: Option<BuiltinTypes>,
-    args: Vec<FuncArg>,
-    args_found: Vec<BuiltinTypes>,
-    node: AstNode,
-    name: String
-) {
-    if return_type.is_some() {
-        self.typestack.push(return_type.unwrap());
-    }
+        &mut self,
+        return_type: Option<BuiltinTypes>,
+        args: Vec<FuncArg>,
+        args_found: Vec<BuiltinTypes>,
+        node: AstNode,
+        name: String
+    ) {
+        if return_type.is_some() {
+            self.typestack.push(return_type.unwrap());
+        }
 
-    let arg_count_error = errors::CompileTimeErrorType::WrongFunctionArgumentCount {
-        function_name: name.to_string(),
-        expected_count: args.len(),
-        found_count: args_found.len(),
-    };
+        let arg_count_error = errors::CompileTimeErrorType::WrongFunctionArgumentCount {
+            function_name: name.to_string(),
+            expected_count: args.len(),
+            found_count: args_found.len(),
+        };
 
-    if name == "izvade" || name == "izvadetp" || name == "garums" {
-        if args_found.len() != 1 {
-            self.add_error(arg_count_error.clone(), node);
-        } else {
-            return;
+        if name == "izvade" || name == "izvadetp" || name == "garums" {
+            if args_found.len() != 1 {
+                self.add_error(arg_count_error.clone(), node);
+            } else {
+                return;
+            }
+        }
+        //first check if argument cound is valid
+        if args.len() != args_found.len() {
+            self.add_error(arg_count_error, node);
+        }
+        //then check if arguement types are valid
+        let mut counter = 0;
+        for expected_arg in args {
+            let found_arg = args_found[counter].clone();
+            if expected_arg.arg_type != found_arg {
+                self.add_error(
+                    errors::CompileTimeErrorType::WrongFunctionArgumentType {
+                        function_name: name.to_string(),
+                        arg_index: counter + 1,
+                        expected_type: expected_arg.arg_type,
+                        found_type: found_arg,
+                    },
+                    node
+                );
+            }
+            counter += 1;
         }
     }
-    //first check if argument cound is valid
-    if args.len() != args_found.len() {
-        self.add_error(arg_count_error, node);
-    }
-    //then check if arguement types are valid
-    let mut counter = 0;
-    for expected_arg in args {
-        let found_arg = args_found[counter].clone();
-        if expected_arg.arg_type != found_arg {
-            self.add_error(
-                errors::CompileTimeErrorType::WrongFunctionArgumentType {
-                    function_name: name.to_string(),
-                    arg_index: counter + 1,
-                    expected_type: expected_arg.arg_type,
-                    found_type: found_arg,
-                },
-                node
-            );
+    pub fn get_var_type_from_id(&mut self, var_id: usize) -> Option<BuiltinTypes> {
+        for var in self.helper.defined_variables.clone() {
+            if var.id == var_id {
+                return Some(var.data_type);
+            }
         }
-        counter += 1;
+        return None;
     }
 }
 
-}
-
-pub fn proces_break_and_continue(main_block: &mut Block, compiler: &mut Compiler){
+pub fn proces_break_and_continue(main_block: &mut Block, compiler: &mut Compiler) {
     let mut i = 0;
     let mut jump_target_if_break_called = 0;
     while i < main_block.bytecode.len() {

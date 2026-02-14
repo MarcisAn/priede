@@ -1,7 +1,7 @@
-use celsium::{block::{Block, TextSpan}, bytecode::BINOP};
-use hime_redist::{ast::AstNode, symbols::SemanticElementTrait};
+use celsium::{ BuiltinTypes, block::{ Block, TextSpan }, bytecode::BINOP };
+use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{errors, util, util::lookup_variable, Compiler};
+use crate::{ Compiler, errors, util::{ self, are_types_equal, lookup_variable } };
 
 use super::parse_ast;
 
@@ -14,14 +14,16 @@ pub fn lookup_var_id_or_error(
     varname: String,
     err_node: AstNode,
     compiler: &mut Compiler,
-    block: &Block,
+    block: &Block
 ) -> Option<usize> {
-    let var_id = lookup_variable(varname.clone(), block.scope.clone(), &mut compiler.helper, err_node);
+    let var_id = lookup_variable(
+        varname.clone(),
+        block.scope.clone(),
+        &mut compiler.helper,
+        err_node
+    );
     if var_id.is_none() {
-        compiler.add_error(
-            errors::CompileTimeErrorType::VariableNotDefined { varname },
-            err_node,
-        );
+        compiler.add_error(errors::CompileTimeErrorType::VariableNotDefined { varname }, err_node);
     }
     var_id
 }
@@ -107,6 +109,25 @@ pub fn id_assign(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
         };
 
         parse_ast(node.child(1), compiler, block);
+        let type_to_assign = compiler.typestack.pop().unwrap();
+        let type_of_array = compiler.get_var_type_from_id(var_id).unwrap();
+        if
+            !are_types_equal(
+                &type_of_array,
+                &(BuiltinTypes::Array {
+                    element_type: Box::new(type_to_assign.clone()),
+                    length: None,
+                })
+            )
+        {
+            compiler.add_error(
+                errors::CompileTimeErrorType::WrongArrayAssignValue {
+                    array_type: type_of_array,
+                    assigned_type: type_to_assign,
+                },
+                node
+            );
+        }
         parse_ast(node.child(0).child(1), compiler, block);
         block.assign_to_array(var_id);
     }

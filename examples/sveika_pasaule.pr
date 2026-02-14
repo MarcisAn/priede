@@ -1,3 +1,4 @@
-izvade("sveiki")
+saraksts [sk] augļi : [1;"bumbieris";"banāns";"apelsīns"]
 
-"sveiki".izvade()
+
+augļi[0].izvade()

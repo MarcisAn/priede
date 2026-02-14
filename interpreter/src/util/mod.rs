@@ -87,6 +87,7 @@ pub fn rem_first_and_last(value: &str) -> &str {
     chars.next_back();
     chars.as_str()
 }
+
 pub fn lookup_variable(
     target_name: String,
     starting_scope: Scope,
@@ -155,7 +156,6 @@ pub fn lookup_function(
         node_parrent.unwrap()
     )
 }
-
 pub fn get_closest_node_location(node: AstNode) -> Option<TextPosition> {
     if node.get_position().is_some() {
         return Some(node.get_position().unwrap());
