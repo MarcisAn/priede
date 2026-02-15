@@ -220,51 +220,55 @@ pub const TERMINALS: &[Symbol] = &[
         name: "kamēr"
     },
     Symbol {
-        id: 0x006B,
-        name: "funkc"
+        id: 0x006A,
+        name: "&"
     },
     Symbol {
         id: 0x006C,
-        name: "->"
+        name: "funkc"
     },
     Symbol {
         id: 0x006D,
-        name: "."
+        name: "->"
     },
     Symbol {
         id: 0x006E,
-        name: "!"
+        name: "."
     },
     Symbol {
         id: 0x006F,
-        name: "*"
+        name: "!"
     },
     Symbol {
         id: 0x0070,
-        name: "/"
+        name: "*"
     },
     Symbol {
         id: 0x0071,
-        name: "%"
+        name: "/"
     },
     Symbol {
         id: 0x0072,
-        name: "+"
+        name: "%"
     },
     Symbol {
         id: 0x0073,
-        name: "-"
+        name: "+"
     },
     Symbol {
         id: 0x0074,
-        name: "xvai"
+        name: "-"
     },
     Symbol {
         id: 0x0075,
+        name: "xvai"
+    },
+    Symbol {
+        id: 0x0076,
         name: "vai"
     },
     Symbol {
-        id: 0x0077,
+        id: 0x0078,
         name: "un"
     }
 ];
@@ -630,16 +634,12 @@ pub const VARIABLES: &[Symbol] = &[
         name: "__V96"
     },
     Symbol {
-        id: 0x006A,
-        name: "__V106"
+        id: 0x006B,
+        name: "__V107"
     },
     Symbol {
-        id: 0x0076,
-        name: "__V118"
-    },
-    Symbol {
-        id: 0x0078,
-        name: "__V120"
+        id: 0x0077,
+        name: "__V119"
     },
     Symbol {
         id: 0x0079,
@@ -659,6 +659,10 @@ pub const VARIABLES: &[Symbol] = &[
     },
     Symbol {
         id: 0x007D,
+        name: "__V125"
+    },
+    Symbol {
+        id: 0x007E,
         name: "__VAxiom"
     }
 ];

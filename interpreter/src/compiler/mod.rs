@@ -65,22 +65,30 @@ impl Compiler {
             self.typestack.push(return_type.unwrap());
         }
 
-        let arg_count_error = errors::CompileTimeErrorType::WrongFunctionArgumentCount {
-            function_name: name.to_string(),
-            expected_count: args.len(),
-            found_count: args_found.len(),
-        };
-
         if name == "izvade" || name == "izvadetp" || name == "garums" {
             if args_found.len() != 1 {
-                self.add_error(arg_count_error.clone(), node);
+                self.add_error(
+                    errors::CompileTimeErrorType::WrongFunctionArgumentCount {
+                        function_name: name.to_string(),
+                        expected_count: 1,
+                        found_count: args_found.len(),
+                    },
+                    node
+                );
             } else {
                 return;
             }
         }
         //first check if argument cound is valid
         if args.len() != args_found.len() {
-            self.add_error(arg_count_error, node);
+            self.add_error(
+                errors::CompileTimeErrorType::WrongFunctionArgumentCount {
+                    function_name: name.to_string(),
+                    expected_count: args.len(),
+                    found_count: args_found.len(),
+                },
+                node
+            );
         }
         //then check if arguement types are valid
         let mut counter = 0;

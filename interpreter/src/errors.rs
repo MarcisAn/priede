@@ -49,7 +49,7 @@ pub enum CompileTimeErrorType {
         expected_type: BuiltinTypes,
         found_type: BuiltinTypes,
     },
-    WrongArrayAssignValue {
+    WrongArrayAssignValue { 
         array_type: BuiltinTypes,
         assigned_type: BuiltinTypes,
     },

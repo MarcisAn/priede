@@ -233,7 +233,7 @@ pub fn get_data_type_from_id(
                 },
                 node
             );
-            panic!(); //to get rid of undefined error. Not needed, because error exits.
+            panic!();
         }
     } else {
         data_type_marked = data_type_marked_option.unwrap();

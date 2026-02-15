@@ -1,24 +1,44 @@
+use std::collections::HashMap;
+
 use celsium::{ BuiltinTypes, block::Block, module::FuncArg };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait };
 
-use crate::{ errors, util, Compiler };
+use crate::{ Compiler, errors, parse_ast::id_assign::lookup_var_id_or_error, util };
 
 use super::parse_ast;
 
-pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block, self_type: Option<BuiltinTypes>) {
+pub fn func_call(
+    node: AstNode,
+    title: &str,
+    compiler: &mut Compiler,
+    block: &mut Block,
+    self_type: Option<BuiltinTypes>,
+    self_var_id: Option<usize>
+) {
     if title == "func_call" {
+        let mut func_arg_var_ids: HashMap<usize, usize> = HashMap::new();
+        if self_var_id.is_some() {
+            func_arg_var_ids.insert(0, self_var_id.unwrap());
+        }
         let mut func_args_found: Vec<BuiltinTypes> = vec![];
         if self_type.is_some() {
-            func_args_found.push(self_type.unwrap());
+            func_args_found.push(self_type.clone().unwrap());
         }
         if node.children_count() > 1 {
             //if funccall has arguments
+            let mut counter = if self_type.is_some() {1} else {0};
             for arg in node.child(1).children().iter() {
                 parse_ast(arg, compiler, block);
                 let arg_type = compiler.typestack.pop();
                 if arg_type.is_some() {
                     func_args_found.push(arg_type.unwrap());
                 }
+                if arg.get_symbol().name == "ID" {
+                    let var_name = arg.get_value().unwrap().to_string();
+                    let var_id = lookup_var_id_or_error(var_name, node, compiler, block).unwrap();
+                    func_arg_var_ids.insert(counter, var_id);
+                }
+                counter += 1;
             }
         }
         func_args_found.reverse();
@@ -65,14 +85,18 @@ pub fn func_call(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
 
             compiler.check_function_signature(
                 func_return_type,
-                func_args,
+                func_args.clone(),
                 func_args_found,
                 node,
                 func_name.to_string()
             );
 
             block.call_function(func_name);
+            for (count, defined_arg) in func_args.iter().enumerate() {
+                if defined_arg.mutable {
+                    block.copy_var_value(defined_arg.local_var_id.unwrap(), *func_arg_var_ids.get(&count).unwrap());
+                }
+            }
         }
     }
 }
-

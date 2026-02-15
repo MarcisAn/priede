@@ -1,4 +1,7 @@
-saraksts [sk] augļi : [1;"bumbieris";"banāns";"apelsīns"]
+funkc testfun(&sk arguments) {
+    arguments : 5
+}
 
-
-augļi[0].izvade()
+sk a : 4
+testfun(a)
+izvade(a) // Izvada 5

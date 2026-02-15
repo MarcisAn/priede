@@ -122,7 +122,7 @@ grammar priede
 
         w_loop -> 'kamēr'! exp '{'! block '}'!;
         
-        arg -> ID ID;
+        arg -> '&'? ID ID;
         func_def_args -> arg|arg (';'! arg)*;
 
         func_return_type -> ID;
