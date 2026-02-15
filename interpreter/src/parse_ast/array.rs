@@ -1,7 +1,7 @@
 use celsium::{ block::Block, BuiltinTypes };
 use hime_redist::ast::AstNode;
 
-use crate::Compiler;
+use crate::{Compiler, util::are_types_equal};
 
 use super::parse_ast;
 
@@ -16,7 +16,7 @@ pub fn array(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Bl
         let first_elem = &element_types.clone()[0];
         let mut already_errored = false;
         for element_type in element_types {
-            if element_type != *first_elem && !already_errored {
+            if !are_types_equal(first_elem, &element_type) && !already_errored {
                 compiler.add_error(crate::errors::CompileTimeErrorType::ArrayTypesMismatched, node);
                 already_errored = true;
             }
