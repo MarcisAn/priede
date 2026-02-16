@@ -1,7 +1,19 @@
-funkc testfun(&sk arguments) {
-    arguments : 5
+objekts koks {
+    tk suga
+    sk augstums
+    sk diametrs
 }
 
-sk a : 4
-testfun(a)
-izvade(a) // Izvada 5
+koks koks1 : {suga: "a" augstums: 4 diametrs:5}
+funkc testfun(&tk arguments) {
+    arguments : "egle"
+}
+
+testfun(koks1.suga)
+izvade(koks1) // Izvada 5
+
+
+// izvade(koks1)
+// koks1 : {suga: "a" augstums: 4 diametrs:8}
+// koks1.augstums +: 1
+// izvade(koks1)

@@ -49,7 +49,7 @@ pub enum CompileTimeErrorType {
         expected_type: BuiltinTypes,
         found_type: BuiltinTypes,
     },
-    WrongArrayAssignValue { 
+    WrongArrayAssignValue {
         array_type: BuiltinTypes,
         assigned_type: BuiltinTypes,
     },
@@ -61,6 +61,10 @@ pub enum CompileTimeErrorType {
         unexpected: String,
     },
     ArrayTypesMismatched,
+    MutableParameterNotVariable {
+        funcname: String,
+        arg_index: usize,
+    },
 }
 
 pub fn get_message(error: &CompileTimeErrorType) -> String {
@@ -141,7 +145,7 @@ pub fn get_message(error: &CompileTimeErrorType) -> String {
             ),
         CompileTimeErrorType::WrongVariableInitValue { varname, expected_type, found_type } =>
             format!(
-                "Nepareizs datu tips mainīgā `{}` sākotnējai vērtībai. Sagaidītais tips ir: `{}`, bet tika mēģināts piešķirt vērtību ar tipu: `{}`",
+                "Nepareizs datu tips mainīgā `{}` sākotnējai vērtībai. Sagaidītais tips ir: \n`{}`\nbet tika mēģināts piešķirt vērtību ar tipu: \n`{}`",
                 varname,
                 util::str_from_data_type(&expected_type),
                 util::str_from_data_type(&found_type)
@@ -162,6 +166,12 @@ pub fn get_message(error: &CompileTimeErrorType) -> String {
             ),
         CompileTimeErrorType::ArrayTypesMismatched =>
             format!("Visiem saraksta elementiem jābūt ar vienādiem datu tipiem."),
+        CompileTimeErrorType::MutableParameterNotVariable { funcname, arg_index } =>
+            format!(
+                "Funkcijas `{}` {}. arguments ir atsauce, tāpēc funckijas izsaukumā var padot tikai tīru mainīgo.",
+                funcname,
+                arg_index
+            ),
     }
 }
 

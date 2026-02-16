@@ -94,6 +94,9 @@ pub fn func_call(
             block.call_function(func_name);
             for (count, defined_arg) in func_args.iter().enumerate() {
                 if defined_arg.mutable {
+                    if func_arg_var_ids.get(&count).is_none() {
+                        compiler.add_error(errors::CompileTimeErrorType::MutableParameterNotVariable { funcname: func_name.to_string(), arg_index: count+1 }, node);
+                    }
                     block.copy_var_value(defined_arg.local_var_id.unwrap(), *func_arg_var_ids.get(&count).unwrap());
                 }
             }
