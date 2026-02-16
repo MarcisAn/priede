@@ -194,7 +194,7 @@ pub fn data_type_from_str(inp: &str) -> Option<BuiltinTypes> {
 fn format_object_fields(fields: &Vec<ObjectFieldType>) -> String {
     let mut formated = "{\n".to_string();
     for field in fields.iter().rev() {
-        formated += &format!("{}: {}\n", str_from_data_type(&field.data_type.clone()), &field.name);
+        formated += &format!("\t{}: {}\n", str_from_data_type(&field.data_type.clone()), &field.name);
     }
     formated += "}";
     formated
