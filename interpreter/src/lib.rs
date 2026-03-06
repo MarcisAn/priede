@@ -18,16 +18,6 @@ pub mod formater;
 use compiler::Compiler;
 use compiler::CompileTimeError;
 
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-    fn wasm_print(s: &str);
-    fn get_stumbrs_data() -> String;
-}
 
 #[derive(Debug, Clone)]
 pub struct InterpreterReturns {

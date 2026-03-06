@@ -1,4 +1,4 @@
-<script lang="ts" type="module">
+<script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import * as monaco from 'monaco-editor';
 	import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -10,7 +10,9 @@
 	import { clear, messages, stumbrsData } from './lib/priede.js';
 	import init, { run } from './lib/pkg/priede_wasm.js';
 
+
 	let answer = '';
+	export let ready_answer = null;
 
 	let is_console_opened = true;
 
@@ -94,7 +96,9 @@
 						{message.text}
 					{:else}
 						<input bind:value={answer} style="margin: 5px;" type="text" />
-						<button>-></button>
+						<button on:click={() => {
+							ready_answer = answer;
+						}}>-></button>
 					{/if}
 				</div>
 			{/each}

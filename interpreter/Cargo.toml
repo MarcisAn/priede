@@ -16,6 +16,7 @@ target-lexicon = "0.12.13"
 
 celsium = {path= "../../celsium/lib"}
 wasm-bindgen = "0.2.92"
+wasm-bindgen-futures = "0.4.64"
 console_error_panic_hook = "0.1.7"
 annotate-snippets = "0.11.2"
 anstream = "0.6.14"

@@ -37,7 +37,14 @@ export async function wasm_input() {
 	messages.update((currentData) => {
 		return [{ typ: 'in' }, ...currentData];
 	});
+
 	
-	return "cav";
+	return await  myPromise;
 
 }
+
+const myPromise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("foo");
+  }, 300);
+});
