@@ -9,7 +9,7 @@ pub fn parse_constants(node: AstNode, title: &str, compiler: &mut Compiler, bloc
             block.load_float(number_as_str.replace(",", ".").parse().unwrap());
             compiler.typestack.push(BuiltinTypes::Float);
         } else {
-            block.load_int(number_as_str.parse().unwrap());
+            block.load_int(number_as_str.trim().parse().unwrap());
             compiler.typestack.push(BuiltinTypes::Int);
         }
     } else if title == "STRING" {
