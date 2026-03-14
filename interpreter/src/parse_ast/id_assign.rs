@@ -114,29 +114,29 @@ fn handle_assignment(
     match operator {
         "+:" => {
             compiler.typestack.binop(BINOP::Add);
-            block.binop(BINOP::Add, operator_span);
+            block.binop(BINOP::Add, lhs_node.id());
         }
         "-:" => {
             compiler.typestack.binop(BINOP::Subtract);
-            block.binop(BINOP::Subtract, operator_span);
+            block.binop(BINOP::Subtract, lhs_node.id());
         }
         "*:" => {
             compiler.typestack.binop(BINOP::Multiply);
-            block.binop(BINOP::Multiply, operator_span);
+            block.binop(BINOP::Multiply, lhs_node.id());
         }
         "/:" => {
             compiler.typestack.binop(BINOP::Divide);
-            block.binop(BINOP::Divide, operator_span);
+            block.binop(BINOP::Divide, lhs_node.id());
         }
         "++" => {
             block.load_int(1);
             compiler.typestack.binop(BINOP::Add);
-            block.binop(BINOP::Add, operator_span);
+            block.binop(BINOP::Add, lhs_node.id());
         }
         "--" => {
             block.load_int(1);
             compiler.typestack.binop(BINOP::Subtract);
-            block.binop(BINOP::Subtract, operator_span);
+            block.binop(BINOP::Subtract, lhs_node.id());
         }
         ":" => {
             // Type annotation; parsing done above.

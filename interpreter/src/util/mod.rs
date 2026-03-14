@@ -7,7 +7,7 @@ use celsium::{
 };
 use hime_redist::{ ast::AstNode, symbols::SemanticElementTrait, text::TextPosition };
 
-use crate::{ compiler::Compiler, errors };
+use crate::{ compiler::Compiler, errors, util };
 
 fn print<'a>(node: AstNode, crossings: Vec<bool>) {
     let mut i = 0;
@@ -18,7 +18,7 @@ fn print<'a>(node: AstNode, crossings: Vec<bool>) {
         }
         print!("+-> ");
     }
-    println!("{:} ({})", node, node.id());
+    println!("{:} ({}) {:?}", node, node.id(), util::get_node_position_and_span_unicode(node));
     i = 0;
     let children = node.children();
     while i < children.len() {

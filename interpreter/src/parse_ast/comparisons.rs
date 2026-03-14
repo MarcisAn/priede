@@ -51,12 +51,12 @@ pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler, block: &
         }
 
         match sign.as_str() {
-            "=" => block.binop(BINOP::Eq, span),
-            ">" => block.binop(BINOP::LargerThan, span),
-            ">=" => block.binop(BINOP::LargerOrEq, span),
-            "<" => block.binop(BINOP::LessThan, span),
-            "<=" => block.binop(BINOP::LessOrEq, span),
-            "!=" => block.binop(BINOP::NotEq, span),
+            "=" => block.binop(BINOP::Eq, node.id()),
+            ">" => block.binop(BINOP::LargerThan, node.id()),
+            ">=" => block.binop(BINOP::LargerOrEq, node.id()),
+            "<" => block.binop(BINOP::LessThan, node.id()),
+            "<=" => block.binop(BINOP::LessOrEq, node.id()),
+            "!=" => block.binop(BINOP::NotEq, node.id()),
             _ => panic!("Neatpazīts salīdzinājuma simbols"),
         }
     } else if title == "un" || title == "vai" || title == "xvai" {
@@ -77,7 +77,7 @@ pub fn comparisons(node: AstNode, title: &str, compiler: &mut Compiler, block: &
             _ => unreachable!(),
         };
 
-        block.binop(op.clone(), span);
+        block.binop(op.clone(), node.id());
         compiler.typestack.binop(op);
     }
 }

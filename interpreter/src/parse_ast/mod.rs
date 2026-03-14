@@ -51,11 +51,7 @@ pub fn parse_ast(node: AstNode, compiler: &mut Compiler, block: &mut Block) {
         parse_ast(node.child(1), compiler, block);
         let (line, col_start, length) = util::get_node_position_and_span_unicode(node);
 
-        block.binop(celsium::bytecode::BINOP::Not, TextSpan {
-            line,
-            col_start,
-            length,
-        });
+        block.binop(celsium::bytecode::BINOP::Not, node.id());
     }
     if title == "BREAK" {
         let (line, col_start, length) = util::get_node_position_and_span_unicode(node);

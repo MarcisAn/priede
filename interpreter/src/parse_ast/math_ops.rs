@@ -37,10 +37,5 @@ fn calculate(binop: BINOP, node: AstNode, compiler: &mut Compiler, block: &mut B
     if res.is_none() {
         compiler.add_error(errors::CompileTimeErrorType::BinopNotPossible { left: left_type, right: right_type }, node);
     }
-    let (line, col_start, length) = util::get_node_position_and_span_unicode(node);
-    block.binop(binop, TextSpan {
-        line,
-        col_start,
-        length,
-    });
+    block.binop(binop, node.id());
 }
