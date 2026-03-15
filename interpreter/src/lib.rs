@@ -70,6 +70,9 @@ pub fn interpret(
     let mut node_locations_by_id: HashMap<usize, TextSpan> = HashMap::new();
     get_all_node_locations(root, &mut node_locations_by_id);
 
+    let mut node_parents: HashMap<usize, Option<usize>> = HashMap::new();
+    get_all_node_parents(root, &mut node_parents);
+
     let mut main_block = Block::new(Scope { ast_id: root.id(), module_path: path.clone() });
 
     parse_ast::parse_ast(root, &mut compiler, &mut main_block);
@@ -78,7 +81,7 @@ pub fn interpret(
     if static_only {
         return InterpreterReturns { errors: compiler.errors, testing_stack: vec![] };
     }
-    let mut celsium = CelsiumProgram::new(main_block, compiler.functions, node_locations_by_id, nodes_by_lines);
+    let mut celsium = CelsiumProgram::new(main_block, compiler.functions, node_locations_by_id, nodes_by_lines, node_parents);
     let bytecode = celsium.get_bytecode();
     if print_bytecode {
         let mut i = 0;
@@ -130,6 +133,19 @@ fn get_all_node_locations(node: AstNode, nodes: &mut HashMap<usize, TextSpan>) {
     }
 }
 
+fn get_all_node_parents(node: AstNode, parents: &mut HashMap<usize, Option<usize>>) {
+    let node_parrent = if node.parent().is_some() {
+        Some(node.parent().unwrap().id())
+    }
+    else {
+        None
+    };
+    parents.insert(node.id(), node_parrent);
+    for child in node.children() {
+        get_all_node_parents(child, parents);
+    }
+}
+
 pub fn run_wasm(code: String) -> String {
     let parse_res = hime::priede::parse_string(code.clone());
     println!("{:?}", parse_res.errors.errors);
@@ -157,7 +173,10 @@ pub fn run_wasm(code: String) -> String {
     let mut node_locations_by_id: HashMap<usize, TextSpan> = HashMap::new();
     get_all_node_locations(root, &mut node_locations_by_id);
 
-    let mut celsium = CelsiumProgram::new(main_block, compiler.functions, node_locations_by_id, nodes_by_lines);
+    let mut node_parents: HashMap<usize, Option<usize>> = HashMap::new();
+    get_all_node_parents(root, &mut node_parents);
+
+    let mut celsium = CelsiumProgram::new(main_block, compiler.functions, node_locations_by_id, nodes_by_lines, node_parents);
     let testing_stack_results = celsium.run_program();
     let mut testing_stack_json: String = "[".to_string();
     for value in testing_stack_results {
