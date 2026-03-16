@@ -55,6 +55,6 @@ pub fn array_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mu
             block.scope.clone(),
             is_exported
         );
-        block.define_variable(var_id.unwrap());
+        block.define_variable(var_id.unwrap(), varname, node.id());
     }
 }

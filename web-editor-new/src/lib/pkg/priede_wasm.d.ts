@@ -8,16 +8,13 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly run: (a: number, b: number) => void;
-    readonly wasm_bindgen__closure__destroy__h9f623552494fc7fa: (a: number, b: number) => void;
-    readonly wasm_bindgen__convert__closures_____invoke__h2bbceb0a00fdcf3f: (a: number, b: number, c: any) => [number, number];
+    readonly wasm_bindgen__closure__destroy__h13cacf83d69b9007: (a: number, b: number) => void;
+    readonly wasm_bindgen__convert__closures_____invoke__h17a777cb30b374f6: (a: number, b: number, c: number, d: number) => void;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;
-    readonly __externref_table_alloc: () => number;
-    readonly __wbindgen_externrefs: WebAssembly.Table;
     readonly __wbindgen_free: (a: number, b: number, c: number) => void;
-    readonly __externref_table_dealloc: (a: number) => void;
-    readonly __wbindgen_start: () => void;
+    readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
 }
 
 export type SyncInitInput = BufferSource | WebAssembly.Module;

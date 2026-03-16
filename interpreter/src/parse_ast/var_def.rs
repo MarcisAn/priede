@@ -57,7 +57,7 @@ pub fn var_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut 
                 node
             );
         } else {
-            block.define_variable(var_id.unwrap());
+            block.define_variable(var_id.unwrap(), varname, node.id());
         }
     }
 }

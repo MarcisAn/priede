@@ -45,13 +45,13 @@ pub fn func_def(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut
                     is_exported
                 );
                 args.push(FuncArg {
-                    name: arg_name,
+                    name: arg_name.clone(),
                     arg_type: data_type_marked,
                     mutable: is_mutable,
                     local_var_id: Some(var_id.unwrap())
                 });
                 
-                body.define_variable(var_id.unwrap());
+                body.define_variable(var_id.unwrap(), arg_name, arg.id());
             }
 
             if is_returning {

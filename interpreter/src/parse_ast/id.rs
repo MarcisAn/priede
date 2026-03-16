@@ -23,7 +23,7 @@ pub fn id(node: AstNode, title: &str, compiler: &mut Compiler, block: &mut Block
         } else {
             let data_type = compiler.helper.get_var_type(var_id.unwrap()).unwrap();
             compiler.typestack.push(data_type.clone());
-            block.load_variable(var_id.unwrap(), node.id());
+            block.load_variable(var_id.unwrap(), node.id(), var_name);
         }
     }
 }
