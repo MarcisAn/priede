@@ -1,4 +1,4 @@
-import { wasm_print, wasm_input, get_stumbrs_data, code_replace, explain, step } from "../priede.js";
+import { wasm_print, wasm_input, get_stumbrs_data, code_replace, explain, step, error_message } from "../priede.js";
 /* eslint-disable */
 /* @ts-self-types="./priede_wasm.d.ts" */
 
@@ -73,6 +73,9 @@ function __wbg_get_imports() {
             } finally {
                 wasm.__wbindgen_free(deferred0_0, deferred0_1, 1);
             }
+        },
+        __wbg_error_message_1251e5cc47b70fd1: function(arg0, arg1) {
+            error_message(getStringFromWasm0(arg0, arg1));
         },
         __wbg_explain_306bc47d31a8efa2: function(arg0, arg1, arg2, arg3, arg4) {
             explain(getStringFromWasm0(arg0, arg1), arg2 >>> 0, arg3 >>> 0, arg4 >>> 0);

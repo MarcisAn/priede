@@ -1,8 +1,22 @@
+use std::process::exit;
+
 use celsium::{ compiletime_helper::{ CompileTimeHelper }, BuiltinTypes };
 use colored::Colorize;
 use hime_redist::text::TextPosition;
-
+use crate::wasm_bindgen;
 use crate::{ compiler::CompileTimeError, util::{ self, str_from_data_type } };
+
+// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
+// allocator.
+#[cfg(feature = "wee_alloc")]
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+#[cfg(target_family = "wasm")]
+#[wasm_bindgen]
+extern "C" {
+    fn error_message(a: &str);
+}
 
 #[derive(Clone, Debug)]
 pub enum CompileTimeErrorType {
@@ -185,16 +199,34 @@ pub fn common_error(
     compilehelper: &mut CompileTimeHelper
 ) {
     let path = &compilehelper.source_file_paths[compilehelper.current_file];
-    println!(
-        "{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā",
-        "-----Kļūda: ".red(),
-        msg.red(),
-        path,
-        if position.is_some() {
-            position.unwrap().line.to_string()
-        } else {
-            "".to_string()
-        }
-    );
-    // exit(0);
+    let msg = if path == "" {
+        format!(
+            "{}\n     {}\n    {}. rindiņā",
+            "-----Kļūda: ".red(),
+            msg.red(),
+            if position.is_some() {
+                position.unwrap().line.to_string()
+            } else {
+                "".to_string()
+            }
+        )
+    } else {
+        format!(
+            "{}\n     {}\n     Faila \"{}\"\n     {}. rindiņā",
+            "-----Kļūda: ".red(),
+            msg.red(),
+            path,
+            if position.is_some() {
+                position.unwrap().line.to_string()
+            } else {
+                "".to_string()
+            }
+        )
+    };
+    println!("{}", msg);
+    #[cfg(target_family = "wasm")]
+    unsafe {
+        error_message(msg.as_str());
+    }
+    exit(0);
 }

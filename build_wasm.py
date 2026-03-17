@@ -9,7 +9,7 @@ def build_wasm():
 
         # Combine the new text with the existing content
         new_content = (
-            'import { wasm_print, wasm_input, get_stumbrs_data, code_replace, explain, step } from "../priede.js";\n/* eslint-disable */\n'
+            'import { wasm_print, wasm_input, get_stumbrs_data, code_replace, explain, step, error_message } from "../priede.js";\n/* eslint-disable */\n'
  + existing_content
         )
 
