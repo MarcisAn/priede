@@ -38,7 +38,7 @@ fn handle_assignment(
     block: &mut Block
 ) {
     let assignable = lhs_node.get_symbol().name;
-    
+
     // Handle array assignment (indexable)
     if assignable == "indexable" {
         let var_name = lhs_node.child(0).get_value().unwrap().to_string();
@@ -52,7 +52,7 @@ fn handle_assignment(
         }
         let type_to_assign = compiler.typestack.pop().unwrap();
         let type_of_array = compiler.get_var_type_from_id(var_id).unwrap();
-        
+
         // Validate array type
         let _ = match type_of_array {
             BuiltinTypes::String => todo!("string assign"),
@@ -67,15 +67,17 @@ fn handle_assignment(
                 return;
             }
         };
-        
+
         // Check type compatibility
-        if !are_types_equal(
-            &type_of_array,
-            &(BuiltinTypes::Array {
-                element_type: Box::new(type_to_assign.clone()),
-                length: None,
-            })
-        ) {
+        if
+            !are_types_equal(
+                &type_of_array,
+                &(BuiltinTypes::Array {
+                    element_type: Box::new(type_to_assign.clone()),
+                    length: None,
+                })
+            )
+        {
             compiler.add_error(
                 errors::CompileTimeErrorType::WrongArrayAssignValue {
                     array_type: type_of_array,
@@ -84,7 +86,7 @@ fn handle_assignment(
                 err_node
             );
         }
-        
+
         // Parse index expression
         parse_ast(lhs_node.child(1), compiler, block);
         block.assign_to_array(var_id);
@@ -146,10 +148,19 @@ fn handle_assignment(
 
     if assignable == "ID" {
         let var_name = lhs_node.get_value().unwrap().to_string();
-        let Some(var_id) = lookup_var_id_or_error(var_name, err_node, compiler, block) else {
+        let Some(var_id) = lookup_var_id_or_error(
+            var_name.clone(),
+            err_node,
+            compiler,
+            block
+        ) else {
             return;
         };
-        block.assign_variable(var_id);
+        block.assign_variable(var_id, &var_name, if rhs_node.is_some() {
+            rhs_node.unwrap().id()
+        } else {
+            lhs_node.id()
+        });
     } else if assignable == "dot_call" {
         let object_var_name = lhs_node.child(0).get_value().unwrap().to_string();
         let Some(var_id) = lookup_var_id_or_error(object_var_name, err_node, compiler, block) else {
