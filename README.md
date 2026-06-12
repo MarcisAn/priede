@@ -1,6 +1,5 @@
 ![PRIEDE](./banner.png)
 
-https://priede.andersons-m.lv/
 
 Viegli rakstāma programmēšanas valoda ar sintaksi latviski
 
